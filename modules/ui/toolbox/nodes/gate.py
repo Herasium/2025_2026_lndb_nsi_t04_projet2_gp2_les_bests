@@ -13,8 +13,8 @@ class Gate(Node):
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
 
-        self.x = 100 + self.grid_size/2
-        self.y = 200 + self.grid_size/2
+        self._x = 0 + self.grid_size/2
+        self._y = 0 + self.grid_size/2
 
         self.inputs = [0,1]
         self.outputs = [0]
@@ -34,6 +34,27 @@ class Gate(Node):
         self.width = math.ceil(self.text.content_width / self.grid_size) * self.grid_size
         self.height = max((len(self.inputs)*2+1)*self.grid_size,(len(self.outputs)*2+1)*self.grid_size)
 
+        self.calculate_display()
+
+    @property
+    def x(self):
+        return self._x
+    
+    @x.setter
+    def x(self,value):
+        self._x = value
+        self.calculate_display()
+
+    @property
+    def y(self):
+        return self._y
+    
+    @y.setter
+    def y(self,value):
+        self._y = value
+        self.calculate_display()
+
+    def calculate_display(self):
         self.text.x = self.x + self.width /2
         self.text.y = self.y + self.height /2
 
@@ -59,6 +80,7 @@ class Gate(Node):
             self.outputs_hibtoxes.append(
                 HitBox(x=self.x+self.width,y=self.y + self.height - ((i*2+1)*self.grid_size),width=self.grid_size,height=self.grid_size)
             )
+
 
     def draw(self):
         self.entity.draw()
