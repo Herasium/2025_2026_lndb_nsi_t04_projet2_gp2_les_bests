@@ -15,7 +15,7 @@ class _Mouse():
         self.direction = "RIGHT"
         self.previous_direction = "RIGHT"
 
-        self.direction_bias = 15
+        self.direction_bias = 0
 
         self._grid_size = data.UI_EDITOR_GRID_SIZE
 
