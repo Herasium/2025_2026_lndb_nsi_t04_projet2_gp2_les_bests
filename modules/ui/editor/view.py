@@ -35,10 +35,10 @@ class EditorView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        for i in self.gates:
+        for i in self.paths:
             i.draw()
 
-        for i in self.paths:
+        for i in self.gates:
             i.draw()
 
         if self.current_path != None:
@@ -47,7 +47,7 @@ class EditorView(arcade.View):
         if self.selected_follower != None:
             self.selected_follower.draw()
 
-        self.follower.draw()
+    
 
     def on_update(self, delta_time):
         pass
@@ -75,8 +75,6 @@ class EditorView(arcade.View):
         if self.selected_follower != None:
                 self.selected_follower.x = mouse.cursor[0] - self.grid_size/2
                 self.selected_follower.y = mouse.cursor[1] - self.grid_size/2
-        if self.current_path != None:
-            self.current_path.move()
 
  
     def on_mouse_press(self, x, y, button, key_modifiers):
@@ -113,6 +111,8 @@ class EditorView(arcade.View):
                         done = True
 
             else:
+
+                self.current_path.add_path()
                 done = True
 
         if done == False:
