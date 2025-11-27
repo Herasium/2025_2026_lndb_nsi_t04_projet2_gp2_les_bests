@@ -94,14 +94,6 @@ def full_adder(input_a, input_b, carry_in):
     carry_out = comp_or(carry_out, comp_and(carry_in, comp_xor(input_a, input_b)))
     return 1*sum, 1*carry_out
 
-def calculator(input_a, input_b, carry_in, bits):
-    result = 0
-    while bits > 0:
-        sum, carry_out = full_adder(input_a, input_b, carry_in)
-        result = (2**(bits-1))*(sum + carry_out) + result
-        bits -= 1
-    return result
-
 def truth_table():
     return comp_and(a,a), comp_and(a,b), comp_and(b,a), comp_and(b,b),\
         comp_not(a), comp_not(b),\
@@ -120,4 +112,3 @@ a = True
 b = False
 
 # print(truth_table())
-print(calculator(a, a, a, 3))
