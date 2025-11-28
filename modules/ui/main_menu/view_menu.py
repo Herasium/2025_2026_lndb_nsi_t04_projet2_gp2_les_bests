@@ -1,6 +1,8 @@
 import arcade
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
+from modules.ui.editor.view import EditorView
+from modules.data import data
 
 class GameView(arcade.View):
     """
@@ -76,7 +78,8 @@ class GameView(arcade.View):
         Called when the user presses a mouse button.
         """
         if self.button.touched:
-            print ("Bouton cliqué")
+            data.window.hide()
+            data.window.display(EditorView())
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """

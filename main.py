@@ -1,14 +1,12 @@
 from modules.ui import Window, EditorView, GameView
 import platform
 import os
+from modules.data import data
 
-def start():
+windows = Window()
+data.window = windows
 
-    windows = Window()
-    view = EditorView()
+view = GameView()
 
-    windows.display(view)
-    windows.run()
-
-if __name__ == "__main__":
-    start()
+windows.display(view)
+windows.run()
