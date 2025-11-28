@@ -22,18 +22,22 @@ class GameView(arcade.View):
         self.button_play = Button()
         self.button_play.x = 120
         self.button_play.y = 540
-        self.button_play.width = 350
+        self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.color = arcade.color.WHITE
         self.button_play.name = "Jouer"
+        self.button_play.text.x = 280
+        self.button_play.text.y = 495
 
         self.button_quit = Button()
         self.button_quit.x = 120
         self.button_quit.y = 400
-        self.button_quit.width = 350
+        self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.color = arcade.color.WHITE
         self.button_quit.name = "Quitter"
+        self.button_quit.text.x = 280
+        self.button_quit.text.y = 355
 
         # batch = Batch
         # text_jouer = arcade.Text ("Jouer")
@@ -59,7 +63,8 @@ class GameView(arcade.View):
             120,
             700,
             arcade.color.WHITE,
-            font_size = 24
+            font_size = 24,
+            font_name = "Kenney Pixel Square"
         )
     
     def on_update(self, delta_time):

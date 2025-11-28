@@ -55,7 +55,6 @@ class Button:
 
     def _recalculate_rect(self):
 
-
         self.rect = arcade.XYWH(
             x=self._x,
             y=self._y,
@@ -75,6 +74,7 @@ class Button:
         )
         self.text.x = self.x + self.width /2
         self.text.y = self.y + self.height /2
+        
     @property
     def name(self):
         return self._name
