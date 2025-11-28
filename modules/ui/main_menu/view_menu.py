@@ -38,6 +38,16 @@ class GameView(arcade.View):
         self.button_quit.name = "Quitter"
         self.button_quit.text.x = 280
         self.button_quit.text.y = 355
+        
+        arcade.load_font("modules/ui/main_menu/UniversCondensed.ttf")
+
+        self.titre = arcade.Text(
+            "Hello",
+            x = 120,
+            y = 700,
+            font_size = 24,
+            font_name = "Univers Condensed"
+        )
 
         # batch = Batch
         # text_jouer = arcade.Text ("Jouer")
@@ -57,15 +67,16 @@ class GameView(arcade.View):
         self.clear()
         self.button_play.draw()
         self.button_quit.draw()
+        self.titre.draw()
 
-        arcade.draw_text(
-            "Hello",
-            120,
-            700,
-            arcade.color.WHITE,
-            font_size = 24,
-            font_name = "Kenney Pixel Square"
-        )
+        # arcade.draw_text(
+        #     "Hello",
+        #     120,
+        #     700,
+        #     arcade.color.WHITE,
+        #     font_size = 24,
+        #     font_name = 'Kenney Future'
+        # )
     
     def on_update(self, delta_time):
         """
