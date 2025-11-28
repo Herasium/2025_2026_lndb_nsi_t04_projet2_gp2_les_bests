@@ -5,7 +5,7 @@ import os
 def start():
 
     windows = Window()
-    view = GameView()
+    view = EditorView()
 
     windows.display(view)
     windows.run()
