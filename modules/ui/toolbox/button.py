@@ -14,16 +14,8 @@ class Button:
         self._color = arcade.color.BLUE
         self.hitbox = HitBox()
 
-        self.name = ""
-        self.text = arcade.Text(
-            self.name,
-            self.x,
-            self.y,
-            arcade.color.BLACK,
-            24, 
-            anchor_x="center",
-            anchor_y="center",
-        )
+        self._name = ""
+        self._text = ""
 
     @property
     def x(self):
@@ -62,8 +54,7 @@ class Button:
         self._recalculate_rect()
 
     def _recalculate_rect(self):
-        self.text.x = self.x + self.width /2
-        self.text.y = self.y + self.height /2
+
 
         self.rect = arcade.XYWH(
             x=self._x,
@@ -73,6 +64,25 @@ class Button:
             anchor=arcade.Vec2(0,0)
         )
         self._update_hitbox()
+        self._text = arcade.Text(
+            self._name,
+            self._x,
+            self._y,
+            arcade.color.BLACK,
+            24, 
+            anchor_x="center",
+            anchor_y="center",
+        )
+        self.text.x = self.x + self.width /2
+        self.text.y = self.y + self.height /2
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, value):
+        self._name = value
+        self._recalculate_rect()
 
     @property
     def text(self):
@@ -94,13 +104,13 @@ class Button:
     
     def _update_hitbox(self):
         self.hitbox.x = self._x
-        self.hitbox.y = self._y
+        self.hitbox.y = self._y-self._height
         self.hitbox.width = self._width
         self.hitbox.height = self._height
 
     def draw(self):
         arcade.draw_rect_filled(
-            arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,0)),
+            arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,1)),
             self._color,
         )
         self.text.draw()

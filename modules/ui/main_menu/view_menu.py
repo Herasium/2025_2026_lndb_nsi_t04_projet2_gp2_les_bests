@@ -3,6 +3,7 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
 from modules.data import data
+from pyglet.graphics import Batch
 
 class GameView(arcade.View):
     """
@@ -16,14 +17,26 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        self.background_color = arcade.color.AMAZON
+        self.background_color = arcade.color.JET
 
-        self.button = Button()
-        self.button.x = 600
-        self.button.y = 600
-        self.button.width = 300
-        self.button.height = 150
-        self.button.color = arcade.color.RED
+        self.button_play = Button()
+        self.button_play.x = 120
+        self.button_play.y = 540
+        self.button_play.width = 350
+        self.button_play.height = 90
+        self.button_play.color = arcade.color.WHITE
+        self.button_play.name = "Jouer"
+
+        self.button_quit = Button()
+        self.button_quit.x = 120
+        self.button_quit.y = 400
+        self.button_quit.width = 350
+        self.button_quit.height = 90
+        self.button_quit.color = arcade.color.WHITE
+        self.button_quit.name = "Quitter"
+
+        # batch = Batch
+        # text_jouer = arcade.Text ("Jouer")
 
         # If you have sprite lists, you should create them here,
         # and set them to None
@@ -38,8 +51,17 @@ class GameView(arcade.View):
         Render the screen.
         """
         self.clear()
-        self.button.draw()
+        self.button_play.draw()
+        self.button_quit.draw()
 
+        arcade.draw_text(
+            "Hello",
+            120,
+            700,
+            arcade.color.WHITE,
+            font_size = 24
+        )
+    
     def on_update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
@@ -77,9 +99,12 @@ class GameView(arcade.View):
         """
         Called when the user presses a mouse button.
         """
-        if self.button.touched:
+        if self.button_play.touched:
             data.window.hide()
             data.window.display(EditorView())
+
+        if self.button_quit.touched:
+            arcade.exit()
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
