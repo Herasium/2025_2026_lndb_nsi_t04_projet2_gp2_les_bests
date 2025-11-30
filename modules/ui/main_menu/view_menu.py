@@ -49,12 +49,6 @@ class GameView(arcade.View):
             font_name = "Univers Condensed"
         )
 
-        # batch = Batch
-        # text_jouer = arcade.Text ("Jouer")
-
-        # If you have sprite lists, you should create them here,
-        # and set them to None
-
     def reset(self):
         """Reset the game to the initial state."""
         # Do changes needed to restart the game here if you want to support that
@@ -69,15 +63,6 @@ class GameView(arcade.View):
         self.button_quit.draw()
         self.titre.draw()
 
-        # arcade.draw_text(
-        #     "Hello",
-        #     120,
-        #     700,
-        #     arcade.color.WHITE,
-        #     font_size = 24,
-        #     font_name = 'Kenney Future'
-        # )
-    
     def on_update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
