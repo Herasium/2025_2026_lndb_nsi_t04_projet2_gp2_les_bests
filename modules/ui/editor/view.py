@@ -1,13 +1,16 @@
 import arcade
+from line_profiler import profile
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.grid import Grid
+from modules.ui.toolbox.id_generator import random_id
 
 from modules.data.nodes.path import Path
 from modules.data.nodes.gate import Gate
 
 from modules.data import data
+
 
 class EditorView(arcade.View):
 
@@ -21,12 +24,31 @@ class EditorView(arcade.View):
         self.follower.width = self.grid_size
 
         self.selected_follower = None
-
-        self.gates = []
-
-        self.paths = []
-
+        self.moving_gate = None
         self.current_path = None
+
+        # changed
+        self.gates = {}   # id : Gate
+        self.paths = {}   # id : Path
+
+        self.moving_gate_offset = (0, 0)
+
+        arcade.load_font("assets/press_start.ttf")
+
+        TILE_W = 27
+        TILE_H = 27
+        ROWS = 6
+        COLS = 6
+        COUNT = ROWS * COLS 
+
+        self.gate_sheet = arcade.SpriteSheet("assets/gate_grid.png")
+
+        self.gate_tiles = self.gate_sheet.get_texture_grid(
+            size=(TILE_W, TILE_H),
+            columns=COLS,
+            count=COUNT
+        )
+
 
 
     def reset(self):
@@ -35,94 +57,150 @@ class EditorView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        for i in self.paths:
-            i.draw()
+        for p in self.paths.values():
+            p.draw()
 
-        for i in self.gates:
-            i.draw()
+        for g in self.gates.values():
+            g.draw()
 
-        if self.current_path != None:
+        if self.current_path:
             self.current_path.draw()
 
-        if self.selected_follower != None:
+        if self.selected_follower:
             self.selected_follower.draw()
 
-    
 
     def on_update(self, delta_time):
         pass
 
+
     def on_key_press(self, key, key_modifiers):
-        if key == 97: #"a"
+        if key == 97:  # "a"
             arcade.exit()
-        if key == 65307: #echap
+        if key == 65307:  # ESC
             self.current_path = None
             self.selected_follower = None
-        
-      
+
 
     def on_key_release(self, key, key_modifiers):
         pass
 
+
+    @profile
     def on_mouse_motion(self, x, y, delta_x, delta_y):
- 
-        mouse.position = (x,y)
+        mouse.position = (x, y)
+
+        self.follower.x = mouse.cursor[0] - self.grid_size / 2
+        self.follower.y = mouse.cursor[1] - self.grid_size / 2
+
+        if self.selected_follower:
+            self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
+            self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
+
+        if self.moving_gate:
+            self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
+            self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
+
+            # update connected paths
+            for path in self.paths.values():
+                connected_inputs, connected_outputs = path.get_connected_points(self.moving_gate.id)
+                modified = False
+
+                for i in connected_inputs:
+                    modified = True
+                    if i[3] == 1:
+                        path.branch_points[i[4]][0] = self.moving_gate.outputs_position[i[2]]
+                    elif i[3] == 2:
+                        path.branch_points[i[4]][-1] = self.moving_gate.outputs_position[i[2]]
+
+                for i in connected_outputs:
+                    modified = True
+                    if i[3] == 1:
+                        path.branch_points[i[4]][0] = self.moving_gate.inputs_position[i[2]]
+                    elif i[3] == 2:
+                        path.branch_points[i[4]][-1] = self.moving_gate.inputs_position[i[2]]
+
+                if modified:
+                    path.recalculate_hitbox()
 
 
-        self.follower.x = mouse.cursor[0] - self.grid_size/2
-        self.follower.y = mouse.cursor[1] - self.grid_size/2
-
-        if self.selected_follower != None:
-                self.selected_follower.x = mouse.cursor[0] - self.grid_size/2
-                self.selected_follower.y = mouse.cursor[1] - self.grid_size/2
-
- 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        
-        done = False
 
-        for i in self.gates:
-            touched = i.touched
-            if touched != False and done == False:
-                if self.current_path == None:
-
-                    self.current_path = Path("0002")
+        # Clicked a gate?
+        for g in self.gates.values():
+            touched = g.touched
+            if touched:
+                if self.current_path is None:
+                    # start new path
+                    pid = random_id()
+                    self.current_path = Path(pid)
                     self.current_path.add_path()
 
                     if touched[0] == 1:
-                        self.current_path.outputs.append((1,i.id,touched[1]))
-                    if touched[0] == 2:
-                        self.current_path.inputs.append((1,i.id,touched[1]))
+                        self.current_path.outputs.append((1, g.id, touched[1], 1, self.current_path.current_branch_count))
+                    else:
+                        self.current_path.inputs.append((2, g.id, touched[1], 1, self.current_path.current_branch_count))
+                    return
 
                 else:
+                    # finish existing path
+                    if touched[0] == 1:
+                        self.current_path.outputs.append((1, g.id, touched[1], 2, self.current_path.current_branch_count))
+                    else:
+                        self.current_path.inputs.append((2, g.id, touched[1], 2, self.current_path.current_branch_count))
+
                     self.current_path.finish()
-                    if not self.current_path in self.paths:
-                        self.paths.append(self.current_path)
+
+                    if self.current_path.id not in self.paths:
+                        self.paths[self.current_path.id] = self.current_path
+
                     self.current_path = None
-                    done = True                
+                    return
 
+        # Clicking on a path
+        if not self.current_path:
+            for p in self.paths.values():
+                if p.touched:
+                    p.add_path()
+                    self.current_path = p
+                    return
+        else:
+            for p in self.paths.values():
+                if p.touched and p != self.current_path:
+                    self.current_path.add_path()
+                    p.merge(self.current_path)
 
-        if done == False:
-            if not self.current_path:
-                for i in self.paths:
-                    if i.touched:
-                        i.add_path()
-                        self.current_path = i
-                        done = True
+                    if self.current_path.id in self.paths:
+                        del self.paths[self.current_path.id]
 
-            else:
+                    self.current_path = None
+                    return
 
-                self.current_path.add_path()
-                done = True
+            self.current_path.add_path()
+            return
 
-        if done == False:
-            if self.selected_follower == None:
-                self.selected_follower = Gate("001")
-            else:
-                self.gates.append(self.selected_follower)
-                self.selected_follower = None
-            done == True
+        # Move a gate
+        if self.moving_gate is None:
+            for g in self.gates.values():
+                if g.entity.touched:
+                    self.moving_gate_offset = (
+                        mouse.cursor[0] - g.x,
+                        mouse.cursor[1] - g.y
+                    )
+                    self.moving_gate = g
+                    return
+
+        # Place new gate
+        if self.selected_follower is None:
+            self.selected_follower = Gate(random_id(),self.gate_tiles)
+            self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
+            self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
+
+        else:
+            self.gates[self.selected_follower.id] = self.selected_follower
+            self.selected_follower = None
+
 
     def on_mouse_release(self, x, y, button, key_modifiers):
-        pass
-
+        self.moving_gate = None
+        self.moving_gate_offset = (0, 0)

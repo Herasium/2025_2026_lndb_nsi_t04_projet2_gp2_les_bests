@@ -12,6 +12,8 @@ class Entity:
         self._width = 10
         self._height = 10
 
+        self.color = arcade.color.BLUE
+
         self.hitbox = HitBox()
         self._update_hitbox()
 
@@ -56,7 +58,7 @@ class Entity:
     def draw(self):
         arcade.draw_rect_filled(
             arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,0)),
-            arcade.color.BLUE,
+            self.color,
         )
 
     @property

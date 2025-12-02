@@ -3,12 +3,15 @@ import math
 
 from modules.data.node import Node
 from modules.ui.toolbox.hitbox import HitBox
+from modules.ui.toolbox.entity import Entity
 from modules.ui.mouse import mouse
 from modules.data import data
 
+from line_profiler import profile
+
 class Gate(Node):
 
-    def __init__(self, id):
+    def __init__(self, id, tiles):
         super().__init__(id)
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
@@ -16,25 +19,54 @@ class Gate(Node):
         self._x = 0 + self.grid_size/2
         self._y = 0 + self.grid_size/2
 
-        self.inputs = [0,1]
-        self.outputs = [0]
+        self.inputs = [False,False]
+        self.outputs = [False]
 
-        self.name = "AND"
+        self._name = "AND"
+
+        self.bg = Entity()
+        self.bg.color = arcade.types.Color.from_hex_string("0F3FA8")
+        self.entity.color = arcade.types.Color.from_hex_string("2563EB")
+
+        self.input_off_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_OFF)
+        self.input_on_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_ON)
 
         self.text = arcade.Text(
-            self.name,
-            self.x,
-            self.y,
-            arcade.color.BLACK,
-            24, 
-            anchor_x="center",
-            anchor_y="center",
-        )
+                    self._name,
+                    self.x,
+                    self.y,
+                    arcade.types.Color.from_hex_string("b45252"),
+                    24, 
+                    anchor_x="center",
+                    anchor_y="center",
+                    font_name="Press Start 2P"
+                )
 
-        self.width = math.ceil(self.text.content_width / self.grid_size) * self.grid_size
-        self.height = max((len(self.inputs)*2+1)*self.grid_size,(len(self.outputs)*2+1)*self.grid_size)
+        self.bg_text = arcade.Text(
+                    self._name,
+                    self.x,
+                    self.y,
+                    arcade.types.Color.from_hex_string("5f556a"),
+                    24, 
+                    anchor_x="center",
+                    anchor_y="center",
+                    font_name="Press Start 2P"
+                )
 
+        self.tiles = tiles
+
+ 
         self.calculate_display()
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self,value):
+        self._name = value
+        if getattr(self,"text",None) != None:
+            self.text.text = self._name
 
     @property
     def x(self):
@@ -52,16 +84,31 @@ class Gate(Node):
     @y.setter
     def y(self,value):
         self._y = value
-        self.calculate_display()
+        self.calculate_display()    
 
+    @profile
     def calculate_display(self):
-        self.text.x = self.x + self.width /2
-        self.text.y = self.y + self.height /2
+
+        self.width = (math.ceil(self.text.content_width / self.grid_size)+2) * self.grid_size
+        self.height = max((len(self.inputs)*2+1)*self.grid_size,(len(self.outputs)*2+1)*self.grid_size)
+        self.max = max(len(self.inputs),len(self.outputs)) +1 
+
+        self.text.x = self.x + self.grid_size * 3 + 1 
+        self.text.y = self.y + self.height /2 + self.grid_size/4
+
+        self.bg_text.x = self.x + self.grid_size * 3 - 1
+        self.bg_text.y = self.y + self.height /2 + self.grid_size/4 + 2
+
 
         self.entity.x = self.x
         self.entity.y = self.y
         self.entity.width = self.width
         self.entity.height = self.height
+
+        self.bg.x = self.x-5
+        self.bg.y = self.y-5
+        self.bg.width = self.width+10
+        self.bg.height = self.height+10
 
         self.inputs_position = []
         self.outputs_position = []
@@ -71,38 +118,61 @@ class Gate(Node):
 
         for i in range(len(self.inputs)):
 
-            y = self.y + self.height - ((i * 2 + 1) * self.grid_size)
-            x = self.x - self.grid_size
+            y = self.y 
+            x = self.x + self.grid_size * (i+1)
 
-            self.inputs_position.append((x, y))
+            self.inputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
             self.inputs_hitboxes.append(
                 HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
         for i in range(len(self.outputs)):
 
-            y = self.y + self.height - ((i * 2 + 1) * self.grid_size)
-            x = self.x + self.width
+            y = self.y 
+            x = self.x + self.grid_size * (i+2+len(self.inputs))
 
-            self.outputs_position.append((x, y))
+            self.outputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
             self.outputs_hibtoxes.append(
                 HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
+    def draw_tiles(self):
+    
+        gate_tile_pattern = [7,6,6,0,6,8,26,10,10,1,10,19,31,13,13,13,13,25,28,2,2,2,2,27]
+        width = 6
+        height = 4
 
+        current = 0
+        for y in range(height):
+            for x in range(width):
+
+                tile_x = x * self.grid_size + self.x
+                tile_y = y * self.grid_size + self.y
+
+                rect = arcade.XYWH(
+                    x=tile_x,
+                    y=tile_y,
+                    width=self.grid_size,
+                    height=self.grid_size,
+                    anchor=arcade.Vec2(0,0)
+                )
+
+
+                arcade.draw_texture_rect(self.tiles[gate_tile_pattern[current]],rect)
+                current += 1
+            
+
+    @profile
     def draw(self):
-        self.entity.draw()
+
+        self.draw_tiles()
+        self.bg_text.draw()
         self.text.draw()
 
-        for a in range(len(self.inputs_position)):
-            i = self.inputs_position[a]
-            arcade.draw_rect_filled(arcade.XYWH(i[0],i[1],self.grid_size,self.grid_size,anchor=arcade.Vec2(0,0)),color=arcade.color.AMARANTH_PINK)
-            self.inputs_hitboxes[a].draw()
 
-        for a in range(len(self.outputs_position)):
-            i = self.outputs_position[a]
-            arcade.draw_rect_filled(arcade.XYWH(i[0],i[1],self.grid_size,self.grid_size,anchor=arcade.Vec2(0,0)),color=arcade.color.CANDY_APPLE_RED)
-            self.outputs_hibtoxes[a].draw()
+        
+
+
 
 
     @property
