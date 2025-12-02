@@ -22,24 +22,32 @@ class GameView(arcade.View):
         self.button_play = Button()
         self.button_play.x = 120
         self.button_play.y = 540
-        self.button_play.width = 350
+        self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.color = arcade.color.WHITE
         self.button_play.name = "Jouer"
+        self.button_play.text.x = 280
+        self.button_play.text.y = 495
 
         self.button_quit = Button()
         self.button_quit.x = 120
         self.button_quit.y = 400
-        self.button_quit.width = 350
+        self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.color = arcade.color.WHITE
         self.button_quit.name = "Quitter"
+        self.button_quit.text.x = 280
+        self.button_quit.text.y = 355
+        
+        arcade.load_font("modules/ui/main_menu/UniversCondensed.ttf")
 
-        # batch = Batch
-        # text_jouer = arcade.Text ("Jouer")
-
-        # If you have sprite lists, you should create them here,
-        # and set them to None
+        self.titre = arcade.Text(
+            "Hello",
+            x = 120,
+            y = 700,
+            font_size = 24,
+            font_name = "Univers Condensed"
+        )
 
     def reset(self):
         """Reset the game to the initial state."""
@@ -53,15 +61,8 @@ class GameView(arcade.View):
         self.clear()
         self.button_play.draw()
         self.button_quit.draw()
+        self.titre.draw()
 
-        arcade.draw_text(
-            "Hello",
-            120,
-            700,
-            arcade.color.WHITE,
-            font_size = 24
-        )
-    
     def on_update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.

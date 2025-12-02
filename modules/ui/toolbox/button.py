@@ -14,6 +14,8 @@ class Button:
         self._color = arcade.color.BLUE
         self.hitbox = HitBox()
 
+        arcade.load_font("modules/ui/main_menu/UniversCondensed.ttf")
+
         self._name = ""
         self._text = ""
 
@@ -55,7 +57,6 @@ class Button:
 
     def _recalculate_rect(self):
 
-
         self.rect = arcade.XYWH(
             x=self._x,
             y=self._y,
@@ -70,11 +71,13 @@ class Button:
             self._y,
             arcade.color.BLACK,
             24, 
-            anchor_x="center",
-            anchor_y="center",
+            anchor_x = "center",
+            anchor_y = "center",
+            font_name = "Univers Condensed"
         )
         self.text.x = self.x + self.width /2
         self.text.y = self.y + self.height /2
+        
     @property
     def name(self):
         return self._name
