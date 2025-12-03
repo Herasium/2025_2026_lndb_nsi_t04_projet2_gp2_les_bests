@@ -90,7 +90,7 @@ class Gate(Node):
     def calculate_display(self):
 
         self.width = (math.ceil(self.text.content_width / self.grid_size)+2) * self.grid_size
-        self.height = max((len(self.inputs)*2+1)*self.grid_size,(len(self.outputs)*2+1)*self.grid_size)
+        self.height = 4*self.grid_size
         self.max = max(len(self.inputs),len(self.outputs)) +1 
 
         self.text.x = self.x + self.grid_size * 3 + 1 
@@ -114,7 +114,7 @@ class Gate(Node):
         self.outputs_position = []
 
         self.inputs_hitboxes = []
-        self.outputs_hibtoxes = []
+        self.outputs_hitboxes = []
 
         for i in range(len(self.inputs)):
 
@@ -132,7 +132,7 @@ class Gate(Node):
             x = self.x + self.grid_size * (i+2+len(self.inputs))
 
             self.outputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
-            self.outputs_hibtoxes.append(
+            self.outputs_hitboxes.append(
                 HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
@@ -168,7 +168,11 @@ class Gate(Node):
         self.draw_tiles()
         self.bg_text.draw()
         self.text.draw()
-
+        for i in self.inputs_hitboxes:
+            i.draw()
+        for i in self.outputs_hitboxes:
+            i.draw()
+        self.entity.hitbox.draw()
 
         
 
@@ -186,8 +190,8 @@ class Gate(Node):
                 touched = (1,a)
 
 
-        for a in range(len(self.outputs_hibtoxes)):
-            i = self.outputs_hibtoxes[a]
+        for a in range(len(self.outputs_hitboxes)):
+            i = self.outputs_hitboxes[a]
             if i.touched:
                 touched = (2,a)
 
