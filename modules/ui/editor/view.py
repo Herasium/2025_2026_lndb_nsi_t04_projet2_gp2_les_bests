@@ -32,9 +32,7 @@ class EditorView(arcade.View):
         self.paths = {}   # id : Path
 
         self.moving_gate_offset = (0, 0)
-
-        arcade.load_font("assets/press_start.ttf")
-
+        
         TILE_W = 27
         TILE_H = 27
         ROWS = 6
