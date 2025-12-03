@@ -71,7 +71,7 @@ class Button:
             24, 
             anchor_x = "center",
             anchor_y = "center",
-            font_name = "Univers Condensed"
+            font_name = "Press Start 2P"
         )
         self.text.x = self.x + self.width /2
         self.text.y = self.y + self.height /2
