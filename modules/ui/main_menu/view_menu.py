@@ -38,15 +38,13 @@ class GameView(arcade.View):
         self.button_quit.name = "Quitter"
         self.button_quit.text.x = 280
         self.button_quit.text.y = 355
-        
-        arcade.load_font("assets/UniverseCondensed.ttf")
 
         self.titre = arcade.Text(
             "Hello",
             x = 120,
             y = 700,
-            font_size = 24,
-            font_name = "Univers Condensed"
+            font_size = 50,
+            font_name = "Press Start 2P"
         )
 
     def reset(self):
