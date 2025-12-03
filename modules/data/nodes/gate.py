@@ -90,7 +90,7 @@ class Gate(Node):
     def calculate_display(self):
 
         self.width = (math.ceil(self.text.content_width / self.grid_size)+2) * self.grid_size
-        self.height = max((len(self.inputs)*2+1)*self.grid_size,(len(self.outputs)*2+1)*self.grid_size)
+        self.height = 4*self.grid_size
         self.max = max(len(self.inputs),len(self.outputs)) +1 
 
         self.text.x = self.x + self.grid_size * 3 + 1 
