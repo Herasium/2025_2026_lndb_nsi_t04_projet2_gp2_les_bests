@@ -6,6 +6,7 @@ from modules.ui.toolbox.hitbox import HitBox
 from modules.ui.toolbox.entity import Entity
 from modules.ui.mouse import mouse
 from modules.data import data
+from modules.engine.logic import calculate_output
 
 from line_profiler import profile
 
@@ -63,10 +64,19 @@ class Gate(Node):
         return self._name
 
     @name.setter
-    def name(self,value):
+    def name(self, value):
         self._name = value
-        if getattr(self,"text",None) != None:
+        if self._name == "NOT":
+            self.inputs = [False]
+        else:
+            self.inputs = [False, False]
+
+        if hasattr(self, "text"):
             self.text.text = self._name
+            self.bg_text.text = self._name
+
+        if hasattr(self, "grid_size"):
+            self.calculate_display()
 
     @property
     def x(self):
@@ -174,9 +184,9 @@ class Gate(Node):
             i.draw()
         self.entity.hitbox.draw()
 
-        
-
-
+    def update(self):
+        """Calculates the output of the gate based on its inputs and type."""
+        self.outputs[0] = calculate_output(self.name, self.inputs)
 
 
     @property

@@ -67,7 +67,8 @@ class EditorView(arcade.View):
 
 
     def on_update(self, delta_time):
-        pass
+        for gate in self.gates.values():
+            gate.update()
 
 
     def on_key_press(self, key, key_modifiers):
