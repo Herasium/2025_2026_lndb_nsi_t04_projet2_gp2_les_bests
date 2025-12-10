@@ -47,8 +47,6 @@ class EditorView(arcade.View):
             count=COUNT
         )
 
-
-
     def reset(self):
         pass
 
