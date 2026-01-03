@@ -19,7 +19,7 @@ class GameView(arcade.View):
             columns = 23,
             count = 9*23,
         )
-
+        
         self.button_play = Button(self.ui_tiles)
         self.button_play.x = 120
         self.button_play.y = 540
@@ -92,6 +92,10 @@ class GameView(arcade.View):
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
+        if self.button_play.rect.point_in_rect((x, y)):
+            self.button_play.scale = 1.1
+        else:
+            self.button_play.scale = 1.0
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:

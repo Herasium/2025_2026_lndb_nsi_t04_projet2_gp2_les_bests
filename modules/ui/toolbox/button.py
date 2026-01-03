@@ -22,6 +22,8 @@ class Button:
         self.grid_size = data.UI_EDITOR_GRID_SIZE
         self.tiles = tiles
 
+        self.scale = 1.0
+
 
     @property
     def x(self):
@@ -88,12 +90,17 @@ class Button:
         width = 10
         height = 2
 
+        # On calcule la taille de la grille "scalée"
+        scaled_grid = self.grid_size * self.scale
+        # La taille d'affichage de la texture (tes tuiles font 3x la grille dans ton code original)
+        tile_size = scaled_grid * 3
+
         current = 0
         for y in range(height):
             for x in range(width):
 
                 tile_x = x * self.grid_size + self.x
-                tile_y = (y-0.75) * self.grid_size + self.y 
+                tile_y = ((y - 0.75) * self.grid_size) + self.y 
 
                 rect = arcade.XYWH(
                     x = tile_x,
@@ -102,7 +109,6 @@ class Button:
                     height = self.grid_size * 3,
                     anchor = arcade.Vec2(0,1)
                 )
-
 
                 arcade.draw_texture_rect(self.tiles[gate_tile_pattern[current]],rect)
                 current += 1
@@ -132,7 +138,7 @@ class Button:
     @color.setter
     def color(self, value):
         self._color = value
-        self._recalculate_rect
+        self._recalculate_rect()
     
     def _update_hitbox(self):
         self.hitbox.x = self._x
@@ -142,6 +148,16 @@ class Button:
 
     def draw(self):
         self.draw_tiles()
+        # On calcule la largeur/hauteur totale actuelle du bouton
+        current_width = 10 * self.grid_size * self.scale
+        current_height = 2 * self.grid_size * self.scale
+        
+        # On repositionne le texte au centre du bouton agrandi
+        self.text.x = self.x + (current_width / 2)
+        self.text.y = self.y + (current_height / 2) - (self.grid_size * self.scale * 0.4) # Petit ajustement visuel
+        
+        # On ajuste la taille de la police
+        self.text.font_size = 18 * self.scale
         # arcade.draw_rect_filled(
         #     arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,1)),
         #     self._color,
