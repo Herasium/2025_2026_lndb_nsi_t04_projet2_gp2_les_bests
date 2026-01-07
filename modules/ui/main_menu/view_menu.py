@@ -26,8 +26,8 @@ class GameView(arcade.View):
         self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.name = "Jouer"
-        self.button_play.text.x = 280
-        self.button_play.text.y = 495
+        self.button_play._text_obj.x = 280
+        self.button_play._text_obj.y = 495
 
         self.button_quit = Button(self.ui_tiles)
         self.button_quit.x = 120
@@ -35,8 +35,8 @@ class GameView(arcade.View):
         self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.name = "Quitter"
-        self.button_quit.text.x = 280
-        self.button_quit.text.y = 355
+        self.button_quit._text_obj.x = 280
+        self.button_quit._text_obj.y = 355
 
         self.titre = arcade.Text(
             "LogicBox",
@@ -66,16 +66,6 @@ class GameView(arcade.View):
         self.button_quit.draw()
         self.shadow_titre.draw()
         self.titre.draw()
-
-        arcade.draw_texture_rect(self.ui_tiles[172],arcade.XYWH(
-                        x = 0,
-                        y = 0,
-                        width = 96,
-                        height = 96,
-                        anchor = arcade.Vec2(0,0)
-                    ))
-
-
 
     def on_update(self, delta_time):
         pass
@@ -107,5 +97,3 @@ class GameView(arcade.View):
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass
-
-
