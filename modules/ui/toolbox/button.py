@@ -64,13 +64,14 @@ class Button:
     def _recalculate_rect(self):
 
         self.rect = arcade.XYWH(
-            x=self._x,
-            y=self._y,
-            width=self._width,
-            height=self._height,
-            anchor=arcade.Vec2(0,0)
+            x = self._x,
+            y = self._y,
+            width = self._width,
+            height = self._height,
+            anchor = arcade.Vec2(0,1)
         )
         self._update_hitbox()
+        
         self._text = arcade.Text(
             self._name,
             self._x,
@@ -82,7 +83,7 @@ class Button:
             font_name = "Press Start 2P"
         )
         self.text.x = self.x + self.width /2
-        self.text.y = self.y + self.height /2
+        self.text.y = self.y - self.height /2
 
     def draw_tiles(self):
     
@@ -90,23 +91,21 @@ class Button:
         width = 10
         height = 2
 
-        # On calcule la taille de la grille "scalée"
         scaled_grid = self.grid_size * self.scale
-        # La taille d'affichage de la texture (tes tuiles font 3x la grille dans ton code original)
         tile_size = scaled_grid * 3
 
         current = 0
         for y in range(height):
             for x in range(width):
 
-                tile_x = x * self.grid_size + self.x
-                tile_y = ((y - 0.75) * self.grid_size) + self.y 
+                tile_x = self.x + x * scaled_grid
+                tile_y = self.y + (y - 0.75) * scaled_grid
 
                 rect = arcade.XYWH(
                     x = tile_x,
                     y = tile_y,
-                    width = self.grid_size * 3,
-                    height = self.grid_size * 3,
+                    width = tile_size,
+                    height = tile_size,
                     anchor = arcade.Vec2(0,1)
                 )
 
@@ -148,20 +147,14 @@ class Button:
 
     def draw(self):
         self.draw_tiles()
-        # On calcule la largeur/hauteur totale actuelle du bouton
         current_width = 10 * self.grid_size * self.scale
         current_height = 2 * self.grid_size * self.scale
         
-        # On repositionne le texte au centre du bouton agrandi
-        self.text.x = self.x + (current_width / 2)
-        self.text.y = self.y + (current_height / 2) - (self.grid_size * self.scale * 0.4) # Petit ajustement visuel
+        self.text.x = self.x + (current_width / 1.7)
+        self.text.y = self.y - ((current_height / 2) + (self.grid_size * self.scale * 0.6))
         
-        # On ajuste la taille de la police
         self.text.font_size = 18 * self.scale
-        # arcade.draw_rect_filled(
-        #     arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,1)),
-        #     self._color,
-        # )
+
         self.text.draw()
 
     @property

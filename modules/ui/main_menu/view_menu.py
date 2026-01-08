@@ -30,8 +30,6 @@ class GameView(arcade.View):
         self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.name = "Jouer"
-        self.button_play.x = 280
-        self.button_play.y = 495
 
         self.button_quit = Button(self.ui_tiles)
         self.button_quit.x = 120
@@ -39,23 +37,37 @@ class GameView(arcade.View):
         self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.name = "Quitter"
-        self.button_quit.x = 280
-        self.button_quit.y = 355
 
-        self.titre = arcade.Text(
-            "LogicBox",
+        self.titre1 = arcade.Text(
+            "Welcome to",
             x = 120,
-            y = 700,
+            y = 760,
             color = arcade.color.BLOND,
-            font_size = 50,
+            font_size = 60,
             font_name = "Press Start 2P"
         )
-        self.shadow_titre = arcade.Text(
+        self.shadow_titre1 = arcade.Text(
+            "Welcome to",
+            x = 120,
+            y = 754,
+            color = arcade.color.DEEP_SAFFRON,
+            font_size = 60,
+            font_name = "Press Start 2P"
+        )
+        self.titreL = arcade.Text(
             "LogicBox",
             x = 120,
-            y = 694,
+            y = 640,
+            color = arcade.color.BLOND,
+            font_size = 60,
+            font_name = "Press Start 2P"
+        )
+        self.shadow_titreL = arcade.Text(
+            "LogicBox",
+            x = 120,
+            y = 634,
             color = arcade.color.DEEP_SAFFRON,
-            font_size = 50,
+            font_size = 60,
             font_name = "Press Start 2P"
         )
 
@@ -68,8 +80,10 @@ class GameView(arcade.View):
         self.clear()
         self.button_play.draw()
         self.button_quit.draw()
-        self.shadow_titre.draw()
-        self.titre.draw()
+        self.shadow_titre1.draw()
+        self.titre1.draw()
+        self.shadow_titreL.draw()
+        self.titreL.draw()
 
     def on_update(self, delta_time):
         pass
@@ -90,6 +104,10 @@ class GameView(arcade.View):
             self.button_play.scale = 1.1
         else:
             self.button_play.scale = 1.0
+        if self.button_quit.rect.point_in_rect((x, y)):
+            self.button_quit.scale = 1.1
+        else:
+            self.button_quit.scale = 1.0
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:
