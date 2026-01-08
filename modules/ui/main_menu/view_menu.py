@@ -30,8 +30,8 @@ class GameView(arcade.View):
         self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.name = "Jouer"
-        self.button_play.x = 280
-        self.button_play.y = 495
+        self.button_play.text.x = 280
+        self.button_play.text.y = 495
 
         self.button_quit = Button(self.ui_tiles)
         self.button_quit.x = 120
@@ -39,8 +39,8 @@ class GameView(arcade.View):
         self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.name = "Quitter"
-        self.button_quit.x = 280
-        self.button_quit.y = 355
+        self.button_quit.text.x = 280
+        self.button_quit.text.y = 355
 
         self.titre = arcade.Text(
             "LogicBox",
@@ -71,6 +71,8 @@ class GameView(arcade.View):
         self.shadow_titre.draw()
         self.titre.draw()
 
+
+
     def on_update(self, delta_time):
         pass
 
@@ -94,10 +96,18 @@ class GameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:
             data.window.hide()
-            data.window.display(DebugTilesView())
+            if key_modifiers == 16:
+                data.window.display(EditorView())
+            if key_modifiers == 17:
+                data.window.display(DebugTilesView())
 
+            else:
+                print("Modificator not found, defaulting to EditorView.")
+                data.window.display(EditorView())
         if self.button_quit.touched:
             arcade.exit()
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass
+
+
