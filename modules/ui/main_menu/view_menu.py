@@ -30,8 +30,8 @@ class GameView(arcade.View):
         self.button_play.width = 340
         self.button_play.height = 90
         self.button_play.name = "Jouer"
-        self.button_play._text_obj.x = 280
-        self.button_play._text_obj.y = 495
+        self.button_play.x = 280
+        self.button_play.y = 495
 
         self.button_quit = Button(self.ui_tiles)
         self.button_quit.x = 120
@@ -39,8 +39,8 @@ class GameView(arcade.View):
         self.button_quit.width = 340
         self.button_quit.height = 90
         self.button_quit.name = "Quitter"
-        self.button_quit._text_obj.x = 280
-        self.button_quit._text_obj.y = 355
+        self.button_quit.x = 280
+        self.button_quit.y = 355
 
         self.titre = arcade.Text(
             "LogicBox",
