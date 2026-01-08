@@ -85,6 +85,8 @@ class GameView(arcade.View):
         self.shadow_titreL.draw()
         self.titreL.draw()
 
+
+
     def on_update(self, delta_time):
         pass
 
@@ -112,10 +114,18 @@ class GameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:
             data.window.hide()
-            data.window.display(DebugTilesView())
+            if key_modifiers == 16:
+                data.window.display(EditorView())
+            if key_modifiers == 17:
+                data.window.display(DebugTilesView())
 
+            else:
+                print("Modificator not found, defaulting to EditorView.")
+                data.window.display(EditorView())
         if self.button_quit.touched:
             arcade.exit()
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass
+
+
