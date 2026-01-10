@@ -10,7 +10,7 @@ from modules.engine.logic import calculate_output
 
 from line_profiler import profile
 
-class Gate(Node):
+class Output(Node):
 
     def __init__(self, id, tiles):
         super().__init__(id)
@@ -20,10 +20,10 @@ class Gate(Node):
         self._x = 0 + self.grid_size/2
         self._y = 0 + self.grid_size/2
 
-        self.inputs = [False,False]
-        self.outputs = [False]
+        self.inputs = [False]
 
-        self._name = "AND"
+        self._name = "OUT"
+        self.type = "Output"
 
         self.bg = Entity()
         self.bg.color = arcade.types.Color.from_hex_string("0F3FA8")
@@ -56,8 +56,9 @@ class Gate(Node):
 
         self.tiles = tiles
 
- 
+        self.gen_tile_pattern()
         self.calculate_display()
+        
 
     @property
     def name(self):
@@ -66,10 +67,6 @@ class Gate(Node):
     @name.setter
     def name(self, value):
         self._name = value
-        if self._name == "NOT":
-            self.inputs = [False]
-        else:
-            self.inputs = [False, False]
 
         if hasattr(self, "text"):
             self.text.text = self._name
@@ -99,14 +96,14 @@ class Gate(Node):
     @profile
     def calculate_display(self):
 
-        self.width = (math.ceil(self.text.content_width / self.grid_size)+2) * self.grid_size
+        self.width = (math.ceil(self.text.content_width / self.grid_size)+1) * self.grid_size
         self.height = 4*self.grid_size
-        self.max = max(len(self.inputs),len(self.outputs)) +1 
+        self.max = len(self.inputs) +1 
 
-        self.text.x = self.x + self.grid_size * 3 + 1 
+        self.text.x = self.x + self.width/2
         self.text.y = self.y + self.height /1.6 + self.grid_size/4
 
-        self.bg_text.x = self.x + self.grid_size * 3 - 1
+        self.bg_text.x = self.x + self.width/2 - 1
         self.bg_text.y = self.y + self.height /1.6 + self.grid_size/4 + 2
 
 
@@ -121,40 +118,70 @@ class Gate(Node):
         self.bg.height = self.height+10
 
         self.inputs_position = []
-        self.outputs_position = []
 
         self.inputs_hitboxes = []
-        self.outputs_hitboxes = []
 
         for i in range(len(self.inputs)):
 
             y = self.y 
-            x = self.x + self.grid_size * (i+1)
+            x = self.x + (((self.gate_width - 2 - (len(self.inputs)))  / 2) + 1 + i)*self.grid_size 
 
             self.inputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
             self.inputs_hitboxes.append(
                 HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
-        for i in range(len(self.outputs)):
+    def gen_tile_pattern(self):
 
-            y = self.y 
-            x = self.x + self.grid_size * (i+2+len(self.inputs))
+        gate_tile_pattern = []
 
-            self.outputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
-            self.outputs_hitboxes.append(
-                HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
-            )
+        self.gate_width = (math.ceil(self.text.content_width / self.grid_size)+1)
+        to_fill = (self.gate_width - 2 - (len(self.inputs)))  / 2
+
+        #Bottom Row
+        gate_tile_pattern.append(7)
+        for _ in range(math.floor(to_fill)):
+            gate_tile_pattern.append(0)
+        for _ in range(len(self.inputs)):
+            gate_tile_pattern.append(6)
+        for _ in range(math.ceil(to_fill)):
+            gate_tile_pattern.append(0)
+        gate_tile_pattern.append(8)
+
+        #First Row
+        gate_tile_pattern.append(30)
+        for _ in range(math.floor(to_fill)):
+            gate_tile_pattern.append(34)
+        for i in self.inputs:
+            if i:
+                gate_tile_pattern.append(15)
+            else:
+                gate_tile_pattern.append(21)
+        for _ in range(math.ceil(to_fill)):
+            gate_tile_pattern.append(33)
+        gate_tile_pattern.append(32)
+
+        #Second Row
+        gate_tile_pattern.append(31)
+        for _ in range(self.gate_width-2):
+            gate_tile_pattern.append(13)
+        gate_tile_pattern.append(25)
+
+        #Top Row
+        gate_tile_pattern.append(28)
+        for _ in range(self.gate_width-2):
+            gate_tile_pattern.append(2)
+        gate_tile_pattern.append(27)
+
+        self.gate_tile_pattern = gate_tile_pattern
 
     def draw_tiles(self):
     
-        gate_tile_pattern = [7,6,6,0,6,8,26,10,10,1,10,19,31,13,13,13,13,25,28,2,2,2,2,27]
-        width = 6
         height = 4
 
         current = 0
         for y in range(height):
-            for x in range(width):
+            for x in range(self.gate_width):
 
                 tile_x = x * self.grid_size + self.x
                 tile_y = y * self.grid_size + self.y
@@ -168,7 +195,7 @@ class Gate(Node):
                 )
 
 
-                arcade.draw_texture_rect(self.tiles[gate_tile_pattern[current]],rect)
+                arcade.draw_texture_rect(self.tiles[self.gate_tile_pattern[current]],rect)
                 current += 1
             
 
@@ -180,13 +207,10 @@ class Gate(Node):
         self.text.draw()
         for i in self.inputs_hitboxes:
             i.draw()
-        for i in self.outputs_hitboxes:
-            i.draw()
         self.entity.hitbox.draw()
 
     def update(self):
-        """Calculates the output of the gate based on its inputs and type."""
-        self.outputs[0] = calculate_output(self.name, self.inputs)
+        pass
 
 
     @property
@@ -198,11 +222,9 @@ class Gate(Node):
             i = self.inputs_hitboxes[a]
             if i.touched:
                 touched = (1,a)
-
-
-        for a in range(len(self.outputs_hitboxes)):
-            i = self.outputs_hitboxes[a]
-            if i.touched:
-                touched = (2,a)
-
+ 
         return touched
+
+    def __str__(self):
+        result = f"Output (#{self.id}), {len(self.inputs)} Inputs ({self.inputs})"
+        return result

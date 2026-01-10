@@ -4,11 +4,21 @@ from line_profiler import profile
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.grid import Grid
+from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.id_generator import random_id
 
 from modules.data.nodes.path import Path
-from modules.data.nodes.gate import Gate
+
+from modules.data.nodes.nand import Nand
+from modules.data.nodes.gand import And
+from modules.data.nodes.gor import Or
+from modules.data.nodes.gnot import Not
+from modules.data.nodes.xor import Xor
+from modules.data.nodes.nor import Nor
+
 from modules.data.nodes.input import Input
+from modules.data.nodes.output import Output
+from modules.data.chip import Chip
 
 from modules.data import data
 
@@ -30,15 +40,15 @@ class EditorView(arcade.View):
         self.moving_gate = None
         self.current_path = None
 
-        self.simulate_button = Entity()
-        self.simulate_button.width = 100
-        self.simulate_button.height = 100
+        self.selected_cursor = 0
+        self.cursors = [
+            Nand,And,Or,Not,Xor,Nor,Input,Output
+        ]
+        self.cursors_names = [
+            "Nand",'And',"Or","Not","Xor","Nor","Input","Output"
+        ]
 
-        self.selected_cursor = 1
-
-        # changed
-        self.gates = {}   # id : Gate
-        self.paths = {}   # id : Path
+        self.chip = Chip()
 
         self.moving_gate_offset = (0, 0)
         
@@ -56,17 +66,41 @@ class EditorView(arcade.View):
             count=COUNT
         )
 
+        self.numpad_key_list = [65456,65457,65458,65459,65460,65461,65462,65463,65464,65465]
+        self.add_side_bar()
+
+    def add_side_bar(self):
+        self.side_texts = []
+
+        for i in self.cursors_names:
+            new = Text()
+            new.name = f"{len(self.side_texts)}: {str(i)}"
+            new.x = 1700
+            new.y = 1080-50*(len(self.side_texts)+1)
+            new.align = ("left","center")
+            self.side_texts.append(new)
+
+    def render_side_bar(self):
+
+        for i in range(len(self.side_texts)):
+            text = self.side_texts[i]
+            if i == self.selected_cursor:
+                text.color = arcade.color.RED
+            else:
+                text.color = arcade.color.WHITE
+
+            text.draw()
+
     def reset(self):
         pass
 
     def on_draw(self):
         self.clear()
-        self.simulate_button.draw()
 
-        for p in self.paths.values():
+        for p in self.chip.paths.values():
             p.draw()
 
-        for g in self.gates.values():
+        for g in self.chip.gates.values():
             g.draw()
 
         if self.current_path:
@@ -75,13 +109,22 @@ class EditorView(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
+        self.render_side_bar()
 
     def on_update(self, delta_time):
-        for gate in self.gates.values():
-            gate.update()
+        self.simulate()
 
 
     def on_key_press(self, key, key_modifiers):
+
+        if key in self.numpad_key_list:
+            self.selected_cursor = self.numpad_key_list.index(key)
+
+        if key == 101:
+            for g in self.chip.gates.values():
+                if g.entity.touched and g.type == "Input":
+                    g.switch()
+
         if key == 97:  # "a"
             arcade.exit()
         if key == 65307:  # ESC
@@ -111,7 +154,7 @@ class EditorView(arcade.View):
             self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
 
             # update connected paths
-            for path in self.paths.values():
+            for path in self.chip.paths.values():
                 connected_inputs, connected_outputs = path.get_connected_points(self.moving_gate.id)
                 modified = False
 
@@ -133,16 +176,12 @@ class EditorView(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self):
-        propagate_values(self.gates,self.paths)
+        propagate_values(self.chip)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
-        if self.simulate_button.touched:
-            self.simulate()
-            return
-
         # Clicked a gate?
-        for g in self.gates.values():
+        for g in self.chip.gates.values():
             touched = g.touched
             if touched:
                 if self.current_path is None:
@@ -151,42 +190,42 @@ class EditorView(arcade.View):
                     self.current_path = Path(pid)
                     self.current_path.add_path()
 
-                    if touched[0] == 1:
-                        self.current_path.outputs.append((1, g.id, touched[1], 1, self.current_path.current_branch_count))
-                    else:
-                        self.current_path.inputs.append((2, g.id, touched[1], 1, self.current_path.current_branch_count))
+                    if touched[0] == 1: #Input touched
+                        self.current_path.outputs.append([1, g.id, touched[1], 1, self.current_path.current_branch_count])
+                    else: #Output touched
+                        self.current_path.inputs.append([2, g.id, touched[1], 1, self.current_path.current_branch_count])
                     return
 
                 else:
                     # finish existing path
-                    if touched[0] == 1:
-                        self.current_path.outputs.append((1, g.id, touched[1], 2, self.current_path.current_branch_count))
-                    else:
-                        self.current_path.inputs.append((2, g.id, touched[1], 2, self.current_path.current_branch_count))
+                    if touched[0] == 1:#Input touched
+                        self.current_path.outputs.append([1, g.id, touched[1], 2, self.current_path.current_branch_count])
+                    else:#Output touched
+                        self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
 
                     self.current_path.finish()
 
-                    if self.current_path.id not in self.paths:
-                        self.paths[self.current_path.id] = self.current_path
+                    if self.current_path.id not in self.chip.paths:
+                        self.chip.paths[self.current_path.id] = self.current_path
 
                     self.current_path = None
                     return
 
         # Clicking on a path
         if not self.current_path:
-            for p in self.paths.values():
+            for p in self.chip.paths.values():
                 if p.touched:
                     p.add_path()
                     self.current_path = p
                     return
         else:
-            for p in self.paths.values():
+            for p in self.chip.paths.values():
                 if p.touched and p != self.current_path:
                     self.current_path.add_path()
                     p.merge(self.current_path)
 
-                    if self.current_path.id in self.paths:
-                        del self.paths[self.current_path.id]
+                    if self.current_path.id in self.chip.paths:
+                        del self.chip.paths[self.current_path.id]
 
                     self.current_path = None
                     return
@@ -196,7 +235,7 @@ class EditorView(arcade.View):
 
         # Move a gate
         if self.moving_gate is None:
-            for g in self.gates.values():
+            for g in self.chip.gates.values():
                 if g.entity.touched:
                     self.moving_gate_offset = (
                         mouse.cursor[0] - g.x,
@@ -207,15 +246,12 @@ class EditorView(arcade.View):
 
         # Place new gate
         if self.selected_follower is None:
-            if self.selected_cursor == 0:
-                self.selected_follower = Gate(random_id(),self.gate_tiles)
-            elif self.selected_cursor == 1:
-                self.selected_follower = Input(random_id(),self.gate_tiles)
+            self.selected_follower =  self.cursors[self.selected_cursor](random_id(),self.gate_tiles)
             self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
             self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
 
         else:
-            self.gates[self.selected_follower.id] = self.selected_follower
+            self.chip.gates[self.selected_follower.id] = self.selected_follower
             self.selected_follower = None
 
 

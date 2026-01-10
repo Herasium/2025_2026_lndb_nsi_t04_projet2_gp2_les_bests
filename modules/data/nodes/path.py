@@ -101,7 +101,6 @@ class Path(Node):
 
         if self.current_point == None and self.current_branch_count > 0:
                 snapped = self.project_point_onto_segments(mouse.cursor[0], mouse.cursor[1])
-                print(snapped)
                 pt = snapped["point"]
                 self.branch_points[snapped["branch"]].insert(snapped["index"]+1,pt)
 
@@ -138,7 +137,6 @@ class Path(Node):
 
         self.recalculate_hitbox()
 
-        print("Aborted",self)
 
     def draw(self):
 
@@ -169,8 +167,6 @@ class Path(Node):
 
     def merge(self,path):
 
-        print("Merging paths",path)
-
         branch_offset = self.current_branch_count 
 
         last_point = path.branch_points[path.current_branch_count][-1] 
@@ -186,14 +182,13 @@ class Path(Node):
             self.current_branch_count += 1
 
         for i in path.inputs:
-            self.inputs.append((i[0],i[1],i[2],i[3],i[4] + branch_offset))
+            self.inputs.append([i[0],i[1],i[2],i[3],i[4] + branch_offset])
 
         for i in path.outputs:
-            self.outputs.append((i[0],i[1],i[2],i[3],i[4] + branch_offset))
+            self.outputs.append([i[0],i[1],i[2],i[3],i[4] + branch_offset])
 
         self.current_branch_count -= 1
         self.finish()
-        print(self)
 
     @profile
     def get_connected_points(self, target_id):

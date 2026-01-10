@@ -116,9 +116,8 @@ class GameView(arcade.View):
             data.window.hide()
             if key_modifiers == 16:
                 data.window.display(EditorView())
-            if key_modifiers == 17:
+            elif key_modifiers == 17:
                 data.window.display(DebugTilesView())
-
             else:
                 print("Modificator not found, defaulting to EditorView.")
                 data.window.display(EditorView())
