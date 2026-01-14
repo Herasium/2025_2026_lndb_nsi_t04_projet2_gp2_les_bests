@@ -4,6 +4,7 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
+from modules.ui.main_menu.in_progress_view import MainMenuView
 
 from modules.data import data
 
@@ -93,9 +94,7 @@ class GameView(arcade.View):
     def on_key_press(self, key, key_modifiers):
         if key == 97: #"a"
             arcade.exit()
-        if key == 65307: #echap
-            self.current_path = None
-            self.selected_follower = None
+
 
     def on_key_release(self, key, key_modifiers):
         pass
@@ -114,12 +113,15 @@ class GameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:
             data.window.hide()
-            if key_modifiers == 16:
+            if key_modifiers == 16 or key_modifiers == 0:
                 data.window.display(EditorView())
-            elif key_modifiers == 17:
+            elif key_modifiers == 17 or key_modifiers == 1:
                 data.window.display(DebugTilesView())
+            elif key_modifiers == 2:
+                data.window.display(MainMenuView())
+
             else:
-                print("Modificator not found, defaulting to EditorView.")
+                print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
                 data.window.display(EditorView())
         if self.button_quit.touched:
             arcade.exit()
