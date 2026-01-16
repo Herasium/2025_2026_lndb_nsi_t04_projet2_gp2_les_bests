@@ -25,6 +25,7 @@ class MainMenuView(arcade.View):
         )
 
         self.play_button_sprite = arcade.Sprite("assets/play_button.png")
+        self.name_banner_sprite = arcade.Sprite("assets/name_banner.png")
 
         self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
 
@@ -63,14 +64,14 @@ class MainMenuView(arcade.View):
         self.clear()
         
         start_x = 32
-        start_y = 900
+        start_y = 865
 
         self.draw_tile(0,start_x,start_y)
         for i in range(27):
             self.draw_tile(1,start_x + (i+1)*64,start_y)
         self.draw_tile(3,start_x+28*64,start_y)
 
-        y_len = 11
+        y_len = 13
 
         for i in range(y_len-1):
             self.draw_tile(4,start_x,start_y - (i+1)*64)
@@ -97,6 +98,17 @@ class MainMenuView(arcade.View):
         )
 
         arcade.draw_sprite_rect(self.play_button_sprite,rect)
+
+        rect = arcade.XYWH(
+                x=0,
+                y=1080-128,
+                width=1920,
+                height=128,
+                anchor=arcade.Vec2(0,0)
+        )
+
+        arcade.draw_sprite_rect(self.name_banner_sprite,rect)
+
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
