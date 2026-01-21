@@ -120,21 +120,21 @@ class EditorView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        start_x = 32
-        start_y = 865
+        start_x = 0
+        start_y = 1080-64
 
         self.draw_tile(0,start_x,start_y)
-        for i in range(27):
+        for i in range(28):
             self.draw_tile(1,start_x + (i+1)*64,start_y)
-        self.draw_tile(3,start_x+28*64,start_y)
+        self.draw_tile(3,start_x+29*64,start_y)
 
         y_len = 13
 
         for i in range(y_len-1):
             self.draw_tile(4,start_x,start_y - (i+1)*64)
-            for a in range(27):
+            for a in range(28):
                 self.draw_tile(9,start_x + (a+1)*64,start_y- (i+1)*64)
-            self.draw_tile(7,start_x+28*64,start_y - (i+1)*64)
+            self.draw_tile(7,start_x+29*64,start_y - (i+1)*64)
 
 
         self.draw_tile(12,start_x,start_y - y_len*64)
@@ -142,9 +142,9 @@ class EditorView(arcade.View):
         self.draw_tile(5,start_x + 2*64,start_y- y_len*64)
         self.draw_tile(6,start_x + 3*64,start_y- y_len*64)
         self.draw_tile(10,start_x + 4*64,start_y- y_len*64)
-        for i in range(23):
+        for i in range(24):
             self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
-        self.draw_tile(15,start_x+28*64,start_y- y_len*64)
+        self.draw_tile(15,start_x+29*64,start_y- y_len*64)
 
         for p in self.chip.paths.values():
             p.draw()
@@ -169,7 +169,7 @@ class EditorView(arcade.View):
         if key in self.numpad_key_list:
             self.selected_cursor = self.numpad_key_list.index(key)
 
-        if key == 101:
+        if key == 101: #e
             for g in self.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
@@ -181,6 +181,9 @@ class EditorView(arcade.View):
                 self.current_path.abort()
             self.current_path = None
             self.selected_follower = None
+
+        if key == 115: # s
+            self.chip.save()
 
 
     def on_key_release(self, key, key_modifiers):
@@ -253,7 +256,6 @@ class EditorView(arcade.View):
                         self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
 
                     self.current_path.finish()
-                    print(self.current_path.points,"\n\n",self.current_path.branch_points)
                     if self.current_path.id not in self.chip.paths:
                         self.chip.paths[self.current_path.id] = self.current_path
 

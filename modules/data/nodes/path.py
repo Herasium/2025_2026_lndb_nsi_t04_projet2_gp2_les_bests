@@ -259,44 +259,21 @@ class Path(Node):
         return left_points, right_points
 
     def __str__(self):
-        out = []
-        out.append(f"Path(id={self.id})")
-        out.append(f"  Current value: {self.current_value}")
-        out.append(f"  Color: {self.color}")
-        out.append(f"  Grid size: {self.grid_size}")
-        out.append(f"  Thickness: {self.thickness}")
-        out.append(f"  Current point: {self.current_point}")
-        out.append(f"  Current branch index: {self.current_branch_count}")
-        out.append("")
-        out.append("  Inputs:")
-        if self.inputs:
-            for i, inp in enumerate(self.inputs):
-                out.append(f"    [{i}] {inp}")
-        else:
-            out.append("    (none)")
-        out.append("")
-        out.append("  Outputs:")
-        if self.outputs:
-            for i, outp in enumerate(self.outputs):
-                out.append(f"    [{i}] {outp}")
-        else:
-            out.append("    (none)")
-        out.append("")
-        out.append("  Branches:")
-        for bid, pts in self.branch_points.items():
-            out.append(f"    Branch {bid}:")
-            out.append(f"      Points ({len(pts)}):")
-            for p in pts:
-                out.append(f"        {p}")
+        return f"Path {self.id}"
+    
+    def save_hitboxes(self):
+        result = {}
+        for id in self.branch_hitboxes:
+            result[id] = []
+            for i in self.branch_hitboxes[id]:
+                result[id].append(i.save())
 
-            hb = self.branch_hitboxes.get(bid)
-            if hb:
-                out.append("      Hitbox points:")
-                for point in hb:
-                        out.append(f"        {point}")
-                else:
-                    out.append("        (empty)")
-            else:
-                out.append("      Hitbox: (missing)")
-            out.append("")
-        return "\n".join(out)
+    def save(self):
+        return {
+            "type": "path",
+            "inputs": self.inputs,
+            "outputs": self.outputs,
+            "id": self.id,
+            "branch_points": self.branch_points,
+            "branch_hitboxes": self.save_hitboxes(),
+        }

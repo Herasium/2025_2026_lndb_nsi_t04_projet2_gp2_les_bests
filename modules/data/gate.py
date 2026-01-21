@@ -22,9 +22,9 @@ class Gate(Node):
         self.inputs = []
         self.outputs = []
 
-        self._name = "NAND"
+        self._name = "Default Gate"
         self.type = "Gate"
-        self.gate_type = "NAND"
+        self.gate_type = "Default"
 
         self.bg = Entity()
         self.bg.color = arcade.types.Color.from_hex_string("0F3FA8")
@@ -255,6 +255,17 @@ class Gate(Node):
 
         return touched
 
+
+    def save(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "type": self.type,
+            "inputs": self.inputs,
+            "outputs": self.outputs,
+            "gate": self.gate_type,
+            "id": self.id
+        }
 
     def __str__(self):
         result = f"Gate {self._name} (#{self.id}), {len(self.inputs)} Inputs ({self.inputs}), {len(self.outputs)} Outputs ({self.outputs})"

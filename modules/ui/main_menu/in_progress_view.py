@@ -140,16 +140,12 @@ class MainMenuView(arcade.View):
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
-        if self.play_button.rect.point_in_rect((x, y)):
-            print (f"soiris")
-        else:
-            pass
+
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         print(x,y)
         if self.play_button.touched:
             data.window.hide()
-            print (f"Bouton préssé")
             if key_modifiers == 16 or key_modifiers == 0:
                 data.window.display(EditorView())
             elif key_modifiers == 17 or key_modifiers == 1:

@@ -218,6 +218,14 @@ class Input(Node):
     def update(self):
         pass
 
+    def save(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "type": self.type,
+            "outputs": self.outputs,
+            "id": self.id
+        }
 
     @property
     def touched(self):

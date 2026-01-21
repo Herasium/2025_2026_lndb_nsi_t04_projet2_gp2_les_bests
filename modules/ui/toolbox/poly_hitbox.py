@@ -12,6 +12,9 @@ class PolyHitbox():
         if len(self.points) > 1:
             arcade.draw_polygon_outline(self.points, arcade.color.ALLOY_ORANGE)
 
+    def save(self): 
+        return {"type": "PolyHitbox", "points": self.points}
+
     @property
     def touched(self):
 
