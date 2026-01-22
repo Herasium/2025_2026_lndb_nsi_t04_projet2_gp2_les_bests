@@ -11,7 +11,7 @@ from line_profiler import profile
 
 class Gate(Node):
 
-    def __init__(self, id, tiles):
+    def __init__(self, id):
         super().__init__(id)
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
@@ -55,7 +55,7 @@ class Gate(Node):
                     font_name="Press Start 2P"
                 )
 
-        self.tiles = tiles
+        self.tiles = data.gate_tiles
         self.draw_hitboxes = False
 
         self.calculate_display()
@@ -266,6 +266,16 @@ class Gate(Node):
             "gate": self.gate_type,
             "id": self.id
         }
+    
+    def load(self, data):
+
+        self.type = data["type"]
+        self.inputs = data["inputs"]
+        self.outputs = data["outputs"]
+        self.gate_type = data["gate"]
+        self.id = data["id"]
+        self.x = data["x"]
+        self.y = data["y"]
 
     def __str__(self):
         result = f"Gate {self._name} (#{self.id}), {len(self.inputs)} Inputs ({self.inputs}), {len(self.outputs)} Outputs ({self.outputs})"

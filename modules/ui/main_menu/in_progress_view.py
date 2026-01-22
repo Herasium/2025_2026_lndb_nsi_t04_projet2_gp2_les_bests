@@ -10,6 +10,8 @@ from modules.data.nodes.path import Path
 from modules.data import data
 
 from pyglet.graphics import Batch
+import sys
+
 
 class MainMenuView(arcade.View):
 
@@ -143,16 +145,15 @@ class MainMenuView(arcade.View):
 
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        print(x,y)
-        if self.play_button.touched:
-            data.window.hide()
-            if key_modifiers == 16 or key_modifiers == 0:
-                data.window.display(EditorView())
-            elif key_modifiers == 17 or key_modifiers == 1:
-                data.window.display(DebugTilesView())
-            elif key_modifiers == 2 or key_modifiers == 18:
-                data.window.display(MainMenuView())
+            if self.play_button.touched:
+                data.window.hide()
+                if key_modifiers == 16 or key_modifiers == 0:
+                    data.window.display(EditorView())
+                elif key_modifiers == 17 or key_modifiers == 1:
+                    data.window.display(DebugTilesView())
+                elif key_modifiers == 2 or key_modifiers == 18:
+                    data.window.display(MainMenuView())
 
-            else:
-                print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
-                data.window.display(EditorView())
+                else:
+                    print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
+                    data.window.display(EditorView())

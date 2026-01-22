@@ -48,36 +48,15 @@ class EditorView(arcade.View):
             "Nand",'And',"Or","Not","Xor","Nor","Input","Output"
         ]
 
-        self.chip = Chip()
+        self.chip = data.loaded_chips["default_id"]
 
         self.moving_gate_offset = (0, 0)
 
         self.camera_position = ()
-        
-        TILE_W = 27
-        TILE_H = 27
-        ROWS = 6
-        COLS = 6
-        COUNT = ROWS * COLS 
-
-        self.gate_sheet = arcade.SpriteSheet("assets/gate_grid.png")
-
-        self.gate_tiles = self.gate_sheet.get_texture_grid(
-            size=(TILE_W, TILE_H),
-            columns=COLS,
-            count=COUNT
-        )
 
         self.numpad_key_list = [65456,65457,65458,65459,65460,65461,65462,65463,65464,65465]
         self.add_side_bar()
 
-        self.ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
-
-        self.ui_border_tiles = self.ui_border_sheet.get_texture_grid(
-            size = (64, 64),
-            columns = 4,
-            count = 4*4,
-        )
 
     def draw_tile(self,id,x,y):
             
@@ -89,7 +68,7 @@ class EditorView(arcade.View):
                 anchor=arcade.Vec2(0,0)
             )
 
-            arcade.draw_texture_rect(self.ui_border_tiles[id],rect)
+            arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
 
 
     def add_side_bar(self):
@@ -222,6 +201,7 @@ class EditorView(arcade.View):
                     if i[3] == 1:
                         path.branch_points[i[4]][0] = self.moving_gate.inputs_position[i[2]]
                     elif i[3] == 2:
+                        print(i,path.branch_points,self.moving_gate.inputs_position)
                         path.branch_points[i[4]][-1] = self.moving_gate.inputs_position[i[2]]
 
                 if modified:
@@ -297,7 +277,7 @@ class EditorView(arcade.View):
 
         # Place new gate
         if self.selected_follower is None:
-            self.selected_follower =  self.cursors[self.selected_cursor](random_id(),self.gate_tiles)
+            self.selected_follower =  self.cursors[self.selected_cursor](random_id())
             self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
             self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
 

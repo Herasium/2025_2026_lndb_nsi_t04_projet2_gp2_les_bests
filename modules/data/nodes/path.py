@@ -267,6 +267,7 @@ class Path(Node):
             result[id] = []
             for i in self.branch_hitboxes[id]:
                 result[id].append(i.save())
+        return result
 
     def save(self):
         return {
@@ -276,4 +277,25 @@ class Path(Node):
             "id": self.id,
             "branch_points": self.branch_points,
             "branch_hitboxes": self.save_hitboxes(),
+            "current_branch_count": self.current_branch_count
         }
+    
+    def load_hitboxes(self,hitboxes):
+        result = {}
+        for index in hitboxes: 
+            count = len(result.keys())
+            result[count] = []
+            for hit in hitboxes[index]:
+                result[count].append(PolyHitbox(hit["points"]))
+        return result
+
+    def load(self,data):
+
+        self.inputs = data["inputs"]
+        self.outputs = data["outputs"]
+        self.id = data["id"]
+        self.branch_points = {}
+        for key in data["branch_points"]:
+            self.branch_points[int(key)] = data["branch_points"][key]
+        self.branch_hitboxes = self.load_hitboxes(data["branch_hitboxes"])
+        self.current_branch_count = data["current_branch_count"]

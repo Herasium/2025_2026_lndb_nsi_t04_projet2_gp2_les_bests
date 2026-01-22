@@ -8,8 +8,8 @@ from line_profiler import profile
 
 class Or(Gate):
 
-    def __init__(self, id, tiles):
-        super().__init__(id,tiles)
+    def __init__(self, id):
+        super().__init__(id)
 
         self.name = "OR"
         self.type = "Gate"

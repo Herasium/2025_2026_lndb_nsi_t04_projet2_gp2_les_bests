@@ -12,7 +12,7 @@ from line_profiler import profile
 
 class Output(Node):
 
-    def __init__(self, id, tiles):
+    def __init__(self, id):
         super().__init__(id)
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
@@ -54,7 +54,7 @@ class Output(Node):
                     font_name="Press Start 2P"
                 )
 
-        self.tiles = tiles
+        self.tiles = data.gate_tiles
         self.draw_hitboxes = False
 
         self.gen_tile_pattern()
@@ -222,6 +222,13 @@ class Output(Node):
             "inputs": self.inputs,
             "id": self.id
         }
+    
+    def load(self, data):
+        self.x = data["x"]
+        self.y = data["y"]
+        self.type = data["type"]
+        self.inputs = data["inputs"]
+        self.id = data["id"]
 
     @property
     def touched(self):
