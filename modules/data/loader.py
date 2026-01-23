@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, isdir
 import zlib
 import json
 from modules.data import data
@@ -11,6 +11,10 @@ import traceback
 def load_saves():
 
     saves = join(data.current_path,"saves")
+
+    if not isdir(saves):
+         return 
+
     files = [f for f in listdir(saves) if isfile(join(saves, f))]
     read = []
 

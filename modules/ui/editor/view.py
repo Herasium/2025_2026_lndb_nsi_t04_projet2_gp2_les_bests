@@ -48,7 +48,7 @@ class EditorView(arcade.View):
             "Nand",'And',"Or","Not","Xor","Nor","Input","Output"
         ]
 
-        self.chip = data.loaded_chips["default_id"]
+        self.chip = Chip("fihzfp")
 
         self.moving_gate_offset = (0, 0)
 

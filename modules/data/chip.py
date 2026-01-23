@@ -34,7 +34,7 @@ class Chip:
 
         dump = json.dumps(result)
         path = data.current_path
-
+        os.makedirs(os.path.join(path,"saves"), exist_ok=True) 
         with open(os.path.join(os.path.join(path,"saves"),f"{self.id}.chip"),"wb") as file:
             file.write(zlib.compress(dump.encode()))
 
