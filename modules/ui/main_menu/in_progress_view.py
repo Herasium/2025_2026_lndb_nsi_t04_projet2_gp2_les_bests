@@ -115,10 +115,13 @@ class MainMenuView(arcade.View):
         self.draw_tile(5,start_x + 2*64,start_y- y_len*64)
         self.draw_tile(6,start_x + 3*64,start_y- y_len*64)
         self.draw_tile(10,start_x + 4*64,start_y- y_len*64)
+
         for i in range(23):
             self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
         self.draw_tile(15,start_x+28*64,start_y- y_len*64)
+
         self.draw_paths()
+
         rect = arcade.XYWH(
                 x = 1920 / 2,
                 y = 260 + 320 + 100,
@@ -142,7 +145,12 @@ class MainMenuView(arcade.View):
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
-
+        if self.play_button.touched:
+            for i in self.paths :
+                i.current_value = True
+        if not self.play_button.touched:
+            for i in self.paths :
+                i.current_value = False
 
     def on_mouse_press(self, x, y, button, key_modifiers):
             if self.play_button.touched:
