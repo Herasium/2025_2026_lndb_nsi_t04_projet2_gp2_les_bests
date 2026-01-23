@@ -201,5 +201,5 @@ class MainMenuView(arcade.View):
                 arcade.exit()
 
             if self.setting_button.touched:
-                print (f"bouton presse")
                 data.window.display(SettingView())
+                print (f"bouton presse")

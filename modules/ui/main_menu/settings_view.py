@@ -2,7 +2,6 @@ import arcade
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
-# from modules.ui.main_menu.in_progress_view import MainMenuView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 
 from modules.data.nodes.path import Path
@@ -37,10 +36,10 @@ class SettingView(arcade.View):
         )
 
         self.back_button = Button(self.ui_tiles)
-        self.back_button.x = 1920 / 2 - 700 / 2 - 5
-        self.back_button.y = 260 + 100 + 240 / 2
-        self.back_button.width = 192
-        self.back_button.height = 215
+        self.back_button.x = 192 / 2.5
+        self.back_button.y = 1010
+        self.back_button.width = 150
+        self.back_button.height = 100
 
 
     def on_key_press(self, key, key_modifiers):
@@ -51,11 +50,13 @@ class SettingView(arcade.View):
         self.back_button.draw()
 
     def on_draw(self):
-       pass
+       self.clear()
+       self.back_button.draw()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
 
-    # def on_mouse_press(self, x, y, button, key_modifiers):
-    #     if self.back_button.touched :
-    #         data.window.display(MainMenuView())
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        if self.back_button.touched :
+            from modules.ui.main_menu.in_progress_view import MainMenuView
+            data.window.display(MainMenuView())
