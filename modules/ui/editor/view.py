@@ -30,11 +30,9 @@ class EditorView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        self.grid_size = data.UI_EDITOR_GRID_SIZE
-
         self.follower = Entity()
-        self.follower.height = self.grid_size
-        self.follower.width = self.grid_size
+        self.follower.height = data.UI_EDITOR_GRID_SIZE
+        self.follower.width = data.UI_EDITOR_GRID_SIZE
 
         self.selected_follower = None
         self.moving_gate = None
@@ -52,10 +50,15 @@ class EditorView(arcade.View):
 
         self.moving_gate_offset = (0, 0)
 
-        self.camera_position = ()
+        self._real_camera_position = (0,0)
+        self.camera_position = (0,0)
 
         self.numpad_key_list = [65456,65457,65458,65459,65460,65461,65462,65463,65464,65465]
         self.add_side_bar()
+        self.background_color = arcade.types.Color.from_hex_string("121212")
+
+        self.camera_hold = False
+        self.fps = 0
 
 
     def draw_tile(self,id,x,y):
@@ -96,9 +99,7 @@ class EditorView(arcade.View):
     def reset(self):
         pass
 
-    def on_draw(self):
-        self.clear()
-
+    def draw_frame_border(self):
         start_x = 0
         start_y = 1080-64
 
@@ -111,8 +112,6 @@ class EditorView(arcade.View):
 
         for i in range(y_len-1):
             self.draw_tile(4,start_x,start_y - (i+1)*64)
-            for a in range(28):
-                self.draw_tile(9,start_x + (a+1)*64,start_y- (i+1)*64)
             self.draw_tile(7,start_x+29*64,start_y - (i+1)*64)
 
 
@@ -125,6 +124,40 @@ class EditorView(arcade.View):
             self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
         self.draw_tile(15,start_x+29*64,start_y- y_len*64)
 
+    def draw_frame_background(self):
+
+        start_x = 0
+        start_y = 1080
+        y_len = 15
+
+        for i in range(y_len-1):
+            for a in range(32):
+                self.draw_tile(9,start_x + (a)*64,start_y- (i+1)*64)
+
+    def draw_debug_text(self):
+
+        debug_list = [
+            f"Camera: {self.camera_position}",
+            f"FPS: {self.fps}",
+        ]
+
+        start_y = 1080-70
+        
+        for index, item in enumerate(debug_list):
+            arcade.draw_text(
+                item, 
+                64,  
+                start_y - (index * 25), 
+                arcade.color.WHITE,  
+                14,
+                font_name="Press Start 2P",
+            )
+
+    def on_draw(self):
+        self.clear()
+
+
+        self.draw_frame_background()
         for p in self.chip.paths.values():
             p.draw()
 
@@ -138,10 +171,12 @@ class EditorView(arcade.View):
             self.selected_follower.draw()
 
         self.render_side_bar()
+        self.draw_frame_border()
+        self.draw_debug_text()
 
     def on_update(self, delta_time):
+        self.fps = 1/delta_time*100//100
         self.simulate()
-
 
     def on_key_press(self, key, key_modifiers):
 
@@ -164,48 +199,91 @@ class EditorView(arcade.View):
         if key == 115: # s
             self.chip.save()
 
-                    
         if key == 65288:
             self.delete()
 
     def delete_gate(self,id):
-        
-        for p in self.chip.paths.values():
+        to_delete = []
+        for index in self.chip.paths.keys():
+            p = self.chip.paths[index]
 
             for input in p.inputs:
                 if input[1] == id:
                     p.remove_branch(input[4])
+                    if p.empty:
+                        to_delete.append(index)
+                        continue
+                    p.clean_out_single_branch()
 
             for output in p.outputs:
                 if output[1] == id:
                     p.remove_branch(output[4])
+                    if p.empty:
+                        to_delete.append(index)
+                        continue
+                    p.clean_out_single_branch()
 
         del self.chip.gates[id]
+        for i in to_delete:
+            del self.chip.paths[i]
 
     def delete(self):
 
         for g in self.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
+                break
+
+        for p in self.chip.paths.values():
+            if p.touched:
+                p.remove_branch(p.get_touched_branch)
+                if p.empty:
+                    del self.chip.paths[p.id]
+                    break
+                p.clean_out_single_branch()
+                break
+
 
     def on_key_release(self, key, key_modifiers):
         pass
 
 
+    @property
+    def camera(self):
+        return self.camera_position
+
+    @camera.setter
     @profile
+    def camera(self,value):
+        self._real_camera_position = value
+        self.camera_position = ((self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE,(self._real_camera_position[1] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE)
+        for g in self.chip.gates:
+            self.chip.gates[g].camera_moving(self.camera_position)
+        for p in self.chip.paths:
+            self.chip.paths[p].camera = self.camera_position
+        if self.current_path:
+            self.current_path.camera = self.camera_position
+
+    
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x, y)
+        
+        self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
+        self.follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
 
-        self.follower.x = mouse.cursor[0] - self.grid_size / 2
-        self.follower.y = mouse.cursor[1] - self.grid_size / 2
+        if self.camera_hold:
+            self.camera = (self._real_camera_position[0] + delta_x, self._real_camera_position[1] + delta_y)
+            #self.camera = (self.camera_position[0] + delta_x, self.camera_position[1] + delta_y)
+
 
         if self.selected_follower:
-            self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
-            self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
+            self.selected_follower._camera = (0,0)
+            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 
+            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 
 
         if self.moving_gate:
-            self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
-            self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
+            self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0] 
+            self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1] 
 
             # update connected paths
             for path in self.chip.paths.values():
@@ -214,17 +292,21 @@ class EditorView(arcade.View):
 
                 for i in connected_inputs:
                     modified = True
+                    position = self.moving_gate.outputs_position[i[2]]
+                    position = (position[0]- self.camera_position[0] ,position[1] - self.camera_position[1] )
                     if i[3] == 1:
-                        path.branch_points[i[4]][0] = self.moving_gate.outputs_position[i[2]]
+                        path.branch_points[i[4]][0] = position
                     elif i[3] == 2:
-                        path.branch_points[i[4]][-1] = self.moving_gate.outputs_position[i[2]]
+                        path.branch_points[i[4]][-1] = position
 
                 for i in connected_outputs:
                     modified = True
+                    position = self.moving_gate.inputs_position[i[2]]
+                    position = (position[0] - self.camera_position[0] ,position[1] - self.camera_position[1] )
                     if i[3] == 1:
-                        path.branch_points[i[4]][0] = self.moving_gate.inputs_position[i[2]]
+                        path.branch_points[i[4]][0] = position
                     elif i[3] == 2:
-                        path.branch_points[i[4]][-1] = self.moving_gate.inputs_position[i[2]]
+                        path.branch_points[i[4]][-1] = position
 
                 if modified:
                     path.recalculate_hitbox()
@@ -234,6 +316,12 @@ class EditorView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
+        if button == 2:
+            self.camera_hold = True
+            return
+        if self.camera_hold:
+            return
+
         # Clicked a gate?
         for g in self.chip.gates.values():
             touched = g.touched
@@ -242,6 +330,7 @@ class EditorView(arcade.View):
                     # start new path
                     pid = random_id()
                     self.current_path = Path(pid)
+                    self.current_path.camera = self.camera
                     self.current_path.add_path()
 
                     if touched[0] == 1: #Input touched
@@ -256,7 +345,7 @@ class EditorView(arcade.View):
                         self.current_path.outputs.append([1, g.id, touched[1], 2, self.current_path.current_branch_count])
                     else:#Output touched
                         self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
-
+                    self.current_path.camera = self.camera
                     self.current_path.finish()
                     if self.current_path.id not in self.chip.paths:
                         self.chip.paths[self.current_path.id] = self.current_path
@@ -300,14 +389,25 @@ class EditorView(arcade.View):
         # Place new gate
         if self.selected_follower is None:
             self.selected_follower =  self.cursors[self.selected_cursor](random_id())
-            self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
-            self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
+            self.selected_follower.camera = self.camera
+            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
 
         else:
             self.chip.gates[self.selected_follower.id] = self.selected_follower
+            self.selected_follower.camera = self.camera
+            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
             self.selected_follower = None
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):
+        
+        if button == 2:
+            self.camera_hold = False
+
+            for g in self.chip.gates:
+                self.chip.gates[g].camera = self.camera_position
+
         self.moving_gate = None
         self.moving_gate_offset = (0, 0)

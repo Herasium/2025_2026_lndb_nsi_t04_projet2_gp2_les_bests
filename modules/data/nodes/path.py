@@ -35,11 +35,12 @@ class Path(Node):
         self.input_on_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_ON)
 
         self.current_value = False
-        self.draw_hitboxes = False
+        self.draw_hitboxes = True
 
         self.do_points = True
-
-    @profile
+        self._camera = (0,0)
+ 
+    
     def project_point_onto_segments(self, x, y):
         closest = {
             "point": None,
@@ -81,55 +82,140 @@ class Path(Node):
 
         return closest
 
-    @profile
+    
     def recalculate_hitbox(self):
         
-        for current in range(self.current_branch_count):
+        for current in range(len(self.branch_hitboxes.keys())):
 
             if len(self.branch_points[current]) > 1:
                 self.branch_hitboxes[current] = []
                 for point in range(len(self.branch_points[current])-1):
                     current_point = self.branch_points[current][point]
+                    current_point = (current_point[0] + self._camera[0], current_point[1] + self._camera[1])
                     next_point = self.branch_points[current][point+1]
+                    next_point = (next_point[0] + self._camera[0], next_point[1] + self._camera[1])
                     left, right = self.generate_thick_line_polygon([current_point,next_point], thickness=self.thickness)
                     polygon = left + list(reversed(right))
 
                     self.branch_hitboxes[current].append(PolyHitbox(polygon))
 
+    def clean_out_single_branch(self,depth = 0):
+
+        if depth > 100:
+            print("Max depth on branch clean out.")
+            return
+
+        branch_counts = [0 for i in range(len(self.branch_points.keys()))]
+
+        for i in (self.inputs+self.outputs):
+            branch_counts[i[4]] += 1
+
+        to_delete = []
+
+        for index in range(len(branch_counts)):
+            i = branch_counts[index]
+            if i <= 1:
+                to_delete.append(index)
+
+        to_delete.sort()
+        to_delete.reverse()
+
+        for i in to_delete:
+            self.remove_branch(i)
+
+        if len(to_delete) > 1:
+            self.clean_out_single_branch(depth=depth+1)
+        else:
+            if len(to_delete) >0:
+                if to_delete[0] != len(self.branch_points)-1:
+                    self.clean_out_single_branch(depth=depth+1)
+            
+    @property
+    def camera(self):
+        return self._camera
+
+    @camera.setter
+    def camera(self,value):
+        self._camera = value
+        self.recalculate_hitbox()
+
+
+    @property
+    def empty(self):
+        value = len(self.branch_points.keys())
+        if 0 in self.branch_points:
+            value += len(self.branch_points[0])
+
+        return value <= 1
     def remove_branch(self,branch):
+        
+        for index in range(branch,len(self.branch_points)-1):
+            self.branch_points[index] = self.branch_points[index+1]
+            self.branch_hitboxes[index] = self.branch_hitboxes[index+1]
+
+        del self.branch_hitboxes[len(self.branch_hitboxes)-1] 
+        del self.branch_points[len(self.branch_points)-1] 
+
+        self.current_branch_count = len(self.branch_hitboxes.keys()) 
+
+        if len(self.branch_points) > 0:
+            if len(self.branch_points[len(self.branch_points)-1]) != 0:
+                self.branch_points[len(self.branch_points)] = []
+                self.branch_hitboxes[len(self.branch_hitboxes)] = []
+        else:
+            self.branch_points[len(self.branch_points)] = []
+            self.branch_hitboxes[len(self.branch_hitboxes)] = []
+
+        to_delete = []
 
         for index in range(len(self.inputs)):
-            i = self.inputs[index]
-            if i[4] == branch:
-                self.inputs.pop(index)
+            if self.inputs[index][4] == branch:
+                to_delete.append(index)
+            elif self.inputs[index][4] > branch:
+                self.inputs[index][4] -= 1
 
-        for i in range(len(self.outputs)):
-            i = self.outputs[index]
-            if i[4] == branch:
-                self.outputs.pop(index)
+        to_delete.sort()
+        to_delete.reverse()
+ 
+        for i in to_delete:
+            del self.inputs[i]
 
-        del self.branch_hitboxes[branch]
-        del self.branch_points[branch]
+        to_delete = []
 
-    @profile
+        for index in range(len(self.outputs)):
+            if self.outputs[index][4] == branch:
+                to_delete.append(index)
+            elif self.outputs[index][4] > branch:
+                self.outputs[index][4] -= 1
+
+        to_delete.sort()
+        to_delete.reverse()
+ 
+        for i in to_delete:
+            del self.outputs[i]
+
+    
     def add_path(self):
         
         pt = None
 
         if self.current_point == None and self.current_branch_count > 0:
-                snapped = self.project_point_onto_segments(mouse.cursor[0], mouse.cursor[1])
+                snapped = self.project_point_onto_segments(mouse.cursor[0]- self._camera[0], mouse.cursor[1]- self._camera[1])
                 pt = snapped["point"]
+                pt = (pt[0], pt[1])
                 self.branch_points[snapped["branch"]].insert(snapped["index"]+1,pt)
 
         if pt == None:
-            pt = (mouse.cursor[0], mouse.cursor[1])
-            
+            pt = (mouse.cursor[0]-self._camera[0], mouse.cursor[1]-self._camera[1])
+        
+
+        pt = (pt[0], pt[1])
         self.points.append(pt)
         self.branch_points[self.current_branch_count].append(pt)
 
         self.recalculate_hitbox()
 
-        self.current_point = mouse.cursor
+        self.current_point = (mouse.cursor[0]- self._camera[0], mouse.cursor[1]- self._camera[1])
 
     def finish(self):
         self.add_path()
@@ -161,18 +247,23 @@ class Path(Node):
 
         for bid, pts in self.branch_points.items():
             if len(pts) > 1:
+
+                new_pts = []
+                for i in pts:
+                    new_pts.append((i[0] + self._camera[0], i[1] + self._camera[1]))
+
                 if self.do_points:
-                    arcade.draw_circle_filled(center_x=pts[0][0],center_y=pts[0][1],radius=self.thickness,color=self.color)
-                    arcade.draw_circle_filled(center_x=pts[-1][0],center_y=pts[-1][1],radius=self.thickness,color=self.color)
+                    arcade.draw_circle_filled(center_x=pts[0][0] + self._camera[0],center_y=pts[0][1] + self._camera[1],radius=self.thickness,color=self.color)
+                    arcade.draw_circle_filled(center_x=pts[-1][0] + self._camera[0],center_y=pts[-1][1] + self._camera[1],radius=self.thickness,color=self.color)
                 arcade.draw_line_strip(
-                    point_list=pts,
+                    point_list=new_pts,
                     color=self.color,
                     line_width=self.thickness
                 )
 
         if self.current_point:
             arcade.draw_line(
-                self.current_point[0], self.current_point[1],
+                self.current_point[0] + self._camera[0], self.current_point[1] + self._camera[1],
                 mouse.cursor[0], mouse.cursor[1],
                 color=self.color,
                 line_width=self.thickness
@@ -208,7 +299,7 @@ class Path(Node):
         self.current_branch_count -= 1
         self.finish()
 
-    @profile
+    
     def get_connected_points(self, target_id):
         connected_inputs = []
         connected_outputs = []
@@ -228,8 +319,14 @@ class Path(Node):
     def touched(self):
         return any(hb.touched for group in self.branch_hitboxes.values() for hb in group)
 
+    @property
+    def get_touched_branch(self):
+        for index in self.branch_hitboxes:
+            group = self.branch_hitboxes[index]
+            if any(hb.touched for hb in group):
+                return index
 
-    @profile
+    
     def generate_thick_line_polygon(self, points, thickness):
         if len(points) < 2:
             return [], []
