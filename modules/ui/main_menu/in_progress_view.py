@@ -30,6 +30,7 @@ class MainMenuView(arcade.View):
 
         self.play_button_sprite = arcade.Sprite("assets/play_button.png")
         self.name_banner_sprite = arcade.Sprite("assets/name_banner.png")
+        self.quit_button_sprite = arcade.Sprite("assets/button_quit.png")
 
         self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
 
@@ -45,7 +46,7 @@ class MainMenuView(arcade.View):
         self.play_button.width = 768 - 85
         self.play_button.height = 768 / 3 - 50
         self.play_button.scale = 1
- 
+
         self.paths = []
         self.add_paths()
 
@@ -138,6 +139,16 @@ class MainMenuView(arcade.View):
         )
 
         arcade.draw_sprite_rect(self.name_banner_sprite,rect)
+
+        rect = arcade.XYWH(
+                x = 1920 / 2 + (768/3*2) - 265,
+                y = 260 + 100,
+                width = 192,
+                height = 240,
+                anchor = arcade.Vec2(0.5,0.5)
+        )
+
+        arcade.draw_sprite_rect(self.quit_button_sprite,rect)
         
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
