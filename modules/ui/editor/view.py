@@ -183,10 +183,9 @@ class EditorView(arcade.View):
             self.perf_graph_list.draw()
 
         self.frame_count += 1
-        self.delta_time = time.time() - self.last_time
-        self.last_time = time.time()
-
+        
     def on_update(self, delta_time):
+        self.delta_time = delta_time
         self.fps = 1/self.delta_time*10000//10000
         self.simulate()
         
