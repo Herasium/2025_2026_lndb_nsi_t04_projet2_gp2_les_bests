@@ -189,10 +189,10 @@ class MainMenuView(arcade.View):
         arcade.draw_sprite_rect(self.name_banner_sprite,rect)
 
         rect = arcade.XYWH(
-                x = 1920 - 490,
-                y = 260 + 170,
-                width = 192,
-                height = 240,
+                x = 1920 - 350,
+                y = 260 + 125,
+                width = 175,
+                height = 175,
                 anchor = arcade.Vec2(0, 1)
         )
 
