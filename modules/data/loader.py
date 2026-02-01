@@ -1,6 +1,5 @@
 import json
 import traceback
-import zlib
 from os import listdir
 from os.path import isdir, isfile, join
 
@@ -11,6 +10,7 @@ from PIL import ImageFont
 
 from modules.data import data
 from modules.data.chip import Chip
+from modules.data.level import Level
 from modules.data.gate_index import gate_types
 from modules.logger import Logger
 
@@ -33,7 +33,7 @@ def load_saves():
                 raw= file.read()
                 file.close()
 
-            dump = zlib.decompress(raw).decode()
+            dump = raw
             loaded = json.loads(dump)
             read.append(loaded)
         except Exception as e:
@@ -47,6 +47,39 @@ def load_saves():
         except Exception as e: 
              logger.error(f"Failed to load chip \n\n{i}\n\n")
              logger.error(traceback.format_exc())
+
+def load_levels():
+
+    saves = join(data.current_path,"levels")
+
+    if not isdir(saves):
+         return 
+
+    files = [f for f in listdir(saves) if isfile(join(saves, f))]
+    read = []
+
+    for file_path in files:
+        complete = join(saves,file_path)
+        try: 
+            with open(complete,"rb") as file:
+                raw= file.read()
+                file.close()
+
+            dump = raw
+            loaded = json.loads(dump)
+            read.append(loaded)
+        except Exception as e:
+            logger.error(f"Failed to read file {complete} ({e})")
+
+    for i in read:
+        try:
+            new = Level("default_id")
+            new.load(i)
+            data.loaded_levels[i["level"]["id"]] = new
+        except Exception as e: 
+             logger.error(f"Failed to load level \n\n{i}\n\n")
+             logger.error(traceback.format_exc())
+
 
 def load_tiles():
         

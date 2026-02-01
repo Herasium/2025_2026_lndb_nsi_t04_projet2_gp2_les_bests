@@ -11,11 +11,18 @@ class Window():
         self.title = "LogicBox"
 
         self.window = arcade.Window(self.width, self.height, self.title,fullscreen=data.WINDOW_FULLSCREEN, update_rate = 0.00001, draw_rate = 0.00001)
+        self.view_history = []
+
+    def back(self):
+        self.view_history.pop()
+        view = self.view_history[-1]
+        self.window.show_view(view)
 
     def run(self):
         arcade.run()
 
     def display(self,view: arcade.View):
+        self.view_history.append(view)
         self.window.show_view(view)
 
     def hide(self):

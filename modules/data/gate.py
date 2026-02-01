@@ -240,7 +240,6 @@ class Gate(Node):
 
         out.reverse()
         inp.reverse()
-
         current = int(''.join(map(str, map(int, (out+inp)))), 2)
 
         tile_x = self.x + self._camera[0]

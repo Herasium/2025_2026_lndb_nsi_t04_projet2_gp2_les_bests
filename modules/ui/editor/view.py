@@ -30,7 +30,7 @@ from modules.engine.logic import propagate_values
 
 class EditorView(arcade.View):
 
-    def __init__(self):
+    def __init__(self,id=None):
         super().__init__()
 
         self.follower = Entity()
@@ -47,7 +47,13 @@ class EditorView(arcade.View):
         self.moving_gate = None
         self.current_path = None
 
-        self.chip = Chip("fihzfp")
+        if id == None:
+            self.chip = Chip(random_id())
+        else:
+            if id in data.loaded_chips:
+                self.chip = data.loaded_chips[id]
+            else:
+                self.chip = Chip(random_id())
 
         self.moving_gate_offset = (0, 0)
 

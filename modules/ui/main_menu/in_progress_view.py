@@ -3,6 +3,9 @@ import arcade
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
+from modules.ui.editor.selector import EditorChipSelector
+from modules.ui.level_editor.view import LevelEditorView
+from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
 
@@ -265,11 +268,16 @@ class MainMenuView(arcade.View):
                 i.current_value = False
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+            
+            if self.level_button.touched:
+                data.window.display(LevelEditorSelector())
+                logger.success("Launching LevelEditorSelector.")     
+
             if self.play_button.touched:
                 data.window.hide()
                 if key_modifiers == 16 or key_modifiers == 0:
-                    data.window.display(EditorView())
-                    logger.success("Launching EditorView.")
+                    data.window.display(EditorChipSelector())
+                    logger.success("Launching EditorChipSelector.")
                 elif key_modifiers == 17 or key_modifiers == 1:
                     data.window.display(DebugTilesView())
                     logger.print("Launching DebugTilesView.")

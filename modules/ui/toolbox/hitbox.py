@@ -58,15 +58,15 @@ class HitBox:
         )
 
     def draw(self):
-        arcade.draw_rect_outline(self.rect, arcade.color.ALLOY_ORANGE)
+        color = arcade.color.ALLOY_ORANGE
+        if self.touched:
+            color = arcade.color.RED
+        arcade.draw_rect_outline(self.rect, color)
 
     @property
     def touched(self):
-        mouse_x, mouse_y = mouse.cursor
-        return (
-            self.rect.left   <= mouse_x <= self.rect.right and
-            self.rect.bottom <= mouse_y <= self.rect.top
-        )
+        return self.rect.point_in_rect(point=mouse.position)
+
     
     def __repr__(self):
         return (f"HitBox(x={self._x}, y={self._y}, "

@@ -13,7 +13,7 @@ class Text:
         self._width = 0
         self._height = 0
 
-        self._color = arcade.color.BLUE
+        self._color = arcade.color.WHITE
         self.hitbox = HitBox()
 
         self._name = ""
@@ -73,15 +73,6 @@ class Text:
         self._recalculate_rect()
 
     def _recalculate_rect(self):
-
-        self.rect = arcade.XYWH(
-            x = self._x,
-            y = self._y,
-            width = self._width,
-            height = self._height,
-            anchor = arcade.Vec2(0,1)
-        )
-        self._update_hitbox()
         
         self._text = arcade.Text(
             self._name,
@@ -93,26 +84,48 @@ class Text:
             anchor_y = self._align[1],
             font_name = "Press Start 2P"
         )
-        self.text.x = self.x 
-        self.text.y = self.y 
+
+        self._width = self._text.content_width
+        self._height = self._text.content_height
+
+        if self._align[0] == "left":
+            self.rect = arcade.XYWH(
+                x = self._x ,
+                y = self._y + self._height/2,
+                width = self._width,
+                height = self._height,
+                anchor = arcade.Vec2(0,1)
+            )
+        if self._align[0] == "center":
+            self.rect = arcade.XYWH(
+                x = self._x + self._width/2,
+                y = self._y + self._height/2,
+                width = self._width,
+                height = self._height,
+                anchor = arcade.Vec2(0,1)
+            )
+        if self._align[0] == "right":
+            self.rect = arcade.XYWH(
+                x = self._x + self._width,
+                y = self._y + self._height/2,
+                width = self._width,
+                height = self._height,
+                anchor = arcade.Vec2(0,1)
+            )
+
+ 
+        self._update_hitbox()
 
 
-    @property
-    def name(self):
-        return self._name
-    
-    @name.setter
-    def name(self, value):
-        self._name = value
-        self._recalculate_rect()
+
 
     @property
     def text(self):
-        return self._text
+        return self._name
     
     @text.setter
     def text(self, value):
-        self._text = value
+        self._name = value
         self._recalculate_rect()
 
     @property
@@ -125,15 +138,11 @@ class Text:
         self._recalculate_rect()
     
     def _update_hitbox(self):
-        self.hitbox.x = self._x
-        self.hitbox.y = self._y-self._height
-        self.hitbox.width = self._width
-        self.hitbox.height = self._height
+        self.hitbox.rect = self.rect
+
 
     def draw(self):   
-        self.text.font_size = 18 * self.scale
-
-        self.text.draw()
+        self._text.draw()
 
     @property
     def touched(self):

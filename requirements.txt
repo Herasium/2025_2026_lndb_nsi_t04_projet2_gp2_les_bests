@@ -1,0 +1,2 @@
+arcade==3.3.2
+line_profiler==4.2.0

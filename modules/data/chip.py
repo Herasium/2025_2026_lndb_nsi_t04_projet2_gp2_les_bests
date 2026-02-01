@@ -4,7 +4,6 @@ from modules.data.gate_index import gate_types
 from modules.data.nodes.path import Path
 from modules.logger import Logger
 import os 
-import zlib
 
 logger = Logger("Chip")
 
@@ -16,7 +15,7 @@ class Chip:
         self.name = "Default Chip"
         self.type = "Chip"
 
-    def save(self):
+    def save(self,no_file=False):
         paths = {}
         gates = {}
 
@@ -32,14 +31,17 @@ class Chip:
             "id": self.id,
             "gates": gates,
             "paths": paths,
-            "version": "0.12"
+            "version": data.VERSION
         }
 
-        dump = json.dumps(result)
+        if no_file:
+            return result
+
+        dump = json.dumps(result,indent=1)
         path = data.current_path
         os.makedirs(os.path.join(path,"saves"), exist_ok=True) 
         with open(os.path.join(os.path.join(path,"saves"),f"{self.id}.chip"),"wb") as file:
-            file.write(zlib.compress(dump.encode()))
+            file.write(dump.encode())
 
         logger.print(f'Saved {self.name}, #{self.id}')
 
@@ -66,8 +68,5 @@ class Chip:
         logger.debug(f"Loaded Chip {self}")
 
     def __str__(self):
-
         result = f"Chip (#{self.id}) {len(self.gates)} Gates / {len(self.paths)} Paths"
-
-
         return result

@@ -1,22 +1,29 @@
 import random
+import time
 
 def gate_and(inputs):
-    return inputs[0] and inputs[1]
+    return [inputs[0] and inputs[1]]
 
 def gate_or(inputs):
-    return inputs[0] or inputs[1]
+    return [inputs[0] or inputs[1]]
 
 def gate_not(inputs):
-    return not inputs[0]
+    return [not inputs[0]]
 
 def gate_xor(inputs):
-    return inputs[0] ^ inputs[1]
+    return [inputs[0] ^ inputs[1]]
 
 def gate_nand(inputs):
-    return not (inputs[0] and inputs[1])
+    return [not (inputs[0] and inputs[1])]
 
 def gate_nor(inputs):
-    return not (inputs[0] or inputs[1])
+    return [not (inputs[0] or inputs[1])]
+
+def gate_clk(inputs):
+    return [round(time.time()) % 2 == 0]
+
+def gate_pass(inputs):
+    return inputs
 
 LOGIC_MAP = {
     "AND": gate_and,
@@ -25,6 +32,8 @@ LOGIC_MAP = {
     "XOR": gate_xor,
     "NAND": gate_nand,
     "NOR": gate_nor,
+    "CLK": gate_clk,
+    "PASS": gate_pass
 }
 
 def calculate_output(gate_name, inputs):
@@ -171,7 +180,7 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
 
             if is_ready:
                 if gate.type == "Gate":
-                    gate.outputs[0] = calculate_output(gate.gate_type, gate.inputs)
+                    gate.outputs = calculate_output(gate.gate_type, gate.inputs)
 
                 propagate_outputs(chip, connections, gate_id)
                 
@@ -186,7 +195,7 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
             gate = chip.gates[random_id]
             
             if gate.type == "Gate":
-                gate.outputs[0] = calculate_output(gate.gate_type, gate.inputs)
+                gate.outputs = calculate_output(gate.gate_type, gate.inputs)
             
             propagate_outputs(chip, connections, random_id)
             
