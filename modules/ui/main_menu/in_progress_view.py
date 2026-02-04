@@ -55,42 +55,52 @@ class MainMenuView(arcade.View):
         self.play_button.y = 260 + 320 + 100 + 225 / 2
         self.play_button.width = 700
         self.play_button.height = 225
-        self.play_button.scale = 1
 
         self.quit_button = Button(self.ui_tiles)
         self.quit_button.x = 1920 - 350
         self.quit_button.y = 260 + 125
         self.quit_button.width = 175
         self.quit_button.height = 175
-        self.quit_button.scale = 1
 
         self.setting_button = Button(self.ui_tiles)
         self.setting_button.x = 1920 / 7
         self.setting_button.y = 260 + 180 
         self.setting_button.width = 200*1.5
         self.setting_button.height = 100*1.5
-        self.setting_button.scale = 1
 
         self.sandbox_button = Button(self.ui_tiles)
         self.sandbox_button.x = 1920 - 830
         self.sandbox_button.y = 260 + 168
         self.sandbox_button.width = 160*1.5
-        self.sandbox_button.height = 100*1.5
-        self.sandbox_button.scale = 1        
+        self.sandbox_button.height = 100*1.5   
 
         self.level_button = Button(self.ui_tiles)
         self.level_button.x = 1920 / 2 - 200
         self.level_button.y = 260 + 250
         self.level_button.width = 180*1.25
         self.level_button.height = 100*1.25
-        self.level_button.scale = 1
 
         self.tuto_button = Button(self.ui_tiles)
         self.tuto_button.x = 1920 / 3 + 60
         self.tuto_button.y = 260
         self.tuto_button.width = 200*1.25
         self.tuto_button.height = 100*1.25
-        self.tuto_button.scale = 1
+
+        self.button_touche = [""]
+        self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
+        self.arcade_colors = [
+                        "#FF004D", "#00E756", "#29ADFF", "#FFA300",
+                        "#FFEC27", "#FF77A8", "#83769C", "#7E2553",
+                        "#1D2B53", "#008751", "#AB5236", "#5F574F",
+                        "#C2C3C7", "#FFF1E8", "#FF6F59", "#254441",
+                        "#43AA8B", "#B2B09B", "#EF3054", "#3A86FF",
+                        "#8338EC", "#FFBE0B", "#FB5607", "#FF006E",
+                        "#2EC4B6", "#E71D36", "#011627", "#FF9F1C",
+                        "#AACC00", "#00F5D4", "#F15BB5", "#9B5DE5",
+                        "#FEE440", "#00BBF9", "#D00000", "#FFBA08",
+                        "#6A4C93", "#1982C4", "#8AC926", "#FF595E"
+                        ]
+        self.compteur = 0
 
 
         self.paths = []
@@ -179,6 +189,8 @@ class MainMenuView(arcade.View):
 
         self.draw_paths()
 
+        self.compteur += 0.1
+
         rect = arcade.XYWH(
                 x = 1920 / 2,
                 y = 260 + 320 + 100,
@@ -249,6 +261,12 @@ class MainMenuView(arcade.View):
 
         arcade.draw_sprite_rect(self.tuto_button_sprite,rect)
 
+        if self.button_touche == self.combinaison:
+            color = (round(self.compteur) % (len(self.arcade_colors)))
+            for i in self.paths :
+                i.input_on_color = arcade.types.Color.from_hex_string(self.arcade_colors[color])
+                i.current_value = True
+
         self.quit_button.draw()
         self.play_button.draw()
         self.setting_button.draw()
@@ -256,16 +274,65 @@ class MainMenuView(arcade.View):
         self.sandbox_button.draw()
         self.tuto_button.draw()
         self.draw_frame_border()
+
+        
         
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
         if self.play_button.touched:
+            if self.button_touche[-1] != "play_button":
+                self.button_touche.append("play_button")
             for i in self.paths :
+                i.input_on_color = arcade.color.MINT_GREEN
                 i.current_value = True
-        if not self.play_button.touched:
+
+        elif self.quit_button.touched:
+            if self.button_touche[-1] != "quit_button":
+                self.button_touche.append("quit_button")
+            for i in self.paths :
+                i.input_on_color = arcade.color.RED
+                i.current_value = True
+
+        elif self.level_button.touched:
+            if self.button_touche[-1] != "level_button":
+                self.button_touche.append("level_button")
+            for i in self.paths :
+                i.input_on_color = arcade.color.UPSDELL_RED
+                i.current_value = True
+
+        elif self.setting_button.touched:
+            if self.button_touche[-1] != "setting_button":
+                self.button_touche.append("setting_button")
+            for i in self.paths :
+                i.input_on_color = arcade.color.GRAY
+                i.current_value = True
+
+        elif self.sandbox_button.touched:
+            if self.button_touche[-1] != "sandbox_button":
+                self.button_touche.append("sandbox_button")
+            for i in self.paths :
+                i.input_on_color = arcade.color.PICTON_BLUE
+                i.current_value = True
+
+        elif self.tuto_button.touched:
+            if self.button_touche[-1] != "tuto_button":
+                self.button_touche.append("tuto_button")
+            for i in self.paths :
+                i.input_on_color = arcade.color.UNIVERSITY_OF_TENNESSEE_ORANGE
+                i.current_value = True
+
+        else :
             for i in self.paths :
                 i.current_value = False
+
+        if len(self.button_touche) > 4:
+            self.button_touche.pop(0)
+            print (self.button_touche)
+
+
+        
+
 
     def on_mouse_press(self, x, y, button, key_modifiers):
             
