@@ -243,6 +243,38 @@ class LevelEditorView(arcade.View):
                 font_name="Press Start 2P",
             )
 
+    def render_truth_table(self):
+
+        if len(self.level.truth) > 0:
+
+            inputs = self.level.get_inputs()
+            outputs = self.level.get_outputs()
+
+            truth = self.level.truth[self.level.start]
+
+            start_x = 1500
+            start_y = 900
+            y = start_y
+            x = start_x
+            offset = 100
+            offset_y = 50
+            for i in truth:
+                values = [(i >> a) & 1 == 1 for a in range(len(inputs))]
+                out = truth[i]
+                for c in values:
+                    arcade.draw_text(str(c),x,y,arcade.color.WHITE,14,font_name="Press Start 2P",)
+                    x += offset
+                for c in truth[i]:
+                    arcade.draw_text(str(c),x,y,arcade.color.ALABAMA_CRIMSON,14,font_name="Press Start 2P",)
+                    x += offset
+                y -= offset_y
+                x = start_x
+            
+
+            
+
+
+
     @profile
     def on_draw(self):
         self.clear()
@@ -266,6 +298,7 @@ class LevelEditorView(arcade.View):
             self.draw_debug_text()
             self.draw_frame_border()
             self.draw_bottom_gates()
+            self.render_truth_table()
         else:
             self.draw_save_data()
             self.plus_number_hitbox.draw()
@@ -298,7 +331,9 @@ class LevelEditorView(arcade.View):
                     g.switch()
 
         if key == 97:  # "a"
-            arcade.exit()
+            data.window.back()
+        if key == 116:  # "a"
+            self.level.get_truth_table()
         if key == 65307:  # ESC
             if self.current_path:
                 self.current_path.abort()
