@@ -14,6 +14,7 @@ class Chip:
         self.id = id
         self.name = "Default Chip"
         self.type = "Chip"
+        self.changed = False
 
     def save(self,no_file=False):
         paths = {}

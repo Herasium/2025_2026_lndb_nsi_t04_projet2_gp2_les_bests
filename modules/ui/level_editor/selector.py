@@ -11,6 +11,7 @@ from modules.ui.editor.view import EditorView
 from modules.ui.level_editor.view import LevelEditorView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
+from modules.ui.level_player.selector import LevelPlayerSelector
 
 class LevelEditorSelector(arcade.View):
 
@@ -27,7 +28,7 @@ class LevelEditorSelector(arcade.View):
             "Level Editor Selector",
             "<- Back",
             "+ New +",
-            "Play Level Selector"
+            "Play Level Selector",
             ""
         ]
 
@@ -85,7 +86,7 @@ class LevelEditorSelector(arcade.View):
                 elif index == 2:
                     data.window.display(LevelEditorView())
                 elif index == 3:
-                    data.window.display(LevelEditorView())
+                    data.window.display(LevelPlayerSelector())
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass

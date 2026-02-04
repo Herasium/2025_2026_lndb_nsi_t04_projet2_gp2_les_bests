@@ -332,7 +332,7 @@ class LevelEditorView(arcade.View):
 
         if key == 97:  # "a"
             data.window.back()
-        if key == 116:  # "a"
+        if key == 116:  # "t"
             self.level.get_truth_table()
         if key == 65307:  # ESC
             if self.current_path:

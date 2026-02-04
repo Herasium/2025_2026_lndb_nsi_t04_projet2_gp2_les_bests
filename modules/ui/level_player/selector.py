@@ -8,7 +8,7 @@ from modules.data import data
 from pyglet.graphics import Batch
 
 from modules.ui.editor.view import EditorView
-from modules.ui.level_editor.view import LevelEditorView
+from modules.ui.level_player.view import LevelPlayer
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
 
@@ -19,21 +19,20 @@ class LevelPlayerSelector(arcade.View):
 
         self.background_color = arcade.color.BLACK
         self.texts = []
-        self.chips = []
+        self.levels = []
         self.setup()
 
     def setup(self):
         debug_list = [
             "Chip Editor Selector",
             "<- Back",
-            "+ New +",
             ""
         ]
 
-        for i in data.loaded_chips:
-            chip = data.loaded_chips[i]
-            debug_list.append(f"Chip #{chip.id}")
-            self.chips.append(i)
+        for i in data.loaded_levels:
+            level = data.loaded_levels[i]
+            debug_list.append(f"Level {level.number} {level.name} #{level.id}")
+            self.levels.append(i)
 
         start_y = 1080-70
         
@@ -77,12 +76,11 @@ class LevelPlayerSelector(arcade.View):
             text = self.texts[index]
 
             if text.touched:
-                if index > 3:
-                    data.window.display(EditorView(self.chips[index-4]))
+                if index > 2:
+                    data.window.display(LevelPlayer(self.levels[index-3]))
                 elif index == 1:
                     data.window.back()
-                elif index == 2:
-                    data.window.display(EditorView())
+
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass

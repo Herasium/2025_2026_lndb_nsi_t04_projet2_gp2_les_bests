@@ -31,24 +31,31 @@ class Level():
         self.chip = Chip(f"play_{self.id}")
         
 
-    def start_chip(self):
-        if self.start == 1:
-            for i in self.chip.gates:
-                self.chip.gates[i].inputs = [False for _ in self.chip.gates[i].inputs]
-                self.chip.gates[i].outputs = [False for _ in self.chip.gates[i].outputs]
-        if self.start == 2:
-            for i in self.chip.gates:
-                self.chip.gates[i].inputs = [True for _ in self.chip.gates[i].inputs]
-                self.chip.gates[i].outputs = [True for _ in self.chip.gates[i].outputs]
+    def start_chip(self, chip = None):
+        if chip == None:
+            chip = self.chip
 
-    def get_inputs(self):
+        if self.start == 1:
+            for i in chip.gates:
+                chip.gates[i].inputs = [False for _ in chip.gates[i].inputs]
+                chip.gates[i].outputs = [False for _ in chip.gates[i].outputs]
+        if self.start == 2:
+            for i in chip.gates:
+                chip.gates[i].inputs = [True for _ in chip.gates[i].inputs]
+                chip.gates[i].outputs = [True for _ in chip.gates[i].outputs]
+
+    def get_inputs(self, chip = None):
+        if chip == None:
+            chip = self.chip
         result = []
         for i in self.chip.gates:
             if self.chip.gates[i].type == "Input":
                 result.append(i)
         return result
     
-    def get_outputs(self):
+    def get_outputs(self, chip = None):
+        if chip == None:
+            chip = self.chip
         result = []
         for i in self.chip.gates:
             if self.chip.gates[i].type == "Output":
@@ -57,18 +64,21 @@ class Level():
 
     def get_single_truth_table(self):
 
-        self.start_chip()
-        propagate_values(self.chip)
-        inputs = self.get_inputs()
-        outputs = self.get_outputs()
+        copy = Chip("copy_chip")
+        copy.load(self.chip.save(no_file=True))
+
+        self.start_chip(copy)
+        propagate_values(copy)
+        inputs = self.get_inputs(copy)
+        outputs = self.get_outputs(copy)
         size = len(inputs)
         power = 2 ** size
         for current in range(power):
             values = [bool(current & (1 << i)) for i in range(size)]
             for index in range(len(inputs)):
-                self.chip.gates[inputs[index]].outputs[0] = values[index]
-            propagate_values(self.chip)
-            result = [self.chip.gates[i].inputs[0] for i in outputs]
+                copy.gates[inputs[index]].outputs[0] = values[index]
+            propagate_values(copy)
+            result = [copy.gates[i].inputs[0] for i in outputs]
             int_value = sum(b << i for i, b in enumerate(reversed(values)))
             self.truth[self.start][int_value] = result
 
@@ -116,7 +126,6 @@ class Level():
         self.hints = data["level"]["hints"]
         self.name = data["level"]["name"]
         self.start = data["level"]["start"]
-        self.truth = data["level"]["truth"]
 
         logger.debug(f"Loaded Level {self}")
 

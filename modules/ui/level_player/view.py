@@ -53,6 +53,7 @@ class LevelPlayer(arcade.View):
         if id == None:
             logger.error("No level id provided, going back.")
             data.window.back()
+            arcade.quit()
         else:
             if id in data.loaded_levels:
                 self.level = data.loaded_levels[id]
@@ -60,6 +61,7 @@ class LevelPlayer(arcade.View):
             else:
                 logger.error("Invalid level id provided, going back.")
                 data.window.back()
+                arcade.quit()
 
         self.moving_gate_offset = (0, 0)
 
@@ -280,6 +282,8 @@ class LevelPlayer(arcade.View):
         for i in to_delete:
             del self.level.chip.paths[i]
 
+        self.level.chip.changed = True
+
     def delete(self):
 
         for g in self.level.chip.gates.values():
@@ -295,6 +299,8 @@ class LevelPlayer(arcade.View):
                     break
                 p.clean_out_single_branch()
                 break
+
+        self.level.chip.changed = True
 
 
     def on_key_release(self, key, key_modifiers):
@@ -362,6 +368,7 @@ class LevelPlayer(arcade.View):
                         path.branch_points[i[4]][-1] = position
 
                 if modified:
+                    self.level.chip.changed = True
                     path.recalculate_hitbox()
 
     def simulate(self):
@@ -390,7 +397,9 @@ class LevelPlayer(arcade.View):
                         self.current_path.outputs.append([1, g.id, touched[1], 1, self.current_path.current_branch_count])
                     else: #Output touched
                         self.current_path.inputs.append([2, g.id, touched[1], 1, self.current_path.current_branch_count])
+                    self.level.chip.changed = True
                     return
+                
 
                 else:
                     # finish existing path
@@ -404,6 +413,7 @@ class LevelPlayer(arcade.View):
                         self.level.chip.paths[self.current_path.id] = self.current_path
 
                     self.current_path = None
+                    self.level.chip.changed = True
                     return
 
         # Clicking on a path
@@ -412,6 +422,7 @@ class LevelPlayer(arcade.View):
                 if p.touched:
                     p.add_path()
                     self.current_path = p
+                    self.level.chip.changed = True
                     return
         else:
             for p in self.level.chip.paths.values():
@@ -423,9 +434,11 @@ class LevelPlayer(arcade.View):
                         del self.level.chip.paths[self.current_path.id]
 
                     self.current_path = None
+                    self.level.chip.changed = True
                     return
 
             self.current_path.add_path()
+            self.level.chip.changed = True
             return
 
         # Move a gate
@@ -447,7 +460,7 @@ class LevelPlayer(arcade.View):
                 self.selected_follower.camera = self.camera
                 self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                 self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-
+                self.level.chip.changed = True
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):
@@ -469,6 +482,7 @@ class LevelPlayer(arcade.View):
                     self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                     self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
                     self.selected_follower = None
+                    
 
         self.moving_gate = None
         self.moving_gate_offset = (0, 0)
