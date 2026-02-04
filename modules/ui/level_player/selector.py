@@ -12,29 +12,28 @@ from modules.ui.level_editor.view import LevelEditorView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
 
-class LevelEditorSelector(arcade.View):
+class LevelPlayerSelector(arcade.View):
 
     def __init__(self):
         super().__init__()
 
         self.background_color = arcade.color.BLACK
         self.texts = []
-        self.levels = []
+        self.chips = []
         self.setup()
 
     def setup(self):
         debug_list = [
-            "Level Editor Selector",
+            "Chip Editor Selector",
             "<- Back",
             "+ New +",
-            "Play Level Selector"
             ""
         ]
 
-        for i in data.loaded_levels:
-            level = data.loaded_levels[i]
-            debug_list.append(f"Level {level.number} {level.name} #{level.id}")
-            self.levels.append(i)
+        for i in data.loaded_chips:
+            chip = data.loaded_chips[i]
+            debug_list.append(f"Chip #{chip.id}")
+            self.chips.append(i)
 
         start_y = 1080-70
         
@@ -78,14 +77,12 @@ class LevelEditorSelector(arcade.View):
             text = self.texts[index]
 
             if text.touched:
-                if index > 4:
-                    data.window.display(LevelEditorView(self.levels[index-5]))
+                if index > 3:
+                    data.window.display(EditorView(self.chips[index-4]))
                 elif index == 1:
                     data.window.back()
                 elif index == 2:
-                    data.window.display(LevelEditorView())
-                elif index == 3:
-                    data.window.display(LevelEditorView())
+                    data.window.display(EditorView())
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass

@@ -132,5 +132,4 @@ class SettingView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.back_button.touched :
-            from modules.ui.main_menu.in_progress_view import MainMenuView
-            data.window.display(MainMenuView())
+            data.window.back()
