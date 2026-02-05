@@ -88,23 +88,49 @@ class MainMenuView(arcade.View):
 
         self.button_touche = [""]
         self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
-        self.arcade_colors = [
-                        "#FF004D", "#00E756", "#29ADFF", "#FFA300",
-                        "#FFEC27", "#FF77A8", "#83769C", "#7E2553",
-                        "#1D2B53", "#008751", "#AB5236", "#5F574F",
-                        "#C2C3C7", "#FFF1E8", "#FF6F59", "#254441",
-                        "#43AA8B", "#B2B09B", "#EF3054", "#3A86FF",
-                        "#8338EC", "#FFBE0B", "#FB5607", "#FF006E",
-                        "#2EC4B6", "#E71D36", "#011627", "#FF9F1C",
-                        "#AACC00", "#00F5D4", "#F15BB5", "#9B5DE5",
-                        "#FEE440", "#00BBF9", "#D00000", "#FFBA08",
-                        "#6A4C93", "#1982C4", "#8AC926", "#FF595E"
-                        ]
         self.compteur = 0
 
 
         self.paths = []
         self.add_paths()
+
+    def rainbow_color(self,precision: int, index: int) -> str:
+
+        if precision <= 0:
+            raise ValueError("precision must be > 0")
+
+        # Wrap index so the rainbow loops
+        index = index % precision
+        h = index / precision  # hue in [0, 1)
+        s = 1.0
+        v = 1.0
+
+        # HSV to RGB conversion
+        i = int(h * 6)
+        f = (h * 6) - i
+        p = v * (1 - s)
+        q = v * (1 - f * s)
+        t = v * (1 - (1 - f) * s)
+        i = i % 6
+
+        if i == 0:
+            r, g, b = v, t, p
+        elif i == 1:
+            r, g, b = q, v, p
+        elif i == 2:
+            r, g, b = p, v, t
+        elif i == 3:
+            r, g, b = p, q, v
+        elif i == 4:
+            r, g, b = t, p, v
+        else:
+            r, g, b = v, p, q
+
+        return "#{:02x}{:02x}{:02x}".format(
+            int(r * 255),
+            int(g * 255),
+            int(b * 255)
+        )
 
     def add_paths(self):
 
@@ -189,7 +215,7 @@ class MainMenuView(arcade.View):
 
         self.draw_paths()
 
-        self.compteur += 0.1
+        self.compteur += 1
 
         rect = arcade.XYWH(
                 x = 1920 / 2,
@@ -262,9 +288,9 @@ class MainMenuView(arcade.View):
         arcade.draw_sprite_rect(self.tuto_button_sprite,rect)
 
         if self.button_touche == self.combinaison:
-            color = (round(self.compteur) % (len(self.arcade_colors)))
+            color = (round(self.compteur))
             for i in self.paths :
-                i.input_on_color = arcade.types.Color.from_hex_string(self.arcade_colors[color])
+                i.input_on_color = arcade.types.Color.from_hex_string(self.rainbow_color(100,color))
                 i.current_value = True
 
         self.quit_button.draw()
@@ -323,8 +349,9 @@ class MainMenuView(arcade.View):
                 i.current_value = True
 
         else :
-            for i in self.paths :
-                i.current_value = False
+            if self.button_touche != self.combinaison:
+                for i in self.paths :
+                    i.current_value = False
 
         if len(self.button_touche) > 4:
             self.button_touche.pop(0)
@@ -339,6 +366,10 @@ class MainMenuView(arcade.View):
             if self.level_button.touched:
                 data.window.display(LevelEditorSelector())
                 logger.success("Launching LevelEditorSelector.")     
+
+            if self.sandbox_button.touched:
+                data.window.display(EditorChipSelector())
+                logger.success("Launching EditorChipSelector.")  
 
             if self.play_button.touched:
                 data.window.hide()

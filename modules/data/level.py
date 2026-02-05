@@ -24,12 +24,36 @@ class Level():
         self.start = 1
         self.play = False
         self.answer = None
+        self.inventory = {}
 
     def play_mode(self):
         self.play = True
         self.answer = self.chip
         self.chip = Chip(f"play_{self.id}")
-        
+        self.chip.load(self.answer.save(no_file=True))
+
+        self.chip.paths = {}
+
+        left = self.get_gates(self.chip)
+
+        keys_to_delete = [i for i in self.chip.gates.keys() if i in left]
+        for key in keys_to_delete:
+            del self.chip.gates[key]
+
+        self.calculate_inventory()
+
+    def calculate_inventory(self):
+        self.inventory = {}
+        for i in self.answer.gates:
+            if not self.answer.gates[i].gate_type in self.inventory:
+                self.inventory[self.answer.gates[i].gate_type] = 0
+            self.inventory[self.answer.gates[i].gate_type] += 1
+
+        for i in self.chip.gates:
+            if self.chip.gates[i].gate_type in self.inventory:
+                self.inventory[self.chip.gates[i].gate_type] -= 1
+
+        print(self.inventory)
 
     def start_chip(self, chip = None):
         if chip == None:
@@ -59,6 +83,15 @@ class Level():
         result = []
         for i in self.chip.gates:
             if self.chip.gates[i].type == "Output":
+                result.append(i)
+        return result
+    
+    def get_gates(self, chip = None):
+        if chip == None:
+            chip = self.chip
+        result = []
+        for i in self.chip.gates:
+            if self.chip.gates[i].type == "Gate":
                 result.append(i)
         return result
 

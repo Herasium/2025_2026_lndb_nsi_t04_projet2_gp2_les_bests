@@ -95,15 +95,15 @@ class LevelPlayer(arcade.View):
         return result
 
     def bottom_gate_bar(self):
-
-        for i in gate_types:
-           
-            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
-            self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
-            self.bottom_gates[-1].camera = (0,0)
-            self.bottom_gates[-1].y = (1*data.UI_EDITOR_GRID_SIZE)
-            self.bottom_gates[-1].x = position
-            
+        self.bottom_gates = []
+        for i in self.level.inventory:
+            for _ in range(self.level.inventory[i]):
+                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
+                self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
+                self.bottom_gates[-1].camera = (0,0)
+                self.bottom_gates[-1].y = (1*data.UI_EDITOR_GRID_SIZE)
+                self.bottom_gates[-1].x = position
+                
 
     def get_hovered_bottom_gate(self):
         for i in self.bottom_gates:
@@ -373,6 +373,12 @@ class LevelPlayer(arcade.View):
 
     def simulate(self):
         propagate_values(self.level.chip)
+
+        if self.level.chip.changed:
+            self.level.chip.changed = False
+            self.level.calculate_inventory()
+            self.bottom_gate_bar()
+
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
