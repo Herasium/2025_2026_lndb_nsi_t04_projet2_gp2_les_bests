@@ -89,16 +89,24 @@ class MainMenuView(arcade.View):
         self.button_touche = [""]
         self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
         self.arcade_colors = [
-                        "#FF004D", "#00E756", "#29ADFF", "#FFA300",
-                        "#FFEC27", "#FF77A8", "#83769C", "#7E2553",
-                        "#1D2B53", "#008751", "#AB5236", "#5F574F",
-                        "#C2C3C7", "#FFF1E8", "#FF6F59", "#254441",
-                        "#43AA8B", "#B2B09B", "#EF3054", "#3A86FF",
-                        "#8338EC", "#FFBE0B", "#FB5607", "#FF006E",
-                        "#2EC4B6", "#E71D36", "#011627", "#FF9F1C",
-                        "#AACC00", "#00F5D4", "#F15BB5", "#9B5DE5",
-                        "#FEE440", "#00BBF9", "#D00000", "#FFBA08",
-                        "#6A4C93", "#1982C4", "#8AC926", "#FF595E"
+                        "#FF0000", # Rouge
+                        "#FF4500", # Rouge Orange
+                        "#FF7F00", # Orange
+                        "#FFA500", # Orange clair
+                        "#FFD700", # Or
+                        "#FFFF00", # Jaune
+                        "#ADFF2F", # Jaune Vert
+                        "#00FF00", # Vert (Lime)
+                        "#00FA9A", # Vert Printemps
+                        "#00FFFF", # Cyan (Transition cruciale Vert->Bleu)
+                        "#00BFFF", # Deep Sky Blue
+                        "#1E90FF", # Dodger Blue
+                        "#0000FF", # Bleu
+                        "#4B0082", # Indigo
+                        "#8A2BE2", # Bleu Violet
+                        "#9400D3", # Violet Foncé
+                        "#EE82EE", # Violet
+                        "#FF00FF", # Magenta
                         ]
         self.compteur = 0
 
