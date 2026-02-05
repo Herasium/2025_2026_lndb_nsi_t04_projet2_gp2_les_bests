@@ -88,6 +88,29 @@ class MainMenuView(arcade.View):
 
         self.button_touche = [""]
         self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
+<<<<<<< HEAD
+=======
+        self.arcade_colors = [
+                        "#FF0000", # Rouge
+                        "#FF4500", # Rouge Orange
+                        "#FF7F00", # Orange
+                        "#FFA500", # Orange clair
+                        "#FFD700", # Or
+                        "#FFFF00", # Jaune
+                        "#ADFF2F", # Jaune Vert
+                        "#00FF00", # Vert (Lime)
+                        "#00FA9A", # Vert Printemps
+                        "#00FFFF", # Cyan (Transition cruciale Vert->Bleu)
+                        "#00BFFF", # Deep Sky Blue
+                        "#1E90FF", # Dodger Blue
+                        "#0000FF", # Bleu
+                        "#4B0082", # Indigo
+                        "#8A2BE2", # Bleu Violet
+                        "#9400D3", # Violet Foncé
+                        "#EE82EE", # Violet
+                        "#FF00FF", # Magenta
+                        ]
+>>>>>>> 0ce975eee10109427f3d184781562a147cc41811
         self.compteur = 0
 
 
