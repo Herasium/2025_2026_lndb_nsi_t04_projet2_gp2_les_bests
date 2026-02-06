@@ -18,6 +18,11 @@ class Window():
         view = self.view_history[-1]
         self.window.show_view(view)
 
+    def first(self):
+        view = self.view_history[0]
+        self.window.show_view(view)
+        self.view_history=[]
+
     def run(self):
         arcade.run()
 
