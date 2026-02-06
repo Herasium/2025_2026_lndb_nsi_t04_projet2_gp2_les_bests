@@ -2,12 +2,8 @@ import json
 import traceback
 from os import listdir
 from os.path import isdir, isfile, join
-
 import arcade
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
-
+from PIL import Image, ImageDraw, ImageFont
 from modules.data import data
 from modules.data.chip import Chip
 from modules.data.level import Level
@@ -16,235 +12,115 @@ from modules.logger import Logger
 
 logger = Logger("Loader")
 
-def load_saves():
-
-    saves = join(data.current_path,"saves")
-
-    if not isdir(saves):
-         return 
-
-    files = [f for f in listdir(saves) if isfile(join(saves, f))]
-    read = []
-
-    for file_path in files:
-        complete = join(saves,file_path)
-        try: 
-            with open(complete,"rb") as file:
-                raw= file.read()
-                file.close()
-
-            dump = raw
-            loaded = json.loads(dump)
-            read.append(loaded)
-        except Exception as e:
-            logger.error(f"Failed to read file {complete} ({e})")
-
-    for i in read:
-        try:
-            new = Chip("default_id")
-            new.load(i)
-            data.loaded_chips[i["id"]] = new
-        except Exception as e: 
-             logger.error(f"Failed to load chip \n\n{i}\n\n")
-             logger.error(traceback.format_exc())
-
-def load_levels():
-
-    saves = join(data.current_path,"levels")
-
-    if not isdir(saves):
-         return 
-
-    files = [f for f in listdir(saves) if isfile(join(saves, f))]
-    read = []
-
-    for file_path in files:
-        complete = join(saves,file_path)
-        try: 
-            with open(complete,"rb") as file:
-                raw= file.read()
-                file.close()
-
-            dump = raw
-            loaded = json.loads(dump)
-            read.append(loaded)
-        except Exception as e:
-            logger.error(f"Failed to read file {complete} ({e})")
-
-    for i in read:
-        try:
-            new = Level("default_id")
-            new.load(i)
-            data.loaded_levels[i["level"]["id"]] = new
-        except Exception as e: 
-             logger.error(f"Failed to load level \n\n{i}\n\n")
-             logger.error(traceback.format_exc())
-
-
-def load_tiles():
+class Loader:
+    def load_json_files(self,sub_folder):
+        path = join(data.current_path, sub_folder)
+        if not isdir(path):
+            return []
         
-        ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
+        results = []
+        files = [f for f in listdir(path) if isfile(join(path, f))]
+        for file_name in files:
+            full_path = join(path, file_name)
+            try:
+                with open(full_path, "rb") as file:
+                    results.append(json.loads(file.read()))
+            except Exception as e:
+                logger.error(f"Failed to read file {full_path} ({e})")
+        return results
 
-        ui_border_tiles = ui_border_sheet.get_texture_grid(
-            size = (64, 64),
-            columns = 4,
-            count = 4*4,
+    def load_saves(self):
+        for raw_data in self.load_json_files("saves"):
+            try:
+                chip = Chip("default_id")
+                chip.load(raw_data)
+                data.loaded_chips[raw_data["id"]] = chip
+            except Exception:
+                logger.error(f"Failed to load chip: {traceback.format_exc()}")
+
+    def load_levels(self):
+        for raw_data in self.load_json_files("levels"):
+            try:
+                level = Level("default_id")
+                level.load(raw_data)
+                data.loaded_levels[raw_data["level"]["id"]] = level
+            except Exception:
+                logger.error(f"Failed to load level: {traceback.format_exc()}")
+
+    def load_assets(self):
+        arcade.load_font("assets/press_start.ttf")
+        
+        data.ui_border_tiles = arcade.SpriteSheet("assets/ui_border_grid.png").get_texture_grid(
+            size=(64, 64), columns=4, count=16
+        )
+        data.gate_tiles = arcade.SpriteSheet("assets/gate_grid.png").get_texture_grid(
+            size=(data.UI_EDITOR_GRID_SIZE, data.UI_EDITOR_GRID_SIZE), columns=6, count=36
         )
 
-        data.ui_border_tiles = ui_border_tiles
+    def _bake_grid(self, width_px, height_px):
+        img = Image.new("RGBA", (width_px, height_px))
+        tile = data.ui_border_tiles[9].image
+        for y in range(0, height_px, 64):
+            for x in range(0, width_px, 64):
+                img.paste(tile, (x, y))
+        return arcade.Texture(img)
 
-        gate_sheet = arcade.SpriteSheet("assets/gate_grid.png")
+    def _bake_border(self, width_px, rows):
+        height_px = rows * 64
+        canvas = Image.new("RGBA", (width_px, height_px))
+        cols = width_px // 64
 
-        gate_tiles = gate_sheet.get_texture_grid(
-            size=(data.UI_EDITOR_GRID_SIZE, data.UI_EDITOR_GRID_SIZE),
-            columns=6,
-            count=6*6
-        )
+        def paste(idx, x, y):
+            canvas.paste(data.ui_border_tiles[idx].image, (x * 64, y * 64))
 
-        data.gate_tiles = gate_tiles
+        paste(0, 0, 0)
+        for i in range(1, cols - 1): paste(1, i, 0)
+        paste(3, cols - 1, 0)
 
-def load_font():
-     arcade.load_font("assets/press_start.ttf")
-     
+        for i in range(1, rows - 1):
+            paste(4, 0, i)
+            paste(7, cols - 1, i)
 
-def bake_background_grid_texture():
-    start_x = 0
-    y_len = int(1088/64)
-    start_y = 1088
-
-    new = Image.new("RGBA",(1920,1088))
-
-    for i in range(y_len):
-        for a in range(int(1920/64)):
-            new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
+        if rows > 3:
+            for idx, off in [(12, 0), (13, 1), (5, 2), (6, 3), (10, 4)]:
+                paste(idx, off, rows - 1)
+            for i in range(5, cols - 1): paste(13, i, rows - 1)
+            paste(15, cols - 1, rows - 1)
         
-    data.background_grid_texture = arcade.Texture(new)
+        return arcade.Texture(canvas)
 
-def bake_editor_border_texture():
-    canvas = Image.new("RGBA", (1920, 14*64))
-
-    def paste(idx, x, y):
-        img = data.ui_border_tiles[idx].image
-        canvas.paste(img, (x, y))
-
-    start_x = 0 
-    start_y = 0
-    paste(0, start_x, start_y)
-    for i in range(28):
-        paste(1, start_x + (i + 1) * 64, start_y)
-    paste(3, start_x + 29 * 64, start_y)
-
-    side_len = 13
-    for i in range(side_len - 1):
-        y = start_y + (i + 1) * 64
-        paste(4, start_x, y)
-        paste(7, start_x + 29 * 64, y)
-
-    bottom_y = start_y + side_len * 64
-    for idx, off in [(12, 0), (13, 1), (5, 2), (6, 3), (10, 4)]:
-        paste(idx, start_x + off * 64, bottom_y)
-
-    for i in range(24):
-        paste(13, start_x + (i + 5) * 64, bottom_y)
-
-    paste(15, start_x + 29 * 64, bottom_y)
-    data.editor_border_texture = arcade.Texture(image=canvas)
-
-def bake_background_grid_texture_small():
-    start_x = 0
-    y_len = 3
-    start_y = 3*64
-
-    new = Image.new("RGBA",(1920,3*64))
-
-    for i in range(y_len):
-        for a in range(int(1920/64)):
-            new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
+    def render_gate_image(self, gate):
+        width, height = gate.tile_width, 4
+        new = Image.new("RGBA", (width * data.UI_EDITOR_GRID_SIZE, height * data.UI_EDITOR_GRID_SIZE))
+        font = ImageFont.truetype('assets/press_start.ttf', 32)
         
-    data.background_grid_texture_small = arcade.Texture(new)
+        for i, pattern_idx in enumerate(gate.gate_tile_pattern):
+            x, y = i % width, i // width
+            tile = gate.tiles[pattern_idx].image.resize((data.UI_EDITOR_GRID_SIZE, data.UI_EDITOR_GRID_SIZE))
+            new.paste(tile, (x * data.UI_EDITOR_GRID_SIZE, (height - 1 - y) * data.UI_EDITOR_GRID_SIZE))
 
-def bake_editor_border_texture_small():
-    canvas = Image.new("RGBA", (1920, 3*64))
+        draw = ImageDraw.Draw(new)
+        tx, ty = gate.width / 2, (height * data.UI_EDITOR_GRID_SIZE) - (gate.height / 1.6 + data.UI_EDITOR_GRID_SIZE / 4)
+        draw.text((tx - 2, ty - 4), gate.name, font=font, fill="#5f556a", anchor="mm")
+        draw.text((tx, ty), gate.name, font=font, fill="#b45252", anchor="mm")
+        return new
 
-    def paste(idx, x, y):
-        img = data.ui_border_tiles[idx].image
-        canvas.paste(img, (x, y))
+    def bake_textures(self):
+        logger.debug("Baking Textures")
+        data.background_grid_texture = self._bake_grid(1920, 1088)
+        data.editor_border_texture = self._bake_border(1920, 14)
+        data.background_grid_texture_small = self._bake_grid(1920, 192)
+        data.editor_border_texture_small = self._bake_border(1920, 3)
+        data.background_grid_texture_level_player = self._bake_grid(1536, 1088)
+        data.editor_border_texture_level_player = self._bake_border(1536, 14)
 
-    start_x = 0 
-    start_y = 0
-    paste(0, start_x, start_y)
-    for i in range(28):
-        paste(1, start_x + (i + 1) * 64, start_y)
-    paste(3, start_x + 29 * 64, start_y)
-
-    side_len = 3
-    for i in range(side_len - 1):
-        y = start_y + (i + 1) * 64
-        paste(4, start_x, y)
-        paste(7, start_x + 29 * 64, y)
-
-    data.editor_border_texture_small = arcade.Texture(image=canvas)
-
-def render_gate_image(gate):
-    width = gate.tile_width
-    height = 4
-
-    current = 0
-    new = Image.new("RGBA",(width*data.UI_EDITOR_GRID_SIZE,height*data.UI_EDITOR_GRID_SIZE))
-    myFont = ImageFont.truetype('assets/press_start.ttf', 32)
-
-    for y in range(height):
-        for x in range(width):
-
-            tile_x = x * data.UI_EDITOR_GRID_SIZE
-            tile_y = ((height-1)-y) * data.UI_EDITOR_GRID_SIZE
-            tile = gate.tiles[gate.gate_tile_pattern[current]].image.copy()
-
-            tile.resize((data.UI_EDITOR_GRID_SIZE,data.UI_EDITOR_GRID_SIZE))
-            new.paste(tile,(tile_x,tile_y))
-
-            current += 1
-
-    I1 = ImageDraw.Draw(new)
-
-    text_x = gate.width/2 
-    text_y = (4*data.UI_EDITOR_GRID_SIZE) - (gate.height /1.6 + data.UI_EDITOR_GRID_SIZE/4)
-
-    bg_text_x = text_x - 2
-    bg_text_y = text_y - 4
-
-    I1.text((bg_text_x, bg_text_y), gate.name, font=myFont, fill="#5f556a", anchor = "mm")
-    I1.text((text_x, text_y), gate.name, font=myFont, fill="#b45252", anchor = "mm")
-
-    return new
-    
-def bake_gate_texture(gate_id):
-
-    gate = gate_types[gate_id]("default_id")
-    size = len(gate.inputs)+len(gate.outputs)
-    power = 2 ** (size)
-    data.IMAGE.add_gate_type(gate_id)
-
-    for current in range(power):
-        values = [bool(current & (1 << i)) for i in range(size)]
-        gate.inputs = values[:len(gate.inputs)]
-        gate.outputs = values[len(gate.inputs):]
-
-        gate.gen_tile_pattern()
-        new = render_gate_image(gate)
-        data.IMAGE.add_texture(gate_id,current,arcade.Texture(new))
-
-    data.IMAGE.complete_gate(gate_id)
-
-def bake_textures():
-    logger.debug("Baking Textures")
-    bake_background_grid_texture()
-    bake_editor_border_texture()
-    bake_background_grid_texture_small()
-    bake_editor_border_texture_small()
-
-    for i in gate_types:
-        bake_gate_texture(i)
-
-def load_textures():
-    bake_textures()
+        for g_id in gate_types:
+            gate = gate_types[g_id]("default_id")
+            data.IMAGE.add_gate_type(g_id)
+            size = len(gate.inputs) + len(gate.outputs)
+            for i in range(2**size):
+                vals = [bool(i & (1 << j)) for j in range(size)]
+                gate.inputs, gate.outputs = vals[:len(gate.inputs)], vals[len(gate.inputs):]
+                gate.gen_tile_pattern()
+                data.IMAGE.add_texture(g_id, i, arcade.Texture(self.render_gate_image(gate)))
+            data.IMAGE.complete_gate(g_id)

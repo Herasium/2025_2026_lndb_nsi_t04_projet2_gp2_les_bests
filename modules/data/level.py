@@ -24,6 +24,7 @@ class Level():
         self.start = 1
         self.play = False
         self.answer = None
+        self.max_usage = {}
         self.inventory = {}
 
     def play_mode(self):
@@ -43,17 +44,19 @@ class Level():
         self.calculate_inventory()
 
     def calculate_inventory(self):
-        self.inventory = {}
+        self.max_usage = {}
         for i in self.answer.gates:
-            if not self.answer.gates[i].gate_type in self.inventory:
-                self.inventory[self.answer.gates[i].gate_type] = 0
-            self.inventory[self.answer.gates[i].gate_type] += 1
+            if not self.answer.gates[i].gate_type in self.max_usage:
+                self.max_usage[self.answer.gates[i].gate_type] = 0
+            self.max_usage[self.answer.gates[i].gate_type] += 1
 
+        self.inventory = {}
         for i in self.chip.gates:
-            if self.chip.gates[i].gate_type in self.inventory:
-                self.inventory[self.chip.gates[i].gate_type] -= 1
+            if not self.chip.gates[i].gate_type in self.inventory:
+                self.inventory[self.chip.gates[i].gate_type] = 0
+            self.inventory[self.chip.gates[i].gate_type] += 1
 
-        print(self.inventory)
+        print(self.inventory,self.max_usage)
 
     def start_chip(self, chip = None):
         if chip == None:

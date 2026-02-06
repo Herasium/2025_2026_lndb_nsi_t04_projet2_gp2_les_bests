@@ -16,6 +16,7 @@ from modules.logger import Logger
 
 from pyglet.graphics import Batch
 import sys
+import colorsys
 
 logger = Logger("MainMenu")
 
@@ -88,26 +89,7 @@ class MainMenuView(arcade.View):
 
         self.button_touche = [""]
         self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
-        self.arcade_colors = [
-                        "#FF0000", # Rouge
-                        "#FF4500", # Rouge Orange
-                        "#FF7F00", # Orange
-                        "#FFA500", # Orange clair
-                        "#FFD700", # Or
-                        "#FFFF00", # Jaune
-                        "#ADFF2F", # Jaune Vert
-                        "#00FF00", # Vert (Lime)
-                        "#00FA9A", # Vert Printemps
-                        "#00FFFF", # Cyan (Transition cruciale Vert->Bleu)
-                        "#00BFFF", # Deep Sky Blue
-                        "#1E90FF", # Dodger Blue
-                        "#0000FF", # Bleu
-                        "#4B0082", # Indigo
-                        "#8A2BE2", # Bleu Violet
-                        "#9400D3", # Violet Foncé
-                        "#EE82EE", # Violet
-                        "#FF00FF", # Magenta
-                        ]
+
         self.compteur = 0
 
 
@@ -116,35 +98,8 @@ class MainMenuView(arcade.View):
 
     def rainbow_color(self,precision: int, index: int) -> str:
 
-        if precision <= 0:
-            raise ValueError("precision must be > 0")
-
-        # Wrap index so the rainbow loops
-        index = index % precision
-        h = index / precision  # hue in [0, 1)
-        s = 1.0
-        v = 1.0
-
-        # HSV to RGB conversion
-        i = int(h * 6)
-        f = (h * 6) - i
-        p = v * (1 - s)
-        q = v * (1 - f * s)
-        t = v * (1 - (1 - f) * s)
-        i = i % 6
-
-        if i == 0:
-            r, g, b = v, t, p
-        elif i == 1:
-            r, g, b = q, v, p
-        elif i == 2:
-            r, g, b = p, v, t
-        elif i == 3:
-            r, g, b = p, q, v
-        elif i == 4:
-            r, g, b = t, p, v
-        else:
-            r, g, b = v, p, q
+        h = (index % precision) / precision
+        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
 
         return "#{:02x}{:02x}{:02x}".format(
             int(r * 255),
@@ -350,9 +305,10 @@ class MainMenuView(arcade.View):
         elif self.setting_button.touched:
             if self.button_touche[-1] != "setting_button":
                 self.button_touche.append("setting_button")
-            for i in self.paths :
-                i.input_on_color = arcade.color.GRAY
-                i.current_value = True
+            if self.button_touche != self.combinaison:
+                for i in self.paths :
+                    i.input_on_color = arcade.color.GRAY
+                    i.current_value = True
 
         elif self.sandbox_button.touched:
             if self.button_touche[-1] != "sandbox_button":

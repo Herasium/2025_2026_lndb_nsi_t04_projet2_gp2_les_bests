@@ -96,12 +96,12 @@ class LevelPlayer(arcade.View):
 
     def bottom_gate_bar(self):
         self.bottom_gates = []
-        for i in self.level.inventory:
-            for _ in range(self.level.inventory[i]):
+        for i in self.level.max_usage:
+            if i != "Input" and i != "Output":
                 position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
                 self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
                 self.bottom_gates[-1].camera = (0,0)
-                self.bottom_gates[-1].y = (1*data.UI_EDITOR_GRID_SIZE)
+                self.bottom_gates[-1].y = (0.8*data.UI_EDITOR_GRID_SIZE)
                 self.bottom_gates[-1].x = position
                 
 
@@ -135,30 +135,30 @@ class LevelPlayer(arcade.View):
         rect = arcade.XYWH(
                 x=0,
                 y=1080-(14*64),
-                width=1920,
+                width=1536,
                 height=14*64,
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(data.editor_border_texture,rect)
+        arcade.draw_texture_rect(data.editor_border_texture_level_player,rect)
 
     def draw_frame_background(self):
 
         rect = arcade.XYWH(
                 x=0,
                 y=0,
-                width=1920,
+                width=1536,
                 height=1088,
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(data.background_grid_texture,rect)
+        arcade.draw_texture_rect(data.background_grid_texture_level_player,rect)
 
     def draw_frame_border_small(self):
 
         rect = arcade.XYWH(
                 x=0,
-                y=0,
+                y=-8,
                 width=1920,
                 height=3*64,
                 anchor=arcade.Vec2(0,0)
@@ -170,7 +170,7 @@ class LevelPlayer(arcade.View):
 
         rect = arcade.XYWH(
                 x=0,
-                y=0,
+                y=-8,
                 width=1920,
                 height=3*64,
                 anchor=arcade.Vec2(0,0)
@@ -259,30 +259,32 @@ class LevelPlayer(arcade.View):
 
     def delete_gate(self,id):
         to_delete = []
-        for index in self.level.chip.paths.keys():
-            p = self.level.chip.paths[index]
 
-            for input in p.inputs:
-                if input[1] == id:
-                    p.remove_branch(input[4])
-                    if p.empty:
-                        to_delete.append(index)
-                        continue
-                    p.clean_out_single_branch()
+        if self.level.chip.gates[id].type == "Gate":
+            for index in self.level.chip.paths.keys():
+                p = self.level.chip.paths[index]
 
-            for output in p.outputs:
-                if output[1] == id:
-                    p.remove_branch(output[4])
-                    if p.empty:
-                        to_delete.append(index)
-                        continue
-                    p.clean_out_single_branch()
+                for input in p.inputs:
+                    if input[1] == id:
+                        p.remove_branch(input[4])
+                        if p.empty:
+                            to_delete.append(index)
+                            continue
+                        p.clean_out_single_branch()
 
-        del self.level.chip.gates[id]
-        for i in to_delete:
-            del self.level.chip.paths[i]
+                for output in p.outputs:
+                    if output[1] == id:
+                        p.remove_branch(output[4])
+                        if p.empty:
+                            to_delete.append(index)
+                            continue
+                        p.clean_out_single_branch()
 
-        self.level.chip.changed = True
+            del self.level.chip.gates[id]
+            for i in to_delete:
+                del self.level.chip.paths[i]
+
+            self.level.chip.changed = True
 
     def delete(self):
 
@@ -466,7 +468,6 @@ class LevelPlayer(arcade.View):
                 self.selected_follower.camera = self.camera
                 self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                 self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-                self.level.chip.changed = True
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):
@@ -488,6 +489,7 @@ class LevelPlayer(arcade.View):
                     self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                     self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
                     self.selected_follower = None
+                    self.level.chip.changed = True
                     
 
         self.moving_gate = None
