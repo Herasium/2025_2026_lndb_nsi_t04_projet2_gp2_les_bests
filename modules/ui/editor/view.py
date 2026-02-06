@@ -27,6 +27,8 @@ from modules.data.gate_index import gate_types
 
 from modules.engine.logic import propagate_values
 
+from modules.ui.main_menu.pause_view import PauseView
+
 
 class EditorView(arcade.View):
 
@@ -240,8 +242,11 @@ class EditorView(arcade.View):
         if key == 65307:  # ESC
             if self.current_path:
                 self.current_path.abort()
-            self.current_path = None
-            self.selected_follower = None
+            if self.current_path or self.selected_follower:
+                self.current_path = None
+                self.selected_follower = None
+            else:   
+                data.window.display(PauseView())
 
         if key == 115: # s
             self.chip.save()
