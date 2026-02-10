@@ -5,7 +5,7 @@ from modules.data import data
 
 class Button:
 
-    def __init__(self, tiles):
+    def __init__(self):
 
         self._x = 0
         self._y = 0
@@ -20,7 +20,6 @@ class Button:
         self._text = ""
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
-        self.tiles = tiles
 
         self.scale = 1.0
 
@@ -96,33 +95,6 @@ class Button:
         self.text.x = self.x + self.width /2
         self.text.y = self.y - self.height /2
 
-    def draw_tiles(self):
-    
-        gate_tile_pattern = [47, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 49, 24, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26]
-        width = 12
-        height = 2
-        tile_anchor = self._anchor
-
-        scaled_grid = self.grid_size * self.scale
-        tile_size = scaled_grid * 3
-
-        current = 0
-        for y in range(height):
-            for x in range(width):
-
-                tile_x = self.x + x * scaled_grid
-                tile_y = self.y + (y - 0.75) * scaled_grid
-
-                rect = arcade.XYWH(
-                    x = tile_x,
-                    y = tile_y,
-                    width = tile_size,
-                    height = tile_size,
-                    anchor = tile_anchor
-                )
-
-                arcade.draw_texture_rect(self.tiles[gate_tile_pattern[current]],rect)
-                current += 1
 
     @property
     def name(self):

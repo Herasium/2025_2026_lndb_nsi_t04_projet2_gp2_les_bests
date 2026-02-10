@@ -13,7 +13,8 @@ from modules.logger import Logger
 logger = Logger("Loader")
 
 class Loader:
-    def load_json_files(self,sub_folder):
+
+    def load_files(self,sub_folder):
         path = join(data.current_path, sub_folder)
         if not isdir(path):
             return []
@@ -30,16 +31,17 @@ class Loader:
         return results
 
     def load_saves(self):
-        for raw_data in self.load_json_files("saves"):
+        for raw_data in self.load_files("saves"):
             try:
                 chip = Chip("default_id")
                 chip.load(raw_data)
                 data.loaded_chips[raw_data["id"]] = chip
             except Exception:
                 logger.error(f"Failed to load chip: {traceback.format_exc()}")
+        logger.success(f"Loaded {len(data.loaded_chips)} Chips.")
 
     def load_levels(self):
-        for raw_data in self.load_json_files("levels"):
+        for raw_data in self.load_files("levels"):
             try:
                 level = Level("default_id")
                 level.load(raw_data)
@@ -47,15 +49,23 @@ class Loader:
             except Exception:
                 logger.error(f"Failed to load level: {traceback.format_exc()}")
 
-    def load_assets(self):
-        arcade.load_font("assets/press_start.ttf")
+        logger.success(f"Loaded {len(data.loaded_levels)} Levels.")
+    def load_fonts(self):
+        try:
+            arcade.load_font("assets/fonts/press_start.ttf")
+            logger.success("Loaded Fonts (1).")
+        except Exception as e:
+            logger.error(f"Failed to load fonts ({e}).")
+
+    def load_tilesets(self):
         
-        data.ui_border_tiles = arcade.SpriteSheet("assets/ui_border_grid.png").get_texture_grid(
+        data.ui_border_tiles = arcade.SpriteSheet("assets/grid/ui_border_grid.png").get_texture_grid(
             size=(64, 64), columns=4, count=16
         )
-        data.gate_tiles = arcade.SpriteSheet("assets/gate_grid.png").get_texture_grid(
+        data.gate_tiles = arcade.SpriteSheet("assets/grid/gate_grid.png").get_texture_grid(
             size=(data.UI_EDITOR_GRID_SIZE, data.UI_EDITOR_GRID_SIZE), columns=6, count=36
         )
+
 
     def _bake_grid(self, width_px, height_px):
         img = Image.new("RGBA", (width_px, height_px))
@@ -77,7 +87,7 @@ class Loader:
         for i in range(1, cols - 1): paste(1, i, 0)
         paste(3, cols - 1, 0)
 
-        for i in range(1, rows - 1):
+        for i in range(1, rows):
             paste(4, 0, i)
             paste(7, cols - 1, i)
 
@@ -92,7 +102,7 @@ class Loader:
     def render_gate_image(self, gate):
         width, height = gate.tile_width, 4
         new = Image.new("RGBA", (width * data.UI_EDITOR_GRID_SIZE, height * data.UI_EDITOR_GRID_SIZE))
-        font = ImageFont.truetype('assets/press_start.ttf', 32)
+        font = ImageFont.truetype('assets/fonts/press_start.ttf', 32)
         
         for i, pattern_idx in enumerate(gate.gate_tile_pattern):
             x, y = i % width, i // width
@@ -108,11 +118,6 @@ class Loader:
     def bake_textures(self):
         logger.debug("Baking Textures")
         data.background_grid_texture = self._bake_grid(1920, 1088)
-        data.editor_border_texture = self._bake_border(1920, 14)
-        data.background_grid_texture_small = self._bake_grid(1920, 192)
-        data.editor_border_texture_small = self._bake_border(1920, 3)
-        data.background_grid_texture_level_player = self._bake_grid(1536, 1088)
-        data.editor_border_texture_level_player = self._bake_border(1536, 14)
 
         for g_id in gate_types:
             gate = gate_types[g_id]("default_id")
@@ -124,3 +129,38 @@ class Loader:
                 gate.gen_tile_pattern()
                 data.IMAGE.add_texture(g_id, i, arcade.Texture(self.render_gate_image(gate)))
             data.IMAGE.complete_gate(g_id)
+
+    def load_ui(self):
+
+        data.play_button = arcade.Sprite("assets/buttons/play_button.png")
+        data.button_level = arcade.Sprite("assets/buttons/button_level.png")
+        data.button_options = arcade.Sprite("assets/buttons/button_options.png")
+        data.button_quit = arcade.Sprite("assets/buttons/button_quit.png")
+        data.button_sandbox = arcade.Sprite("assets/buttons/button_sandbox.png")
+        data.button_tuto = arcade.Sprite("assets/buttons/button_tuto.png")
+
+        data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
+        data.level_info = arcade.Sprite("assets/titles/level_info.png")
+        data.truth_table = arcade.Sprite("assets/titles/truth_table.png")
+
+        data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
+        data.level_player_border = arcade.Sprite("assets/borders/level_player_border.png")
+
+    def load(self):
+
+        logger.print("Loading Game Stuff.")
+
+        try:
+
+            self.load_fonts()
+            self.load_tilesets()
+            self.load_saves()
+            self.load_levels()
+            self.bake_textures()
+            self.load_ui()
+
+            logger.success("Finished loading stuff.")
+        except Exception as e:
+            logger.error(f"Failed to load stuff ({e})")
+
+        

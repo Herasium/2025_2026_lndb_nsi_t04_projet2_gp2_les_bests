@@ -16,21 +16,11 @@ loader = Loader()
 logger.print(f"Logic Box, v.{data.VERSION}.")
 logger.print(f"Current path: {path}")
 
-loader.load_assets()
-logger.print("Loaded Assets.")
-
 windows = Window()
 data.window = windows
 logger.print("Created Window.")
 
-loader.load_saves()
-logger.print("Loaded saves files.")
-
-loader.load_levels()
-logger.print("Loaded levels files.")
-
-loader.bake_textures()
-logger.print("Baked Textures.")
+loader.load()
 
 view = MainMenuView()
 

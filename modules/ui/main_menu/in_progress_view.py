@@ -27,61 +27,45 @@ class MainMenuView(arcade.View):
 
         self.background_color = arcade.color.JET
 
-        self.ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
+        self.play_button_sprite = data.play_button
+        self.name_banner_sprite = data.name_banner
+        self.quit_button_sprite = data.button_quit
+        self.level_button_sprite = data.button_level
+        self.setting_button_sprite = data.button_options
+        self.sandbox_button_sprite = data.button_sandbox
+        self.tuto_button_sprite = data.button_tuto
 
-        self.ui_border_tiles = self.ui_border_sheet.get_texture_grid(
-            size = (64, 64),
-            columns = 4,
-            count = 4*4,
-        )
-
-        self.play_button_sprite = arcade.Sprite("assets/play_button.png")
-        self.name_banner_sprite = arcade.Sprite("assets/name_banner.png")
-        self.quit_button_sprite = arcade.Sprite("assets/button_quit.png")
-        self.level_button_sprite = arcade.Sprite("assets/button_level.png")
-        self.setting_button_sprite = arcade.Sprite("assets/button_options.png")
-        self.sandbox_button_sprite = arcade.Sprite("assets/button_sandbox.png")
-        self.tuto_button_sprite = arcade.Sprite("assets/button_tuto.png")
-
-        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
-
-        self.ui_tiles = self.ui_sheet.get_texture_grid(
-            size = (32, 32),
-            columns = 23,
-            count = 9*23,
-        )
-
-        self.play_button = Button(self.ui_tiles)
+        self.play_button = Button()
         self.play_button.x = 1920 / 2 - 700 / 2 - 5
         self.play_button.y = 260 + 320 + 100 + 225 / 2
         self.play_button.width = 700
         self.play_button.height = 225
 
-        self.quit_button = Button(self.ui_tiles)
+        self.quit_button = Button()
         self.quit_button.x = 1920 - 350
         self.quit_button.y = 260 + 125
         self.quit_button.width = 175
         self.quit_button.height = 175
 
-        self.setting_button = Button(self.ui_tiles)
+        self.setting_button = Button()
         self.setting_button.x = 1920 / 7
         self.setting_button.y = 260 + 180 
         self.setting_button.width = 200*1.5
         self.setting_button.height = 100*1.5
 
-        self.sandbox_button = Button(self.ui_tiles)
+        self.sandbox_button = Button()
         self.sandbox_button.x = 1920 - 830
         self.sandbox_button.y = 260 + 168
         self.sandbox_button.width = 160*1.5
         self.sandbox_button.height = 100*1.5   
 
-        self.level_button = Button(self.ui_tiles)
+        self.level_button = Button()
         self.level_button.x = 1920 / 2 - 200
         self.level_button.y = 260 + 250
         self.level_button.width = 180*1.25
         self.level_button.height = 100*1.25
 
-        self.tuto_button = Button(self.ui_tiles)
+        self.tuto_button = Button()
         self.tuto_button.x = 1920 / 3 + 60
         self.tuto_button.y = 260
         self.tuto_button.width = 200*1.25
@@ -146,7 +130,7 @@ class MainMenuView(arcade.View):
                 anchor=arcade.Vec2(0,0)
             )
 
-            arcade.draw_texture_rect(self.ui_border_tiles[id],rect)
+            arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
 
     def draw_frame_border(self):
         start_x = 32
@@ -331,7 +315,6 @@ class MainMenuView(arcade.View):
 
         if len(self.button_touche) > 4:
             self.button_touche.pop(0)
-            print (self.button_touche)
 
 
         

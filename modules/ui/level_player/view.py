@@ -98,10 +98,10 @@ class LevelPlayer(arcade.View):
         self.bottom_gates = []
         for i in self.level.max_usage:
             if i != "Input" and i != "Output":
-                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
+                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
                 self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
                 self.bottom_gates[-1].camera = (0,0)
-                self.bottom_gates[-1].y = (0.8*data.UI_EDITOR_GRID_SIZE)
+                self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
                 self.bottom_gates[-1].x = position
                 
 
@@ -134,49 +134,25 @@ class LevelPlayer(arcade.View):
 
         rect = arcade.XYWH(
                 x=0,
-                y=1080-(14*64),
-                width=1536,
-                height=14*64,
+                y=0,
+                width=1920,
+                height=1080,
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(data.editor_border_texture_level_player,rect)
+        arcade.draw_sprite_rect(data.level_player_border,rect)
 
     def draw_frame_background(self):
 
         rect = arcade.XYWH(
                 x=0,
                 y=0,
-                width=1536,
+                width=1920,
                 height=1088,
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(data.background_grid_texture_level_player,rect)
-
-    def draw_frame_border_small(self):
-
-        rect = arcade.XYWH(
-                x=0,
-                y=-8,
-                width=1920,
-                height=3*64,
-                anchor=arcade.Vec2(0,0)
-            )
-
-        arcade.draw_texture_rect(data.editor_border_texture_small,rect)
-
-    def draw_frame_background_small(self):
-
-        rect = arcade.XYWH(
-                x=0,
-                y=-8,
-                width=1920,
-                height=3*64,
-                anchor=arcade.Vec2(0,0)
-            )
-
-        arcade.draw_texture_rect(data.background_grid_texture_small,rect)
+        arcade.draw_texture_rect(data.background_grid_texture,rect)
 
 
 
@@ -218,8 +194,6 @@ class LevelPlayer(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
-        self.draw_frame_background_small()
-        self.draw_frame_border_small()
         self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()

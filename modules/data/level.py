@@ -20,7 +20,7 @@ class Level():
         self.name = "Default Level"
         self.description = "Basic level to learn the basis of gates."
         self.hints = []
-        self.truth = []
+        self.truth = {}
         self.start = 1
         self.play = False
         self.answer = None
@@ -42,6 +42,7 @@ class Level():
             del self.chip.gates[key]
 
         self.calculate_inventory()
+        self.get_truth_table(answer=True)
 
     def calculate_inventory(self):
         self.max_usage = {}
@@ -56,7 +57,7 @@ class Level():
                 self.inventory[self.chip.gates[i].gate_type] = 0
             self.inventory[self.chip.gates[i].gate_type] += 1
 
-        print(self.inventory,self.max_usage)
+
 
     def start_chip(self, chip = None):
         if chip == None:
@@ -98,10 +99,10 @@ class Level():
                 result.append(i)
         return result
 
-    def get_single_truth_table(self):
+    def get_single_truth_table(self,chip):
 
         copy = Chip("copy_chip")
-        copy.load(self.chip.save(no_file=True))
+        copy.load(chip.save(no_file=True))
 
         self.start_chip(copy)
         propagate_values(copy)
@@ -116,16 +117,15 @@ class Level():
             propagate_values(copy)
             result = [copy.gates[i].inputs[0] for i in outputs]
             int_value = sum(b << i for i, b in enumerate(reversed(values)))
-            self.truth[self.start][int_value] = result
+            self.truth[chip.id][int_value] = result
 
-    def get_truth_table(self):
-        self.truth = []
-        initial = self.start
-        for i in range(3):
-            self.start = i
-            self.truth.append({})
-            self.get_single_truth_table()
-        self.start = initial
+    def get_truth_table(self,answer=False):
+
+        used = self.chip
+        if answer:
+            used = self.answer
+        self.truth[used.id] = {}
+        self.get_single_truth_table(used)
         print(self.truth)
 
     def save(self):

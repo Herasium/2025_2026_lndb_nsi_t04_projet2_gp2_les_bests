@@ -102,13 +102,12 @@ class LevelEditorView(arcade.View):
 
         for i in gate_types:
            
-            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
+            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
             self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
             self.bottom_gates[-1].camera = (0,0)
-            self.bottom_gates[-1].y = (1*data.UI_EDITOR_GRID_SIZE)
+            self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
             self.bottom_gates[-1].x = position
             
-
     def get_hovered_bottom_gate(self):
         for i in self.bottom_gates:
             if i.entity.touched :
@@ -138,13 +137,13 @@ class LevelEditorView(arcade.View):
 
         rect = arcade.XYWH(
                 x=0,
-                y=1080-(14*64),
+                y=0,
                 width=1920,
-                height=14*64,
+                height=1080,
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(data.editor_border_texture,rect)
+        arcade.draw_sprite_rect(data.editor_border,rect)
 
     def draw_frame_background(self):
 
@@ -158,29 +157,8 @@ class LevelEditorView(arcade.View):
 
         arcade.draw_texture_rect(data.background_grid_texture,rect)
 
-    def draw_frame_border_small(self):
 
-        rect = arcade.XYWH(
-                x=0,
-                y=0,
-                width=1920,
-                height=3*64,
-                anchor=arcade.Vec2(0,0)
-            )
 
-        arcade.draw_texture_rect(data.editor_border_texture_small,rect)
-
-    def draw_frame_background_small(self):
-
-        rect = arcade.XYWH(
-                x=0,
-                y=0,
-                width=1920,
-                height=3*64,
-                anchor=arcade.Vec2(0,0)
-            )
-
-        arcade.draw_texture_rect(data.background_grid_texture_small,rect)
 
     def get_save_gate_counts(self):
         result = {}
@@ -293,8 +271,6 @@ class LevelEditorView(arcade.View):
             if self.selected_follower:
                 self.selected_follower.draw()
 
-            self.draw_frame_background_small()
-            self.draw_frame_border_small()
             self.draw_debug_text()
             self.draw_frame_border()
             self.draw_bottom_gates()
