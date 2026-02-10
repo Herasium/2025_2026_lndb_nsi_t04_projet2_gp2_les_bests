@@ -109,7 +109,11 @@ class Level():
         inputs = self.get_inputs(copy)
         outputs = self.get_outputs(copy)
         size = len(inputs)
+        self.truth[chip.id]["meta"]["size"] = size
+        self.truth[chip.id]["meta"]["inputs"] = inputs
+        self.truth[chip.id]["meta"]["outputs"] = outputs
         power = 2 ** size
+        self.truth[chip.id]["meta"]["power"] = power
         for current in range(power):
             values = [bool(current & (1 << i)) for i in range(size)]
             for index in range(len(inputs)):
@@ -117,14 +121,14 @@ class Level():
             propagate_values(copy)
             result = [copy.gates[i].inputs[0] for i in outputs]
             int_value = sum(b << i for i, b in enumerate(reversed(values)))
-            self.truth[chip.id][int_value] = result
+            self.truth[chip.id]["data"][int_value] = result
 
     def get_truth_table(self,answer=False):
 
         used = self.chip
         if answer:
             used = self.answer
-        self.truth[used.id] = {}
+        self.truth[used.id] = {"meta": {}, "data": {}}
         self.get_single_truth_table(used)
         print(self.truth)
 

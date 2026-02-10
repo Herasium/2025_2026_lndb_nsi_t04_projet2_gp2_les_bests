@@ -138,6 +138,9 @@ class Loader:
         data.button_quit = arcade.Sprite("assets/buttons/button_quit.png")
         data.button_sandbox = arcade.Sprite("assets/buttons/button_sandbox.png")
         data.button_tuto = arcade.Sprite("assets/buttons/button_tuto.png")
+        data.button_check = arcade.Sprite("assets/buttons/button_check.png")
+        data.button_next_on = arcade.Sprite("assets/buttons/button_next_on.png")
+        data.button_next_off = arcade.Sprite("assets/buttons/button_next_off.png")
 
         data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
         data.level_info = arcade.Sprite("assets/titles/level_info.png")

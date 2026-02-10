@@ -1,6 +1,7 @@
 import arcade
 from line_profiler import profile
 from PIL import Image
+from pyglet.graphics import Batch
 import time
 
 from modules.ui.mouse import mouse
@@ -87,6 +88,81 @@ class LevelPlayer(arcade.View):
             graph = arcade.PerfGraph(400, 400, graph_data="FPS")
             graph.position = 200, 200
             self.perf_graph_list.append(graph)
+
+        self.prepare_right_frame()
+
+    def prepare_right_frame(self):
+
+        self.level_name_text = arcade.Text(f"Level {self.level.number} : {self.level.name}",
+            1408, 
+            900, 
+            arcade.color.WHITE,  
+            12,
+            font_name="Press Start 2P",
+        )
+
+        self.level_desc_text = []
+        texts = self.level.description.split(" ")
+        c = 0
+
+        for _ in range(len(texts)):
+
+            if c > len(texts) - 2:
+                break
+
+            if len(texts[c] + texts[c+1]) + 1 <= 24:
+                b = texts.pop(c+1)
+                texts[c] += " "+b
+            else:
+                c += 1
+
+        for i in range(len(texts)):
+
+            self.level_desc_text.append(arcade.Text(texts[i], 
+                1408, 
+                850 - 25*i, 
+                arcade.color.WHITE,  
+                10,
+                font_name="Press Start 2P",
+            ))
+
+        table = self.level.truth[self.level.answer.id]
+
+        self.truth_table_inputs = [[] for _ in range(len(table["meta"]["inputs"]))]
+        self.truth_table_outputs = [[] for _ in range(len(table["meta"]["outputs"]))]
+
+        start_x = 1402
+        start_y = 1080-447
+
+        offset_x = 0
+        offset_y = 0
+
+        for current in range(table["meta"]["power"]):
+            values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
+            for i in range(len(values)):
+                self.truth_table_inputs[i].append(arcade.Text(str(values[i] * 1), 
+                    start_x + offset_x, 
+                    start_y - offset_y, 
+                    arcade.color.WHITE,  
+                    14,
+                    font_name="Press Start 2P",
+                ))
+
+                offset_x += 50
+
+            for i in range(len(table["data"][current])):
+                self.truth_table_outputs[i].append(arcade.Text(str(table["data"][current][i] * 1), 
+                    start_x + offset_x, 
+                    start_y - offset_y, 
+                    arcade.color.WHITE,  
+                    14,
+                    font_name="Press Start 2P",
+                ))
+
+                offset_x += 50
+            offset_x = 0
+            offset_y += 50
+            
 
     def bottom_bar_width_sum(self):
         result = 0
@@ -176,6 +252,54 @@ class LevelPlayer(arcade.View):
                 font_name="Press Start 2P",
             )
 
+    def draw_right(self):
+
+
+            arcade.draw_sprite_rect(data.button_check,arcade.XYWH(
+                x=1402,
+                y=57,
+                width=216,
+                height=128,
+                anchor=arcade.Vec2(0,0)
+            ))
+
+            arcade.draw_sprite_rect(data.button_next_off,arcade.XYWH(
+                x=1634,
+                y=57,
+                width=216,
+                height=128,
+                anchor=arcade.Vec2(0,0)
+            ))
+
+            arcade.draw_sprite_rect(data.truth_table,arcade.XYWH(
+                x=1402,
+                y=1080-383,
+                width=448,
+                height=64,
+                anchor=arcade.Vec2(0,0)
+            ))
+
+            arcade.draw_sprite_rect(data.level_info,arcade.XYWH(
+                x=1402,
+                y=1080-127,
+                width=448,
+                height=64,
+                anchor=arcade.Vec2(0,0)
+            ))
+
+            
+            self.level_name_text.draw()
+
+            for i in self.level_desc_text: i.draw()
+
+            for i in self.truth_table_inputs: 
+                for a in i: 
+                    a.draw()
+
+            for i in self.truth_table_outputs: 
+                for a in i: 
+                    a.draw()
+
     @profile
     def on_draw(self):
         self.clear()
@@ -197,6 +321,7 @@ class LevelPlayer(arcade.View):
         self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()
+        self.draw_right()
 
         if self.stress_test:
             self.perf_graph_list.draw()
