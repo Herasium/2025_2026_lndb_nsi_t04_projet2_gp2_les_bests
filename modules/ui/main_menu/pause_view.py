@@ -21,36 +21,22 @@ class PauseView(arcade.View):
 
         self.background_color = arcade.color.JET
 
-        self.ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
-        self.name_banner_sprite = arcade.Sprite("assets/name_banner.png")
+        self.ui_border_sheet = data.ui_border_tiles
+        self.name_banner_sprite = data.name_banner
 
-        self.ui_border_tiles = self.ui_border_sheet.get_texture_grid(
-            size = (64, 64),
-            columns = 4,
-            count = 4*4,
-        )
-
-        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
-
-        self.ui_tiles = self.ui_sheet.get_texture_grid(
-            size = (32, 32),
-            columns = 23,
-            count = 9*23,
-        )
-
-        self.back_button = Button(self.ui_tiles)
+        self.back_button = Button()
         self.back_button.x = 700
         self.back_button.y = 800 - 25
         self.back_button.width = 520
         self.back_button.height = 100
 
-        self.settings_button = Button(self.ui_tiles)
+        self.settings_button = Button()
         self.settings_button.x = 700
         self.settings_button.y = 575 - 25
         self.settings_button.width = 520
         self.settings_button.height = 100
 
-        self.quitter_button = Button(self.ui_tiles)
+        self.quitter_button = Button()
         self.quitter_button.x = 700
         self.quitter_button.y = 350 - 25
         self.quitter_button.width = 520
@@ -70,7 +56,7 @@ class PauseView(arcade.View):
             anchor=arcade.Vec2(0,0)
         )
 
-        arcade.draw_texture_rect(self.ui_border_tiles[id],rect)
+        arcade.draw_texture_rect(self.ui_border_sheet[id],rect)
 
     def draw_frame_border(self):
         start_x = 32

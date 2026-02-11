@@ -219,7 +219,7 @@ class EditorView(arcade.View):
             if self.current_path or self.selected_follower:
                 self.current_path = None
                 self.selected_follower = None
-            else:   
+            else:
                 data.window.display(PauseView())
 
         if key == 115: # s
