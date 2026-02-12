@@ -26,7 +26,7 @@ class Path(Node):
         self.current_branch_count = 0
         self.color = arcade.color.RED
 
-        self.thickness = data.UI_EDITOR_GRID_SIZE /2 
+        self.thickness = 12
 
         self.branch_points[0] = []
         self.branch_hitboxes[0] = []

@@ -139,15 +139,48 @@ class LevelPlayer(arcade.View):
    
         self.truth_table_inputs = [[] for _ in range(len(table["meta"]["inputs"]))]
         self.truth_table_outputs = [[] for _ in range(len(table["meta"]["outputs"]))]
+        self.line_set = []
+        self.truth_table_titles = []
 
-        start_x = 1402
-        start_y = 1080-447
+        add_y = 28
+        add_x = 27
+
+        total_len = (len(table["data"][0])*2+table["meta"]["size"]+4) * add_x
+
+        start_x = 1402 + (7*32) - ((len(table["data"][0])*2+table["meta"]["size"]+4)/2*add_x)
+        start_y = 1080-(447)
 
         offset_x = 0
         offset_y = 0
 
-        add_y = 27
-        add_x = 27
+        self.line_set.append([(start_x - 10,start_y-offset_y+add_y-4),(start_x+total_len+10,start_y+add_y-offset_y-4)])
+        self.truth_table_titles.append(arcade.Text("Inputs", 
+                    start_x + (table["meta"]["size"]/2)*add_x, 
+                    start_y + add_y + 5, 
+                    arcade.color.WHITE,  
+                    10,
+                    font_name="Press Start 2P",
+                    anchor_x="center"
+        ))
+        self.truth_table_titles.append(arcade.Text("Target", 
+                    start_x + (table["meta"]["size"] + 2 + len(table["data"][0])/2)*add_x-5, 
+                    start_y + add_y + 5, 
+                    arcade.color.WHITE,  
+                    9,
+                    font_name="Press Start 2P",
+                    anchor_x="center"
+        ))
+
+        self.truth_table_titles.append(arcade.Text("Current", 
+                    start_x + (table["meta"]["size"] + 4 + len(table["data"][0])*1.5)*add_x, 
+                    start_y + add_y + 5, 
+                    arcade.color.WHITE,  
+                    9,
+                    font_name="Press Start 2P",
+                    anchor_x="center"
+        ))
+
+
 
         for current in range(table["meta"]["power"]):
             values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
@@ -161,7 +194,7 @@ class LevelPlayer(arcade.View):
                 ))
 
                 offset_x += add_x
-
+            offset_x += add_x*2
             for i in range(len(table["data"][current])):
                 self.truth_table_outputs[i].append(arcade.Text(str(table["data"][current][i] * 1), 
                     start_x + offset_x, 
@@ -172,13 +205,18 @@ class LevelPlayer(arcade.View):
                 ))
 
                 offset_x += add_x
-
+            offset_x += add_x*2
             if chip_truth:
                 for i in range(len(chip_truth["data"][current])):
+
+                    color = arcade.color.RED_PURPLE
+                    if table["data"][current][i] == chip_truth["data"][current][i]:
+                        color = arcade.color.GREEN_YELLOW
+
                     self.truth_table_outputs[i].append(arcade.Text(str(chip_truth["data"][current][i] * 1), 
                         start_x + offset_x, 
                         start_y - offset_y, 
-                        arcade.color.WHITE,  
+                        color,  
                         14,
                         font_name="Press Start 2P",
                     ))
@@ -196,7 +234,7 @@ class LevelPlayer(arcade.View):
 
                     offset_x += add_x
       
-            
+            self.line_set.append([(start_x - 10,start_y-offset_y-4),(start_x+offset_x+10,start_y-offset_y-4)])
             offset_x = 0
             offset_y += add_y
             
@@ -296,6 +334,12 @@ class LevelPlayer(arcade.View):
         for i in self.truth_table_outputs: 
             for a in i: 
                 a.draw()
+
+        for coords in self.line_set:
+            arcade.draw_line(coords[0][0],coords[0][1],coords[1][0],coords[1][1],arcade.color.WHITE,1)
+
+        for i in self.truth_table_titles:
+            i.draw()
 
     @profile
     def on_draw(self):
