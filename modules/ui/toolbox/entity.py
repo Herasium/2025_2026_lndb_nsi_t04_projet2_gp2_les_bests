@@ -4,15 +4,17 @@ from modules.data import data
 
 class Entity:
 
-    def __init__(self):
+    def __init__(self,x=0,y=0,width=10,height=10,sprite=None,anchor=arcade.Vec2(0,0)):
 
-        self._x = 0
-        self._y = 0
+        self._x = x
+        self._y = y
 
-        self._width = 10
-        self._height = 10
+        self._width = width
+        self._height = height
 
-        self.color = arcade.color.BLUE
+        self.sprite = sprite
+
+        self._anchor = anchor
 
         self.hitbox = HitBox()
         self._update_hitbox()
@@ -50,17 +52,25 @@ class Entity:
         self._update_hitbox()
 
     def _update_hitbox(self):
-        self.hitbox.x = self._x
-        self.hitbox.y = self._y
-        self.hitbox.width = self._width
-        self.hitbox.height = self._height
+        self.hitbox._x = self._x
+        self.hitbox._y = self._y
+        self.hitbox._width = self._width
+        self.hitbox._height = self._height
+        self.hitbox.anchor = self._anchor #Do the hitbox math only once.
 
     def draw(self):
-        arcade.draw_rect_filled(
-            arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,0)),
-            self.color,
-        )
-
+        if self.sprite == None:
+            arcade.draw_rect_filled(
+                arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=self._anchor),
+                self.color,
+            )
+        else:
+            arcade.draw_sprite_rect(
+                self.sprite,
+                arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=self._anchor),
+                
+            )
+        self.hitbox.draw()
     @property
     def touched(self):
         return self.hitbox.touched

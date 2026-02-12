@@ -32,6 +32,7 @@ class Level():
         self.answer = self.chip
         self.chip = Chip(f"play_{self.id}")
         self.chip.load(self.answer.save(no_file=True))
+        self.chip.id = f"chip_{self.id}"
 
         self.chip.paths = {}
 
@@ -130,7 +131,7 @@ class Level():
             used = self.answer
         self.truth[used.id] = {"meta": {}, "data": {}}
         self.get_single_truth_table(used)
-        print(self.truth)
+
 
     def save(self):
         chip_save = self.chip.save(no_file=True)

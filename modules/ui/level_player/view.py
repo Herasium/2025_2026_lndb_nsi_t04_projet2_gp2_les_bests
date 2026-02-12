@@ -93,6 +93,11 @@ class LevelPlayer(arcade.View):
 
     def prepare_right_frame(self):
 
+        self.check_button = Entity(x=1402,y=57,width=216,height=128,sprite=data.button_check)
+        self.truth_table = Entity(x=1402,y=1080-383,width=448,height=64,sprite=data.truth_table)
+        self.button_next_off = Entity(x=1634,y=57,width=216,height=128,sprite=data.button_next_off)
+        self.level_info = Entity(x=1402,y=1080-127,width=448,height=64,sprite=data.level_info)
+
         self.level_name_text = arcade.Text(f"Level {self.level.number} : {self.level.name}",
             1408, 
             900, 
@@ -127,7 +132,11 @@ class LevelPlayer(arcade.View):
             ))
 
         table = self.level.truth[self.level.answer.id]
+        chip_truth = None
 
+        if self.level.chip.id in self.level.truth:
+            chip_truth = self.level.truth[self.level.chip.id]
+   
         self.truth_table_inputs = [[] for _ in range(len(table["meta"]["inputs"]))]
         self.truth_table_outputs = [[] for _ in range(len(table["meta"]["outputs"]))]
 
@@ -136,6 +145,9 @@ class LevelPlayer(arcade.View):
 
         offset_x = 0
         offset_y = 0
+
+        add_y = 27
+        add_x = 27
 
         for current in range(table["meta"]["power"]):
             values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
@@ -148,7 +160,7 @@ class LevelPlayer(arcade.View):
                     font_name="Press Start 2P",
                 ))
 
-                offset_x += 50
+                offset_x += add_x
 
             for i in range(len(table["data"][current])):
                 self.truth_table_outputs[i].append(arcade.Text(str(table["data"][current][i] * 1), 
@@ -159,9 +171,34 @@ class LevelPlayer(arcade.View):
                     font_name="Press Start 2P",
                 ))
 
-                offset_x += 50
+                offset_x += add_x
+
+            if chip_truth:
+                for i in range(len(chip_truth["data"][current])):
+                    self.truth_table_outputs[i].append(arcade.Text(str(chip_truth["data"][current][i] * 1), 
+                        start_x + offset_x, 
+                        start_y - offset_y, 
+                        arcade.color.WHITE,  
+                        14,
+                        font_name="Press Start 2P",
+                    ))
+
+                    offset_x += add_x
+            else:
+                for i in range(len(table["data"][current])):
+                    self.truth_table_outputs[i].append(arcade.Text("?", 
+                        start_x + offset_x, 
+                        start_y - offset_y, 
+                        arcade.color.WHITE,  
+                        14,
+                        font_name="Press Start 2P",
+                    ))
+
+                    offset_x += add_x
+      
+            
             offset_x = 0
-            offset_y += 50
+            offset_y += add_y
             
 
     def bottom_bar_width_sum(self):
@@ -189,18 +226,6 @@ class LevelPlayer(arcade.View):
     def draw_bottom_gates(self):
         for i in self.bottom_gates:
             i.draw()
-
-    def draw_tile(self,id,x,y):
-            
-            rect = arcade.XYWH(
-                x=x,
-                y=y,
-                width=64,
-                height=64,
-                anchor=arcade.Vec2(0,0)
-            )
-
-            arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
 
 
     def reset(self):
@@ -254,51 +279,23 @@ class LevelPlayer(arcade.View):
 
     def draw_right(self):
 
-
-            arcade.draw_sprite_rect(data.button_check,arcade.XYWH(
-                x=1402,
-                y=57,
-                width=216,
-                height=128,
-                anchor=arcade.Vec2(0,0)
-            ))
-
-            arcade.draw_sprite_rect(data.button_next_off,arcade.XYWH(
-                x=1634,
-                y=57,
-                width=216,
-                height=128,
-                anchor=arcade.Vec2(0,0)
-            ))
-
-            arcade.draw_sprite_rect(data.truth_table,arcade.XYWH(
-                x=1402,
-                y=1080-383,
-                width=448,
-                height=64,
-                anchor=arcade.Vec2(0,0)
-            ))
-
-            arcade.draw_sprite_rect(data.level_info,arcade.XYWH(
-                x=1402,
-                y=1080-127,
-                width=448,
-                height=64,
-                anchor=arcade.Vec2(0,0)
-            ))
+        self.check_button.draw()
+        self.truth_table.draw()
+        self.button_next_off.draw()
+        self.level_info.draw()
 
             
-            self.level_name_text.draw()
+        self.level_name_text.draw()
 
-            for i in self.level_desc_text: i.draw()
+        for i in self.level_desc_text: i.draw()
 
-            for i in self.truth_table_inputs: 
-                for a in i: 
-                    a.draw()
+        for i in self.truth_table_inputs: 
+            for a in i: 
+                a.draw()
 
-            for i in self.truth_table_outputs: 
-                for a in i: 
-                    a.draw()
+        for i in self.truth_table_outputs: 
+            for a in i: 
+                a.draw()
 
     @profile
     def on_draw(self):
@@ -487,6 +484,11 @@ class LevelPlayer(arcade.View):
             self.camera_hold = True
             return
         if self.camera_hold:
+            return
+
+        if self.check_button.touched:
+            self.level.get_truth_table()
+            self.prepare_right_frame()
             return
 
         # Clicked a gate?

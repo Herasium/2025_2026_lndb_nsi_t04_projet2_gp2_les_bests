@@ -3,11 +3,12 @@ from modules.ui.mouse import mouse
 
 class HitBox:
 
-    def __init__(self,x=0,y=0,width=0,height=0):
+    def __init__(self,x=0,y=0,width=0,height=0,anchor = arcade.Vec2(0,0)):
         self._x = x
         self._y = y
         self._width = width
         self._height = height
+        self._anchor = anchor
         
         self._recalculate_rect()
 
@@ -27,6 +28,15 @@ class HitBox:
     @y.setter
     def y(self, value):
         self._y = value
+        self._recalculate_rect()
+
+    @property
+    def anchor(self):
+        return self._anchor
+    
+    @y.setter
+    def anchor(self, value):
+        self._anchor = value
         self._recalculate_rect()
 
     @property
@@ -54,7 +64,7 @@ class HitBox:
             y=self._y,
             width=self._width,
             height=self._height,
-            anchor=arcade.Vec2(0,0)
+            anchor=self._anchor
         )
 
     def draw(self):
