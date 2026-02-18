@@ -8,6 +8,7 @@ from modules.data import data
 from modules.data.chip import Chip
 from modules.data.level import Level
 from modules.data.gate_index import gate_types
+from modules.data.custom import CustomGate
 from modules.logger import Logger
 
 logger = Logger("Loader")
@@ -115,20 +116,37 @@ class Loader:
         draw.text((tx, ty), gate.name, font=font, fill="#b45252", anchor="mm")
         return new
 
+    def bake_single_gate(self,gate,id):
+        data.IMAGE.add_gate_type(id)
+        size = len(gate.inputs) + len(gate.outputs)
+        for i in range(2**size):
+            vals = [bool(i & (1 << j)) for j in range(size)]
+            gate.inputs, gate.outputs = vals[:len(gate.inputs)], vals[len(gate.inputs):]
+            gate.gen_tile_pattern()
+            data.IMAGE.add_texture(id, i, arcade.Texture(self.render_gate_image(gate)))
+        data.IMAGE.complete_gate(id)
+
+    def bake_predefined_gates(self):
+        
+        for g_id in gate_types:
+            gate = gate_types[g_id]("default_id")
+            self.bake_single_gate(gate,g_id)
+
+    def bake_custom_gates(self):
+
+        for chip_id in data.loaded_chips:
+            chip = data.loaded_chips[chip_id]
+            new = CustomGate("no_id",chip.copy())
+            self.bake_single_gate(new,chip.id)
+
+
+
     def bake_textures(self):
         logger.debug("Baking Textures")
         data.background_grid_texture = self._bake_grid(1920, 1088)
+        self.bake_predefined_gates()
+        self.bake_custom_gates()
 
-        for g_id in gate_types:
-            gate = gate_types[g_id]("default_id")
-            data.IMAGE.add_gate_type(g_id)
-            size = len(gate.inputs) + len(gate.outputs)
-            for i in range(2**size):
-                vals = [bool(i & (1 << j)) for j in range(size)]
-                gate.inputs, gate.outputs = vals[:len(gate.inputs)], vals[len(gate.inputs):]
-                gate.gen_tile_pattern()
-                data.IMAGE.add_texture(g_id, i, arcade.Texture(self.render_gate_image(gate)))
-            data.IMAGE.complete_gate(g_id)
 
     def load_ui(self):
 
@@ -147,6 +165,7 @@ class Loader:
         data.truth_table = arcade.Sprite("assets/titles/truth_table.png")
 
         data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
+        data.editor_border_no_bg = arcade.Sprite("assets/borders/editor_border_no_bg.png")
         data.level_player_border = arcade.Sprite("assets/borders/level_player_border.png")
 
     def load(self):
@@ -159,9 +178,9 @@ class Loader:
             self.load_tilesets()
             self.load_saves()
             self.load_levels()
-            self.bake_textures()
             self.load_ui()
-
+            self.bake_textures()
+            
             logger.success("Finished loading stuff.")
         except Exception as e:
             logger.error(f"Failed to load stuff ({e})")

@@ -3,6 +3,7 @@ from modules.data import data
 from modules.data.gate_index import gate_types
 from modules.data.nodes.path import Path
 from modules.logger import Logger
+from modules.ui.toolbox.id_generator import random_id
 import os 
 
 logger = Logger("Chip")
@@ -15,6 +16,12 @@ class Chip:
         self.name = "Default Chip"
         self.type = "Chip"
         self.changed = False
+
+    def copy(self):
+        new = Chip("no_id")
+        new.load(self.save(no_file=True))
+        new.id = random_id()
+        return new
 
     def save(self,no_file=False):
         paths = {}
@@ -43,7 +50,7 @@ class Chip:
         os.makedirs(os.path.join(path,"saves"), exist_ok=True) 
         with open(os.path.join(os.path.join(path,"saves"),f"{self.id}.chip"),"wb") as file:
             file.write(dump.encode())
-
+        
         logger.print(f'Saved {self.name}, #{self.id}')
 
     def load(self,data):
@@ -70,4 +77,25 @@ class Chip:
 
     def __str__(self):
         result = f"Chip (#{self.id}) {len(self.gates)} Gates / {len(self.paths)} Paths"
+        return result
+    
+    def get_inputs(self):
+        result = []
+        for i in self.gates:
+            if self.gates[i].type == "Input":
+                result.append(i)
+        return result
+    
+    def get_outputs(self):
+        result = []
+        for i in self.gates:
+            if self.gates[i].type == "Output":
+                result.append(i)
+        return result
+    
+    def get_gates(self):
+        result = []
+        for i in self.gates:
+            if self.gates[i].type == "Gate":
+                result.append(i)
         return result
