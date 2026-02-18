@@ -26,6 +26,7 @@ class Level():
         self.answer = None
         self.max_usage = {}
         self.inventory = {}
+        self.won = False
 
     def play_mode(self):
         self.play = True
@@ -33,6 +34,7 @@ class Level():
         self.chip = Chip(f"play_{self.id}")
         self.chip.load(self.answer.save(no_file=True))
         self.chip.id = f"chip_{self.id}"
+        self.won = False
 
         self.chip.paths = {}
 
@@ -99,6 +101,21 @@ class Level():
             if self.chip.gates[i].type == "Gate":
                 result.append(i)
         return result
+
+    def compare_truth_tables(self):
+        if self.answer == None:
+            return False
+        if not self.answer.id in self.truth or not self.chip.id in self.truth:
+            return False
+        
+        for i in self.truth[self.answer.id]["data"]:
+            if self.truth[self.answer.id]["data"][i] != self.truth[self.chip.id]["data"][i]:
+                return False
+        return True
+
+    def check_victory(self):
+        self.won = self.compare_truth_tables()
+        return self.won
 
     def get_single_truth_table(self,chip):
 

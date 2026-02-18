@@ -90,6 +90,11 @@ class LevelPlayer(arcade.View):
             self.perf_graph_list.append(graph)
 
         self.prepare_right_frame()
+        self.prepare_won_frame()
+
+    def prepare_won_frame(self):
+        self.win_frame = Entity(x=1920/2-(576/2),y=1080/2-(320/2),width=576,height=320,sprite=data.level_payer_win)
+        
 
     def prepare_right_frame(self):
 
@@ -315,6 +320,9 @@ class LevelPlayer(arcade.View):
                 font_name="Press Start 2P",
             )
 
+    def draw_won(self):
+        self.win_frame.draw()
+
     def draw_right(self):
 
         self.check_button.draw()
@@ -363,6 +371,8 @@ class LevelPlayer(arcade.View):
         self.draw_frame_border()
         self.draw_bottom_gates()
         self.draw_right()
+        if self.level.won:
+            self.draw_won()
 
         if self.stress_test:
             self.perf_graph_list.draw()
@@ -521,6 +531,8 @@ class LevelPlayer(arcade.View):
             self.level.calculate_inventory()
             self.bottom_gate_bar()
 
+    def won(sefl):
+        pass
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
@@ -533,6 +545,8 @@ class LevelPlayer(arcade.View):
         if self.check_button.touched:
             self.level.get_truth_table()
             self.prepare_right_frame()
+            if self.level.check_victory():
+                self.won()
             return
 
         # Clicked a gate?

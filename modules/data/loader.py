@@ -141,6 +141,7 @@ class Loader:
         data.button_check = arcade.Sprite("assets/buttons/button_check.png")
         data.button_next_on = arcade.Sprite("assets/buttons/button_next_on.png")
         data.button_next_off = arcade.Sprite("assets/buttons/button_next_off.png")
+        data.button_back = arcade.Sprite("assets/buttons/button_back.png")
 
         data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
         data.level_info = arcade.Sprite("assets/titles/level_info.png")
@@ -148,6 +149,10 @@ class Loader:
 
         data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
         data.level_player_border = arcade.Sprite("assets/borders/level_player_border.png")
+        data.level_player_win = arcade.Sprite("assets/borders/level_player_win.png")
+
+        data.star = arcade.Sprite("assets/icons/star.png")
+        data.star_empty = arcade.Sprite("assets/icons/star_empty.png")
 
     def load(self):
 
