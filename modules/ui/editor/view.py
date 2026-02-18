@@ -21,6 +21,7 @@ from modules.data.nodes.nor import Nor
 from modules.data.nodes.input import Input
 from modules.data.nodes.output import Output
 from modules.data.chip import Chip
+from modules.data.custom import CustomGate
 
 from modules.data import data
 from modules.data.gate_index import gate_types
@@ -61,6 +62,7 @@ class EditorView(arcade.View):
 
         self._real_camera_position = (0,0)
         self.camera_position = (0,0)
+        self.bottom_camera_position = [0,0]
 
         self.bottom_gates = []
         self.bottom_gate_bar()
@@ -90,6 +92,15 @@ class EditorView(arcade.View):
 
     def bottom_gate_bar(self):
 
+        for chip_id in data.loaded_chips:
+            if chip_id != self.chip.id:
+                chip = data.loaded_chips[chip_id]
+                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
+                self.bottom_gates[-1].camera = (0,0)
+                self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                self.bottom_gates[-1].x = position
+
         for i in gate_types:
            
             position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
@@ -98,11 +109,19 @@ class EditorView(arcade.View):
             self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
             self.bottom_gates[-1].x = position
             
+    def bottom_bar_update_camera(self):
+
+        for gate in self.bottom_gates:
+            gate.camera = self.bottom_camera_position
 
     def get_hovered_bottom_gate(self):
         for i in self.bottom_gates:
-            if i.entity.touched :
-                return i.gate_type
+            if i.entity.touched:
+                if i.gate_type != "Custom":
+                    return 0,i.gate_type
+                else:
+                    return 1,i.base_chip_id
+        return 2,None
 
     def draw_bottom_gates(self):
         for i in self.bottom_gates:
@@ -135,6 +154,18 @@ class EditorView(arcade.View):
             )
 
         arcade.draw_sprite_rect(data.editor_border,rect)
+
+    def draw_frame_border_no_bg(self):
+
+        rect = arcade.XYWH(
+                x=0,
+                y=0,
+                width=1920,
+                height=1080,
+                anchor=arcade.Vec2(0,0)
+            )
+
+        arcade.draw_sprite_rect(data.editor_border_no_bg,rect)
 
     def draw_frame_background(self):
 
@@ -191,6 +222,7 @@ class EditorView(arcade.View):
         self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()
+        self.draw_frame_border_no_bg()
 
         if self.stress_test:
             self.perf_graph_list.draw()
@@ -340,6 +372,11 @@ class EditorView(arcade.View):
     def simulate(self):
         propagate_values(self.chip)
 
+    def on_mouse_scroll(self,x,y,scroll_x,scroll_y):
+        if self.bottom_zone_collider.touched:
+            self.bottom_camera_position[0] += scroll_y * 5
+            self.bottom_bar_update_camera()
+
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         if button == 2:
@@ -414,13 +451,19 @@ class EditorView(arcade.View):
 
         # Place new gate
         if self.selected_follower is None:
-            hovered = self.get_hovered_bottom_gate()
-            if hovered in gate_types:
-                self.selected_follower =  gate_types[hovered](random_id())
-                self.selected_follower.camera = self.camera
-                self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
-                self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-
+            type,hovered = self.get_hovered_bottom_gate()
+            if type == 0:
+                if hovered in gate_types:
+                    self.selected_follower =  gate_types[hovered](random_id())
+                    self.selected_follower.camera = self.camera
+                    self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+                    self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+            elif type == 1:
+                if hovered in data.loaded_chips:
+                    self.selected_follower =  CustomGate(random_id(),data.loaded_chips[hovered])
+                    self.selected_follower.camera = self.camera
+                    self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+                    self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):

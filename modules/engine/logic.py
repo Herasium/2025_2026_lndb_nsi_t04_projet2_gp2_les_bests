@@ -1,5 +1,8 @@
 import random
 import time
+from modules.logger import Logger
+
+logger = Logger("Engine")
 
 def gate_and(inputs):
     return [inputs[0] and inputs[1]]
@@ -39,7 +42,14 @@ LOGIC_MAP = {
 def calculate_output(gate_name, inputs):
     if gate_name in LOGIC_MAP:
         return LOGIC_MAP[gate_name](inputs)
-    return False
+    return [False]
+
+def calculate_custom(gate):
+
+    gate.prop_io()
+    propagate_values(gate.chip)
+    gate.update_io()
+
 
 def sort_gates(chip):
     gates = []
@@ -181,7 +191,8 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
             if is_ready:
                 if gate.type == "Gate":
                     gate.outputs = calculate_output(gate.gate_type, gate.inputs)
-
+                elif gate.type == "Custom":
+                    calculate_custom(gate)
                 propagate_outputs(chip, connections, gate_id)
                 
                 gate.val_done = True
@@ -196,6 +207,8 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
             
             if gate.type == "Gate":
                 gate.outputs = calculate_output(gate.gate_type, gate.inputs)
+            elif gate.type == "Custom":
+                    calculate_custom(gate)
             
             propagate_outputs(chip, connections, random_id)
             
