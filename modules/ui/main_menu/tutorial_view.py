@@ -12,7 +12,7 @@ from pyglet.graphics import Batch
 import sys
 
 
-class SettingView(arcade.View):
+class TutorialView(arcade.View):
 
     def __init__(self):
         super().__init__()
@@ -43,29 +43,6 @@ class SettingView(arcade.View):
         self.back_button.width = 80
         self.back_button.height = 40
 
-        self.settings1_button = Button()
-        self.settings1_button.x = 600
-        self.settings1_button.y = 350
-        self.settings1_button.width = 200
-        self.settings1_button.height = 100
-
-        self.settings2_button = Button()
-        self.settings2_button.x = 1200
-        self.settings2_button.y = 350
-        self.settings2_button.width = 200
-        self.settings2_button.height = 100
-
-        self.settings3_button = Button()
-        self.settings3_button.x = 600
-        self.settings3_button.y = 650
-        self.settings3_button.width = 200
-        self.settings3_button.height = 100
-
-        self.settings4_button = Button()
-        self.settings4_button.x = 1200
-        self.settings4_button.y = 650
-        self.settings4_button.width = 200
-        self.settings4_button.height = 100
 
     def on_key_press(self, key, key_modifiers):
         if key == 97: #"a"
@@ -124,10 +101,6 @@ class SettingView(arcade.View):
        self.draw_frame_border()
 
        self.back_button.draw()
-       self.settings1_button.draw()
-       self.settings2_button.draw()
-       self.settings3_button.draw()
-       self.settings4_button.draw()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)

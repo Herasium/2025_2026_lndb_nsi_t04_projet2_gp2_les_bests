@@ -8,6 +8,7 @@ from modules.ui.level_editor.view import LevelEditorView
 from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
+from modules.ui.main_menu.tutorial_view import TutorialView
 
 from modules.data.nodes.path import Path
 
@@ -351,3 +352,6 @@ class MainMenuView(arcade.View):
 
             if self.setting_button.touched:
                 data.window.display(SettingView())
+
+            if self.tuto_button.touched:
+                data.window.display(TutorialView())
