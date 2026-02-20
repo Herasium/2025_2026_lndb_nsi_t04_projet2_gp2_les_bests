@@ -9,6 +9,7 @@ from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.grid import Grid
 from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.id_generator import random_id
+from modules.ui.toolbox.easing import BackEaseOut, ElasticEaseOut
 
 from modules.data.nodes.path import Path
 
@@ -93,7 +94,8 @@ class LevelPlayer(arcade.View):
         self.prepare_won_frame()
 
     def prepare_won_frame(self):
-        self.win_frame = Entity(x=1920/2-(576/2),y=1080/2-(320/2),width=576,height=320,sprite=data.level_payer_win)
+        self.win_frame_ease = BackEaseOut(-500,1080/2-(320),90)
+        self.win_frame = Entity(x=1920/2-(576),y=-500,width=576*2,height=320*2,sprite=data.level_player_win)
         
 
     def prepare_right_frame(self):
@@ -321,6 +323,8 @@ class LevelPlayer(arcade.View):
             )
 
     def draw_won(self):
+        value = self.win_frame_ease.tick()
+        self.win_frame.y = value
         self.win_frame.draw()
 
     def draw_right(self):

@@ -10,7 +10,7 @@ class Window():
         self.height = data.WINDOW_HEIGHT
         self.title = "LogicBox"
 
-        self.window = arcade.Window(self.width, self.height, self.title,fullscreen=data.WINDOW_FULLSCREEN, update_rate = 0.00001, draw_rate = 0.00001)
+        self.window = arcade.Window(self.width, self.height, self.title,fullscreen=data.WINDOW_FULLSCREEN, update_rate = 0.01666666666666666666666666666, draw_rate = 0.01666666666666666666666666666)
         self.view_history = []
 
     def back(self):
