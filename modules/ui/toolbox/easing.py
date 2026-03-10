@@ -17,6 +17,7 @@ class EasingBase:
         self.end = end
         self.duration = duration
         self.current = 0
+        self.done = False
 
     def func(self):
         raise NotImplementedError
@@ -27,10 +28,12 @@ class EasingBase:
             self.current += 1
             return self.start + (self.end - self.start) * value
         else:
+            self.done = True
             return self.end
 
     def reset(self):
         self.current = 0
+        self.done = False
 
 """
 Linear
@@ -327,40 +330,3 @@ class BounceEaseInOut(EasingBase):
     
 
 
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    # Assuming all easing functions are defined in the provided code
-
-    def plot_easing_functions():
-        easing_functions = [
-            LinearInOut,
-            QuadEaseIn, QuadEaseOut, QuadEaseInOut,
-            CubicEaseIn, CubicEaseOut, CubicEaseInOut,
-            QuarticEaseIn, QuarticEaseOut, QuarticEaseInOut,
-            QuinticEaseIn, QuinticEaseOut, QuinticEaseInOut,
-            SineEaseIn, SineEaseOut, SineEaseInOut,
-            CircularEaseIn, CircularEaseOut, CircularEaseInOut,
-            ExponentialEaseIn, ExponentialEaseOut, ExponentialEaseInOut,
-            ElasticEaseIn, ElasticEaseOut, ElasticEaseInOut,
-            BackEaseIn, BackEaseOut, BackEaseInOut,
-            BounceEaseIn, BounceEaseOut, BounceEaseInOut,
-        ]
-
-        fig, axs = plt.subplots(len(easing_functions), 1, figsize=(10, 20))
-
-        for i, EasingClass in enumerate(easing_functions):
-            easing = EasingClass(duration=100)
-            values = [easing.tick() / easing.end for _ in range(101)] # Normalize values to [0,1]
-
-            axs[i].plot(values)
-            axs[i].set_title(EasingClass.__name__)
-            axs[i].set_ylim([0, 1]) # Set y-axis limits to [0,1]
-
-        plt.tight_layout()
-        plt.savefig('easing_functions.png', dpi=300, bbox_inches='tight')
-        plt.close()
-
-    plot_easing_functions()

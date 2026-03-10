@@ -19,11 +19,11 @@ class Chip:
 
     def copy(self):
         new = Chip("no_id")
-        new.load(self.save(no_file=True))
+        new.load(json.loads(self.save(no_file=True,dojson=True)))
         new.id = random_id()
         return new
 
-    def save(self,no_file=False):
+    def save(self,no_file=False, dojson= False):
         paths = {}
         gates = {}
 
@@ -42,10 +42,11 @@ class Chip:
             "version": data.VERSION
         }
 
-        if no_file:
+        if no_file and not dojson:
             return result
 
         dump = json.dumps(result,indent=1)
+        if dojson: return dump
         path = data.current_path
         os.makedirs(os.path.join(path,"saves"), exist_ok=True) 
         with open(os.path.join(os.path.join(path,"saves"),f"{self.id}.chip"),"wb") as file:

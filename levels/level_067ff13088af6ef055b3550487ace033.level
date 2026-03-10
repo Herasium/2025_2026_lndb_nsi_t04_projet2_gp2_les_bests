@@ -1,0 +1,23 @@
+{
+ "chip": {
+  "type": "Chip",
+  "name": "Default Chip",
+  "id": "067ff13088af6ef055b3550487ace033",
+  "gates": {},
+  "paths": {},
+  "version": "a.136"
+ },
+ "level": {
+  "time": 90,
+  "id": "level_067ff13088af6ef055b3550487ace033",
+  "number": 0,
+  "name": "Default Level",
+  "description": "Basic level to learn the basis of gates.",
+  "hints": [],
+  "version": "a.136",
+  "start": 1,
+  "truth": {},
+  "color": 0,
+  "category": 0
+ }
+}

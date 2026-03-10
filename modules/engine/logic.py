@@ -1,34 +1,107 @@
+#  Imports
+# -------------------------------------------------
 import random
 import time
-from modules.logger import Logger
+from modules.logger import Logger # Debuging
+from modules.data.custom import CustomGate
+from modules.data.chip import Chip
+# -------------------------------------------------
 
-logger = Logger("Engine")
+logger = Logger("Engine") # Engine's logger, to provide debug informations.
 
-def gate_and(inputs):
+# Default gates.
+# All gates here are the default gates included in the game as 'vanilla' gates.
+# Differs from 'custom' gates, which are built by the user, or provided in certain levels.
+
+def gate_and(inputs): # And Gate
+    # Takes 2 Inputs, 1 Output
+    # On when both inputs are on.
+
+    # Truth Table:
+    # In0 In1 Out
+    #  0   0   0
+    #  1   0   0
+    #  0   1   0
+    #  1   1   1
+
     return [inputs[0] and inputs[1]]
 
-def gate_or(inputs):
+def gate_or(inputs):# Or Gate
+    # Takes 2 Inputs, 1 Output
+    # On when at least one inputs is on.
+
+    # Truth Table:
+    # In0 In1 Out
+    #  0   0   0
+    #  1   0   1
+    #  0   1   1
+    #  1   1   1
     return [inputs[0] or inputs[1]]
 
-def gate_not(inputs):
+def gate_not(inputs):# Not Gate
+    # Takes 1 Input, 1 Output
+    # Reverse the Input
+
+    # Truth Table:
+    # In0 Out 
+    #  0   1   
+    #  1   0   
+
     return [not inputs[0]]
 
-def gate_xor(inputs):
+def gate_xor(inputs):# Xor Gate
+    # Takes 2 Inputs, 1 Output
+    # On when only one inputs is on.
+
+    # Truth Table:
+    # In0 In1 Out
+    #  0   0   0
+    #  1   0   1
+    #  0   1   1
+    #  1   1   0
+
     return [inputs[0] ^ inputs[1]]
 
-def gate_nand(inputs):
+def gate_nand(inputs):# Nand Gate
+    # Takes 2 Inputs, 1 Output
+    # Reverse and gate, on when not both inputs are on.
+    # Same as chaining an and gate, and a not gate.
+
+    # Truth Table:
+    # In0 In1 Out
+    #  0   0   1
+    #  1   0   1
+    #  0   1   1
+    #  1   1   0
+
     return [not (inputs[0] and inputs[1])]
 
-def gate_nor(inputs):
+def gate_nor(inputs):# Nor Gate
+    # Takes 2 Inputs, 1 Output
+    # Reverse or gate, on when none are on.
+
+    # Truth Table:
+    # In0 In1 Out
+    #  0   0   1
+    #  1   0   0
+    #  0   1   0
+    #  1   1   0
+
     return [not (inputs[0] or inputs[1])]
 
-def gate_clk(inputs):
+def gate_clk(inputs):# Clock
+    # Takes 0 Input, 1 Output
+    # Special gate that switch is output each second, from on to off.
+
     return [round(time.time()) % 2 == 0]
 
-def gate_pass(inputs):
+def gate_pass(inputs): # Pass
+    # Takes x inputs, x outputs.
+    # No logic here, just outputs it's inputs.
+
     return inputs
 
-LOGIC_MAP = {
+LOGIC_MAP = { # List of all logic gates functions, linked with the id of the logic gate using it. Used for easy access.
     "AND": gate_and,
     "OR": gate_or,
     "NOT": gate_not,
@@ -39,37 +112,42 @@ LOGIC_MAP = {
     "PASS": gate_pass
 }
 
-def calculate_output(gate_name, inputs):
-    if gate_name in LOGIC_MAP:
-        return LOGIC_MAP[gate_name](inputs)
+def calculate_output(gate_type:str, inputs:list) -> list: 
+    # Function used to calculate the outputs of a 'vanilla' logic gate, based on it's type and it's inputs.
+    # Output a single False, in case of gate type not found.
+    if gate_type in LOGIC_MAP:
+        return LOGIC_MAP[gate_type](inputs)
     return [False]
 
-def calculate_custom(gate):
+def calculate_custom(gate: CustomGate): 
+    # Function used to calculate the outputs of a 'custom' gate. 
+    # The custom gate, is built on 2 levels. The top inputs and outputs, that are connected to the rest of the logic circuit, and a custom 'chip' class inside, which contains another logic circuit. Thus the name, custom gate.
+    gate.prop_io() # The top inputs are replicated inside the custom chip's inputs.
+    propagate_values(gate.chip) #The propagate function is called recursivly on the chip inside the gate, to simulate it's own logic circuit.
+    gate.update_io() # The outputs inside the chip are replicate to the top outputs.
 
-    gate.prop_io()
-    propagate_values(gate.chip)
-    gate.update_io()
 
+def sort_gates(chip: Chip) -> tuple: 
+    # Function to sort the gates inside a chip based on their types, and output a tuple containing lists of gate ids.
+    # Here the gates are sorted in 2 types:
+    gates = [] #Logic gates, same for 'vanilla' and 'custom' logic gates.
+    inputs = [] #Input gates, that are simulated first.
+    outputs = [] #Output gates, the end of the simulation.
 
-def sort_gates(chip):
-    gates = []
-    inputs = []
-    outputs = []
-
-    for i in chip.gates:
+    for i in chip.gates: #Iterate through all gates in the chip
         gate = chip.gates[i]
-        current = gate.type
+        current = gate.type # Get the type of the gate
         id = gate.id
         if current == "Input":
-            inputs.append(id)
-        elif current == "Output":
-            outputs.append(id)
+            inputs.append(id) # If it's an input, add it's id to the corresponding list.
+        elif current == "Output": 
+            outputs.append(id)# Same if it's an output.
         else:
-            gates.append(id)
+            gates.append(id) # If it's neither an output, nor an input, then it must be a gate.
 
-    return gates, inputs, outputs
+    return gates, inputs, outputs # Return the three lists as tuple, containing the sorted ids.
 
-def draw_connections(chip, inputs, outputs, gates):
+def draw_connections(chip: Chip, inputs: list, outputs: list, gates: list) -> dict:
     paths = chip.paths
     result = {}
 
@@ -219,7 +297,6 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
         print("Safeguard reached. Infinite loop or too complex.")
 
 def propagate_values(chip):
-
     gates, inputs, outputs = sort_gates(chip)
     connections = draw_connections(chip, inputs, outputs, gates)
     reset_input_validation(chip, gates, outputs)

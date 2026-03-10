@@ -173,7 +173,13 @@ class Loader:
         data.star = arcade.Sprite("assets/icons/star.png")
         data.star_empty = arcade.Sprite("assets/icons/star_empty.png")
 
-        print(vars(data))
+        data.level_buttons_empty = {}
+
+        data.level_buttons_empty["yellow"] = arcade.Sprite("assets/buttons/levels/yellow.png")
+        data.level_buttons_empty["orange"] = arcade.Sprite("assets/buttons/levels/orange.png")
+        data.level_buttons_empty["red"] = arcade.Sprite("assets/buttons/levels/red.png")
+        data.level_buttons_empty["green"] = arcade.Sprite("assets/buttons/levels/green.png")
+
 
     def load(self):
 

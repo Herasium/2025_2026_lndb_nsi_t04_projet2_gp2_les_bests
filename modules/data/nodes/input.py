@@ -1,12 +1,6 @@
 import arcade
 import math
 
-from modules.data.node import Node
-from modules.ui.toolbox.hitbox import HitBox
-from modules.ui.toolbox.entity import Entity
-from modules.ui.mouse import mouse
-from modules.data import data
-from modules.engine.logic import calculate_output
 from modules.data.gate import Gate
 
 from line_profiler import profile

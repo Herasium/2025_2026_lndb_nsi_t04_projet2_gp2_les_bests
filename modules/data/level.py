@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from modules.data.chip import Chip
 from modules.ui.toolbox.id_generator import random_id
@@ -19,6 +20,7 @@ class Level():
         self.id = f"level_{id}"
         self.name = "Default Level"
         self.description = "Basic level to learn the basis of gates."
+        self.start_text = []
         self.hints = []
         self.truth = {}
         self.start = 1
@@ -27,14 +29,23 @@ class Level():
         self.max_usage = {}
         self.inventory = {}
         self.won = False
+        self.start_time = 0
+        self.stars = 0
+        self.shown_hints = False
+        self.shown_solution = False
+        self.color = 0
+        self.category = 0
 
     def play_mode(self):
         self.play = True
         self.answer = self.chip
-        self.chip = Chip(f"play_{self.id}")
-        self.chip.load(self.answer.save(no_file=True))
+        self.chip = self.answer.copy()
         self.chip.id = f"chip_{self.id}"
         self.won = False
+        self.start_time = time.time()
+        self.stars = 3
+        self.shown_hints = False
+        self.shown_solution = False
 
         self.chip.paths = {}
 
@@ -46,6 +57,17 @@ class Level():
 
         self.calculate_inventory()
         self.get_truth_table(answer=True)
+
+    def get_stars_count(self):
+        self.stars = 3
+
+        if round(time.time() - self.start_time) > self.time:
+            self.stars -= 1
+        
+        if self.shown_hints or self.shown_solution:
+            self.stars -= 1
+
+        return self.stars
 
     def calculate_inventory(self):
         self.max_usage = {}
@@ -119,8 +141,7 @@ class Level():
 
     def get_single_truth_table(self,chip):
 
-        copy = Chip("copy_chip")
-        copy.load(chip.save(no_file=True))
+        copy = chip.copy()
 
         self.start_chip(copy)
         propagate_values(copy)
@@ -164,7 +185,9 @@ class Level():
                 "hints": self.hints,
                 "version": data.VERSION,
                 "start": self.start,
-                "truth": self.truth
+                "truth": self.truth,
+                "color": self.color,
+                "category": self.category
             }
         }
 
@@ -173,6 +196,8 @@ class Level():
         os.makedirs(os.path.join(path,"levels"), exist_ok=True) 
         with open(os.path.join(os.path.join(path,"levels"),f"{self.id}.level"),"wb") as file:
             file.write(dump.encode())
+
+        logger.success(f"Saved level {self.id}")
 
     def load(self,data):
         
@@ -184,6 +209,8 @@ class Level():
         self.hints = data["level"]["hints"]
         self.name = data["level"]["name"]
         self.start = data["level"]["start"]
+        self.color = data["level"]["color"]
+        self.category = data["level"]["category"]
 
         logger.debug(f"Loaded Level {self}")
 
