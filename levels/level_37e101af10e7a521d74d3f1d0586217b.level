@@ -1,0 +1,308 @@
+{
+ "chip": {
+  "type": "Chip",
+  "name": "Default Chip",
+  "id": "37e101af10e7a521d74d3f1d0586217b",
+  "gates": {
+   "939e510c75612157953ad9f2aa228329": {
+    "x": 580.5,
+    "y": 715.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     true
+    ],
+    "gate": "Input",
+    "id": "939e510c75612157953ad9f2aa228329"
+   },
+   "eafe7da706a40fd6a5d55ea3d1430d27": {
+    "x": 580.5,
+    "y": 472.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     true
+    ],
+    "gate": "Input",
+    "id": "eafe7da706a40fd6a5d55ea3d1430d27"
+   },
+   "0ad4d9b61d5cf16c85a3e30a965a2efb": {
+    "x": 769.5,
+    "y": 580.5,
+    "type": "Gate",
+    "inputs": [
+     true,
+     true
+    ],
+    "outputs": [
+     false
+    ],
+    "gate": "NAND",
+    "id": "0ad4d9b61d5cf16c85a3e30a965a2efb"
+   },
+   "36763024e00bd208f09d4475a6c994ba": {
+    "x": 1012.5,
+    "y": 580.5,
+    "type": "Output",
+    "inputs": [
+     false
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "36763024e00bd208f09d4475a6c994ba"
+   }
+  },
+  "paths": {
+   "38e5a6ee8ddc06048abeaa9d12061baf": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "939e510c75612157953ad9f2aa228329",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "0ad4d9b61d5cf16c85a3e30a965a2efb",
+      0,
+      2,
+      0
+     ]
+    ],
+    "id": "38e5a6ee8ddc06048abeaa9d12061baf",
+    "branch_points": {
+     "0": [
+      [
+       648,
+       729
+      ],
+      [
+       810,
+       729
+      ],
+      [
+       810,
+       594
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         648.0,
+         735.0
+        ],
+        [
+         810.0,
+         735.0
+        ],
+        [
+         810.0,
+         723.0
+        ],
+        [
+         648.0,
+         723.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         816.0,
+         729.0
+        ],
+        [
+         816.0,
+         594.0
+        ],
+        [
+         804.0,
+         594.0
+        ],
+        [
+         804.0,
+         729.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   },
+   "c4d64d9c8326c4ac78e30aed58d5502e": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "eafe7da706a40fd6a5d55ea3d1430d27",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "0ad4d9b61d5cf16c85a3e30a965a2efb",
+      1,
+      2,
+      0
+     ]
+    ],
+    "id": "c4d64d9c8326c4ac78e30aed58d5502e",
+    "branch_points": {
+     "0": [
+      [
+       648,
+       486
+      ],
+      [
+       837,
+       486
+      ],
+      [
+       837,
+       594
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         648.0,
+         492.0
+        ],
+        [
+         837.0,
+         492.0
+        ],
+        [
+         837.0,
+         480.0
+        ],
+        [
+         648.0,
+         480.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         831.0,
+         486.0
+        ],
+        [
+         831.0,
+         594.0
+        ],
+        [
+         843.0,
+         594.0
+        ],
+        [
+         843.0,
+         486.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   },
+   "5aa58b46a3b969a8115eefe2d37ea674": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "0ad4d9b61d5cf16c85a3e30a965a2efb",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "36763024e00bd208f09d4475a6c994ba",
+      0,
+      2,
+      0
+     ]
+    ],
+    "id": "5aa58b46a3b969a8115eefe2d37ea674",
+    "branch_points": {
+     "0": [
+      [
+       891,
+       594
+      ],
+      [
+       1080,
+       594
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         891.0,
+         600.0
+        ],
+        [
+         1080.0,
+         600.0
+        ],
+        [
+         1080.0,
+         588.0
+        ],
+        [
+         891.0,
+         588.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   }
+  },
+  "version": "a.136"
+ },
+ "level": {
+  "time": 60,
+  "id": "level_37e101af10e7a521d74d3f1d0586217b",
+  "number": 4,
+  "name": "A NAND B",
+  "description": "The beginning.",
+  "hints": [],
+  "version": "a.136",
+  "start": 1,
+  "truth": {},
+  "color": 0,
+  "category": 0
+ }
+}
