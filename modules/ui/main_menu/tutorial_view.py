@@ -2,6 +2,7 @@ import arcade
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
+from modules.ui.toolbox.text import Text
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 
 from modules.data.nodes.path import Path
@@ -20,27 +21,41 @@ class TutorialView(arcade.View):
 
         self.name_banner_sprite = data.name_banner
 
-        # self.ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
-
-        # self.ui_border_tiles = self.ui_border_sheet.get_texture_grid(
-        #     size = (64, 64),
-        #     columns = 4,
-        #     count = 4*4,
-        # )
-
-        # self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
-
-        # self.ui_tiles = self.ui_sheet.get_texture_grid(
-        #     size = (32, 32),
-        #     columns = 23,
-        #     count = 9*23,
-        # )
-
         self.back_button = Button()
         self.back_button.x = 192 / 2.5 - 30
         self.back_button.y = 1010 + 10
         self.back_button.width = 80
         self.back_button.height = 40
+
+        self.regle_button = Text()
+        self.regle_button.align = ("left", "center")
+        self.regle_button.x = 120
+        self.regle_button.y = 820
+        self.regle_button.width = 200
+        self.regle_button.height = 100
+        self.regle_button.text = "Les règles de base"
+
+        self.listeporte_button = Text()
+        self.listeporte_button.align = ("left", "center")
+        self.listeporte_button.x = 120
+        self.listeporte_button.y = 520
+        self.listeporte_button.width = 200
+        self.listeporte_button.height = 100
+        self.listeporte_button.text = "Les différents portes"
+
+        self.in_button = Text()
+        self.in_button.x = 600
+        self.in_button.y = 350
+        self.in_button.width = 200
+        self.in_button.height = 100
+        self.in_button.text = "IN"
+
+        self.out_button = Text()
+        self.out_button.x = 1200
+        self.out_button.y = 350
+        self.out_button.width = 200
+        self.out_button.height = 100
+        self.out_button.text = "OUT"
 
 
     def on_key_press(self, key, key_modifiers):
@@ -100,6 +115,10 @@ class TutorialView(arcade.View):
        self.draw_frame_border()
 
        self.back_button.draw()
+       self.regle_button.draw()
+       self.listeporte_button.draw()
+       self.in_button.draw()
+       self.out_button.draw()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
