@@ -27,9 +27,12 @@ class LevelList(arcade.View):
     def setup(self):
         
         self.bg = Entity(0,0,1920,1088,arcade.Sprite(data.background_grid_texture))
-        self.border = Entity()
+        self.border = Entity(0,0,1920,960,data.border_small)
+        self.title = Entity(0,952,1920,128,data.name_banner)
 
         self.buttons = {}
+        self.texts = []
+
         levels = []
         for i in data.loaded_levels:
             levels.append(i)
@@ -39,8 +42,8 @@ class LevelList(arcade.View):
         
         levels.sort(key=sort_keys)
 
-        pos_y = 850
-        pos_x = 200
+        pos_y = 600
+        pos_x = 75
 
         current_category = data.loaded_levels[levels[0]].category
 
@@ -48,8 +51,8 @@ class LevelList(arcade.View):
             level = data.loaded_levels[i]
 
             if level.category != current_category:
-                pos_y -= 250
-                pos_x = 200
+                pos_y -= 300
+                pos_x = 75
                 current_category = level.category
 
             button = arcade.Sprite(arcade.Texture(data.LEVEL_BUTTONS.get(level.id)))
@@ -57,6 +60,10 @@ class LevelList(arcade.View):
             self.buttons[level.id] = Entity(x=pos_x,y=pos_y,width=175,height=175,sprite=button)
             pos_x += 200
 
+        c = 0
+        for i in data.categories:
+            self.texts.append(Text(x=75,y=800-c*300,width=100,height=300,text=i,align=("left","center")))
+            c += 1
 
     def reset(self):
         pass
@@ -68,13 +75,18 @@ class LevelList(arcade.View):
         for i in self.buttons:
             self.buttons[i].draw()
 
+        for i in self.texts:
+            i.draw()
+
+        self.border.draw()
+        self.title.draw()
 
     def on_update(self, delta_time):
         pass
 
     def on_key_press(self, key, key_modifiers):
         if key == 97:
-            arcade.exit()
+            data.window.back()
 
 
     def on_key_release(self, key, key_modifiers):

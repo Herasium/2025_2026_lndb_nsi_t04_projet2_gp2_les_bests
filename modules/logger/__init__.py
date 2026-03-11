@@ -53,6 +53,11 @@ class Logger():
         self.history.append(data)
         print(data)
 
+    def info(self,message:str) -> None: #INFO
+        data = f"{self._header(1)}{message}{self.colors[0]}"
+        self.history.append(data)
+        print(data)
+
     def success(self,message:str) -> None:
         data = f"{self._header(2)}{message}{self.colors[0]}"
         self.history.append(data)

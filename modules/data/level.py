@@ -206,7 +206,8 @@ class Level():
 
     def load(self,data):
         
-        self.chip.load(data["chip"])
+        self.chip.partial_load(data["chip"])
+        self.chip.load()
         self.time = data["level"]["time"]
         self.id = data["level"]["id"]
         self.number = data["level"]["number"]

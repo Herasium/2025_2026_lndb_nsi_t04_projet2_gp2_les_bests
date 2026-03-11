@@ -5,25 +5,27 @@ from modules.data import data
 
 class Text:
 
-    def __init__(self):
+    def __init__(self,x=0,y=0,width=10,height=10,text="Default Text",align = ("center","center"),scale = 1):
 
-        self._x = 0
-        self._y = 0
+        self._x = x
+        self._y = y
 
-        self._width = 0
-        self._height = 0
+        self._width = width
+        self._height = height
 
         self._color = arcade.color.WHITE
         self.hitbox = HitBox()
 
-        self._name = ""
+        self._name = text
         self._text = ""
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
 
-        self.scale = 1.0
+        self.scale = scale
 
-        self._align =("center","center")
+        self._align =align
+
+        self._recalculate_rect()
 
 
     @property

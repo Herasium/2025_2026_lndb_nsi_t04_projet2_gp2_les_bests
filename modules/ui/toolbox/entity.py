@@ -16,6 +16,8 @@ class Entity:
 
         self._anchor = anchor
 
+        self.color = arcade.color.ALLOY_ORANGE
+
         self.hitbox = HitBox()
         self._update_hitbox()
 
@@ -71,7 +73,6 @@ class Entity:
                 pixelated=True
                 
             )
-        self.hitbox.draw()
     @property
     def touched(self):
         return self.hitbox.touched

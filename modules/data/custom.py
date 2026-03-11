@@ -3,13 +3,13 @@ import math
 
 from modules.data.node import Node
 from modules.data.gate import Gate
-from modules.data import data
+from modules.data import data as data_module
 
 from line_profiler import profile
 
 class CustomGate(Gate):
 
-    def __init__(self, id, chip):
+    def __init__(self, id, chip = None):
         super().__init__(id)
 
         self.name = chip.name
@@ -57,9 +57,39 @@ class CustomGate(Gate):
         rect = arcade.XYWH(
                     x=tile_x,
                     y=tile_y,
-                    width=width * data.UI_EDITOR_GRID_SIZE,
-                    height=height * data.UI_EDITOR_GRID_SIZE,
+                    width=width * data_module.UI_EDITOR_GRID_SIZE,
+                    height=height * data_module.UI_EDITOR_GRID_SIZE,
                     anchor=arcade.Vec2(0,0)
         )
 
-        arcade.draw_texture_rect(data.IMAGE.get_texture(self.base_chip_id,current),rect)
+        arcade.draw_texture_rect(data_module.IMAGE.get_texture(self.base_chip_id,current),rect)
+
+
+    def save(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "type": self.type,
+            "inputs": self.inputs,
+            "outputs": self.outputs,
+            "gate": self.gate_type,
+            "id": self.id,
+            "parent": self.base_chip_id,
+        }
+    
+    def load(self, data):
+
+        self.type = data["type"]
+        self.inputs = data.get("inputs",[])
+        self.outputs = data.get("outputs",[])
+        self.gate_type = data.get("gate","")
+        self.id = data["id"]
+        self.x = data["x"]
+        self.y = data["y"]
+        self.base_chip_id = data["parent"]
+        self.chip = data_module.loaded_chips[self.base_chip_id].copy()
+
+        self.update_io()
+
+        self.calculate_display()
+        self.gen_tile_pattern()

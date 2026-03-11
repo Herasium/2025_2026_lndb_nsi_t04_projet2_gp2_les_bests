@@ -15,6 +15,9 @@ logger = Logger("Loader")
 
 class Loader:
 
+    def __init__(self):
+        self.to_load_buffer = []
+
     def load_files(self,sub_folder):
         path = join(data.current_path, sub_folder)
         if not isdir(path):
@@ -35,11 +38,53 @@ class Loader:
         for raw_data in self.load_files("saves"):
             try:
                 chip = Chip("default_id")
-                chip.load(raw_data)
-                data.loaded_chips[raw_data["id"]] = chip
+                chip.partial_load(raw_data)
+                if len(chip.requirements) == 0:
+                    chip.load()
+                    data.loaded_chips[raw_data["id"]] = chip
+                else:
+                    can_load = True
+                    for i in chip.requirements:
+                        if not i in data.loaded_chips:
+                            can_load = False
+                    if can_load:
+                        chip.load()
+                        data.loaded_chips[raw_data["id"]] = chip
+                    else:
+                        self.to_load_buffer.append(chip)
+
             except Exception:
                 logger.error(f"Failed to load chip: {traceback.format_exc()}")
         logger.success(f"Loaded {len(data.loaded_chips)} Chips.")
+        if len(self.to_load_buffer):
+            logger.info(f"Chip loading not finished, {len(self.to_load_buffer)} chips with requirements left to load.")
+
+    def load_saves_dependency_round(self):
+        for chip in self.to_load_buffer:
+            can_load = True
+            for i in chip.requirements:
+                if not i in data.loaded_chips:
+                    can_load = False
+            if can_load:
+                chip.load()
+                self.to_load_buffer.remove(chip)
+                data.loaded_chips[chip.id] = chip
+
+    def load_saves_dependency(self):
+
+        max_count = 1000
+        count = 0
+        previous = len(self.to_load_buffer)
+
+        while count < max_count and len(self.to_load_buffer) > 0:
+            self.load_saves_dependency_round()
+            if len(self.to_load_buffer) == previous:
+                logger.error(f"Failed to load {len(self.to_load_buffer)} gates with dependencies, maybe due to circular dependency or missing chips.")
+            else:
+                previous = len(self.to_load_buffer)
+            count += 1
+
+        logger.success(f"Finished loading gates with dependencies in {count} rounds.")
 
     def load_levels(self):
         for raw_data in self.load_files("levels"):
@@ -119,6 +164,13 @@ class Loader:
     def bake_single_gate(self,gate,id):
         data.IMAGE.add_gate_type(id)
         size = len(gate.inputs) + len(gate.outputs)
+        if size >= 12:
+            logger.warning(f"Large Texture count found {2**size}, this might take a while.")
+
+        if size > 16 :
+            logger.error(f"Texture size too large, aborting.")
+            return False
+        
         for i in range(2**size):
             vals = [bool(i & (1 << j)) for j in range(size)]
             gate.inputs, gate.outputs = vals[:len(gate.inputs)], vals[len(gate.inputs):]
@@ -134,10 +186,18 @@ class Loader:
 
     def bake_custom_gates(self):
 
+        to_remove = []
+
         for chip_id in data.loaded_chips:
             chip = data.loaded_chips[chip_id]
             new = CustomGate("no_id",chip.copy())
-            self.bake_single_gate(new,chip.id)
+            result = self.bake_single_gate(new,chip.id)
+            if result == False:
+                to_remove.append(chip_id)
+
+        for i in to_remove:
+            logger.warning(f"Chip {i} failed to load textures, removed from register.")
+            del data.loaded_chips[i]
 
     def bake_level_buttons(self):
         
@@ -184,6 +244,7 @@ class Loader:
         data.editor_border_no_bg = arcade.Sprite("assets/borders/editor_border_no_bg.png")
         data.level_player_border = arcade.Sprite("assets/borders/level_player_border.png")
         data.level_player_win = arcade.Sprite("assets/borders/level_player_win.png")
+        data.border_small = arcade.Sprite("assets/borders/border_small.png")
 
         data.star = arcade.Sprite("assets/icons/star.png")
         data.star_empty = arcade.Sprite("assets/icons/star_empty.png")
@@ -206,6 +267,8 @@ class Loader:
             self.load_tilesets()
             self.load_ui()
             self.load_saves()
+            if len(self.to_load_buffer) > 0:
+                self.load_saves_dependency()
             self.load_levels()
             self.bake_textures()
             
