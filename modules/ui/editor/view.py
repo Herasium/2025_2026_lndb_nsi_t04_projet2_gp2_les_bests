@@ -2,6 +2,7 @@ import arcade
 from line_profiler import profile
 from PIL import Image
 import time
+import psutil
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
@@ -75,7 +76,7 @@ class EditorView(arcade.View):
         self.frame_count = 0
         self.last_time = 1
 
-        self.stress_test = False
+        self.stress_test = True
 
         if self.stress_test:
             self.perf_graph_list = arcade.SpriteList()
@@ -182,11 +183,17 @@ class EditorView(arcade.View):
 
 
     def draw_debug_text(self):
+        # Get RAM usage
+        ram_info = psutil.virtual_memory()
+        current_ram_mb = ram_info.used / (1024 ** 2)
+        total_ram_mb = ram_info.total / (1024 ** 2)
+        ram_percent = ram_info.percent
 
         debug_list = [
             f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
-            f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p"
+            f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",
+            f"RAM: {current_ram_mb:.1f} / {total_ram_mb:.1f} MB ({ram_percent:.1f}%)"
         ]
 
         start_y = 1080-70
@@ -234,6 +241,10 @@ class EditorView(arcade.View):
     def on_update(self, delta_time):
         self.fps = 1/self.delta_time*10000//10000
         self.simulate()
+        if self.stress_test:
+            for i in range(10000):
+                a = random_id()
+                self.chip.gates[a] = And(a)
 
 
     def on_key_press(self, key, key_modifiers):
