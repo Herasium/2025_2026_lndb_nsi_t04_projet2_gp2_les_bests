@@ -37,10 +37,15 @@ class Level():
         self.category = 0
 
     def play_mode(self):
-        self.play = True
-        self.answer = self.chip
-        self.chip = self.answer.copy()
-        self.chip.id = f"chip_{self.id}"
+        if self.play:
+            self.play = True
+            self.chip = self.answer.copy()
+            self.chip.id = f"chip_{self.id}"
+        else:
+            self.play = True
+            self.answer = self.chip
+            self.chip = self.answer.copy()
+            self.chip.id = f"chip_{self.id}"
         self.won = False
         self.start_time = time.time()
         self.stars = 3

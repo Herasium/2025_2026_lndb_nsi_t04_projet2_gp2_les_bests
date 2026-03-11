@@ -151,6 +151,7 @@ class Loader:
             new = Image.new("RGBA", (175, 175))
             new.paste(data.level_buttons_empty[data.level_colors[color]].texture.image,(0,0))
             draw = ImageDraw.Draw(new)
+            draw.text((175/2, 175/2 - 16), number, font=font, fill="#000000", anchor="mm")
             draw.text((175/2, 175/2 - 20), number, font=font, fill="#FFFFFF", anchor="mm")
             data.LEVEL_BUTTONS.set(level.id,new)
 

@@ -51,5 +51,6 @@ class Data:
         self.loaded_levels = {}
         self.window = None
         self.level_colors = ["green","yellow","orange","red"]
+        self.categories = ["Fondamentals of logic","Some basic gates","Some NANDic gates"]
 
 data = Data()
