@@ -4,10 +4,11 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
 from modules.ui.editor.selector import EditorChipSelector
-from modules.ui.level_editor.view import LevelEditorView
+from modules.ui.level_list.view import LevelList
 from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
+from modules.ui.main_menu.tutorial_view import TutorialView
 
 from modules.data.nodes.path import Path
 
@@ -322,32 +323,38 @@ class MainMenuView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
             
+            to_display = None
+
             if self.level_button.touched:
-                data.window.display(LevelEditorSelector())
-                logger.success("Launching LevelEditorSelector.")     
+                to_display = LevelEditorSelector
 
             if self.sandbox_button.touched:
-                data.window.display(EditorChipSelector())
-                logger.success("Launching EditorChipSelector.")  
+                to_display = EditorChipSelector
 
             if self.play_button.touched:
                 data.window.hide()
                 if key_modifiers == 16 or key_modifiers == 0:
-                    data.window.display(EditorChipSelector())
-                    logger.success("Launching EditorChipSelector.")
+                    to_display = EditorChipSelector
                 elif key_modifiers == 17 or key_modifiers == 1:
-                    data.window.display(DebugTilesView())
-                    logger.print("Launching DebugTilesView.")
-                elif key_modifiers == 2 or key_modifiers == 18:
-                    data.window.display(MainMenuView())
-                    logger.print("Launching Main Menu ???")
+                    to_display = DebugTilesView
                 else:
                     logger.warning(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
-                    data.window.display(EditorView())
+                    to_display = EditorChipSelector
             
             if self.quit_button.touched:
                 logger.success("Bye Bye ! <3")
                 arcade.exit()
 
             if self.setting_button.touched:
-                data.window.display(SettingView())
+                to_display = SettingView
+
+            if self.tuto_button.touched:
+                to_display = TutorialView
+
+            if to_display != None:
+                try:
+                    data.window.display(to_display())
+                    logger.success(f"Launching {to_display.__name__}")
+                except Exception as e:
+                    logger.error(f"Failed to launch {to_display.__name__} : {e}")
+                    data.window.display(self)

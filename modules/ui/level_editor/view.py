@@ -11,6 +11,7 @@ from modules.ui.toolbox.grid import Grid
 from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.hitbox import HitBox
 from modules.ui.toolbox.id_generator import random_id
+from modules.ui.level_editor.save import SaveFrame
 
 from modules.data.nodes.path import Path
 
@@ -78,20 +79,9 @@ class LevelEditorView(arcade.View):
             else:
                 self.level = Level(random_id())
                 
-        self.save_frame_on = False
 
-        self.plus_number_hitbox = HitBox(x=10,y=950,width=400,height=25)
-        self.minus_number_hitbox = HitBox(x=10,y=925,width=400,height=25)
-        self.plus_time_hitbox = HitBox(x=10,y=875,width=400,height=25)
-        self.minus_time_hitbox = HitBox(x=10,y=850,width=400,height=25)
 
-        if self.stress_test:
-            self.perf_graph_list = arcade.SpriteList()
-
-            graph = arcade.PerfGraph(400, 400, graph_data="FPS")
-            graph.position = 200, 200
-            self.perf_graph_list.append(graph)
-
+  
     def bottom_bar_width_sum(self):
         result = 0
         for i in self.bottom_gates:
@@ -157,49 +147,7 @@ class LevelEditorView(arcade.View):
 
         arcade.draw_texture_rect(data.background_grid_texture,rect)
 
-
-
-
-    def get_save_gate_counts(self):
-        result = {}
-        for i in self.level.chip.gates:
-            if not self.level.chip.gates[i].gate_type in result:
-                result[self.level.chip.gates[i].gate_type] = 0
-            result[self.level.chip.gates[i].gate_type] += 1
-        return result
-    def draw_save_data(self):
-
-        debug_list = [
-            "Level Editor Save",
-            f"Level ID {self.level.id}",
-            f"Chip ID {self.level.chip.id}",
-            f"Level Number {self.level.number}",
-            f"Level Number + 1",
-            f"Level Number - 1",
-            f"Level Time {self.level.time}",
-            f"Level Time + 30s",
-            f"Level Time - 30s",
-            f"Level Contains {len(self.level.chip.gates)} gates, {len(self.level.chip.paths)} paths :",
-        ]
-
-        gates = self.get_save_gate_counts()
-        for i in gates:
-            debug_list.append(f"Gate {i}, x{gates[i]}")
-
-        
-
-        start_y = 1080-30
-        
-        for index, item in enumerate(debug_list):
-            arcade.draw_text(
-                item, 
-                10,  
-                start_y - (index * 25), 
-                arcade.color.WHITE,  
-                14,
-                font_name="Press Start 2P",
-            )
-
+    
     def draw_debug_text(self):
 
         debug_list = [
@@ -221,44 +169,27 @@ class LevelEditorView(arcade.View):
                 font_name="Press Start 2P",
             )
 
-    def render_truth_table(self):
-
-        pass #todo
-            
-
-
 
     @profile
     def on_draw(self):
         self.clear()
 
-        if not self.save_frame_on:
-            self.draw_frame_background()
-            for p in self.level.chip.paths.values():
-                p.draw()
+        self.draw_frame_background()
+        for p in self.level.chip.paths.values():
+            p.draw()
 
-            for g in self.level.chip.gates.values():
-                g.draw()
+        for g in self.level.chip.gates.values():
+            g.draw()
 
-            if self.current_path:
-                self.current_path.draw()
+        if self.current_path:
+            self.current_path.draw()
 
-            if self.selected_follower:
-                self.selected_follower.draw()
+        if self.selected_follower:
+            self.selected_follower.draw()
 
-            self.draw_debug_text()
-            self.draw_frame_border()
-            self.draw_bottom_gates()
-            self.render_truth_table()
-        else:
-            self.draw_save_data()
-            self.plus_number_hitbox.draw()
-            self.minus_number_hitbox.draw()
-            self.plus_time_hitbox.draw()
-            self.minus_time_hitbox.draw()
-
-        if self.stress_test:
-            self.perf_graph_list.draw()
+        self.draw_debug_text()
+        self.draw_frame_border()
+        self.draw_bottom_gates()
 
         self.frame_count += 1
         self.delta_time = time.time() - self.last_time
@@ -269,9 +200,7 @@ class LevelEditorView(arcade.View):
         self.simulate()
 
     def save_frame(self):
-        if self.save_frame_on:
-            self.level.save()
-        self.save_frame_on = not self.save_frame_on
+        data.window.display(SaveFrame(self.level))
 
 
     def on_key_press(self, key, key_modifiers):
@@ -361,10 +290,9 @@ class LevelEditorView(arcade.View):
 
     
     def on_mouse_motion(self, x, y, delta_x, delta_y):
-        mouse.position = (x, y)
+            mouse.position = (x, y)
 
-        if not self.save_frame_on:
-            
+
             self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
             self.follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
 
@@ -414,13 +342,12 @@ class LevelEditorView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
 
 
-        if button == 2:
-            self.camera_hold = True
-            return
-        if self.camera_hold:
-            return
-        
-        if not self.save_frame_on:
+            if button == 2:
+                self.camera_hold = True
+                return
+            if self.camera_hold:
+                return
+
             # Clicked a gate?
             for g in self.level.chip.gates.values():
                 touched = g.touched
@@ -493,23 +420,7 @@ class LevelEditorView(arcade.View):
                     self.selected_follower.camera = self.camera
                     self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                     self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-        else:
-            if self.plus_number_hitbox.touched:
-                self.level.number += 1
-
-            elif self.minus_number_hitbox.touched:
-
-                self.level.number -= 1
-
-            elif self.plus_time_hitbox.touched:
-
-                self.level.time += 30
-
-            elif self.minus_time_hitbox.touched:
-
-                self.level.time -= 30
-
-
+  
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         

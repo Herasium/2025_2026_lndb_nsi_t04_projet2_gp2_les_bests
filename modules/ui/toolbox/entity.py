@@ -68,6 +68,7 @@ class Entity:
             arcade.draw_sprite_rect(
                 self.sprite,
                 arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=self._anchor),
+                pixelated=True
                 
             )
         self.hitbox.draw()

@@ -9,6 +9,7 @@ from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.grid import Grid
 from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.id_generator import random_id
+from modules.ui.toolbox.easing import BackEaseOut, ElasticEaseOut
 
 from modules.data.nodes.path import Path
 
@@ -93,8 +94,24 @@ class LevelPlayer(arcade.View):
         self.prepare_won_frame()
 
     def prepare_won_frame(self):
-        self.win_frame = Entity(x=1920/2-(576/2),y=1080/2-(320/2),width=576,height=320,sprite=data.level_payer_win)
-        
+        self.win_frame_ease = BackEaseOut(-500,220,90)
+        self.win_frame = Entity(x=384,y=-500,width=576*2,height=320*2,sprite=data.level_player_win)
+
+        self.win_text_level_num = arcade.Text(f"Level {self.level.number}",512,580,arcade.color.WHITE,20,font_name="Press Start 2P")
+        self.win_text_level_name = arcade.Text(f"{self.level.name}",512,540,arcade.color.WHITE,20,font_name="Press Start 2P")
+
+        self.win_button_next = Entity(x=990,y=348,width=432,height=256,sprite=data.button_next_on)
+
+        self.win_stars = []
+        self.win_stars_ease = []
+
+        for i in range(3):
+
+            sprite = data.star
+            if i > self.level.get_stars_count()-1:
+                sprite = data.star_empty
+            self.win_stars.append(Entity(x=535+i*135+54,y=410+54,width=108,height=108,sprite=sprite,anchor=arcade.Vec2(0.5,0.5)))
+            self.win_stars_ease.append(ElasticEaseOut(-20 + i*-20,end=108,duration=128+i*20))
 
     def prepare_right_frame(self):
 
@@ -320,8 +337,43 @@ class LevelPlayer(arcade.View):
                 font_name="Press Start 2P",
             )
 
+    def draw_level_time(self):
+
+        debug_list = [
+            f"Time Limit: {round(time.time() - self.level.start_time)}s / {self.level.time}s",
+            f"Stars: {self.level.get_stars_count()}"
+        ]
+
+        start_y = 1080-80
+        
+        for index, item in enumerate(debug_list):
+            arcade.draw_text(
+                item, 
+                64,  
+                start_y - (index * 25), 
+                arcade.color.WHITE,  
+                14,
+                font_name="Press Start 2P",
+            )
+        arcade.draw_sprite_rect(data.star,arcade.rect.XYWH(64+8*20+7,986,25,25))
+
     def draw_won(self):
+        if not self.win_frame_ease.done:
+            value = self.win_frame_ease.tick()
+            self.win_frame.y = value
+
         self.win_frame.draw()
+
+        if self.win_frame_ease.done:
+            self.win_text_level_num.draw()
+            self.win_text_level_name.draw()
+            for i in range(len(self.win_stars)): 
+                value = self.win_stars_ease[i].tick()
+                star = self.win_stars[i]
+                star._width = value
+                star.height = value
+                star.draw()
+            self.win_button_next.draw()
 
     def draw_right(self):
 
@@ -367,10 +419,11 @@ class LevelPlayer(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
-        self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()
         self.draw_right()
+        self.draw_level_time()
+
         if self.level.won:
             self.draw_won()
 
@@ -388,7 +441,7 @@ class LevelPlayer(arcade.View):
 
     def on_key_press(self, key, key_modifiers):
 
-        if key == 101: #e
+        if key == 101 and not self.level.won: #e
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
@@ -401,10 +454,7 @@ class LevelPlayer(arcade.View):
             self.current_path = None
             self.selected_follower = None
 
-        if key == 115: # s
-            self.level.chip.save()
-
-        if key == 65288:
+        if key == 65288 and not self.level.won:
             self.delete()
 
     def delete_gate(self,id):
@@ -479,6 +529,9 @@ class LevelPlayer(arcade.View):
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x, y)
         
+        if self.level.won:
+            return
+
         self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
         self.follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
 
@@ -531,10 +584,13 @@ class LevelPlayer(arcade.View):
             self.level.calculate_inventory()
             self.bottom_gate_bar()
 
-    def won(sefl):
-        pass
+    def won(self):
+        self.prepare_won_frame()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+
+        if self.level.won:
+            return
 
         if button == 2:
             self.camera_hold = True

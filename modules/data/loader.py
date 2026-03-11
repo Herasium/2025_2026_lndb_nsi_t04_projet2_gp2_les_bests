@@ -173,6 +173,14 @@ class Loader:
         data.star = arcade.Sprite("assets/icons/star.png")
         data.star_empty = arcade.Sprite("assets/icons/star_empty.png")
 
+        data.level_buttons_empty = {}
+
+        data.level_buttons_empty["yellow"] = arcade.Sprite("assets/buttons/levels/yellow.png")
+        data.level_buttons_empty["orange"] = arcade.Sprite("assets/buttons/levels/orange.png")
+        data.level_buttons_empty["red"] = arcade.Sprite("assets/buttons/levels/red.png")
+        data.level_buttons_empty["green"] = arcade.Sprite("assets/buttons/levels/green.png")
+
+
     def load(self):
 
         logger.print("Loading Game Stuff.")
@@ -181,9 +189,9 @@ class Loader:
 
             self.load_fonts()
             self.load_tilesets()
+            self.load_ui()
             self.load_saves()
             self.load_levels()
-            self.load_ui()
             self.bake_textures()
             
             logger.success("Finished loading stuff.")

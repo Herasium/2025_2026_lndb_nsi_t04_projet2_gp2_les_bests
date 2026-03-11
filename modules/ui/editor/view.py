@@ -34,7 +34,7 @@ from modules.ui.main_menu.pause_view import PauseView
 
 class EditorView(arcade.View):
 
-    def __init__(self,id=None):
+    def __init__(self,id=None,hint=None):
         super().__init__()
 
         self.follower = Entity()
@@ -58,6 +58,9 @@ class EditorView(arcade.View):
                 self.chip = data.loaded_chips[id]
             else:
                 self.chip = Chip(random_id())
+
+        if hint != None:
+            self.chip = hint.chip
 
         self.moving_gate_offset = (0, 0)
 
@@ -472,6 +475,7 @@ class EditorView(arcade.View):
             elif type == 1:
                 if hovered in data.loaded_chips:
                     self.selected_follower =  CustomGate(random_id(),data.loaded_chips[hovered])
+                    print(self.selected_follower,self.selected_follower.chip)
                     self.selected_follower.camera = self.camera
                     self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                     self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]

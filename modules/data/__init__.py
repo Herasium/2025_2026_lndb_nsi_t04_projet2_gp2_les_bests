@@ -37,6 +37,7 @@ class Data:
         self.IMAGE = ImageBuffer()
         self.loaded_chips = {}
         self.loaded_levels = {}
-
+        self.window = None
+        self.level_colors = ["green","yellow","orange","red"]
 
 data = Data()
