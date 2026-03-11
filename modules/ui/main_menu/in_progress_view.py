@@ -15,7 +15,6 @@ from modules.data.nodes.path import Path
 from modules.data import data
 from modules.logger import Logger
 
-from pyglet.graphics import Batch
 import sys
 import colorsys
 
