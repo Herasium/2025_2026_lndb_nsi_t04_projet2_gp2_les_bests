@@ -326,7 +326,7 @@ class MainMenuView(arcade.View):
             to_display = None
 
             if self.level_button.touched:
-                to_display = LevelEditorSelector
+                to_display = LevelList
 
             if self.sandbox_button.touched:
                 to_display = EditorChipSelector
