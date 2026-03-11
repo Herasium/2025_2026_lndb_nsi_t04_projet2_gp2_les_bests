@@ -2,6 +2,7 @@ import arcade
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.text import Text
+from modules.ui.toolbox.entity import Entity
 
 from modules.data import data
 
@@ -20,13 +21,28 @@ class LevelList(arcade.View):
         self.setup()
 
     def setup(self):
-        pass
+        
+        self.buttons = {}
+
+        pos_y = 200
+        pos_x = 200
+
+        for i in data.loaded_levels:
+            level = data.loaded_levels[i]
+            button = arcade.Sprite(arcade.Texture(data.LEVEL_BUTTONS.get(level.id)))
+
+            self.buttons[level.id] = Entity(x=pos_x,y=pos_y,width=175,height=175,sprite=button)
+            pos_x += 200
+
 
     def reset(self):
         pass
 
     def on_draw(self):
         self.clear()
+
+        for i in self.buttons:
+            self.buttons[i].draw()
 
 
     def on_update(self, delta_time):
@@ -45,7 +61,10 @@ class LevelList(arcade.View):
 
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        pass
+        
+        for i in self.buttons:
+            if self.buttons[i].touched:
+                data.window.display(LevelPlayer(i))
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):

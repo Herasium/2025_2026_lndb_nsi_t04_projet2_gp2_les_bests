@@ -25,6 +25,17 @@ class ImageBuffer():
     def is_complete_gate(self,id):
         return self.buffer[id]["complete"]
 
+class LevelButtonsBuffer():
+
+    def __init__(self):
+        self.buffer = {}
+
+    def get(self,id):
+        return self.buffer[id]
+    
+    def set(self,id,image):
+        self.buffer[id] = image
+        
 
 class Data:
     def __init__(self):
@@ -35,6 +46,7 @@ class Data:
         self.VERSION = "a.136"
         self.COLORS = COLORS
         self.IMAGE = ImageBuffer()
+        self.LEVEL_BUTTONS = LevelButtonsBuffer()
         self.loaded_chips = {}
         self.loaded_levels = {}
         self.window = None

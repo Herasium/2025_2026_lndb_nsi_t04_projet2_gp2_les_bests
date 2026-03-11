@@ -139,13 +139,27 @@ class Loader:
             new = CustomGate("no_id",chip.copy())
             self.bake_single_gate(new,chip.id)
 
+    def bake_level_buttons(self):
+        
+        font = ImageFont.truetype('assets/fonts/press_start.ttf', 32)
 
+        for i in data.loaded_levels:
+            level = data.loaded_levels[i]
+            number = "0"*(2-len(str(level.number)))+str(level.number)
+            color = level.color
+
+            new = Image.new("RGBA", (175, 175))
+            new.paste(data.level_buttons_empty[data.level_colors[color]].texture.image,(0,0))
+            draw = ImageDraw.Draw(new)
+            draw.text((175/2, 175/2 - 20), number, font=font, fill="#FFFFFF", anchor="mm")
+            data.LEVEL_BUTTONS.set(level.id,new)
 
     def bake_textures(self):
         logger.debug("Baking Textures")
         data.background_grid_texture = self._bake_grid(1920, 1088)
         self.bake_predefined_gates()
         self.bake_custom_gates()
+        self.bake_level_buttons()
 
 
     def load_ui(self):

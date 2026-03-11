@@ -1,0 +1,234 @@
+{
+ "chip": {
+  "type": "Chip",
+  "name": "Default Chip",
+  "id": "75ef61c72ec69179f868a784ab5642e1",
+  "gates": {
+   "d757f89e676479ea69d1436d6bb23666": {
+    "x": 472.5,
+    "y": 526.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     true
+    ],
+    "gate": "Input",
+    "id": "d757f89e676479ea69d1436d6bb23666"
+   },
+   "1cba0adc6cb88734f5e1cb31b53ec4a9": {
+    "x": 742.5,
+    "y": 526.5,
+    "type": "Gate",
+    "inputs": [
+     true
+    ],
+    "outputs": [
+     false
+    ],
+    "gate": "NOT",
+    "id": "1cba0adc6cb88734f5e1cb31b53ec4a9"
+   },
+   "df333226f0df6b5ac467ab0b1a435db9": {
+    "x": 1012.5,
+    "y": 526.5,
+    "type": "Output",
+    "inputs": [
+     false
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "df333226f0df6b5ac467ab0b1a435db9"
+   }
+  },
+  "paths": {
+   "cf21e5ab36c17ab5384984e06c7ed74f": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "d757f89e676479ea69d1436d6bb23666",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "1cba0adc6cb88734f5e1cb31b53ec4a9",
+      0,
+      2,
+      0
+     ]
+    ],
+    "id": "cf21e5ab36c17ab5384984e06c7ed74f",
+    "branch_points": {
+     "0": [
+      [
+       540,
+       540
+      ],
+      [
+       783,
+       540
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         540.0,
+         546.0
+        ],
+        [
+         783.0,
+         546.0
+        ],
+        [
+         783.0,
+         534.0
+        ],
+        [
+         540.0,
+         534.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   },
+   "3f5b2e7811063fcbc71f1fc26bd0726f": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "1cba0adc6cb88734f5e1cb31b53ec4a9",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "df333226f0df6b5ac467ab0b1a435db9",
+      0,
+      2,
+      0
+     ]
+    ],
+    "id": "3f5b2e7811063fcbc71f1fc26bd0726f",
+    "branch_points": {
+     "0": [
+      [
+       837,
+       540
+      ],
+      [
+       1053,
+       540
+      ],
+      [
+       1080,
+       540
+      ],
+      [
+       1080.0,
+       540.0
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         837.0,
+         546.0
+        ],
+        [
+         1053.0,
+         546.0
+        ],
+        [
+         1053.0,
+         534.0
+        ],
+        [
+         837.0,
+         534.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         1053.0,
+         546.0
+        ],
+        [
+         1080.0,
+         546.0
+        ],
+        [
+         1080.0,
+         534.0
+        ],
+        [
+         1053.0,
+         534.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         1080.0,
+         540.0
+        ],
+        [
+         1080.0,
+         540.0
+        ],
+        [
+         1080.0,
+         540.0
+        ],
+        [
+         1080.0,
+         540.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   }
+  },
+  "version": "a.136"
+ },
+ "level": {
+  "time": 60,
+  "id": "level_75ef61c72ec69179f868a784ab5642e1",
+  "number": 1,
+  "name": "NOT A",
+  "description": "This isn't A.",
+  "hints": [],
+  "version": "a.136",
+  "start": 1,
+  "truth": {},
+  "color": 0,
+  "category": 0
+ }
+}
