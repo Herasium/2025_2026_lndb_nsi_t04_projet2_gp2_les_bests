@@ -325,7 +325,12 @@ class MainMenuView(arcade.View):
             to_display = None
 
             if self.level_button.touched:
-                to_display = LevelList
+                if key_modifiers == 16 or key_modifiers == 0:
+                    to_display = LevelList
+                elif key_modifiers == 17 or key_modifiers == 1:
+                    to_display = LevelEditorSelector
+                else:
+                    to_display = LevelList
 
             if self.sandbox_button.touched:
                 to_display = EditorChipSelector
