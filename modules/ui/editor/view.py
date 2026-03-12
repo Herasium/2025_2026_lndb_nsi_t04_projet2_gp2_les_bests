@@ -67,8 +67,13 @@ class EditorView(arcade.View):
         self.camera_position = (0,0)
         self.bottom_camera_position = [0,0]
 
+        self.current_bottom_categorie = 0
+
         self.bottom_gates = []
         self.bottom_gate_bar()
+
+        self.editor_categories = []
+        self.setup_editor_categories()
 
         self.background_color = arcade.types.Color.from_hex_string("121212")
 
@@ -87,6 +92,18 @@ class EditorView(arcade.View):
             graph.position = 200, 200
             self.perf_graph_list.append(graph)
 
+    def setup_editor_categories(self):
+        self.editor_categories = []
+
+        sprite = data.editor_categories["1_bit"]
+        self.editor_categories.append(Entity(x=48,y=0,width=100,height=30,sprite=sprite))
+
+        sprite = data.editor_categories["custom"]
+        self.editor_categories.append(Entity(x=175,y=0,width=125,height=30,sprite=sprite))
+
+        sprite = data.editor_categories["8_bit"]
+        self.editor_categories.append(Entity(x=325,y=0,width=100,height=30,sprite=sprite))
+
     def bottom_bar_width_sum(self):
         result = 0
         for i in self.bottom_gates:
@@ -95,22 +112,25 @@ class EditorView(arcade.View):
 
     def bottom_gate_bar(self):
 
-        for chip_id in data.loaded_chips:
-            if chip_id != self.chip.id:
-                chip = data.loaded_chips[chip_id]
+        self.bottom_gates = []
+
+        if self.current_bottom_categorie == 1:
+            for chip_id in data.loaded_chips:
+                if chip_id != self.chip.id:
+                    chip = data.loaded_chips[chip_id]
+                    position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                    self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
+                    self.bottom_gates[-1].camera = (0,0)
+                    self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                    self.bottom_gates[-1].x = position
+
+        if self.current_bottom_categorie == 0:
+            for i in gate_types:
                 position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
-                self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
+                self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
                 self.bottom_gates[-1].camera = (0,0)
                 self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
                 self.bottom_gates[-1].x = position
-
-        for i in gate_types:
-           
-            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
-            self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
-            self.bottom_gates[-1].camera = (0,0)
-            self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
-            self.bottom_gates[-1].x = position
             
     def bottom_bar_update_camera(self):
 
@@ -226,6 +246,9 @@ class EditorView(arcade.View):
         self.draw_frame_border()
         self.draw_bottom_gates()
         self.draw_frame_border_no_bg()
+
+        for i in self.editor_categories:
+            i.draw()
 
         if self.stress_test:
             self.perf_graph_list.draw()
@@ -381,7 +404,8 @@ class EditorView(arcade.View):
 
     def on_mouse_scroll(self,x,y,scroll_x,scroll_y):
         if self.bottom_zone_collider.touched:
-            self.bottom_camera_position[0] += scroll_y * 5
+            self.bottom_camera_position[0] += scroll_y * -15
+            self.bottom_camera_position[0] = min(self.bottom_camera_position[0],0)
             self.bottom_bar_update_camera()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
@@ -391,6 +415,11 @@ class EditorView(arcade.View):
             return
         if self.camera_hold:
             return
+        
+        for i in range(len(self.editor_categories)):
+            if self.editor_categories[i].touched:
+                self.current_bottom_categorie = i
+                self.bottom_gate_bar()
 
         # Clicked a gate?
         for g in self.chip.gates.values():

@@ -587,10 +587,25 @@ class LevelPlayer(arcade.View):
     def won(self):
         self.prepare_won_frame()
 
+    def launch_next_level(self):
+        levels = []
+        for i in data.loaded_levels:
+            levels.append(i)
+
+        def sort_keys(i):
+            return data.loaded_levels[i].number
+        
+        levels.sort(key=sort_keys)
+        current = levels.index(self.level.id)
+        if (current + 1) < len(levels):
+            data.window.display(LevelPlayer(levels[current+1]))
+
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         if self.level.won:
-            return
+            if self.win_button_next.touched:
+                self.launch_next_level()
+            return 
 
         if button == 2:
             self.camera_hold = True
