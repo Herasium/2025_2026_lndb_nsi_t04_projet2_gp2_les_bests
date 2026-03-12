@@ -22,6 +22,7 @@ class LevelList(arcade.View):
         self.background_color = arcade.color.BLACK
         self.texts = []
         self.levels = []
+        self.camera_y = 0
         self.setup()
 
     def setup(self):
@@ -42,7 +43,7 @@ class LevelList(arcade.View):
         
         levels.sort(key=sort_keys)
 
-        pos_y = 600
+        pos_y = 600 + self.camera_y
         pos_x = 75
 
         current_category = data.loaded_levels[levels[0]].category
@@ -62,7 +63,7 @@ class LevelList(arcade.View):
 
         c = 0
         for i in data.categories:
-            self.texts.append(Text(x=75,y=800-c*300,width=100,height=300,text=i,align=("left","center")))
+            self.texts.append(Text(x=75,y=800-c*300 + self.camera_y,width=100,height=300,text=i,align=("left","center")))
             c += 1
 
     def reset(self):
@@ -103,7 +104,10 @@ class LevelList(arcade.View):
                 logger.success(f"Launching Level {i}")
                 data.window.display(LevelPlayer(i))
 
-
+    def on_mouse_scroll(self,x,y,scroll_x,scroll_y):
+        self.camera_y += scroll_y * -15
+        self.camera_y = max(self.camera_y,0)
+        self.setup()
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass
 
