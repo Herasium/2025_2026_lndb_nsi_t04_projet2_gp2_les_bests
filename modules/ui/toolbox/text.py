@@ -5,7 +5,7 @@ from modules.data import data
 
 class Text:
 
-    def __init__(self,x=0,y=0,width=10,height=10,text="Default Text",align = ("center","center"),scale = 1):
+    def __init__(self,x=0,y=0,width=10,height=10,text="Default Text",align = ("center","center"),size = 18):
 
         self._x = x
         self._y = y
@@ -21,7 +21,7 @@ class Text:
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
 
-        self.scale = scale
+        self._size = size
 
         self._align =align
 
@@ -66,6 +66,15 @@ class Text:
         self._recalculate_rect()
 
     @property
+    def size(self):
+        return self._size
+    
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self._recalculate_rect()
+
+    @property
     def height(self):
         return self._height
     
@@ -81,7 +90,7 @@ class Text:
             self._x,
             self._y,
             self._color,
-            18, 
+            self._size, 
             anchor_x = self._align[0],
             anchor_y = self._align[1],
             font_name = "Press Start 2P"
