@@ -105,7 +105,7 @@ class LevelList(arcade.View):
                 data.window.display(LevelPlayer(i))
 
     def on_mouse_scroll(self,x,y,scroll_x,scroll_y):
-        self.camera_y += scroll_y * 15
+        self.camera_y += scroll_y * -15
         self.camera_y = max(self.camera_y,0)
         self.setup()
     def on_mouse_release(self, x, y, button, key_modifiers):
