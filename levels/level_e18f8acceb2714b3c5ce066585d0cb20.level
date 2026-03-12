@@ -787,7 +787,7 @@
  "level": {
   "time": 150,
   "id": "level_e18f8acceb2714b3c5ce066585d0cb20",
-  "number": 8,
+  "number": 10,
   "name": "A XOR B v2",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
@@ -795,6 +795,6 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 1
+  "category": 2
  }
 }
