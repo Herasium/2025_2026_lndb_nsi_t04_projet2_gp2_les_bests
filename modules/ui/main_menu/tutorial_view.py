@@ -104,7 +104,7 @@ class TutorialView(arcade.View):
 
         self.regletexte.draw()
         self.listeportetexte.draw()
-        
+
         self.regleplay_button.draw()
         self.commande_button.draw()
         self.in_button.draw()
