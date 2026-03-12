@@ -27,13 +27,21 @@ class TutorialView(arcade.View):
         self.back_button.width = 80
         self.back_button.height = 40
 
-        self.regletexte = Text(x=120, y=820, text="The rules of the game", align = ("left", "center"))
-        self.listeportetexte = Text(x=120, y=520, text="The different logic gates", align = ("left", "center"))
+        self.regletexte = Text(x=120, y=820, text="The rules of the game", align=("left", "center"))
+        self.listeportetexte = Text(x=120, y=520, text="The different logic gates", align=("left", "center"))
 
-        self.regleplay_button = Text(x=160, y=720, text="I want to play", align = ("left", "center"))
-        self.commande_button = Text(x=160, y=665, text="Keyboard commands", align = ("left", "center"))
-        self.in_button = Text(x=160, y=610, text = "IN", align = ("left", "center"))
-        self.out_button = Text(x=360, y=610, text = "OUT", align = ("left", "center"))
+        self.regleplay_button = Text(x=160, y=740, text="I want to play ->", align=("left", "center"), size=16)
+        self.commande_button = Text(x=160, y=685, text="Keyboard commands ->", align=("left", "center"), size=16)
+        self.in_button = Text(x=160, y=630, text = "IN ->", align=("left", "center"), size=16)
+        self.out_button = Text(x=160, y=585, text = "OUT ->", align=("left", "center"), size=16)
+
+        self.namebutton = ["AND ->", "NOT ->", "OR ->", "NAND ->", "NOR ->", "XOR ->", "CLOCK ->", "PASS ->", "INPUT ->", "OUTPUT ->"]
+        self.buttons = []
+
+        a = 485
+        for i in self.namebutton :
+            a = a - 45
+            self.buttons.append(Text(x=160, y=a, text=i, align=("left", "center"), size=16))
 
 
     def on_key_press(self, key, key_modifiers):
@@ -87,18 +95,23 @@ class TutorialView(arcade.View):
                 self.draw_tile(9,start_x + (a)*64,start_y- (i+1)*64)
 
     def on_draw(self):
-       self.clear(arcade.color.BLACK)
+        self.clear(arcade.color.BLACK)
 
-       self.draw_frame_background()
-       self.draw_frame_border()
+        self.draw_frame_background()
+        self.draw_frame_border()
 
-       self.back_button.draw()
-       self.regletexte.draw()
-       self.listeportetexte.draw()
-       self.regleplay_button.draw()
-       self.commande_button.draw()
-       self.in_button.draw()
-       self.out_button.draw()
+        self.back_button.draw()
+
+        self.regletexte.draw()
+        self.listeportetexte.draw()
+        
+        self.regleplay_button.draw()
+        self.commande_button.draw()
+        self.in_button.draw()
+        self.out_button.draw()
+       
+        for i in self.buttons :
+           i.draw()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
