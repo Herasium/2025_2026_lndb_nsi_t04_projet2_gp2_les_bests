@@ -27,35 +27,13 @@ class TutorialView(arcade.View):
         self.back_button.width = 80
         self.back_button.height = 40
 
-        self.regle_button = Text()
-        self.regle_button.align = ("left", "center")
-        self.regle_button.x = 120
-        self.regle_button.y = 820
-        self.regle_button.width = 200
-        self.regle_button.height = 100
-        self.regle_button.text = "Les règles de base"
+        self.regletexte = Text(x=120, y=820, text="The rules of the game", align = ("left", "center"))
+        self.listeportetexte = Text(x=120, y=520, text="The different logic gates", align = ("left", "center"))
 
-        self.listeporte_button = Text()
-        self.listeporte_button.align = ("left", "center")
-        self.listeporte_button.x = 120
-        self.listeporte_button.y = 520
-        self.listeporte_button.width = 200
-        self.listeporte_button.height = 100
-        self.listeporte_button.text = "Les différents portes"
-
-        self.in_button = Text()
-        self.in_button.x = 600
-        self.in_button.y = 350
-        self.in_button.width = 200
-        self.in_button.height = 100
-        self.in_button.text = "IN"
-
-        self.out_button = Text()
-        self.out_button.x = 1200
-        self.out_button.y = 350
-        self.out_button.width = 200
-        self.out_button.height = 100
-        self.out_button.text = "OUT"
+        self.regleplay_button = Text(x=160, y=720, text="I want to play", align = ("left", "center"))
+        self.commande_button = Text(x=160, y=665, text="Keyboard commands", align = ("left", "center"))
+        self.in_button = Text(x=160, y=610, text = "IN", align = ("left", "center"))
+        self.out_button = Text(x=360, y=610, text = "OUT", align = ("left", "center"))
 
 
     def on_key_press(self, key, key_modifiers):
@@ -115,8 +93,10 @@ class TutorialView(arcade.View):
        self.draw_frame_border()
 
        self.back_button.draw()
-       self.regle_button.draw()
-       self.listeporte_button.draw()
+       self.regletexte.draw()
+       self.listeportetexte.draw()
+       self.regleplay_button.draw()
+       self.commande_button.draw()
        self.in_button.draw()
        self.out_button.draw()
 
