@@ -256,6 +256,12 @@ class Loader:
         data.level_buttons_empty["red"] = arcade.Sprite("assets/buttons/levels/red.png")
         data.level_buttons_empty["green"] = arcade.Sprite("assets/buttons/levels/green.png")
 
+        data.editor_categories = {}
+
+        data.editor_categories["1_bit"] = arcade.Sprite("assets/buttons/editor_categories/1_bit.png")
+        data.editor_categories["8_bit"] = arcade.Sprite("assets/buttons/editor_categories/8_bit.png")
+        data.editor_categories["custom"] = arcade.Sprite("assets/buttons/editor_categories/custom.png")
+
 
     def load(self):
 
