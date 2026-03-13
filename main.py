@@ -8,17 +8,6 @@ import arcade # Game Engine
 import os
 # -------------------------------------------------
 
-"""
-  _                 _      ____            
- | |               (_)    |  _ \           
- | |     ___   __ _ _  ___| |_) | _____  __
- | |    / _ \ / _` | |/ __|  _ < / _ \ \/ /
- | |___| (_) | (_| | | (__| |_) | (_) >  < 
- |______\___/ \__, |_|\___|____/ \___/_/\_\
-               __/ |                       
-              |___/                        
-"""
-
 arcade.enable_timings() #Debug informations for stress test (fps,delta_time)
 path = os.path.dirname(os.path.abspath(__file__)) # The path for data loading, such as saves and levels.
 

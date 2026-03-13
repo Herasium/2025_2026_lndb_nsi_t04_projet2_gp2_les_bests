@@ -1,3 +1,5 @@
+from modules.data.language import English,French
+
 class COLORS:
     VALUE_ON = "DC2626"
     VALUE_OFF = "D9D9D9"
@@ -55,5 +57,11 @@ class Data:
         self.window = None
         self.level_colors = ["green","yellow","orange","red"]
         self.categories = ["Fondamentals of logic","Some basic gates","Some NANDic gates","Triple inputs gates","Triple NANDuts gates"]
+
+        self.current_lang = "en"
+        if self.current_lang == "en":
+            self.language = English()
+        else:
+            self.language = French()
 
 data = Data()
