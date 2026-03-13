@@ -29,11 +29,12 @@ from modules.data.gate_index import gate_types
 from modules.engine.logic import propagate_values
 
 from modules.ui.main_menu.pause_view import PauseView
+from modules.ui.level_editor.save import SaveFrame
 
 
 class EditorView(arcade.View):
 
-    def __init__(self,id=None,hint=None):
+    def __init__(self,id=None,level=None):
         super().__init__()
 
         self.follower = Entity()
@@ -49,6 +50,7 @@ class EditorView(arcade.View):
         self.selected_follower = None
         self.moving_gate = None
         self.current_path = None
+        self.level_editor = False
 
         if id == None:
             self.chip = Chip(random_id())
@@ -58,8 +60,10 @@ class EditorView(arcade.View):
             else:
                 self.chip = Chip(random_id())
 
-        if hint != None:
-            self.chip = hint.chip
+        if level != None:
+            self.level = level
+            self.level_editor = True
+            self.chip = level.chip
 
         self.moving_gate_offset = (0, 0)
 
@@ -118,11 +122,12 @@ class EditorView(arcade.View):
             for chip_id in data.loaded_chips:
                 if chip_id != self.chip.id:
                     chip = data.loaded_chips[chip_id]
-                    position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
-                    self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
-                    self.bottom_gates[-1].camera = (0,0)
-                    self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
-                    self.bottom_gates[-1].x = position
+                    if self.chip.id not in chip.requirements:
+                        position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                        self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
+                        self.bottom_gates[-1].camera = (0,0)
+                        self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                        self.bottom_gates[-1].x = position
 
         if self.current_bottom_categorie == 0:
             for i in gate_types:
@@ -207,6 +212,7 @@ class EditorView(arcade.View):
     def draw_debug_text(self):
    
         debug_list = [
+            f"Level Editor ? {self.level_editor}",
             f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
             f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",
@@ -285,7 +291,10 @@ class EditorView(arcade.View):
                 data.window.display(PauseView())
 
         if key == 115: # s
-            self.chip.save()
+            if self.level_editor:
+                data.window.display(SaveFrame(self.level))
+            else:
+                self.chip.save()
 
         if key == 65288:
             self.delete()

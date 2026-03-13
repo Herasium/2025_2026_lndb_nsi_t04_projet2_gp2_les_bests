@@ -41,7 +41,7 @@ class TutorialView(arcade.View):
             a = a - 45
             self.buttons.append(Text(x=160, y=a, text=data.language.get("tutorial", i), align=("left", "center"), size=16))
 
-        self.texte_button = Text(x=160, y=685, text="", align=("left", "center"), size=16)
+        self.texte_button = Text(x=1000, y=750, text="", align=("left", "top"), size=16,multiline=True,width=750)
 
 
     def on_key_press(self, key, key_modifiers):
@@ -120,11 +120,11 @@ class TutorialView(arcade.View):
             data.window.back()
 
         if self.regleplay_button.touched :
-            self.texte_button = Text(x=900, y=750, text=data.language.tutorial["button_01"], align=("left", "center"))
+            self.texte_button.text = data.language.tutorial["button_01"]
         
         if self.commande_button.touched : 
-            self.texte_button = Text(x=900, y=750, text=data.language.tutorial["button_02"], align=("left", "center"))
+            self.texte_button.text = data.language.tutorial["button_02"]
 
         for i in self.buttons :
-            if self.buttons[i].touched :
+            if i.touched :
                 pass

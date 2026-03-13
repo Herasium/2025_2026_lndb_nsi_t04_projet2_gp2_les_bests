@@ -290,7 +290,7 @@
     "current_branch_count": 1
    }
   },
-  "version": "a.160",
+  "version": 160,
   "requirements": []
  },
  "level": {
@@ -300,7 +300,7 @@
   "name": "A NAND B",
   "description": "The beginning.",
   "hints": [],
-  "version": "a.160",
+  "version": 160,
   "start": 1,
   "truth": {},
   "color": 0,
