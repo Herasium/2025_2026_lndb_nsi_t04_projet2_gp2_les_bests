@@ -58,6 +58,6 @@ class French:
             if key in self.__dict__[menu]:
                 return self.__dict__[menu][key]
             else:
-                return f"Key '{key}' not found in menu '{menu}'"
+                return f"Clé '{key}' non trouvée dans menu '{menu}'."
         else:
-            return f"Menu '{menu}' not found"
+            return f"Menu '{menu}' non trouvé."

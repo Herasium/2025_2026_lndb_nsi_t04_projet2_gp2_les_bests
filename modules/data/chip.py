@@ -42,7 +42,6 @@ class Chip:
                 self.requirements.append(self.gates[id].base_chip_id)
                 self.requirements += data.loaded_chips[self.gates[id].base_chip_id].requirements
         self.requirements = list(set(self.requirements)) #Removes duplicates
-        print(self.requirements)
         result = {
             "type": self.type,
             "name": self.name,

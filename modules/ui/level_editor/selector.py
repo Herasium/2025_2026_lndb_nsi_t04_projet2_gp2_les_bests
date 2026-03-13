@@ -2,8 +2,10 @@ import arcade
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.text import Text
+from modules.ui.toolbox.id_generator import random_id
 
 from modules.data import data
+from modules.data.level import Level
 
 from pyglet.graphics import Batch
 
@@ -80,11 +82,11 @@ class LevelEditorSelector(arcade.View):
 
             if text.touched:
                 if index > 4:
-                    data.window.display(LevelEditorView(self.levels[index-5]))
+                    data.window.display(EditorView(level=data.loaded_levels[self.levels[index-5]]))
                 elif index == 1:
                     data.window.back()
                 elif index == 2:
-                    data.window.display(LevelEditorView())
+                    data.window.display(EditorView(level=Level(random_id())))
                 elif index == 3:
                     data.window.display(LevelPlayerSelector())
 
