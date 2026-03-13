@@ -30,18 +30,18 @@ class TutorialView(arcade.View):
         self.regletexte = Text(x=120, y=820, text="The rules of the game", align=("left", "center"))
         self.listeportetexte = Text(x=120, y=520, text="The different logic gates", align=("left", "center"))
 
-        self.regleplay_button = Text(x=160, y=740, text="I want to play ->", align=("left", "center"), size=16)
-        self.commande_button = Text(x=160, y=685, text="Keyboard commands ->", align=("left", "center"), size=16)
-        self.in_button = Text(x=160, y=630, text = "IN ->", align=("left", "center"), size=16)
-        self.out_button = Text(x=160, y=585, text = "OUT ->", align=("left", "center"), size=16)
-
-        self.namebutton = ["AND ->", "NOT ->", "OR ->", "NAND ->", "NOR ->", "XOR ->", "CLOCK ->", "PASS ->", "INPUT ->", "OUTPUT ->"]
+        self.regleplay_button = Text(x=160, y=740, text="-> How to play ?", align=("left", "center"), size=16)
+        self.commande_button = Text(x=160, y=685, text="-> Keyboard commands", align=("left", "center"), size=16)
+        
+        self.namebutton = ["-> INPUT", "-> OUTPUT", "-> AND", "-> NOT", "-> OR", "-> NAND", "-> NOR", "-> XOR", "-> CLOCK", "-> PASS"]
         self.buttons = []
 
         a = 485
         for i in self.namebutton :
             a = a - 45
             self.buttons.append(Text(x=160, y=a, text=i, align=("left", "center"), size=16))
+
+
 
 
     def on_key_press(self, key, key_modifiers):
@@ -107,8 +107,6 @@ class TutorialView(arcade.View):
 
         self.regleplay_button.draw()
         self.commande_button.draw()
-        self.in_button.draw()
-        self.out_button.draw()
        
         for i in self.buttons :
            i.draw()
