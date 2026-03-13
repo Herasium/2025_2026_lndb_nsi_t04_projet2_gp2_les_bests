@@ -56,7 +56,7 @@ class Data:
         self.loaded_levels = {}
         self.window = None
         self.level_colors = ["green","yellow","orange","red"]
-        self.categories = ["Fondamentals of logic","Some basic gates","Some NANDic gates","Triple inputs gates","Triple NANDuts gates"]
+        self.categories = ["Fondamentals of logic","Some basic gates","Some NANDic gates","Triple inputs gates","Triple NANDuts gates","Basics of arithmetic"]
 
         self.current_lang = "en"
         if self.current_lang == "en":
