@@ -27,21 +27,21 @@ class TutorialView(arcade.View):
         self.back_button.width = 80
         self.back_button.height = 40
 
-        self.regletexte = Text(x=120, y=820, text="The rules of the game", align=("left", "center"))
-        self.listeportetexte = Text(x=120, y=520, text="The different logic gates", align=("left", "center"))
+        self.regletexte = Text(x=120, y=820, text=data.language.tutorial["title_1"], align=("left", "center"))
+        self.listeportetexte = Text(x=120, y=520, text=data.language.tutorial["title_2"], align=("left", "center"))
 
-        self.regleplay_button = Text(x=160, y=740, text="-> How to play ?", align=("left", "center"), size=16)
-        self.commande_button = Text(x=160, y=685, text="-> Keyboard commands", align=("left", "center"), size=16)
-        
-        self.namebutton = ["-> INPUT", "-> OUTPUT", "-> AND", "-> NOT", "-> OR", "-> NAND", "-> NOR", "-> XOR", "-> CLOCK", "-> PASS"]
+        self.regleplay_button = Text(x=160, y=740, text=data.language.tutorial["button_1"], align=("left", "center"), size=16)
+        self.commande_button = Text(x=160, y=685, text=data.language.tutorial["button_2"], align=("left", "center"), size=16)
+
+        self.namebutton = ["button_3", "button_4", "button_5", "button_6", "button_7", "button_8", "button_9", "button_10", "button_11", "button_12"]
         self.buttons = []
 
         a = 485
         for i in self.namebutton :
             a = a - 45
-            self.buttons.append(Text(x=160, y=a, text=i, align=("left", "center"), size=16))
+            self.buttons.append(Text(x=160, y=a, text=data.language.tutorial[i], align=("left", "center"), size=16))
 
-
+        self.texte_button = Text()
 
 
     def on_key_press(self, key, key_modifiers):
@@ -100,6 +100,7 @@ class TutorialView(arcade.View):
         self.draw_frame_background()
         self.draw_frame_border()
 
+        self.texte_button.draw()
         self.back_button.draw()
 
         self.regletexte.draw()
@@ -117,3 +118,13 @@ class TutorialView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.back_button.touched :
             data.window.back()
+
+        if self.regleplay_button.touched :
+            self.texte_button = Text(x=300, y=820, text=data.language.tutorial["button_01"], align=("left", "center"))
+        
+        if self.commande_button.touched : 
+            self.texte_button = Text(x=300, y=820, text=data.language.tutorial["button_02"], align=("left", "center"))
+
+        for i in self.buttons :
+            if self.buttons[i].touched :
+                pass
