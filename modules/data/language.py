@@ -15,7 +15,9 @@ class English:
             "button_9" : "-> NOR",
             "button_10" : "-> XOR",
             "button_11" : "-> CLOCK",
-            "button_12" : "-> PASS"
+            "button_12" : "-> PASS",
+            "title_1" : "Rules",
+            "title_2" : "Logic gates"
 
         }
 
@@ -35,5 +37,7 @@ class French:
             "button_9" : "-> NOR",
             "button_10" : "-> XOR",
             "button_11" : "-> CLOCK",
-            "button_12" : "-> PASS"
+            "button_12" : "-> PASS",
+            "title_1" : "Règles",
+            "title_2" : "Portes logiques"
         }
