@@ -17,7 +17,13 @@ class English:
             "button_11" : "-> CLOCK",
             "button_12" : "-> PASS",
             "title_1" : "Rules",
-            "title_2" : "Logic gates"
+            "title_2" : "Logic gates",
+            "button_01" : "Drag gates from the hotbar\n "
+                "to the playground. You can click on the output port\n "
+                "of a gate to create a wire \n "
+                "and then on the input port\n "
+                "of another gate to connect them.",
+            "button_02" : "def"
 
         }
 
@@ -49,7 +55,9 @@ class French:
             "button_11" : "-> CLOCK",
             "button_12" : "-> PASS",
             "title_1" : "Règles",
-            "title_2" : "Portes logiques"
+            "title_2" : "Portes logiques",
+            "button_01" : "zyx",
+            "button_02" : "wvu"
         }
 
     
