@@ -23,6 +23,7 @@ from modules.data.nodes.nor import Nor
 from modules.data.nodes.input import Input
 from modules.data.nodes.output import Output
 from modules.data.chip import Chip
+from modules.data.custom import CustomGate
 
 from modules.data import data
 from modules.data.gate_index import gate_types
@@ -271,16 +272,26 @@ class LevelPlayer(arcade.View):
         self.bottom_gates = []
         for i in self.level.max_usage:
             if i != "Input" and i != "Output":
-                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
-                self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
-                self.bottom_gates[-1].camera = (0,0)
-                self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
-                self.bottom_gates[-1].x = position
+                if i in gate_types:
+                    position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                    self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
+                    self.bottom_gates[-1].camera = (0,0)
+                    self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                    self.bottom_gates[-1].x = position
+                elif i in data.loaded_chips:
+                    chip = data.loaded_chips[i]
+                    position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                    self.bottom_gates.append(CustomGate(f"bottom_gate_{random_id()}",chip))
+                    self.bottom_gates[-1].camera = (0,0)
+                    self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                    self.bottom_gates[-1].x = position
                 
 
     def get_hovered_bottom_gate(self):
         for i in self.bottom_gates:
             if i.entity.touched :
+                if i.type == "Custom":
+                    return i.base_chip_id
                 return i.gate_type
 
     def draw_bottom_gates(self):
@@ -698,6 +709,13 @@ class LevelPlayer(arcade.View):
                 self.selected_follower.camera = self.camera
                 self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                 self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+            elif hovered in data.loaded_chips:
+                self.selected_follower =  CustomGate(random_id(),data.loaded_chips[hovered])
+                self.selected_follower.camera = self.camera
+                self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+                self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+
+
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):

@@ -40,18 +40,17 @@ class Level():
         if self.play:
             self.play = True
             self.chip = self.answer.copy()
-            self.chip.id = f"chip_{self.id}"
+            self.chip.id = random_id()
         else:
             self.play = True
             self.answer = self.chip
             self.chip = self.answer.copy()
-            self.chip.id = f"chip_{self.id}"
+            self.chip.id = random_id()
         self.won = False
         self.start_time = time.time()
         self.stars = 3
         self.shown_hints = False
         self.shown_solution = False
-
         self.chip.paths = {}
 
         left = self.get_gates(self.chip)
@@ -77,15 +76,26 @@ class Level():
     def calculate_inventory(self):
         self.max_usage = {}
         for i in self.answer.gates:
-            if not self.answer.gates[i].gate_type in self.max_usage:
-                self.max_usage[self.answer.gates[i].gate_type] = 0
-            self.max_usage[self.answer.gates[i].gate_type] += 1
+            if self.answer.gates[i].type == "Custom":
+                if not self.answer.gates[i].base_chip_id in self.max_usage:
+                    self.max_usage[self.answer.gates[i].base_chip_id] = 0
+                self.max_usage[self.answer.gates[i].base_chip_id] += 1
+            else:
+                if not self.answer.gates[i].gate_type in self.max_usage:
+                    self.max_usage[self.answer.gates[i].gate_type] = 0
+                self.max_usage[self.answer.gates[i].gate_type] += 1
 
         self.inventory = {}
         for i in self.chip.gates:
-            if not self.chip.gates[i].gate_type in self.inventory:
-                self.inventory[self.chip.gates[i].gate_type] = 0
-            self.inventory[self.chip.gates[i].gate_type] += 1
+            if self.chip.gates[i].type == "Custom":
+                if not self.chip.gates[i].base_chip_id in self.inventory:
+                    self.inventory[self.chip.gates[i].base_chip_id] = 0
+                self.inventory[self.chip.gates[i].base_chip_id] += 1
+
+            else:
+                if not self.chip.gates[i].gate_type in self.inventory:
+                    self.inventory[self.chip.gates[i].gate_type] = 0
+                self.inventory[self.chip.gates[i].gate_type] += 1
 
 
 
@@ -125,7 +135,7 @@ class Level():
             chip = self.chip
         result = []
         for i in self.chip.gates:
-            if self.chip.gates[i].type == "Gate":
+            if self.chip.gates[i].type == "Gate" or self.chip.gates[i].type == "Custom":
                 result.append(i)
         return result
 

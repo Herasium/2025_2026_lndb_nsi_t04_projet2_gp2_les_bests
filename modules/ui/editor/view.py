@@ -506,7 +506,6 @@ class EditorView(arcade.View):
             elif type == 1:
                 if hovered in data.loaded_chips:
                     self.selected_follower =  CustomGate(random_id(),data.loaded_chips[hovered])
-                    print(self.selected_follower,self.selected_follower.chip)
                     self.selected_follower.camera = self.camera
                     self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
                     self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]

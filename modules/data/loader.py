@@ -10,6 +10,7 @@ from modules.data.level import Level
 from modules.data.gate_index import gate_types
 from modules.data.custom import CustomGate
 from modules.logger import Logger
+import traceback
 
 logger = Logger("Loader")
 
@@ -34,25 +35,27 @@ class Loader:
                 logger.error(f"Failed to read file {full_path} ({e})")
         return results
 
+    def load_single_chip(self,raw_data):
+        chip = Chip("default_id")
+        chip.partial_load(raw_data)
+        if len(chip.requirements) == 0:
+            chip.load()
+            data.loaded_chips[raw_data["id"]] = chip
+        else:
+            can_load = True
+            for i in chip.requirements:
+                if not i in data.loaded_chips:
+                    can_load = False
+            if can_load:
+                chip.load()
+                data.loaded_chips[raw_data["id"]] = chip
+            else:
+                self.to_load_buffer.append(chip)
+
     def load_saves(self):
         for raw_data in self.load_files("saves"):
             try:
-                chip = Chip("default_id")
-                chip.partial_load(raw_data)
-                if len(chip.requirements) == 0:
-                    chip.load()
-                    data.loaded_chips[raw_data["id"]] = chip
-                else:
-                    can_load = True
-                    for i in chip.requirements:
-                        if not i in data.loaded_chips:
-                            can_load = False
-                    if can_load:
-                        chip.load()
-                        data.loaded_chips[raw_data["id"]] = chip
-                    else:
-                        self.to_load_buffer.append(chip)
-
+                self.load_single_chip(raw_data)
             except Exception:
                 logger.error(f"Failed to load chip: {traceback.format_exc()}")
         logger.success(f"Loaded {len(data.loaded_chips)} Chips.")
@@ -62,6 +65,7 @@ class Loader:
     def load_saves_dependency_round(self):
         for chip in self.to_load_buffer:
             can_load = True
+            print(chip)
             for i in chip.requirements:
                 if not i in data.loaded_chips:
                     can_load = False
@@ -84,14 +88,16 @@ class Loader:
                 previous = len(self.to_load_buffer)
             count += 1
 
-        logger.success(f"Finished loading gates with dependencies in {count} rounds.")
+        logger.debug(f"Finished loading gates with dependencies in {count} rounds.")
 
     def load_levels(self):
         for raw_data in self.load_files("levels"):
             try:
                 level = Level("default_id")
-                if raw_data
-                self.to_load_buffer += raw_data["requirements"]
+                if raw_data["level"]["version"] > 160:
+                    for i in raw_data["requirements"]:
+                        self.load_single_chip(i)
+                self.load_saves_dependency()
                 level.load(raw_data)
                 data.loaded_levels[raw_data["level"]["id"]] = level
             except Exception:
@@ -275,13 +281,13 @@ class Loader:
             self.load_tilesets()
             self.load_ui()
             self.load_saves()
+            self.load_levels()
             if len(self.to_load_buffer) > 0:
                 self.load_saves_dependency()
-            self.load_levels()
             self.bake_textures()
             
             logger.success("Finished loading stuff.")
         except Exception as e:
-            logger.error(f"Failed to load stuff ({e})")
+            logger.error(f"Failed to load stuff ({traceback.format_exc()})")
 
         
