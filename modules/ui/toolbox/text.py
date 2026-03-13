@@ -154,6 +154,7 @@ class Text:
 
     def draw(self):   
         self._text.draw()
+        self.hitbox.draw()
 
     @property
     def touched(self):
