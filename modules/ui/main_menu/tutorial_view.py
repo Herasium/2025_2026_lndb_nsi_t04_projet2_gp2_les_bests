@@ -120,10 +120,10 @@ class TutorialView(arcade.View):
             data.window.back()
 
         if self.regleplay_button.touched :
-            self.texte_button = Text(x=900, y=750, text=data.language.tutorial["button_01"], align=("left", "center"))
+            self.texte_button = Text(x=1000, y=750, text=data.language.tutorial["button_01"], align=("left", "center"))
         
         if self.commande_button.touched : 
-            self.texte_button = Text(x=900, y=750, text=data.language.tutorial["button_02"], align=("left", "center"))
+            self.texte_button = Text(x=1000, y=750, text=data.language.tutorial["button_02"], align=("left", "center"))
 
         for i in self.buttons :
             if self.buttons[i].touched :
