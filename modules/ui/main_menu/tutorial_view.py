@@ -27,21 +27,21 @@ class TutorialView(arcade.View):
         self.back_button.width = 80
         self.back_button.height = 40
 
-        self.regletexte = Text(x=120, y=820, text=data.language.tutorial["title_1"], align=("left", "center"))
-        self.listeportetexte = Text(x=120, y=520, text=data.language.tutorial["title_2"], align=("left", "center"))
+        self.regletexte = Text(x=120, y=820, text=data.language.get("tutorial","title_1"), align=("left", "center"))
+        self.listeportetexte = Text(x=120, y=600, text=data.language.get("tutorial","title_2"), align=("left", "center"))
 
-        self.regleplay_button = Text(x=160, y=740, text=data.language.tutorial["button_1"], align=("left", "center"), size=16)
-        self.commande_button = Text(x=160, y=685, text=data.language.tutorial["button_2"], align=("left", "center"), size=16)
+        self.regleplay_button = Text(x=160, y=740, text=data.language.get("tutorial", "button_1"), align=("left", "center"), size=16)
+        self.commande_button = Text(x=160, y=685, text=data.language.get("tutorial", "button_2"), align=("left", "center"), size=16)
 
         self.namebutton = ["button_3", "button_4", "button_5", "button_6", "button_7", "button_8", "button_9", "button_10", "button_11", "button_12"]
         self.buttons = []
 
-        a = 485
+        a = 560
         for i in self.namebutton :
             a = a - 45
-            self.buttons.append(Text(x=160, y=a, text=data.language.tutorial[i], align=("left", "center"), size=16))
+            self.buttons.append(Text(x=160, y=a, text=data.language.get("tutorial", i), align=("left", "center"), size=16))
 
-        self.texte_button = Text()
+        self.texte_button = Text(x=160, y=685, text="", align=("left", "center"), size=16)
 
 
     def on_key_press(self, key, key_modifiers):
@@ -120,10 +120,10 @@ class TutorialView(arcade.View):
             data.window.back()
 
         if self.regleplay_button.touched :
-            self.texte_button = Text(x=300, y=820, text=data.language.tutorial["button_01"], align=("left", "center"))
+            self.texte_button = Text(x=1000, y=750, text=data.language.tutorial["button_01"], align=("left", "center"))
         
         if self.commande_button.touched : 
-            self.texte_button = Text(x=300, y=820, text=data.language.tutorial["button_02"], align=("left", "center"))
+            self.texte_button = Text(x=1000, y=750, text=data.language.tutorial["button_02"], align=("left", "center"))
 
         for i in self.buttons :
             if self.buttons[i].touched :

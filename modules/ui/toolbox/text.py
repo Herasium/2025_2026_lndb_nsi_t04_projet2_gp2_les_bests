@@ -93,10 +93,11 @@ class Text:
             self._size, 
             anchor_x = self._align[0],
             anchor_y = self._align[1],
-            font_name = "Press Start 2P"
+            font_name = "Press Start 2P",
+            multiline=True,
+            width=self._width,
         )
 
-        self._width = self._text.content_width
         self._height = self._text.content_height
 
         if self._align[0] == "left":
