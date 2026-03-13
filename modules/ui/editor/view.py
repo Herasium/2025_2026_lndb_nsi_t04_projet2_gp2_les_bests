@@ -212,7 +212,7 @@ class EditorView(arcade.View):
     def draw_debug_text(self):
    
         debug_list = [
-            f"Level Editor ? {self.level_editor}"
+            f"Level Editor ? {self.level_editor}",
             f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
             f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",

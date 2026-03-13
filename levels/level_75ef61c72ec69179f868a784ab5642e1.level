@@ -216,7 +216,7 @@
     "current_branch_count": 1
    }
   },
-  "version": "a.160",
+  "version": 160,
   "requirements": []
  },
  "level": {
@@ -226,7 +226,7 @@
   "name": "NOT A",
   "description": "This isn't A.",
   "hints": [],
-  "version": "a.160",
+  "version": 160,
   "start": 1,
   "truth": {},
   "color": 0,

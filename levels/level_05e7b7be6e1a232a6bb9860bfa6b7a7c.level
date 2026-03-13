@@ -1529,7 +1529,7 @@
     "current_branch_count": 1
    }
   },
-  "version": "a.160",
+  "version": 160,
   "requirements": []
  },
  "level": {
@@ -1539,7 +1539,7 @@
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": "a.160",
+  "version": 160,
   "start": 1,
   "truth": {},
   "color": 2,

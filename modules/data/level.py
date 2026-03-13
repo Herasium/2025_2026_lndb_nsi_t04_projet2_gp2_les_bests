@@ -178,9 +178,13 @@ class Level():
 
     def save(self):
         chip_save = self.chip.save(no_file=True)
+        requirements = []
+        for i in chip_save["requirements"]:
+            requirements.append(data.loaded_chips[i].save(no_file=True))
 
         result = {
             "chip": chip_save,
+            "requirements": requirements,
             "level": {
                 "time":self.time,
                 "id": self.id,
@@ -208,6 +212,7 @@ class Level():
         
         self.chip.partial_load(data["chip"])
         self.chip.load()
+
         self.time = data["level"]["time"]
         self.id = data["level"]["id"]
         self.number = data["level"]["number"]

@@ -90,6 +90,8 @@ class Loader:
         for raw_data in self.load_files("levels"):
             try:
                 level = Level("default_id")
+                if raw_data
+                self.to_load_buffer += raw_data["requirements"]
                 level.load(raw_data)
                 data.loaded_levels[raw_data["level"]["id"]] = level
             except Exception:
