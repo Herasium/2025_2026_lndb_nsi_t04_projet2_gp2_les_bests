@@ -18,11 +18,7 @@ class English:
             "button_12" : "-> PASS",
             "title_1" : "Rules",
             "title_2" : "Logic gates",
-            "button_01" : "Drag gates from the hotbar\n "
-                "to the playground. You can click on the output port\n "
-                "of a gate to create a wire \n "
-                "and then on the input port\n "
-                "of another gate to connect them.",
+            "button_01" : "Drag gates from the hotbar\nto the playground. You can click on the output port\nof a gate to create a wire \nand then on the input port\nof another gate to connect them.",
             "button_02" : "def"
 
         }

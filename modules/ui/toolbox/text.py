@@ -5,7 +5,7 @@ from modules.data import data
 
 class Text:
 
-    def __init__(self,x=0,y=0,width=10,height=10,text="Default Text",align = ("center","center"),size = 18):
+    def __init__(self,x=0,y=0,width=10,height=10,text="Default Text",align = ("center","center"),size = 18,multiline=False):
 
         self._x = x
         self._y = y
@@ -22,8 +22,8 @@ class Text:
         self.grid_size = data.UI_EDITOR_GRID_SIZE
 
         self._size = size
-
         self._align =align
+        self._multiline = multiline
 
         self._recalculate_rect()
 
@@ -83,21 +83,45 @@ class Text:
         self._height = value
         self._recalculate_rect()
 
+    @property
+    def multiline(self):
+        return self._multiline
+    
+    @multiline.setter
+    def multiline(self, value):
+        self._multiline = value
+        self._recalculate_rect()
+
     def _recalculate_rect(self):
         
-        self._text = arcade.Text(
-            self._name,
-            self._x,
-            self._y,
-            self._color,
-            self._size, 
-            anchor_x = self._align[0],
-            anchor_y = self._align[1],
-            font_name = "Press Start 2P",
-            multiline=True,
-            width=self._width,
-        )
-
+        if self._multiline:
+            self._text = arcade.Text(
+                self._name,
+                self._x,
+                self._y,
+                self._color,
+                self._size, 
+                anchor_x = self._align[0],
+                anchor_y = self._align[1],
+                font_name = "Press Start 2P",
+                multiline=True,
+                width=self._width,
+            )
+        else:
+            self._text = arcade.Text(
+                self._name,
+                self._x,
+                self._y,
+                self._color,
+                self._size, 
+                anchor_x = self._align[0],
+                anchor_y = self._align[1],
+                font_name = "Press Start 2P",
+                multiline=False,
+            )
+        
+        if not self._multiline:
+            self._width = self._text.content_width
         self._height = self._text.content_height
 
         if self._align[0] == "left":
