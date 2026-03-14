@@ -25,6 +25,7 @@ class Gate(Node):
         self._name = "Default Gate"
         self.type = "Gate"
         self.gate_type = "Default"
+        self.texts = {}
 
         self.bg = Entity()
         self.bg.color = arcade.types.Color.from_hex_string("0F3FA8")
@@ -104,6 +105,7 @@ class Gate(Node):
 
     
     def calculate_display_lite(self):
+        self.hide_text = True
         self.text.x = self.x + self.width/2 + self._camera[0]
         self.text.y = self.y + self.height /1.6 + data.UI_EDITOR_GRID_SIZE/4 + self._camera[1]
 
@@ -119,6 +121,9 @@ class Gate(Node):
         self.bg._y = self.y-5
         self.bg._width = self.width+10
         self.bg._height = self.height+10
+    
+    def update_text_position(self):
+        pass
     
     def calculate_display(self):
         self.both = len(self.inputs) > 0 and len(self.outputs) > 0
@@ -172,6 +177,7 @@ class Gate(Node):
                 HitBox(x=x, y=y, width=data.UI_EDITOR_GRID_SIZE, height=data.UI_EDITOR_GRID_SIZE)
             )
 
+        self.update_text_position()
 
     @property
     def camera(self):
@@ -204,18 +210,24 @@ class Gate(Node):
 
         #First Row
         gate_tile_pattern.append(26)
-        for i in self.inputs:
-            if i==1:
-                gate_tile_pattern.append(15)
+        for i in range(len(self.inputs)):
+            if self.inputs_sizes[i] == 1:
+                if self.inputs[i]:
+                    gate_tile_pattern.append(15)
+                else:
+                    gate_tile_pattern.append(21)
             else:
-                gate_tile_pattern.append(21)
+                gate_tile_pattern.append(22)
         if self.both:
             gate_tile_pattern.append(1)
-        for i in self.outputs:
-            if i:
-                gate_tile_pattern.append(15)
+        for i in range(len(self.outputs)):
+            if self.outputs_sizes[i] == 1:
+                if self.outputs[i]:
+                    gate_tile_pattern.append(15)
+                else:
+                    gate_tile_pattern.append(21)
             else:
-                gate_tile_pattern.append(21)
+                gate_tile_pattern.append(22)
         gate_tile_pattern.append(19)
 
         #Second Row
@@ -239,6 +251,13 @@ class Gate(Node):
         height = 4
         out = self.outputs.copy()
         inp = self.inputs.copy()
+        for i in range(len(inp)):
+            if self.inputs_sizes[i] != 1:
+                inp[i] = 0
+
+        for i in range(len(out)):
+            if self.outputs_sizes[i] != 1:
+                out[i] = 0
 
         out.reverse()
         inp.reverse()

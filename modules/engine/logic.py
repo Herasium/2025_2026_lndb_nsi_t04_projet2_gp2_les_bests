@@ -253,6 +253,8 @@ def propagate_outputs(chip, connections, source_id):
 
                 if target_gate.type in ["Output","Gate"]:
                     target_gate.gen_tile_pattern()
+                if target_gate.type == "Complex" or target_gate.gate_type == "8Output":
+                    target_gate.update_text_readings()
 
 def run_propagation_loop(chip, connections, gates, inputs, outputs):
     unprocessed = set(gates + outputs)

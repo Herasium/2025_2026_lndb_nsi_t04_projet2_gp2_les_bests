@@ -26,28 +26,51 @@ class Input(Complex):
 
         self.gen_tile_pattern()
         self.calculate_display()
+        self.setup_texts()
         
         
     def switch(self):
         self.outputs[0] = random.randint(0,255)
         self.gen_tile_pattern()
+        self.update_text_readings()
 
+    def gen_tile_pattern(self):
 
-    def draw_tiles(self):
-    
-        width = self.tile_width
-        height = 4
+        gate_tile_pattern = []
 
-        tile_x = self.x + self._camera[0]
-        tile_y = self.y + self._camera[1]
+        self.gate_width = 5
+        to_fill = (self.gate_width - 2 - (len(self.outputs)))  / 2
 
-        rect = arcade.XYWH(
-                    x=tile_x,
-                    y=tile_y,
-                    width=width * data.UI_EDITOR_GRID_SIZE,
-                    height=height * data.UI_EDITOR_GRID_SIZE,
-                    anchor=arcade.Vec2(0,0)
-        )
+        #Bottom Row
+        gate_tile_pattern.append(7)
+        for _ in range(math.floor(to_fill)):
+            gate_tile_pattern.append(0)
+        for _ in range(len(self.outputs)):
+            gate_tile_pattern.append(6)
+        for _ in range(math.ceil(to_fill)):
+            gate_tile_pattern.append(0)
+        gate_tile_pattern.append(8)
 
-        arcade.draw_rect_filled(rect,arcade.color.BLUE)
-        arcade.draw_text(f"Input: {self.outputs}",tile_x,tile_y,arcade.color.WHITE)
+        #First Row
+        gate_tile_pattern.append(30)
+        for _ in range(math.floor(to_fill)):
+            gate_tile_pattern.append(34)
+        for i in self.outputs:
+                gate_tile_pattern.append(22)
+        for _ in range(math.ceil(to_fill)):
+            gate_tile_pattern.append(33)
+        gate_tile_pattern.append(32)
+
+        #Second Row
+        gate_tile_pattern.append(31)
+        for _ in range(self.gate_width-2):
+            gate_tile_pattern.append(13)
+        gate_tile_pattern.append(25)
+
+        #Top Row
+        gate_tile_pattern.append(28)
+        for _ in range(self.gate_width-2):
+            gate_tile_pattern.append(2)
+        gate_tile_pattern.append(27)
+
+        self.gate_tile_pattern = gate_tile_pattern

@@ -79,12 +79,12 @@ class Chip:
         data = self.temp_data
         for key in data["gates"]:
             gate = data["gates"][key]
-            if gate["type"] == "Gate":
+            if gate["type"] in ["Gate","Complex"]:
                 new = gate_types[gate["gate"]]("default_id")
             elif gate["type"] == "Custom":
                 new = CustomGate("default_id",self)
             else:
-                new = gate_types[gate["type"]]("default_id")
+                new = gate_types[gate["gate"]]("default_id")
 
             new.load(gate)
             self.gates[key] = new

@@ -21,7 +21,7 @@ class Not(Complex):
         self.outputs = [15]
         self.inputs_sizes = [8]
         self.outputs_sizes = [8]
-
+        
         self.calculate_display()
         self.gen_tile_pattern()
-        
+        self.setup_texts()

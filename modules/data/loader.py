@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from modules.data import data
 from modules.data.chip import Chip
 from modules.data.level import Level
-from modules.data.gate_index import gate_types
+from modules.data.gate_index import gate_types,gate_types_1,gate_types_8,gate_types_mix
 from modules.data.custom import CustomGate
 from modules.logger import Logger
 import traceback

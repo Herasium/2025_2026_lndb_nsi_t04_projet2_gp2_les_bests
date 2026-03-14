@@ -14,7 +14,7 @@ class Breaker(Complex):
     def __init__(self, id):
         super().__init__(id)
 
-        self.name = "8BIT BREAKER"
+        self.name = "BREAKER"
         self.gate_type = "8BREAK"
 
         self.inputs = [0]
@@ -24,4 +24,5 @@ class Breaker(Complex):
 
         self.calculate_display()
         self.gen_tile_pattern()
+        self.setup_texts()
         

@@ -14,7 +14,7 @@ class Maker(Complex):
     def __init__(self, id):
         super().__init__(id)
 
-        self.name = "8BIT MAKER"
+        self.name = "MAKER"
         self.gate_type = "8MAKER"
 
         self.inputs = [0,0,0,0,0,0,0,0]
@@ -24,4 +24,5 @@ class Maker(Complex):
 
         self.calculate_display()
         self.gen_tile_pattern()
+        self.setup_texts()
         

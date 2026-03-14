@@ -19,7 +19,7 @@ class DebugTilesView(arcade.View):
         self.tilesets = [
             {
                 "name": "Gate Grid",
-                "path": "assets/gate_grid.png",
+                "path": "assets/grid/gate_grid.png",
                 "tile_w": 27,
                 "tile_h": 27,
                 "columns": 6,
@@ -28,7 +28,7 @@ class DebugTilesView(arcade.View):
             },
             {
                 "name": "UI Grid",
-                "path": "assets/ui_grid.png",
+                "path": "assets/grid/ui_grid.png",
                 "tile_w": 32,
                 "tile_h": 32,
                 "columns": 23,
@@ -37,7 +37,7 @@ class DebugTilesView(arcade.View):
             },
             {
                 "name": "UI Border Grid",
-                "path": "assets/ui_border_grid.png",
+                "path": "assets/grid/ui_border_grid.png",
                 "tile_w": 64,
                 "tile_h": 64,
                 "columns": 4,

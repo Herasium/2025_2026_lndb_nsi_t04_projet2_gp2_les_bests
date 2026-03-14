@@ -2,12 +2,12 @@ import arcade
 import math
 
 from modules.data.node import Node
-from modules.data.gate import Gate
+from modules.data.complex import Complex
 from modules.data import data as data_module
 
 from line_profiler import profile
 
-class CustomGate(Gate):
+class CustomGate(Complex):
 
     def __init__(self, id, chip = None):
         super().__init__(id)
@@ -22,6 +22,7 @@ class CustomGate(Gate):
 
         self.calculate_display()
         self.gen_tile_pattern()
+        self.setup_texts()
         
     def prop_io(self):
         chip_inputs = self.chip.get_inputs()
@@ -44,12 +45,21 @@ class CustomGate(Gate):
             self.outputs.append(self.chip.gates[i].inputs[0])
             self.outputs_sizes.append(self.chip.gates[i].inputs_sizes[0])
 
+        self.update_text_readings()
+
     def draw_tiles(self):
     
         width = self.tile_width
         height = 4
         out = self.outputs.copy()
         inp = self.inputs.copy()
+        for i in range(len(inp)):
+            if self.inputs_sizes[i] != 1:
+                inp[i] = 0
+
+        for i in range(len(out)):
+            if self.outputs_sizes[i] != 1:
+                out[i] = 0
 
         out.reverse()
         inp.reverse()
@@ -67,7 +77,9 @@ class CustomGate(Gate):
         )
 
         arcade.draw_texture_rect(data_module.IMAGE.get_texture(self.base_chip_id,current),rect)
-
+        if not self.hide_text:
+            for i in self.texts:
+                self.texts[i].draw()
 
     def save(self):
         return {
@@ -97,3 +109,4 @@ class CustomGate(Gate):
 
         self.calculate_display()
         self.gen_tile_pattern()
+        self.setup_texts()
