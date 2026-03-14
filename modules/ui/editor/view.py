@@ -11,20 +11,13 @@ from modules.ui.toolbox.id_generator import random_id
 
 from modules.data.nodes.path import Path
 
-from modules.data.nodes.nand import Nand
-from modules.data.nodes.gand import And
-from modules.data.nodes.gor import Or
-from modules.data.nodes.gnot import Not
-from modules.data.nodes.xor import Xor
-from modules.data.nodes.nor import Nor
+from modules.data.nodes.one.gand import And
 
-from modules.data.nodes.input import Input
-from modules.data.nodes.output import Output
 from modules.data.chip import Chip
 from modules.data.custom import CustomGate
 
 from modules.data import data
-from modules.data.gate_index import gate_types
+from modules.data.gate_index import gate_types,gate_types_1,gate_types_8,gate_types_mix
 
 from modules.engine.logic import propagate_values
 
@@ -130,7 +123,15 @@ class EditorView(arcade.View):
                         self.bottom_gates[-1].x = position
 
         if self.current_bottom_categorie == 0:
-            for i in gate_types:
+            for i in gate_types_1:
+                position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+                self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
+                self.bottom_gates[-1].camera = (0,0)
+                self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+                self.bottom_gates[-1].x = position
+
+        if self.current_bottom_categorie == 2:
+            for i in ({**gate_types_8, **gate_types_mix}):
                 position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
                 self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
                 self.bottom_gates[-1].camera = (0,0)
@@ -440,26 +441,27 @@ class EditorView(arcade.View):
                     self.current_path = Path(pid)
                     self.current_path.camera = self.camera
                     self.current_path.add_path()
-
                     if touched[0] == 1: #Input touched
                         self.current_path.outputs.append([1, g.id, touched[1], 1, self.current_path.current_branch_count])
                     else: #Output touched
                         self.current_path.inputs.append([2, g.id, touched[1], 1, self.current_path.current_branch_count])
+                    self.current_path.current_size = touched[2]
                     return
 
                 else:
                     # finish existing path
-                    if touched[0] == 1:#Input touched
-                        self.current_path.outputs.append([1, g.id, touched[1], 2, self.current_path.current_branch_count])
-                    else:#Output touched
-                        self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
-                    self.current_path.camera = self.camera
-                    self.current_path.finish()
-                    if self.current_path.id not in self.chip.paths:
-                        self.chip.paths[self.current_path.id] = self.current_path
+                    if touched[2] == self.current_path.current_size:
+                        if touched[0] == 1:#Input touched
+                            self.current_path.outputs.append([1, g.id, touched[1], 2, self.current_path.current_branch_count])
+                        else:#Output touched
+                            self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
+                        self.current_path.camera = self.camera
+                        self.current_path.finish()
+                        if self.current_path.id not in self.chip.paths:
+                            self.chip.paths[self.current_path.id] = self.current_path
 
-                    self.current_path = None
-                    return
+                        self.current_path = None
+                        return
 
         # Clicking on a path
         if not self.current_path:

@@ -19,6 +19,8 @@ class Gate(Node):
 
         self.inputs = []
         self.outputs = []
+        self.inputs_sizes = []
+        self.outputs_sizes = []
 
         self._name = "Default Gate"
         self.type = "Gate"
@@ -71,9 +73,9 @@ class Gate(Node):
     def name(self, value):
         self._name = value
         if self._name == "NOT":
-            self.inputs = [False]
+            self.inputs = [0]
         else:
-            self.inputs = [False, False]
+            self.inputs = [0, 0]
 
         if hasattr(self, "text"):
             self.text.text = self._name
@@ -203,7 +205,7 @@ class Gate(Node):
         #First Row
         gate_tile_pattern.append(26)
         for i in self.inputs:
-            if i:
+            if i==1:
                 gate_tile_pattern.append(15)
             else:
                 gate_tile_pattern.append(21)
@@ -275,13 +277,13 @@ class Gate(Node):
         for a in range(len(self.inputs_hitboxes)):
             i = self.inputs_hitboxes[a]
             if i.touched:
-                touched = (1,a)
+                touched = (1,a,self.inputs_sizes[a])
 
 
         for a in range(len(self.outputs_hitboxes)):
             i = self.outputs_hitboxes[a]
             if i.touched:
-                touched = (2,a)
+                touched = (2,a,self.outputs_sizes[a])
 
         return touched
 

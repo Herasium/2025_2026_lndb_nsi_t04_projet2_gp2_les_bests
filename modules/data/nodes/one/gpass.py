@@ -15,8 +15,10 @@ class Pass(Gate):
         self.type = "Gate"
         self.gate_type = "PASS"
 
-        self.inputs = [False,False]
-        self.outputs = [False,False]
+        self.inputs = [0,0]
+        self.outputs = [0,0]
+        self.inputs_sizes = [1,1]
+        self.outputs_sizes = [1,1]
 
         self.calculate_display()
         self.gen_tile_pattern()

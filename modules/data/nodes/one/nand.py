@@ -15,8 +15,10 @@ class Nand(Gate):
         self.type = "Gate"
         self.gate_type = "NAND"
 
-        self.inputs = [False,False]
-        self.outputs = [True]
+        self.inputs = [0,0]
+        self.outputs = [1]
+        self.inputs_sizes = [1,1]
+        self.outputs_sizes = [1]
 
         self.calculate_display()
         self.gen_tile_pattern()

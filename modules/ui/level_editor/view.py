@@ -15,15 +15,6 @@ from modules.ui.level_editor.save import SaveFrame
 
 from modules.data.nodes.path import Path
 
-from modules.data.nodes.nand import Nand
-from modules.data.nodes.gand import And
-from modules.data.nodes.gor import Or
-from modules.data.nodes.gnot import Not
-from modules.data.nodes.xor import Xor
-from modules.data.nodes.nor import Nor
-
-from modules.data.nodes.input import Input
-from modules.data.nodes.output import Output
 from modules.data.chip import Chip
 from modules.data.level import Level
 

@@ -31,14 +31,18 @@ class CustomGate(Gate):
     def update_io(self):
         self.inputs = []
         self.outputs = []
+        self.inputs_sizes = []
+        self.outputs_sizes = []
 
         chip_inputs = self.chip.get_inputs()
         for i in chip_inputs:
             self.inputs.append(self.chip.gates[i].outputs[0])
+            self.inputs_sizes.append(self.chip.gates[i].outputs_sizes[0])
 
         chip_outputs = self.chip.get_outputs()
         for i in chip_outputs:
             self.outputs.append(self.chip.gates[i].inputs[0])
+            self.outputs_sizes.append(self.chip.gates[i].inputs_sizes[0])
 
     def draw_tiles(self):
     

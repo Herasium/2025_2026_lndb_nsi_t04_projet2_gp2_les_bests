@@ -24,7 +24,7 @@ def gate_and(inputs): # And Gate
     #  0   1   0
     #  1   1   1
 
-    return [inputs[0] and inputs[1]]
+    return [(inputs[0] and inputs[1])*1]
 
 def gate_or(inputs):# Or Gate
     # Takes 2 Inputs, 1 Output
@@ -36,7 +36,7 @@ def gate_or(inputs):# Or Gate
     #  1   0   1
     #  0   1   1
     #  1   1   1
-    return [inputs[0] or inputs[1]]
+    return [(inputs[0] or inputs[1])*1]
 
 def gate_not(inputs):# Not Gate
     # Takes 1 Input, 1 Output
@@ -47,7 +47,7 @@ def gate_not(inputs):# Not Gate
     #  0   1   
     #  1   0   
 
-    return [not inputs[0]]
+    return [(not inputs[0])*1]
 
 def gate_xor(inputs):# Xor Gate
     # Takes 2 Inputs, 1 Output
@@ -60,7 +60,7 @@ def gate_xor(inputs):# Xor Gate
     #  0   1   1
     #  1   1   0
 
-    return [inputs[0] ^ inputs[1]]
+    return [((inputs[0]) ^ (inputs[1]))*1]
 
 def gate_nand(inputs):# Nand Gate
     # Takes 2 Inputs, 1 Output
@@ -74,7 +74,7 @@ def gate_nand(inputs):# Nand Gate
     #  0   1   1
     #  1   1   0
 
-    return [not (inputs[0] and inputs[1])]
+    return [(not (inputs[0] and inputs[1]))*1]
 
 def gate_nor(inputs):# Nor Gate
     # Takes 2 Inputs, 1 Output
@@ -87,19 +87,28 @@ def gate_nor(inputs):# Nor Gate
     #  0   1   0
     #  1   1   0
 
-    return [not (inputs[0] or inputs[1])]
+    return [(not (inputs[0] or inputs[1]))*1]
 
 def gate_clk(inputs):# Clock
     # Takes 0 Input, 1 Output
     # Special gate that switch is output each second, from on to off.
 
-    return [round(time.time()) % 2 == 0]
+    return [round(time.time()) % 2]
 
 def gate_pass(inputs): # Pass
     # Takes x inputs, x outputs.
     # No logic here, just outputs it's inputs.
 
     return inputs
+
+def gate_8nor(inputs):
+    return [inputs[0]^((1<<8)-1)]
+
+def gate_8maker(inputs):
+    return [int("".join(map(str, inputs)), 2)]
+
+def gate_8breaker(inputs):
+    return [int(bit) for bit in format(inputs[0], '08b')]
 
 LOGIC_MAP = { # List of all logic gates functions, linked with the id of the logic gate using it. Used for easy access.
     "AND": gate_and,
@@ -109,7 +118,10 @@ LOGIC_MAP = { # List of all logic gates functions, linked with the id of the log
     "NAND": gate_nand,
     "NOR": gate_nor,
     "CLK": gate_clk,
-    "PASS": gate_pass
+    "PASS": gate_pass,
+    "8NOT": gate_8nor,
+    "8BREAK": gate_8breaker,
+    "8MAKER": gate_8maker,
 }
 
 def calculate_output(gate_type:str, inputs:list) -> list: 
@@ -267,7 +279,7 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
                         break
 
             if is_ready:
-                if gate.type == "Gate":
+                if gate.type == "Gate" or gate.type == "Complex":
                     gate.outputs = calculate_output(gate.gate_type, gate.inputs)
                 elif gate.type == "Custom":
                     calculate_custom(gate)
@@ -283,10 +295,10 @@ def run_propagation_loop(chip, connections, gates, inputs, outputs):
             random_id = random.choice(list(unprocessed))
             gate = chip.gates[random_id]
             
-            if gate.type == "Gate":
+            if gate.type == "Gate" or gate.type == "Complex":
                 gate.outputs = calculate_output(gate.gate_type, gate.inputs)
             elif gate.type == "Custom":
-                    calculate_custom(gate)
+                calculate_custom(gate)
             
             propagate_outputs(chip, connections, random_id)
             

@@ -34,7 +34,8 @@ class Path(Node):
         self.input_off_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_OFF)
         self.input_on_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_ON)
 
-        self.current_value = False
+        self.current_value = 0
+        self.current_size = 0
         self.draw_hitboxes = False
 
         self.do_points = True
@@ -243,7 +244,7 @@ class Path(Node):
     @profile
     def draw(self):
 
-        self.color = self.input_on_color if self.current_value else self.input_off_color
+        self.color = self.input_on_color if self.current_value == 1 else self.input_off_color
 
         for bid, pts in self.branch_points.items():
             if len(pts) > 1:

@@ -16,7 +16,9 @@ class Input(Gate):
         self.gate_type = "Input"
 
         self.inputs = []
-        self.outputs = [True]
+        self.outputs = [1]
+        self.inputs_sizes = []
+        self.outputs_sizes = [1]
 
         self.exceptional_size_offset = 2
 
@@ -25,7 +27,7 @@ class Input(Gate):
         
         
     def switch(self):
-        self.outputs[0] = not self.outputs[0]
+        self.outputs[0] = (not self.outputs[0]==1)*1
         self.gen_tile_pattern()
 
     def gen_tile_pattern(self):

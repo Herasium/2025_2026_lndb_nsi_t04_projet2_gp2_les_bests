@@ -6,17 +6,19 @@ from modules.data.gate import Gate
 
 from line_profiler import profile
 
-class Nor(Gate):
+class Not(Gate):
 
     def __init__(self, id):
         super().__init__(id)
 
-        self.name = "NOR"
+        self.name = "NOT"
         self.type = "Gate"
-        self.gate_type = "NOR"
+        self.gate_type = "NOT"
 
-        self.inputs = [False,False]
-        self.outputs = [True]
+        self.inputs = [0]
+        self.outputs = [1]
+        self.inputs_sizes = [1]
+        self.outputs_sizes = [1]
 
         self.calculate_display()
         self.gen_tile_pattern()

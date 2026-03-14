@@ -3,20 +3,24 @@ import math
 
 from modules.data.node import Node
 from modules.data.gate import Gate
+from modules.data.complex import Complex
 
 from line_profiler import profile
 
-class Or(Gate):
+#Eight Bit Gate
+
+class Not(Complex):
 
     def __init__(self, id):
         super().__init__(id)
 
-        self.name = "OR"
-        self.type = "Gate"
-        self.gate_type = "OR"
+        self.name = "NOT"
+        self.gate_type = "8NOT"
 
-        self.inputs = [False,False]
-        self.outputs = [False]
+        self.inputs = [0]
+        self.outputs = [15]
+        self.inputs_sizes = [8]
+        self.outputs_sizes = [8]
 
         self.calculate_display()
         self.gen_tile_pattern()

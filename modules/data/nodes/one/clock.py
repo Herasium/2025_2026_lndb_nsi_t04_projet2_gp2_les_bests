@@ -18,7 +18,9 @@ class Clock(Gate):
         self.exceptional_size_offset = 2
 
         self.inputs = []
-        self.outputs = [False]
+        self.outputs = [0]
+        self.inputs_sizes = []
+        self.outputs_sizes = [1]
 
         self.calculate_display()
         self.gen_tile_pattern()
