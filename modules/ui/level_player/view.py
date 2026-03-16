@@ -23,21 +23,18 @@ logger: Logger = Logger("LevelPlayer")
 
 
 class LevelPlayer(arcade.View):
-    """
-    Main view class for playing a game level.
-    Handles UI rendering, user input for level editing, and simulation of logic gates.
+    """Manages the interactive game level view, including UI rendering,
+    user-driven editing, and logic gate simulation.
     """
 
     def __init__(self, id: Optional[str] = None) -> None:
-        """
-        Initialize the LevelPlayer view.
+        """Initializes the LevelPlayer view and loads level configuration.
 
-        Parameters:
-        - id: The unique identifier for the level to load.
+        Args:
+            id: Unique identifier for the level.
         """
         super().__init__()
 
-        # UI elements
         self.follower: Entity = Entity()
         self.follower.height = data.UI_EDITOR_GRID_SIZE
         self.follower.width = data.UI_EDITOR_GRID_SIZE
@@ -52,8 +49,7 @@ class LevelPlayer(arcade.View):
         self.moving_gate: Optional[Any] = None
         self.current_path: Optional[Path] = None
 
-        # Validate and load level
-        if id == None:
+        if id is None:
             logger.error("No level id provided, going back.")
             data.window.back()
             arcade.quit()
@@ -75,7 +71,6 @@ class LevelPlayer(arcade.View):
 
         self.background_color = arcade.types.Color.from_hex_string("121212")
 
-        # Engine and state tracking
         self.camera_hold: bool = False
         self.fps: float = 0
         self.delta_time: float = 1
@@ -95,7 +90,7 @@ class LevelPlayer(arcade.View):
         self.prepare_won_frame()
 
     def prepare_won_frame(self) -> None:
-        """Prepare UI elements for the victory screen."""
+        """Initializes UI elements for the victory screen."""
         self.win_frame_ease = BackEaseOut(-500, 220, 90)
         self.win_frame = Entity(
             x=384, y=-500, width=576 * 2, height=320 * 2, sprite=data.level_player_win
@@ -125,7 +120,6 @@ class LevelPlayer(arcade.View):
         self.win_stars: List[Entity] = []
         self.win_stars_ease: List[ElasticEaseOut] = []
 
-        # Create star sprites based on level performance
         for i in range(3):
             sprite = data.star
             if i > self.level.get_stars_count() - 1:
@@ -145,7 +139,7 @@ class LevelPlayer(arcade.View):
             )
 
     def prepare_right_frame(self) -> None:
-        """Prepare the right-hand UI frame including truth table and level info."""
+        """Constructs the right-hand sidebar UI, including the truth table rendering."""
         self.check_button = Entity(
             x=1402, y=57, width=216, height=128, sprite=data.button_check
         )
@@ -172,7 +166,7 @@ class LevelPlayer(arcade.View):
         texts: List[str] = self.level.description.split(" ")
         c: int = 0
 
-        # Word wrap logic
+        # Perform basic greedy word wrap
         for _ in range(len(texts)):
             if c > len(texts) - 2:
                 break
@@ -222,7 +216,6 @@ class LevelPlayer(arcade.View):
         offset_x = 0
         offset_y = 0
 
-        # Create truth table visual elements
         self.line_set.append(
             [
                 (start_x - 10, start_y - offset_y + add_y - 4),
@@ -266,7 +259,6 @@ class LevelPlayer(arcade.View):
             )
         )
 
-        # Populate table data
         for current in range(table["meta"]["power"]):
             values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
             for i in range(len(values)):
@@ -338,14 +330,14 @@ class LevelPlayer(arcade.View):
             offset_y += add_y
 
     def bottom_bar_width_sum(self) -> int:
-        """Calculate total width of gates currently in the bottom bar."""
+        """Returns the aggregate width of all gate icons in the bottom toolbar."""
         result: int = 0
         for i in self.bottom_gates:
             result += i.tile_width
         return result
 
     def bottom_gate_bar(self) -> None:
-        """Populate the bottom UI bar with available gates."""
+        """Populates the bottom UI toolbar with available gates based on level constraints."""
         self.bottom_gates = []
         for i in self.level.max_usage:
             if i != "Input" and i != "Output":
@@ -372,7 +364,7 @@ class LevelPlayer(arcade.View):
                     self.bottom_gates[-1].x = position
 
     def get_hovered_bottom_gate(self) -> Optional[str]:
-        """Check if mouse is hovering over a gate in the bottom bar."""
+        """Identifies which gate icon in the toolbar is currently being hovered."""
         for i in self.bottom_gates:
             if i.entity.touched:
                 if i.type == "Custom":
@@ -381,26 +373,26 @@ class LevelPlayer(arcade.View):
         return None
 
     def draw_bottom_gates(self) -> None:
-        """Draw all gates in the bottom bar."""
+        """Renders the gate icons in the bottom toolbar."""
         for i in self.bottom_gates:
             i.draw()
 
     def reset(self) -> None:
-        """Placeholder for level reset logic."""
+        """Resets the current level state."""
         pass
 
     def draw_frame_border(self) -> None:
-        """Draw the window UI borders."""
+        """Renders the outer UI window boundary."""
         rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
         arcade.draw_sprite_rect(data.level_player_border, rect)
 
     def draw_frame_background(self) -> None:
-        """Draw the background grid texture."""
+        """Renders the level grid background texture."""
         rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
-        """Draw debugging information on screen."""
+        """Renders engine performance metrics and object counts."""
         debug_list = [
             f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time * 100000) / 100} ms / {self.frame_count}",
@@ -418,7 +410,7 @@ class LevelPlayer(arcade.View):
             )
 
     def draw_level_time(self) -> None:
-        """Draw current level timer and star progress."""
+        """Renders current elapsed time versus limits and progress markers."""
         debug_list = [
             f"Time Limit: {round(time.time() - self.level.start_time)}s / {self.level.time}s",
             f"Stars: {self.level.get_stars_count()}",
@@ -438,7 +430,7 @@ class LevelPlayer(arcade.View):
         )
 
     def draw_won(self) -> None:
-        """Draw the victory screen overlay."""
+        """Renders the victory modal and animated star icons."""
         if not self.win_frame_ease.done:
             value = self.win_frame_ease.tick()
             self.win_frame.y = value
@@ -455,7 +447,7 @@ class LevelPlayer(arcade.View):
             self.win_button_next.draw()
 
     def draw_right(self) -> None:
-        """Draw the right-side interface."""
+        """Renders the sidebar components and calculated truth table."""
         self.check_button.draw()
         self.truth_table.draw()
         self.button_next_off.draw()
@@ -483,11 +475,10 @@ class LevelPlayer(arcade.View):
 
     @profile
     def on_draw(self) -> None:
-        """Main rendering loop."""
+        """Main rendering loop: updates component visual states and draws layers."""
         self.clear()
         self.draw_frame_background()
 
-        # Draw circuit components
         for p in self.level.chip.paths.values():
             p.draw()
         for g in self.level.chip.gates.values():
@@ -512,28 +503,28 @@ class LevelPlayer(arcade.View):
         self.last_time = time.time()
 
     def on_update(self, delta_time: float) -> None:
-        """Update logic per frame."""
+        """Per-frame update loop for simulation and state tracking."""
         self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handle keyboard input for interactions."""
-        if key == 101 and not self.level.won:  # 'e' to toggle input gates
+        """Handles keyboard shortcuts for interaction, deletion, and navigation."""
+        if key == 101 and not self.level.won:
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
-        if key == 97:  # 'a' to go back
+        if key == 97:
             data.window.back()
-        if key == 65307:  # ESC to cancel current action
+        if key == 65307:
             if self.current_path:
                 self.current_path.abort()
             self.current_path = None
             self.selected_follower = None
-        if key == 65288 and not self.level.won:  # Backspace to delete
+        if key == 65288 and not self.level.won:
             self.delete()
 
     def delete_gate(self, id: str) -> None:
-        """Remove a gate and handle path cleanup."""
+        """Removes specified gate and reconciles affected circuit paths."""
         to_delete: List[str] = []
         if self.level.chip.gates[id].type == "Gate":
             for index in self.level.chip.paths.keys():
@@ -558,7 +549,7 @@ class LevelPlayer(arcade.View):
             self.level.chip.changed = True
 
     def delete(self) -> None:
-        """Determine what object is being deleted."""
+        """Determines which gate or path component is targeted for deletion."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
@@ -574,16 +565,17 @@ class LevelPlayer(arcade.View):
         self.level.chip.changed = True
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
+        """Handles key-up events."""
         pass
 
     @property
     def camera(self) -> Tuple[int, int]:
-        """Return camera position."""
+        """Provides the current quantized camera position."""
         return self.camera_position
 
     @camera.setter
     def camera(self, value: Tuple[int, int]) -> None:
-        """Set camera position and update object offsets."""
+        """Updates camera position and recalibrates object offsets."""
         self._real_camera_position = value
         self.camera_position = (
             (self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE)
@@ -599,7 +591,7 @@ class LevelPlayer(arcade.View):
             self.current_path.camera = self.camera_position
 
     def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
-        """Handle mouse movement for dragging and UI updates."""
+        """Handles mouse movement for dragging objects and updating circuit layout."""
         mouse.position = (x, y)
         if self.level.won:
             return
@@ -617,7 +609,7 @@ class LevelPlayer(arcade.View):
         if self.moving_gate:
             self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
             self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
-            # Update connected wire paths
+            # Recalculate wire geometry based on gate movement
             for path in self.level.chip.paths.values():
                 connected_inputs, connected_outputs = path.get_connected_points(
                     self.moving_gate.id
@@ -650,7 +642,7 @@ class LevelPlayer(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self) -> None:
-        """Propagate logic values through the chip."""
+        """Propagates logic states through the current circuit chip."""
         self.engine.propagate_values(self.level.chip)
         if self.level.chip.changed:
             self.level.chip.changed = False
@@ -658,11 +650,11 @@ class LevelPlayer(arcade.View):
             self.bottom_gate_bar()
 
     def won(self) -> None:
-        """Trigger victory sequence."""
+        """Activates victory-related UI and logic states."""
         self.prepare_won_frame()
 
     def launch_next_level(self) -> None:
-        """Transition to the next level."""
+        """Transitions application to the subsequent level in the sequence."""
         levels: List[str] = list(data.loaded_levels.keys())
 
         def sort_keys(i: str) -> int:
@@ -674,12 +666,12 @@ class LevelPlayer(arcade.View):
             data.window.display(LevelPlayer(levels[current + 1]))
 
     def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Handle mouse clicks for interacting with components and paths."""
+        """Handles click events for UI navigation, wiring paths, and gate placement."""
         if self.level.won:
             if self.win_button_next.touched:
                 self.launch_next_level()
             return
-        if button == 2:  # Right-click for camera drag
+        if button == 2:
             self.camera_hold = True
             return
         if self.camera_hold:
@@ -690,17 +682,16 @@ class LevelPlayer(arcade.View):
             if self.level.check_victory():
                 self.won()
             return
-        # Interaction with gates
+        # Wiring logic
         for g in self.level.chip.gates.values():
             touched = g.touched
             if touched:
                 if self.current_path is None:
-                    # Start new wiring path
                     pid = random_id()
                     self.current_path = Path(pid)
                     self.current_path.camera = self.camera
                     self.current_path.add_path()
-                    if touched[0] == 1:  # Input touched
+                    if touched[0] == 1:
                         self.current_path.outputs.append(
                             [
                                 1,
@@ -710,7 +701,7 @@ class LevelPlayer(arcade.View):
                                 self.current_path.current_branch_count,
                             ]
                         )
-                    else:  # Output touched
+                    else:
                         self.current_path.inputs.append(
                             [
                                 2,
@@ -723,8 +714,7 @@ class LevelPlayer(arcade.View):
                     self.level.chip.changed = True
                     return
                 else:
-                    # Finish existing wiring path
-                    if touched[0] == 1:  # Input touched
+                    if touched[0] == 1:
                         self.current_path.outputs.append(
                             [
                                 1,
@@ -734,7 +724,7 @@ class LevelPlayer(arcade.View):
                                 self.current_path.current_branch_count,
                             ]
                         )
-                    else:  # Output touched
+                    else:
                         self.current_path.inputs.append(
                             [
                                 2,
@@ -751,7 +741,6 @@ class LevelPlayer(arcade.View):
                     self.current_path = None
                     self.level.chip.changed = True
                     return
-        # Clicking on existing path
         if not self.current_path:
             for p in self.level.chip.paths.values():
                 if p.touched:
@@ -772,7 +761,6 @@ class LevelPlayer(arcade.View):
             self.current_path.add_path()
             self.level.chip.changed = True
             return
-        # Move existing gate
         if self.moving_gate is None:
             for g in self.level.chip.gates.values():
                 if g.entity.touched:
@@ -782,7 +770,6 @@ class LevelPlayer(arcade.View):
                     )
                     self.moving_gate = g
                     return
-        # Place new gate from bottom bar
         if self.selected_follower is None:
             hovered = self.get_hovered_bottom_gate()
             if hovered in gate_types:
@@ -815,13 +802,15 @@ class LevelPlayer(arcade.View):
                 )
 
     def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Handle mouse button release."""
+        """Handles mouse button release interactions."""
         if button == 2:
             self.camera_hold = False
             for g in self.level.chip.gates:
                 self.level.chip.gates[g].camera = self.camera_position
+
         else:
             if self.selected_follower is not None:
+
                 if self.bottom_zone_collider.touched:
                     self.selected_follower = None
                 else:
@@ -841,5 +830,6 @@ class LevelPlayer(arcade.View):
                     )
                     self.selected_follower = None
                     self.level.chip.changed = True
+
         self.moving_gate = None
         self.moving_gate_offset = (0, 0)

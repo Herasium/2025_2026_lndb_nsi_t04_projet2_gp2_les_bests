@@ -1,3 +1,5 @@
+"""Provides path node management and geometric path rendering for the UI editor."""
+
 import arcade
 import math
 from typing import Any, Dict, List, Optional, Tuple
@@ -11,16 +13,13 @@ from line_profiler import profile
 
 
 class Path(Node):
-    """
-    Represents a path node in the UI editor, consisting of branched line segments.
-    """
+    """Manages branched line segments and their associated collision hitboxes."""
 
     def __init__(self, id: Any) -> None:
-        """
-        Initialize the Path object.
+        """Initializes a Path instance.
 
-        Parameters:
-        - id: Unique identifier for the node.
+        Args:
+            id: Unique identifier for the node.
         """
         super().__init__(id)
 
@@ -57,15 +56,14 @@ class Path(Node):
         self._camera: Tuple[float, float] = (0.0, 0.0)
 
     def project_point_onto_segments(self, x: float, y: float) -> Dict[str, Any]:
-        """
-        Finds the closest point on any segment to the given (x, y) coordinates.
+        """Calculates the nearest point on any segment to given coordinates.
 
-        Parameters:
-        - x: Target x-coordinate
-        - y: Target y-coordinate
+        Args:
+            x: Target coordinate.
+            y: Target coordinate.
 
         Returns:
-        - dict: Containing 'point', 'branch', 'index', and 'dist' of the closest segment.
+            Dictionary containing the closest point, branch ID, index, and distance.
         """
         closest: Dict[str, Any] = {
             "point": None,
@@ -78,7 +76,6 @@ class Path(Node):
             if len(pts) < 2:
                 continue
 
-            # Iterate through line segments within the branch
             for i in range(len(pts) - 1):
                 x1, y1 = pts[i]
                 x2, y2 = pts[i + 1]
@@ -90,7 +87,7 @@ class Path(Node):
                 if seg_len_sq == 0:
                     continue
 
-                # Project point onto segment and clamp to segment bounds
+                # Scalar projection onto segment, clamped between 0 and 1
                 t = ((x - x1) * dx + (y - y1) * dy) / seg_len_sq
                 t = max(0.0, min(1.0, t))
 
@@ -99,7 +96,6 @@ class Path(Node):
 
                 dist_sq = (px - x) ** 2 + (py - y) ** 2
 
-                # Update if a closer point is found
                 if dist_sq < closest["dist"]:
                     closest = {
                         "point": (px, py),
@@ -111,14 +107,11 @@ class Path(Node):
         return closest
 
     def recalculate_hitbox(self) -> None:
-        """
-        Regenerates hitboxes for all path segments based on current camera position.
-        """
+        """Regenerates collision geometry for all branches based on current camera offset."""
         for current in range(len(self.branch_hitboxes.keys())):
             if len(self.branch_points[current]) > 1:
                 self.branch_hitboxes[current] = []
                 for point in range(len(self.branch_points[current]) - 1):
-                    # Adjust points by camera offset
                     current_point = self.branch_points[current][point]
                     current_point = (
                         current_point[0] + self._camera[0],
@@ -130,7 +123,6 @@ class Path(Node):
                         next_point[1] + self._camera[1],
                     )
 
-                    # Generate polygon representing the thick line
                     left, right = self.generate_thick_line_polygon(
                         [current_point, next_point], thickness=self.thickness
                     )
@@ -139,17 +131,15 @@ class Path(Node):
                     self.branch_hitboxes[current].append(PolyHitbox(polygon))
 
     def clean_out_single_branch(self, depth: int = 0) -> None:
-        """
-        Removes branches that have insufficient connections.
+        """Recursively removes branches with insufficient connections.
 
-        Parameters:
-        - depth: Recursive depth tracker to prevent infinite loops.
+        Args:
+            depth: Current recursion depth used to terminate cycles.
         """
         if depth > 100:
             print("Max depth on branch clean out.")
             return
 
-        # Count how many connections exist for each branch
         branch_counts = [0 for _ in range(len(self.branch_points.keys()))]
         for i in self.inputs + self.outputs:
             branch_counts[i[4]] += 1
@@ -164,7 +154,6 @@ class Path(Node):
         for i in to_delete:
             self.remove_branch(i)
 
-        # Recursively clean if branches were deleted
         if len(to_delete) > 1 or (
             len(to_delete) > 0 and to_delete[0] != len(self.branch_points) - 1
         ):
@@ -181,18 +170,17 @@ class Path(Node):
 
     @property
     def empty(self) -> bool:
-        """Checks if the path is essentially empty."""
+        """Determines if the path has no meaningful geometry."""
         value = len(self.branch_points.keys())
         if 0 in self.branch_points:
             value += len(self.branch_points[0])
         return value <= 1
 
     def remove_branch(self, branch: int) -> None:
-        """
-        Removes a branch and updates input/output indices.
+        """Deletes a branch and recalibrates remaining indices.
 
-        Parameters:
-        - branch: The branch index to remove.
+        Args:
+            branch: Target index of the branch to remove.
         """
         for index in range(branch, len(self.branch_points) - 1):
             self.branch_points[index] = self.branch_points[index + 1]
@@ -203,7 +191,6 @@ class Path(Node):
 
         self.current_branch_count = len(self.branch_hitboxes.keys())
 
-        # Ensure at least one empty branch remains
         if len(self.branch_points) > 0:
             if len(self.branch_points[len(self.branch_points) - 1]) != 0:
                 self.branch_points[len(self.branch_points)] = []
@@ -212,23 +199,20 @@ class Path(Node):
             self.branch_points[len(self.branch_points)] = []
             self.branch_hitboxes[len(self.branch_hitboxes)] = []
 
-        # Update input indices
         for entry in self.inputs:
             if entry[4] > branch:
                 entry[4] -= 1
         self.inputs = [i for i in self.inputs if i[4] != branch]
 
-        # Update output indices
         for entry in self.outputs:
             if entry[4] > branch:
                 entry[4] -= 1
         self.outputs = [i for i in self.outputs if i[4] != branch]
 
     def add_path(self) -> None:
-        """Adds a new segment to the current path branch."""
+        """Appends a point or segment to the current active branch."""
         pt = None
 
-        # Try snapping to existing segments
         if self.current_point is None and self.current_branch_count > 0:
             snapped = self.project_point_onto_segments(
                 mouse.cursor[0] - self._camera[0], mouse.cursor[1] - self._camera[1]
@@ -250,7 +234,7 @@ class Path(Node):
         )
 
     def finish(self) -> None:
-        """Finalizes the current path branch."""
+        """Commits the current path segment and prepares for a new branch."""
         self.add_path()
         self.current_branch_count += 1
         self.current_point = None
@@ -260,7 +244,7 @@ class Path(Node):
         self.recalculate_hitbox()
 
     def abort(self) -> None:
-        """Resets the current drawing operation."""
+        """Resets the current pending path state."""
         self.current_point = None
         self.points = []
         self.branch_points[self.current_branch_count] = []
@@ -269,7 +253,7 @@ class Path(Node):
 
     @profile
     def draw(self) -> None:
-        """Renders the paths and hitboxes."""
+        """Renders path lines, active points, and hitboxes."""
         self.color = (
             self.input_on_color if self.current_value == 1 else self.input_off_color
         )
@@ -292,7 +276,6 @@ class Path(Node):
                     point_list=new_pts, color=self.color, line_width=self.thickness
                 )
 
-        # Draw the line being currently dragged
         if self.current_point:
             arcade.draw_line(
                 self.current_point[0] + self._camera[0],
@@ -309,11 +292,10 @@ class Path(Node):
                     a.draw()
 
     def merge(self, path: "Path") -> None:
-        """
-        Merges another path into this one.
+        """Integrates external path data into the local instance.
 
-        Parameters:
-        - path: The Path object to merge.
+        Args:
+            path: Target Path object to merge.
         """
         branch_offset = self.current_branch_count
         last_point = path.branch_points[path.current_branch_count][-1]
@@ -339,14 +321,13 @@ class Path(Node):
     def get_connected_points(
         self, target_id: Any
     ) -> Tuple[List[List[Any]], List[List[Any]]]:
-        """
-        Returns inputs and outputs connected to a specific target.
+        """Retrieves connections mapped to a specific node ID.
 
-        Parameters:
-        - target_id: The ID to look for.
+        Args:
+            target_id: Identifier of the target node.
 
         Returns:
-        - Tuple of (inputs, outputs) lists.
+            Tuple containing lists of connected inputs and outputs.
         """
         connected_inputs = [inp for inp in self.inputs if inp[1] == target_id]
         connected_outputs = [outp for outp in self.outputs if outp[1] == target_id]
@@ -354,14 +335,14 @@ class Path(Node):
 
     @property
     def touched(self) -> bool:
-        """Returns True if any hitbox is currently touched."""
+        """Indicates if any segment hitboxes are active."""
         return any(
             hb.touched for group in self.branch_hitboxes.values() for hb in group
         )
 
     @property
     def get_touched_branch(self) -> Optional[int]:
-        """Returns the index of the branch currently being touched, if any."""
+        """Identifies the index of the branch currently intersecting the cursor."""
         for index in self.branch_hitboxes:
             group = self.branch_hitboxes[index]
             if any(hb.touched for hb in group):
@@ -371,15 +352,14 @@ class Path(Node):
     def generate_thick_line_polygon(
         self, points: List[Tuple[float, float]], thickness: float
     ) -> Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]:
-        """
-        Calculates the polygon vertices for a thick line.
+        """Constructs a polygon representing a thick line segment.
 
-        Parameters:
-        - points: List of coordinates.
-        - thickness: Line thickness.
+        Args:
+            points: Coordinates forming the spine of the segment.
+            thickness: Total width of the polygon.
 
         Returns:
-        - Tuple of (left_points, right_points) lists.
+            Tuple of left and right polygon edge vertex lists.
         """
         if len(points) < 2:
             return [], []
@@ -394,7 +374,6 @@ class Path(Node):
 
         for i in range(len(points)):
             p = points[i]
-            # Calculate normal vector at each point
             if i == 0:
                 dx, dy = points[i + 1][0] - p[0], points[i + 1][1] - p[1]
             elif i == len(points) - 1:
@@ -404,7 +383,7 @@ class Path(Node):
                 dy = (points[i + 1][1] - p[1]) + (p[1] - points[i - 1][1])
 
             nx, ny = normalize(dx, dy)
-            px, py = -ny, nx  # Perpendicular vector
+            px, py = -ny, nx
 
             left_points.append((p[0] + px * half, p[1] + py * half))
             right_points.append((p[0] - px * half, p[1] - py * half))
@@ -415,14 +394,14 @@ class Path(Node):
         return f"Path {self.id}"
 
     def save_hitboxes(self) -> Dict[int, List[Dict[str, Any]]]:
-        """Serializes hitboxes."""
+        """Serializes hitbox state to a dictionary structure."""
         result = {}
         for bid in self.branch_hitboxes:
             result[bid] = [i.save() for i in self.branch_hitboxes[bid]]
         return result
 
     def save(self) -> Dict[str, Any]:
-        """Serializes the Path node for saving."""
+        """Serializes the complete Path state for persistence."""
         return {
             "type": "path",
             "inputs": self.inputs,
@@ -436,7 +415,11 @@ class Path(Node):
     def load_hitboxes(
         self, hitboxes: Dict[str, List[Dict[str, Any]]]
     ) -> Dict[int, List[PolyHitbox]]:
-        """Deserializes hitboxes."""
+        """Reconstructs hitbox objects from saved data.
+
+        Args:
+            hitboxes: Dictionary of saved hitbox structures.
+        """
         result = {}
         for index in hitboxes:
             count = len(result.keys())
@@ -444,11 +427,10 @@ class Path(Node):
         return result
 
     def load(self, data: Dict[str, Any]) -> None:
-        """
-        Loads path data from a dictionary.
+        """Restores path configuration from a saved state.
 
-        Parameters:
-        - data: Dictionary containing saved path state.
+        Args:
+            data: Dictionary containing serialized path properties.
         """
         self.inputs = data["inputs"]
         self.outputs = data["outputs"]

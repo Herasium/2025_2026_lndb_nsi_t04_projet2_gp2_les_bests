@@ -1,154 +1,147 @@
-# Imports
-# -------------------------------------------------
-import random  # For stochastic behavior in propagation conflict resolution
-import time  # For clock-based gate
-from modules.logger import Logger  # Debugging/logging class
-from modules.data.custom import CustomGate  # Custom gate class
-from modules.data.chip import Chip  # Chip representation
+import random
+import time
+from modules.logger import Logger
+from modules.data.custom import CustomGate
+from modules.data.chip import Chip
 
-# -------------------------------------------------
+"""Provides simulation logic for circuit chips, including gate operations, 
+signal propagation, and circuit traversal."""
 
-# Logger instance for engine debug outputs
 logger: Logger = Logger("Engine")
-
-# -------------------------------------------------
-# Vanilla logic gates (default gates)
-# -------------------------------------------------
 
 
 def gate_and(inputs: list[int]) -> list[int]:
-    """AND gate: returns 1 if both inputs are 1, else 0.
+    """Calculates AND operation.
 
-    Parameters:
-    - inputs: list of input bits
+    Args:
+        inputs: List containing two input bits.
 
     Returns:
-    - list[int]: result of the AND operation
+        Result of the AND operation.
     """
-    return [(inputs[0] and inputs[1]) * 1]  # Logical AND and conversion to int
+    return [(inputs[0] and inputs[1]) * 1]
 
 
 def gate_or(inputs: list[int]) -> list[int]:
-    """OR gate: returns 1 if at least one input is 1, else 0.
+    """Calculates OR operation.
 
-    Parameters:
-    - inputs: list of input bits
+    Args:
+        inputs: List containing two input bits.
 
     Returns:
-    - list[int]: result of the OR operation
+        Result of the OR operation.
     """
-    return [(inputs[0] or inputs[1]) * 1]  # Logical OR and conversion to int
+    return [(inputs[0] or inputs[1]) * 1]
 
 
 def gate_not(inputs: list[int]) -> list[int]:
-    """NOT gate: inverts a single input.
+    """Calculates NOT operation.
 
-    Parameters:
-    - inputs: list containing the input bit
+    Args:
+        inputs: List containing a single input bit.
 
     Returns:
-    - list[int]: inverted bit
+        Inverted bit.
     """
-    return [(not inputs[0]) * 1]  # Logical NOT and conversion to int
+    return [(not inputs[0]) * 1]
 
 
 def gate_xor(inputs: list[int]) -> list[int]:
-    """XOR gate: returns 1 if only one input is 1, else 0.
+    """Calculates XOR operation.
 
-    Parameters:
-    - inputs: list of input bits
+    Args:
+        inputs: List containing two input bits.
 
     Returns:
-    - list[int]: result of the XOR operation
+        Result of the XOR operation.
     """
-    return [(inputs[0] ^ inputs[1]) * 1]  # Bitwise XOR and conversion to int
+    return [(inputs[0] ^ inputs[1]) * 1]
 
 
 def gate_nand(inputs: list[int]) -> list[int]:
-    """NAND gate: inverse of AND; returns 0 only if both inputs are 1.
+    """Calculates NAND operation.
 
-    Parameters:
-    - inputs: list of input bits
+    Args:
+        inputs: List containing two input bits.
 
     Returns:
-    - list[int]: result of the NAND operation
+        Result of the NAND operation.
     """
-    return [(not (inputs[0] and inputs[1])) * 1]  # Logical NAND
+    return [(not (inputs[0] and inputs[1])) * 1]
 
 
 def gate_nor(inputs: list[int]) -> list[int]:
-    """NOR gate: inverse of OR; returns 1 only if both inputs are 0.
+    """Calculates NOR operation.
 
-    Parameters:
-    - inputs: list of input bits
+    Args:
+        inputs: List containing two input bits.
 
     Returns:
-    - list[int]: result of the NOR operation
+        Result of the NOR operation.
     """
-    return [(not (inputs[0] or inputs[1])) * 1]  # Logical NOR
+    return [(not (inputs[0] or inputs[1])) * 1]
 
 
 def gate_clk(inputs: list[int] = []) -> list[int]:
-    """Clock gate: toggles every second; ignores inputs.
+    """Provides a clock signal based on system time.
 
-    Parameters:
-    - inputs: ignored input list
+    Args:
+        inputs: Ignored input list.
 
     Returns:
-    - list[int]: alternating 0 or 1 based on current system time
+        Alternating bit based on current Unix timestamp.
     """
-    return [round(time.time()) % 2]  # Alternates based on Unix timestamp
+    return [round(time.time()) % 2]
 
 
 def gate_pass(inputs: list[int]) -> list[int]:
-    """Pass-through gate: returns inputs unchanged.
+    """Passes input values through unchanged.
 
-    Parameters:
-    - inputs: input list
+    Args:
+        inputs: Input list to pass.
 
     Returns:
-    - list[int]: identical to input
+        Input list unchanged.
     """
     return inputs
 
 
 def gate_8nor(inputs: list[int]) -> list[int]:
-    """8-bit NOR gate: XOR input with 0xFF (bitwise inversion for 8 bits).
+    """Performs 8-bit inversion via XOR.
 
-    Parameters:
-    - inputs: list containing 8-bit value
+    Args:
+        inputs: List containing an 8-bit integer value.
 
     Returns:
-    - list[int]: bitwise inverted 8-bit value
+        Bitwise inverted 8-bit value.
     """
-    return [inputs[0] ^ ((1 << 8) - 1)]  # Bitwise inversion via XOR with 255
+    return [inputs[0] ^ ((1 << 8) - 1)]
 
 
 def gate_8maker(inputs: list[int]) -> list[int]:
-    """Convert list of 0/1 bits into an 8-bit integer.
+    """Converts a sequence of bits into an 8-bit integer.
 
-    Parameters:
-    - inputs: list of bits
+    Args:
+        inputs: List of individual bits.
 
     Returns:
-    - list[int]: single element list containing the integer representation
+        Single-element list containing the integer representation.
     """
-    return [int("".join(map(str, inputs)), 2)]  # Join bits to string and parse base-2
+    return [int("".join(map(str, inputs)), 2)]
 
 
 def gate_8breaker(inputs: list[int]) -> list[int]:
-    """Convert an 8-bit integer into a list of 0/1 bits.
+    """Decomposes an 8-bit integer into a sequence of bits.
 
-    Parameters:
-    - inputs: list containing an integer
+    Args:
+        inputs: List containing the integer to decompose.
 
     Returns:
-    - list[int]: 8-bit binary representation as list of ints
+        8-bit binary representation as a list of integers.
     """
-    return [int(bit) for bit in format(inputs[0], "08b")]  # Pad integer to 8 bits
+    return [int(bit) for bit in format(inputs[0], "08b")]
 
 
-# Mapping gate names to functions for vanilla logic
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
     "OR": gate_or,
@@ -164,47 +157,41 @@ LOGIC_MAP: dict[str, callable] = {
 }
 
 
-# -------------------------------------------------
-# Engine class: simulates a circuit chip
-# -------------------------------------------------
-
-
 class Engine:
+    """Simulates circuit chip behavior and signal propagation."""
 
     def calculate_output(self, gate_type: str, inputs: list[int]) -> list[int]:
-        """Calculate the output of a vanilla gate.
+        """Calculates output for a standard logic gate.
 
-        Parameters:
-        - gate_type: The type of gate ("AND", "OR", etc.)
-        - inputs: Input values for the gate
+        Args:
+            gate_type: Identifier for the gate logic.
+            inputs: Input values for the gate.
 
         Returns:
-        - list[int]: Output values (single-element list for vanilla gates)
+            Output values as a list.
         """
         if gate_type in LOGIC_MAP:
-            return LOGIC_MAP[gate_type](inputs)  # Invoke function from map
+            return LOGIC_MAP[gate_type](inputs)
         return [False]
 
     def calculate_custom(self, gate: CustomGate) -> None:
-        """Calculate outputs for a custom gate.
-        Replicates top-level inputs into the internal chip,
-        propagates internal logic, then updates outputs.
+        """Simulates internal logic for a custom gate component.
 
-        Parameters:
-        - gate: The custom gate object to simulate
+        Args:
+            gate: Custom gate object to be simulated.
         """
-        gate.prop_io()  # replicate top-level inputs to internal chip
-        self.propagate_values(gate.chip)  # simulate internal logic
-        gate.update_io()  # replicate internal outputs to top-level outputs
+        gate.prop_io()
+        self.propagate_values(gate.chip)
+        gate.update_io()
 
     def sort_gates(self, chip: Chip) -> tuple[list[str], list[str], list[str]]:
-        """Sort gates into vanilla logic gates, inputs, and outputs.
+        """Categorizes chip components into logic, input, and output gates.
 
-        Parameters:
-        - chip: The chip representation to sort
+        Args:
+            chip: The chip structure to analyze.
 
         Returns:
-        - tuple[list[str], list[str], list[str]]: (logic_gates, input_gates, output_gates)
+            Tuple containing lists of logic gate IDs, input IDs, and output IDs.
         """
         gates: list[str] = []
         inputs: list[str] = []
@@ -221,31 +208,28 @@ class Engine:
     def draw_connections(
         self, chip: Chip, inputs: list[str], outputs: list[str], gates: list[str]
     ) -> dict[str, list]:
-        """Build a connection map for the chip.
+        """Builds a connectivity map for the chip.
 
-        Parameters:
-        - chip: The circuit structure
-        - inputs: List of input gate IDs
-        - outputs: List of output gate IDs
-        - gates: List of logic gate IDs
+        Args:
+            chip: The chip structure.
+            inputs: List of input gate IDs.
+            outputs: List of output gate IDs.
+            gates: List of logic gate IDs.
 
         Returns:
-        - dict[str, list]: Maps gate IDs to input/output path structures
+            Dictionary mapping gate IDs to connection path structures.
         """
         paths = chip.paths
         result: dict[str, list] = {}
 
-        # Initialize input gate entries
         for i in inputs:
             gate = chip.gates[i]
             result[gate.id] = [[], [[] for _ in range(len(gate.outputs))]]
 
-        # Initialize output gate entries
         for o in outputs:
             gate = chip.gates[o]
             result[gate.id] = [[[] for _ in range(len(gate.inputs))], []]
 
-        # Initialize logic gate entries
         for g in gates:
             gate = chip.gates[g]
             result[gate.id] = [
@@ -253,7 +237,6 @@ class Engine:
                 [[] for _ in range(len(gate.outputs))],
             ]
 
-        # Fill connections based on paths
         for path_id, path in paths.items():
             path_outputs = [out.copy() + [path.id] for out in path.outputs]
             for input_info in path.inputs:
@@ -265,33 +248,33 @@ class Engine:
     def reset_input_validation(
         self, chip: Chip, gates: list[str], outputs: list[str]
     ) -> None:
-        """Reset validation flags for gates and paths before simulation.
+        """Resets validation state for all gates and paths.
 
-        Parameters:
-        - chip: The chip whose gates need resetting
-        - gates: IDs of internal logic gates
-        - outputs: IDs of output gates
+        Args:
+            chip: The chip object to reset.
+            gates: Logic gate IDs.
+            outputs: Output gate IDs.
         """
         for gate_id in gates + outputs:
             gate = chip.gates[gate_id]
-            gate.val_inputs = [False] * len(gate.inputs)  # Reset input status
-            gate.val_done = False  # Mark as unprocessed
+            gate.val_inputs = [False] * len(gate.inputs)
+            gate.val_done = False
 
         for path in chip.paths.values():
-            path.val_done = False  # Reset path state
+            path.val_done = False
 
     def get_wired_inputs_map(self, connections: dict[str, list]) -> dict[str, set[int]]:
-        """Build a map of which input ports are wired for each gate.
+        """Maps gate input ports to their wired status.
 
-        Parameters:
-        - connections: Dictionary map of connections
+        Args:
+            connections: Connectivity map of the chip.
 
         Returns:
-        - dict[str, set[int]]: Mapping of {gate_id: set(port_indices)}
+            Dictionary mapping gate ID to a set of active input port indices.
         """
         wired_map: dict[str, set[int]] = {}
         for source_id, data in connections.items():
-            for port_conns in data[1]:  # Iterate over output ports
+            for port_conns in data[1]:
                 for path_group in port_conns:
                     for conn in path_group:
                         target_id, target_port = conn[1], conn[2]
@@ -301,12 +284,12 @@ class Engine:
     def propagate_outputs(
         self, chip: Chip, connections: dict[str, list], source_id: str
     ) -> None:
-        """Propagate output values from a gate to connected paths and gates.
+        """Propagates signal from a source gate to connected targets.
 
-        Parameters:
-        - chip: The chip object
-        - connections: Connectivity map
-        - source_id: ID of the gate currently being processed
+        Args:
+            chip: The chip structure.
+            connections: Connectivity map of the chip.
+            source_id: ID of the gate originating the signal.
         """
         if source_id not in connections:
             return
@@ -315,7 +298,7 @@ class Engine:
 
         for out_idx, target_paths in enumerate(connections[source_id][1]):
             if out_idx >= len(gate.outputs):
-                continue  # Skip missing output ports
+                continue
 
             signal_value = gate.outputs[out_idx]
 
@@ -325,20 +308,17 @@ class Engine:
                     target_port = conn[2]
                     path_id = conn[5]
 
-                    # Randomized conflict resolution for competing signals
+                    # Stochastic conflict resolution for signal contention
                     if target_gate.val_inputs[target_port] and random.random() < 0.5:
                         continue
 
-                    # Update target gate inputs
                     target_gate.inputs[target_port] = signal_value
                     target_gate.val_inputs[target_port] = True
 
-                    # Update path data
                     if path_id in chip.paths:
                         chip.paths[path_id].current_value = signal_value
                         chip.paths[path_id].val_done = True
 
-                    # Update UI/Readings for specific gate types
                     if target_gate.type in ["Output", "Gate"]:
                         target_gate.gen_tile_pattern()
                     if (
@@ -355,29 +335,26 @@ class Engine:
         inputs: list[str],
         outputs: list[str],
     ) -> None:
-        """Execute simulation loop until all gates have propagated their outputs.
-        Includes safeguard to prevent infinite loops.
+        """Iteratively simulates signal propagation through logic gates.
 
-        Parameters:
-        - chip: The chip being simulated
-        - connections: Connectivity data
-        - gates: List of logic gate IDs
-        - inputs: List of input gate IDs
-        - outputs: List of output gate IDs
+        Args:
+            chip: The chip being simulated.
+            connections: Connectivity map.
+            gates: Logic gate IDs.
+            inputs: Input gate IDs.
+            outputs: Output gate IDs.
         """
         unprocessed = set(gates + outputs)
         wired_inputs_map = self.get_wired_inputs_map(connections)
-        safeguard_max: int = 2000  # Max iterations to avoid hanging
+        safeguard_max: int = 2000
         iterations: int = 0
 
         while unprocessed and iterations < safeguard_max:
             iterations += 1
             processed_this_frame: list[str] = []
 
-            # Process ready gates
             for gate_id in list(unprocessed):
                 gate = chip.gates[gate_id]
-                # Check if all required inputs have been validated
                 is_ready = all(
                     gate.val_inputs[port] for port in wired_inputs_map.get(gate_id, [])
                 )
@@ -394,11 +371,10 @@ class Engine:
                     gate.val_done = True
                     processed_this_frame.append(gate_id)
 
-            # Remove processed gates from list
             for pid in processed_this_frame:
                 unprocessed.remove(pid)
 
-            # Force process one random gate if stuck (asymmetric resolution)
+            # Force resolution of stalled gates
             if not processed_this_frame and unprocessed:
                 random_id = random.choice(list(unprocessed))
                 gate = chip.gates[random_id]
@@ -416,18 +392,16 @@ class Engine:
             print("Safeguard reached. Infinite loop or too complex.")
 
     def propagate_values(self, chip: Chip) -> None:
-        """Top-level function to propagate all input values through a chip.
+        """Initializes and runs the signal propagation sequence.
 
-        Parameters:
-        - chip: The chip object to simulate
+        Args:
+            chip: The chip object to simulate.
         """
         gates, inputs, outputs = self.sort_gates(chip)
         connections = self.draw_connections(chip, inputs, outputs, gates)
         self.reset_input_validation(chip, gates, outputs)
 
-        # Trigger propagation from input pins first
         for inp_id in inputs:
             self.propagate_outputs(chip, connections, inp_id)
 
-        # Run full simulation loop
         self.run_propagation_loop(chip, connections, gates, inputs, outputs)

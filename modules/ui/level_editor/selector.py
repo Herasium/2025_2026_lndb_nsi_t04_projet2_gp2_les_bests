@@ -12,28 +12,32 @@ from modules.data.level import Level
 from modules.ui.editor.view import EditorView
 from modules.ui.level_player.selector import LevelPlayerSelector
 
+"""
+Provides the LevelEditorSelector class for managing level selection and creation
+workflows within the arcade application.
+"""
+
 
 class LevelEditorSelector(arcade.View):
     """
-    A view for selecting or creating game levels within the editor interface.
+    Manages the UI view for browsing existing levels or creating new ones.
     """
 
     def __init__(self) -> None:
         """
-        Initialize the LevelEditorSelector view, set background, and setup UI components.
+        Initializes the view with default background and container structures.
         """
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
-        self.texts: List[Text] = []  # List to hold UI Text objects
-        self.levels: List[Any] = []  # List to store references to loaded level data
+        self.texts: List[Text] = []
+        self.levels: List[Any] = []
         self.setup()
 
     def setup(self) -> None:
         """
-        Configure the display elements and populate the list of available levels.
+        Populates the UI labels and initializes interaction objects for levels.
         """
-        # Define static UI labels for the menu
         debug_list: List[str] = [
             "Level Editor Selector",
             "<- Back",
@@ -42,7 +46,6 @@ class LevelEditorSelector(arcade.View):
             "",
         ]
 
-        # Iterate through loaded data and add level details to the display list
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
             debug_list.append(f"Level {level.number} {level.name} #{level.id}")
@@ -50,7 +53,6 @@ class LevelEditorSelector(arcade.View):
 
         start_y: int = 1080 - 70
 
-        # Instantiate and position UI Text objects based on the debug_list
         for index, item in enumerate(debug_list):
             self.texts.append(Text())
             self.texts[-1].x = 64
@@ -60,43 +62,47 @@ class LevelEditorSelector(arcade.View):
 
     def reset(self) -> None:
         """
-        Reset the view state if necessary.
+        Resets the current view state.
         """
         pass
 
     def on_draw(self) -> None:
         """
-        Render the UI elements and their hitboxes to the screen.
+        Renders all UI text elements and their associated hitboxes.
         """
         self.clear()
 
         for i in self.texts:
-            i.draw()  # Draw the text label
-            i.hitbox.draw()  # Draw the interaction area for debugging
+            i.draw()
+            i.hitbox.draw()
 
     def on_update(self, delta_time: float) -> None:
         """
-        Handle per-frame game logic updates.
+        Updates logic state per frame.
 
-        Parameters:
-        - delta_time: time elapsed since the last frame
+        Args:
+            delta_time: Time elapsed since the previous update.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Handle keyboard input for exiting the application.
+        Handles keyboard input events.
 
-        Parameters:
-        - key: integer representation of the key pressed
-        - key_modifiers: bitmask for pressed modifiers (Shift, Ctrl, etc.)
+        Args:
+            key: Integer identifier of the pressed key.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
-        if key == 97:  # ASCII 'a'
+        if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
-        Handle key release events.
+        Handles key release events.
+
+        Args:
+            key: Integer identifier of the released key.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         pass
 
@@ -104,7 +110,13 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
         """
-        Update global mouse position tracker.
+        Updates the global mouse tracking state.
+
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Change in x position.
+            delta_y: Change in y position.
         """
         mouse.position = (x, y)
 
@@ -112,31 +124,39 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Check for interaction with UI elements when the mouse is pressed.
+        Triggers UI navigation based on interaction with text element hitboxes.
+
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            button: Identifier of the pressed mouse button.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         for index in range(len(self.texts)):
             text = self.texts[index]
 
-            if text.touched:  # If the text element is clicked
+            if text.touched:
                 if index > 4:
-                    # Switch to EditorView with the selected level
                     data.window.display(
                         EditorView(level=data.loaded_levels[self.levels[index - 5]])
                     )
                 elif index == 1:
-                    # Return to the previous menu
                     data.window.back()
                 elif index == 2:
-                    # Initialize a new level
                     data.window.display(EditorView(level=Level(random_id())))
                 elif index == 3:
-                    # Switch to the level selector
                     data.window.display(LevelPlayerSelector())
 
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Handle mouse release events.
+        Handles mouse release events.
+
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            button: Identifier of the released mouse button.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         pass

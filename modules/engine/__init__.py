@@ -1,1 +1,1 @@
-from .logic import Engine
+from .logic import Engine as Engine

@@ -16,23 +16,18 @@ from modules.logger import Logger
 
 import colorsys
 
-# Initialize the module logger for the main menu
 logger: Logger = Logger("MainMenu")
 
 
 class MainMenuView(arcade.View):
-    """
-    Main menu view class responsible for rendering the menu interface,
-    handling user interaction with buttons, and managing visual feedback.
-    """
+    """Manages the main menu interface, user input, and visual navigation elements."""
 
     def __init__(self) -> None:
-        """Initialize the view, set background, and define UI button layouts."""
+        """Initializes the view, configures UI button geometry, and sets up path data."""
         super().__init__()
 
         self.background_color: arcade.types.Color = arcade.color.JET
 
-        # UI Element Sprites
         self.play_button_sprite = data.play_button
         self.name_banner_sprite = data.name_banner
         self.quit_button_sprite = data.button_quit
@@ -41,7 +36,6 @@ class MainMenuView(arcade.View):
         self.sandbox_button_sprite = data.button_sandbox
         self.tuto_button_sprite = data.button_tuto
 
-        # Initialize buttons and set their geometric properties
         self.play_button = Button()
         self.play_button.x = 1920 / 2 - 700 / 2 - 5
         self.play_button.y = 260 + 320 + 100 + 225 / 2
@@ -78,7 +72,6 @@ class MainMenuView(arcade.View):
         self.tuto_button.width = 200 * 1.25
         self.tuto_button.height = 100 * 1.25
 
-        # Input state tracking for secret combination easter egg
         self.button_touche: List[str] = [""]
         self.combinaison: List[str] = [
             "level_button",
@@ -92,23 +85,22 @@ class MainMenuView(arcade.View):
         self.add_paths()
 
     def rainbow_color(self, precision: int, index: int) -> str:
-        """
-        Calculate an RGB hex color based on the current frame index for a rainbow effect.
+        """Generates a hex color string based on HSV cycling.
 
-        Parameters:
-        - precision: The speed/cycle frequency of the color shift.
-        - index: The current frame or time counter.
+        Args:
+            precision: The cycle duration used for hue division.
+            index: The current frame count or time interval.
 
         Returns:
-        - str: Hex color string.
+            The calculated RGB hex code.
         """
         h = (index % precision) / precision
-        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)  # Convert HSV to RGB
+        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
 
         return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
     def add_paths(self) -> None:
-        """Create and append geometric paths to the visual display list."""
+        """Initializes and registers geometric paths for menu navigation visuals."""
         branches = [
             {0: [(945, 702), (594, 702), (594, 837), (270, 837), (270, 891)], 1: []},
             {
@@ -189,50 +181,46 @@ class MainMenuView(arcade.View):
 
         for branch in branches:
             self.paths.append(Path(""))
-            # Configure properties of the newly added path
-            self.paths[len(self.paths) - 1].do_points = False
-            self.paths[len(self.paths) - 1].branch_points = branch
+            self.paths[-1].do_points = False
+            self.paths[-1].branch_points = branch
 
     def draw_paths(self) -> None:
-        """Render all registered paths."""
+        """Renders all path objects."""
         for i in self.paths:
             i.draw()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handle keyboard events."""
-        if key == 97:  # "a"
-            arcade.exit()  # Close application
+        """Handles exit command on specific key inputs."""
+        if key == 97:
+            arcade.exit()
 
     def draw_tile(self, id: int, x: float, y: float) -> None:
-        """
-        Draw a UI tile component at a specified coordinate.
+        """Renders a UI tile at specific coordinates.
 
-        Parameters:
-        - id: Tile index for lookup.
-        - x, y: Position coordinates.
+        Args:
+            id: Index for the texture lookup.
+            x: Horizontal position.
+            y: Vertical position.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def draw_frame_border(self) -> None:
-        """Draw the decorative UI frame borders."""
+        """Renders decorative borders around the menu."""
         start_x = 32
         start_y = 865
         y_len = 13
         x_len = 28
 
-        # Draw top row
         self.draw_tile(0, start_x, start_y)
         for i in range(x_len - 1):
             self.draw_tile(1, start_x + (i + 1) * 64, start_y)
         self.draw_tile(3, start_x + x_len * 64, start_y)
 
-        # Draw side columns
         for i in range(y_len - 1):
             self.draw_tile(4, start_x, start_y - (i + 1) * 64)
             self.draw_tile(7, start_x + x_len * 64, start_y - (i + 1) * 64)
 
-        # Draw bottom row
         self.draw_tile(12, start_x, start_y - y_len * 64)
         self.draw_tile(13, start_x + 64, start_y - y_len * 64)
         self.draw_tile(5, start_x + 2 * 64, start_y - y_len * 64)
@@ -243,7 +231,7 @@ class MainMenuView(arcade.View):
         self.draw_tile(15, start_x + x_len * 64, start_y - y_len * 64)
 
     def draw_frame_background(self) -> None:
-        """Fill the background frame area with background tiles."""
+        """Fills the UI frame background area."""
         start_x = 32
         start_y = 865 + 64
         y_len = 15
@@ -259,10 +247,8 @@ class MainMenuView(arcade.View):
         self.draw_frame_background()
         self.draw_paths()
 
-        # Update animation counter
         self.compteur += 1
 
-        # Draw UI buttons and sprites
         rect = arcade.XYWH(
             x=1920 / 2,
             y=260 + 320 + 100,
@@ -318,7 +304,6 @@ class MainMenuView(arcade.View):
         )
         arcade.draw_sprite_rect(self.tuto_button_sprite, rect)
 
-        # Check for secret combination sequence
         if self.button_touche == self.combinaison:
             color = round(self.compteur)
             for i in self.paths:
@@ -338,7 +323,12 @@ class MainMenuView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Handle mouse movement and update path interaction states."""
+        """Handles mouse hover interactions and updates the path activation sequence.
+
+        Args:
+            x, y: Mouse screen coordinates.
+            delta_x, delta_y: Mouse motion deltas.
+        """
         mouse.position = (x, y)
         if self.play_button.touched:
             if self.button_touche[-1] != "play_button":
@@ -388,14 +378,19 @@ class MainMenuView(arcade.View):
                 for i in self.paths:
                     i.current_value = False
 
-        # Limit sequence buffer size
         if len(self.button_touche) > 4:
             self.button_touche.pop(0)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Handle user clicks on buttons to launch different game states."""
+        """Handles button click events to trigger view transitions.
+
+        Args:
+            x, y: Mouse screen coordinates.
+            button: Mouse button code.
+            key_modifiers: Active keyboard modifiers.
+        """
 
         if self.level_button.touched:
             data.window.display(LevelEditorSelector())
@@ -407,7 +402,7 @@ class MainMenuView(arcade.View):
 
         if self.play_button.touched:
             data.window.hide()
-            # Handle specific key modifier logic to determine which mode to launch
+            # Handle conditional launch modes based on key modifiers (e.g., Debug/Editor)
             if key_modifiers == 16 or key_modifiers == 0:
                 data.window.display(EditorChipSelector())
                 logger.success("Launching EditorChipSelector.")

@@ -14,23 +14,18 @@ from modules.data.nodes.path import Path
 from modules.data import data
 from modules.logger import Logger
 
-# Initialize the logger for this module
 logger: Logger = Logger("MainMenu")
 
 
 class MainMenuView(arcade.View):
-    """
-    Handles the main menu view of the game, including UI rendering,
-    button interactions, and navigation.
-    """
+    """Manages the main menu interface, including UI rendering and navigation."""
 
     def __init__(self) -> None:
-        """Initialize the MainMenuView, setting up buttons and initial state."""
+        """Initializes the view, UI elements, and navigation state."""
         super().__init__()
 
         self.background_color: arcade.types.Color = arcade.color.JET
 
-        # Assign sprite assets from the data module
         self.play_button_sprite = data.play_button
         self.name_banner_sprite = data.name_banner
         self.quit_button_sprite = data.button_quit
@@ -39,7 +34,6 @@ class MainMenuView(arcade.View):
         self.sandbox_button_sprite = data.button_sandbox
         self.tuto_button_sprite = data.button_tuto
 
-        # Initialize buttons and set their geometric properties
         self.play_button: Button = Button()
         self.play_button.x = 1920 / 2 - 700 / 2 - 5
         self.play_button.y = 260 + 320 + 100 + 225 / 2
@@ -76,7 +70,6 @@ class MainMenuView(arcade.View):
         self.tuto_button.width = 200 * 1.25
         self.tuto_button.height = 100 * 1.25
 
-        # Tracking state for hidden easter egg combination
         self.button_touche: List[str] = [""]
         self.combinaison: List[str] = [
             "level_button",
@@ -90,24 +83,21 @@ class MainMenuView(arcade.View):
         self.add_paths()
 
     def rainbow_color(self, precision: int, index: int) -> str:
-        """
-        Generate a hex color string based on an index to create a rainbow effect.
+        """Calculates a hex color based on a cycling HSV value.
 
-        Parameters:
-        - precision: The frequency of the color shift.
-        - index: The current frame or step index.
+        Args:
+            precision: The frequency of the color transition.
+            index: The current animation step.
 
         Returns:
-        - str: Hex color code (e.g., "#RRGGBB").
+            The resulting hex string.
         """
         h: float = (index % precision) / precision
-        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)  # Convert HSV to RGB
-
-        # Convert normalized float RGB values to 0-255 integer hex representation
+        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
         return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
     def add_paths(self) -> None:
-        """Define and append path data structures for menu visuals."""
+        """Initializes and registers path structures for menu background visuals."""
         branches: List[Dict[int, List[Tuple[int, int]]]] = [
             {0: [(945, 702), (594, 702), (594, 837), (270, 837), (270, 891)], 1: []},
             {
@@ -192,50 +182,45 @@ class MainMenuView(arcade.View):
             self.paths[-1].branch_points = branch
 
     def draw_paths(self) -> None:
-        """Draw all stored visual paths on the screen."""
+        """Renders all initialized path visuals."""
         for path in self.paths:
             path.draw()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """
-        Handle keyboard input.
+        """Processes keyboard input for menu controls.
 
-        Parameters:
-        - key: The numeric code of the key pressed.
-        - key_modifiers: Modifier keys (shift, ctrl, etc.).
+        Args:
+            key: The numeric key code.
+            key_modifiers: Bitmask of modifier keys.
         """
-        if key == 97:  # "a" to exit
+        if key == 97:
             arcade.exit()
 
     def draw_tile(self, id: int, x: int, y: int) -> None:
-        """
-        Draw a specific UI tile from the border set.
+        """Renders a single UI border tile from the data registry.
 
-        Parameters:
-        - id: Index of the tile in the ui_border_tiles list.
-        - x: Horizontal screen position.
-        - y: Vertical screen position.
+        Args:
+            id: The index of the tile texture.
+            x: The horizontal screen coordinate.
+            y: The vertical screen coordinate.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def draw_frame_border(self) -> None:
-        """Assemble the frame border by drawing individual tiles."""
+        """Constructs the UI border using repetitive tile rendering."""
         start_x, start_y = 32, 865
         y_len, x_len = 13, 28
 
-        # Draw top corners and edge
         self.draw_tile(0, start_x, start_y)
         for i in range(x_len - 1):
             self.draw_tile(1, start_x + (i + 1) * 64, start_y)
         self.draw_tile(3, start_x + x_len * 64, start_y)
 
-        # Draw side edges
         for i in range(y_len - 1):
             self.draw_tile(4, start_x, start_y - (i + 1) * 64)
             self.draw_tile(7, start_x + x_len * 64, start_y - (i + 1) * 64)
 
-        # Draw bottom edge
         self.draw_tile(12, start_x, start_y - y_len * 64)
         self.draw_tile(13, start_x + 64, start_y - y_len * 64)
         self.draw_tile(5, start_x + 2 * 64, start_y - y_len * 64)
@@ -246,7 +231,7 @@ class MainMenuView(arcade.View):
         self.draw_tile(15, start_x + x_len * 64, start_y - y_len * 64)
 
     def draw_frame_background(self) -> None:
-        """Fill the frame background area with tiles."""
+        """Fills the internal menu background area."""
         start_x, start_y = 32, 865 + 64
         y_len = 15
         for i in range(y_len - 1):
@@ -254,14 +239,13 @@ class MainMenuView(arcade.View):
                 self.draw_tile(9, start_x + (a) * 64, start_y - (i + 1) * 64)
 
     def on_draw(self) -> None:
-        """Main rendering loop for the view."""
+        """Rendering pass for the menu scene."""
         self.clear(arcade.color.BLACK)
         self.draw_frame_background()
         self.draw_paths()
 
-        self.compteur += 1  # Update animation counter
+        self.compteur += 1
 
-        # Draw UI buttons and banners
         rect = arcade.XYWH(
             x=1920 / 2,
             y=260 + 320 + 100,
@@ -298,7 +282,7 @@ class MainMenuView(arcade.View):
             self.tuto_button_sprite,
             arcade.XYWH(1920 / 3 + 60, 260, 200 * 1.25, 100 * 1.25, arcade.Vec2(0, 1)),
         )
-        # Check for easter egg combination to trigger rainbow mode
+
         if self.button_touche == self.combinaison:
             color_val = round(self.compteur)
             for i in self.paths:
@@ -318,19 +302,22 @@ class MainMenuView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """
-        Handle mouse movement, button hover states, and path highlighting.
+        """Handles mouse tracking, UI hover states, and easter egg progression.
+
+        Args:
+            x: Current cursor X coordinate.
+            y: Current cursor Y coordinate.
+            delta_x: Horizontal mouse displacement.
+            delta_y: Vertical mouse displacement.
         """
         mouse.position = (x, y)
 
-        # Logic for hover state changes
         if self.play_button.touched:
             if self.button_touche[-1] != "play_button":
                 self.button_touche.append("play_button")
             for i in self.paths:
                 i.input_on_color = arcade.color.MINT_GREEN
                 i.current_value = True
-        # ... [remaining conditional logic for other buttons]
         elif self.tuto_button.touched:
             if self.button_touche[-1] != "tuto_button":
                 self.button_touche.append("tuto_button")
@@ -348,13 +335,13 @@ class MainMenuView(arcade.View):
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """
-        Handle mouse clicks for menu navigation.
+        """Handles interaction events for menu navigation.
 
-        Parameters:
-        - x, y: Mouse coordinates.
-        - button: Button index pressed.
-        - key_modifiers: Modifier keys active during click.
+        Args:
+            x: X coordinate of the click.
+            y: Y coordinate of the click.
+            button: The mouse button pressed.
+            key_modifiers: Active keyboard modifiers.
         """
         to_display: Optional[Any] = None
 

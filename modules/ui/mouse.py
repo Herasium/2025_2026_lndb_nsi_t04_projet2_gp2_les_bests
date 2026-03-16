@@ -1,23 +1,21 @@
+"""Provides mouse tracking capabilities with grid-snapping and directional analysis."""
+
 from typing import List, Tuple
 from arcade import Vec2
 from modules.data import data
 
 
 class _Mouse:
-    """
-    Tracks mouse movement, snaps to a grid, and calculates movement direction.
-    """
+    """Manages mouse state, including raw position, grid-aligned coordinates, and movement vectors."""
 
     def __init__(self) -> None:
-        """Initialize the Mouse tracking object with default values."""
+        """Initializes the mouse tracker with default state."""
         self._x: float = 0.0
         self._y: float = 0.0
         self._cursor: Vec2 = Vec2(0, 0)
         self._position: Tuple[float, float] = (0.0, 0.0)
 
-        self.history: List[Vec2] = (
-            []
-        )  # Stores recent cursor positions for direction tracking
+        self.history: List[Vec2] = []
         self.direction: str = "RIGHT"
         self.previous_direction: str = "RIGHT"
 
@@ -26,22 +24,15 @@ class _Mouse:
         self._grid_size: int = data.UI_EDITOR_GRID_SIZE
 
     def _calculate_cursor(self) -> None:
-        """
-        Snap the current mouse coordinates to the defined grid size
-        and update the _cursor attribute.
-        """
-        # Round coordinates to the nearest grid step
+        """Updates the grid-snapped cursor position based on current raw coordinates."""
         self._cursor = Vec2(
             round(self._x / self._grid_size) * self._grid_size,
             round(self._y / self._grid_size) * self._grid_size,
         )
 
     def _calculate_direction(self) -> None:
-        """
-        Update the movement direction based on recent history of cursor positions.
-        """
+        """Analyzes recent position history to determine current movement direction."""
         if len(self.history) > 4:
-            # Maintain a sliding window of positions
             self.history.pop(0)
             self.history.append(self.cursor)
 
@@ -53,7 +44,6 @@ class _Mouse:
 
             self.previous_direction = self.direction
 
-            # Apply bias based on current movement state to influence new direction
             if self.previous_direction == "RIGHT":
                 dx += self.direction_bias
             if self.previous_direction == "LEFT":
@@ -64,69 +54,64 @@ class _Mouse:
             if self.previous_direction == "DOWN":
                 dy -= self.direction_bias
 
-            # Determine dominant axis of movement
             if abs(dx) >= abs(dy):
                 self.direction = "RIGHT" if dx > 0 else "LEFT"
             else:
                 self.direction = "UP" if dy > 0 else "DOWN"
         else:
-            # Build initial history until threshold is met
             self.history.append(self.cursor)
 
     @property
     def position(self) -> Tuple[float, float]:
-        """Get the raw mouse position."""
+        """Returns the raw mouse coordinates."""
         return self._position
 
     @position.setter
     def position(self, value: Tuple[float, float]) -> Tuple[float, float]:
-        """
-        Set raw mouse position and trigger dependent calculations.
+        """Updates the raw mouse position and triggers dependent state calculations.
 
-        Parameters:
-        - value: (x, y) coordinates
+        Args:
+            value: The (x, y) coordinates.
 
         Returns:
-        - The updated position tuple
+            The updated position tuple.
         """
         self._position = value
         self._x = self._position[0]
         self._y = self._position[1]
-        self._calculate_cursor()  # Snap to grid
-        self._calculate_direction()  # Update movement state
+        self._calculate_cursor()
+        self._calculate_direction()
         return self._position
 
     @property
     def x(self) -> float:
-        """Get current x coordinate."""
+        """Returns the current x coordinate."""
         return self._x
 
     @property
     def y(self) -> float:
-        """Get current y coordinate."""
+        """Returns the current y coordinate."""
         return self._y
 
     @property
     def cursor(self) -> Vec2:
-        """Get the current grid-snapped cursor position."""
+        """Returns the current grid-snapped cursor position."""
         return self._cursor
 
     @property
     def grid_size(self) -> int:
-        """Get the current grid size."""
+        """Returns the active grid size."""
         return self._grid_size
 
     @grid_size.setter
     def grid_size(self, value: int) -> None:
-        """
-        Update the grid size and recalculate cursor snap.
+        """Updates the grid size and adjusts the snapped cursor position.
 
-        Parameters:
-        - value: New grid size in pixels
+        Args:
+            value: The pixel size of the grid.
         """
         self._grid_size = value
         self._calculate_cursor()
 
 
-# Global mouse tracking instance
 mouse: _Mouse = _Mouse()

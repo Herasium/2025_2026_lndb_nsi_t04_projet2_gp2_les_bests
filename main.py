@@ -1,47 +1,35 @@
-#  Imports
-# -------------------------------------------------
+"""Entry point for the Logic Box application.
+
+This module initializes the core game systems, including logging, data loading,
+and the primary window management, before launching the initial UI view.
+"""
+
 from modules.ui.window import Window
 from modules.ui.main_menu.in_progress_view import MainMenuView
-from modules.data import data  # Global shared data
-from modules.data.loader import Loader  # Data loading
-from modules.logger import Logger  # Debugging
-import arcade  # Game engine
-import os  # File system operations
+from modules.data import data
+from modules.data.loader import Loader
+from modules.logger import Logger
+import arcade
+import os
 
-# -------------------------------------------------
-
-# Enable arcade's internal timing to track FPS and delta_time for debugging/stress testing
 arcade.enable_timings()
 
-# Get the directory path of the current script file for data loading (saves, levels, etc.)
 path: str = os.path.dirname(os.path.abspath(__file__))
-
-# Set the current path in the global data object
 data.current_path = path
 
-# Initialize a logger instance for debugging purposes
 logger: Logger = Logger("Main")
-
-# Initialize the data loader, responsible for loading all game assets, saves, and levels
 loader: Loader = Loader()
 
-# Print the game version and current path for debug purposes
-logger.print(f"Logic Box, v.{data.VERSION}.")  # Version info from data
-logger.print(f"Current path: {path}")  # Current working directory
+logger.print(f"Logic Box, v.{data.VERSION}.")
+logger.print(f"Current path: {path}")
 
-# Create the main game window (handles textures and display)
 windows: Window = Window()
-data.window = windows  # Store the window instance in global data
-logger.print("Created Window.")  # Confirm window creation in logs
+data.window = windows
+logger.print("Created Window.")
 
-# Load all necessary game data (levels, saves, textures)
-loader.load()  # Critical step for initializing game content
+loader.load()
 
-# Instantiate the main menu view (first UI displayed to the player)
 view: MainMenuView = MainMenuView()
-
-# Display the main menu view in the game window
 windows.display(view)
 
-# Start the game loop (blocks execution and runs the arcade window)
 windows.run()

@@ -1,3 +1,5 @@
+"""Provides the CustomGate class for managing user-defined logic gate instances."""
+
 import arcade
 from typing import Any, Dict, List, Optional
 
@@ -6,86 +8,62 @@ from modules.data import data as data_module
 
 
 class CustomGate(Complex):
-    """
-    A class representing a user-defined custom logic gate within the simulator.
-    Inherits from the Complex base class.
-    """
+    """Represents a user-defined logic gate wrapping an internal chip architecture."""
 
     def __init__(self, id: int, chip: Optional[Any] = None) -> None:
-        """Initialize a CustomGate instance.
+        """Initializes a new CustomGate instance.
 
-        Parameters:
-        - id: A unique integer identifier for this gate instance.
-        - chip: An optional chip object representing the internal logic of this gate.
+        Args:
+            id: Unique identifier for the gate.
+            chip: The chip definition to encapsulate.
         """
         super().__init__(id)
 
-        # Basic identification and metadata
         self.name: str = chip.name
         self.type: str = "Custom"
         self.base_chip_id: int = chip.id
-        self.chip: Any = chip.copy()  # Create a unique instance of the internal chip
+        self.chip: Any = chip.copy()
         self.gate_type: str = "Custom"
 
-        # Initialize I/O structures based on the internal chip
         self.update_io()
 
-        # Visual and UI setup
         self.calculate_display()
         self.gen_tile_pattern()
         self.setup_texts()
 
     def prop_io(self) -> None:
-        """Propagate external input values to the internal chip's input gates.
-
-        Returns:
-        - None
-        """
+        """Propagates current external input values into the internal chip structure."""
         chip_inputs: List[int] = self.chip.get_inputs()
-        # Map this gate's inputs to the internal chip's corresponding input pins
         for i in range(len(self.inputs)):
             self.chip.gates[chip_inputs[i]].outputs[0] = self.inputs[i]
 
     def update_io(self) -> None:
-        """Synchronize the gate's I/O pins and bus sizes with the internal chip structure.
-
-        Returns:
-        - None
-        """
+        """Synchronizes gate I/O pins and bus metadata with the underlying chip."""
         self.inputs: List[int] = []
         self.outputs: List[int] = []
         self.inputs_sizes: List[int] = []
         self.outputs_sizes: List[int] = []
 
-        # Process internal chip inputs to define external gate inputs
         chip_inputs: List[int] = self.chip.get_inputs()
         for i in chip_inputs:
             self.inputs.append(self.chip.gates[i].outputs[0])
             self.inputs_sizes.append(self.chip.gates[i].outputs_sizes[0])
 
-        # Process internal chip outputs to define external gate outputs
         chip_outputs: List[int] = self.chip.get_outputs()
         for i in chip_outputs:
             self.outputs.append(self.chip.gates[i].inputs[0])
             self.outputs_sizes.append(self.chip.gates[i].inputs_sizes[0])
 
-        # Refresh text elements to reflect new I/O states
         self.update_text_readings()
 
     def draw_tiles(self) -> None:
-        """Render the gate's visual representation using textures and labels.
-
-        Returns:
-        - None
-        """
+        """Renders the gate using state-dependent textures."""
         width: int = self.tile_width
         height: int = 4
 
-        # Deep copy I/O states to calculate the specific texture variant (bitmask)
         out: List[int] = self.outputs.copy()
         inp: List[int] = self.inputs.copy()
 
-        # Filter out bus values (size != 1) to simplify texture bitmask calculation
         for i in range(len(inp)):
             if self.inputs_sizes[i] != 1:
                 inp[i] = 0
@@ -94,16 +72,14 @@ class CustomGate(Complex):
             if self.outputs_sizes[i] != 1:
                 out[i] = 0
 
-        # Create a binary string from reversed outputs and inputs to determine current state index
         out.reverse()
         inp.reverse()
+        # Pack state bits into an integer to select the appropriate texture index
         current: int = int("".join(map(str, map(int, (out + inp)))), 2)
 
-        # Calculate coordinates relative to camera position
         tile_x: float = self.x + self._camera[0]
         tile_y: float = self.y + self._camera[1]
 
-        # Define the rectangular area for drawing
         rect: arcade.XYWH = arcade.XYWH(
             x=tile_x,
             y=tile_y,
@@ -112,21 +88,19 @@ class CustomGate(Complex):
             anchor=arcade.Vec2(0, 0),
         )
 
-        # Render the specific texture for this gate and state
         arcade.draw_texture_rect(
             data_module.IMAGE.get_texture(self.base_chip_id, current), rect
         )
 
-        # Draw text labels if they aren't hidden
         if not self.hide_text:
             for i in self.texts:
                 self.texts[i].draw()
 
     def save(self) -> Dict[str, Any]:
-        """Serialize the current state of the gate for saving to a file.
+        """Serializes the gate state for storage.
 
         Returns:
-        - Dict[str, Any]: A dictionary containing the gate's spatial and logical properties.
+            Dictionary containing spatial and logical configuration data.
         """
         return {
             "x": self.x,
@@ -140,15 +114,11 @@ class CustomGate(Complex):
         }
 
     def load(self, data: Dict[str, Any]) -> None:
-        """Restore the gate's state from a dictionary.
+        """Hydrates the gate state from provided configuration data.
 
-        Parameters:
-        - data: A dictionary containing the saved state of the gate.
-
-        Returns:
-        - None
+        Args:
+            data: Configuration dictionary to load.
         """
-        # Assign primary attributes from the dictionary
         self.type = data["type"]
         self.inputs = data.get("inputs", [])
         self.outputs = data.get("outputs", [])
@@ -158,10 +128,8 @@ class CustomGate(Complex):
         self.y = data["y"]
         self.base_chip_id = data["parent"]
 
-        # Instantiate a fresh copy of the internal logic from the master library
         self.chip = data_module.loaded_chips[self.base_chip_id].copy()
 
-        # Re-initialize visual and logical structures
         self.update_io()
         self.calculate_display()
         self.gen_tile_pattern()

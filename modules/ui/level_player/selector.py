@@ -11,40 +11,28 @@ from modules.ui.level_player.view import LevelPlayer
 
 
 class LevelPlayerSelector(arcade.View):
-    """
-    A view for selecting and launching game levels.
-    """
+    """Provides an interface for users to select and launch game levels."""
 
     def __init__(self) -> None:
-        """
-        Initialize the LevelPlayerSelector view.
-        """
+        """Initializes the view and populates the level selection UI."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
-        self.texts: List[Text] = []  # Stores UI Text objects
-        self.levels: List[Any] = []  # Stores identifiers for loaded levels
+        self.texts: List[Text] = []
+        self.levels: List[Any] = []
         self.setup()
 
     def setup(self) -> None:
-        """
-        Configure the UI layout and populate the list of available levels.
-
-        Returns:
-            - None
-        """
-        # Define the static navigation headers
+        """Configures the UI layout and maps available levels to selectable elements."""
         debug_list: List[str] = ["Chip Editor Selector", "<- Back", ""]
 
-        # Dynamically append levels from the data module
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
             debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
-        start_y: int = 1080 - 70  # Y coordinate for the first menu item
+        start_y: int = 1080 - 70
 
-        # Create Text objects for each item in the list
         for index, item in enumerate(debug_list):
             self.texts.append(Text())
             self.texts[-1].x = 64
@@ -53,45 +41,38 @@ class LevelPlayerSelector(arcade.View):
             self.texts[-1].align = ("left", "center")
 
     def reset(self) -> None:
-        """
-        Placeholder for state reset logic.
-        """
+        """Resets the view state."""
         pass
 
     def on_draw(self) -> None:
-        """
-        Render the UI elements to the screen.
-        """
+        """Renders text elements and their associated hitboxes."""
         self.clear()
 
-        # Iterate through text objects and draw both text and their hitboxes
         for i in self.texts:
             i.draw()
             i.hitbox.draw()
 
     def on_update(self, delta_time: float) -> None:
         """
-        Update loop, currently unused.
-
-        Parameters:
-            - delta_time: time elapsed since last frame
+        Args:
+            delta_time: Time elapsed since the last update frame.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Handle keyboard inputs.
-
-        Parameters:
-            - key: identifier of the pressed key
-            - key_modifiers: bitmask of active modifiers (e.g., Shift)
+        Args:
+            key: Integer identifier of the pressed key.
+            key_modifiers: Bitmask of active modifier keys.
         """
-        if key == 97:  # Key code 97 corresponds to 'a'
+        if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
-        Handle key release events, currently unused.
+        Args:
+            key: Integer identifier of the released key.
+            key_modifiers: Bitmask of active modifier keys.
         """
         pass
 
@@ -99,7 +80,11 @@ class LevelPlayerSelector(arcade.View):
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
         """
-        Update the shared mouse position when moved.
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Change in horizontal position.
+            delta_y: Change in vertical position.
         """
         mouse.position = (x, y)
 
@@ -107,23 +92,18 @@ class LevelPlayerSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Handle mouse click events to detect menu interactions.
-
-        Parameters:
-            - x: current mouse x position
-            - y: current mouse y position
-            - button: mouse button pressed
-            - key_modifiers: bitmask of active modifiers
+        Args:
+            x: Horizontal mouse position during click.
+            y: Vertical mouse position during click.
+            button: Identifier of the mouse button pressed.
+            key_modifiers: Bitmask of active modifier keys.
         """
-        # Iterate through text objects to check if any were clicked
         for index in range(len(self.texts)):
             text = self.texts[index]
 
             if text.touched:
-                # If index > 2, it indicates a level button was clicked
                 if index > 2:
                     data.window.display(LevelPlayer(self.levels[index - 3]))
-                # Index 1 is the 'Back' button
                 elif index == 1:
                     data.window.back()
 
@@ -131,6 +111,10 @@ class LevelPlayerSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Handle mouse release events, currently unused.
+        Args:
+            x: Horizontal mouse position.
+            y: Vertical mouse position.
+            button: Identifier of the mouse button released.
+            key_modifiers: Bitmask of active modifier keys.
         """
         pass

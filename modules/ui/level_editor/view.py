@@ -1,3 +1,8 @@
+"""
+This module defines the LevelEditorView, which provides the primary graphical
+interface for constructing and managing circuit levels within the application.
+"""
+
 import arcade
 from line_profiler import profile
 import time
@@ -7,15 +12,10 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.id_generator import random_id
 from modules.ui.level_editor.save import SaveFrame
-
 from modules.data.nodes.path import Path
-
 from modules.data.level import Level
-
-
 from modules.data import data
 from modules.data.gate_index import gate_types
-
 from modules.engine import Engine
 
 
@@ -28,7 +28,6 @@ class LevelEditorView(arcade.View):
     def __init__(self, id: Optional[str] = None):
         super().__init__()
 
-        # UI elements and interaction states
         self.follower: Entity = Entity()
         self.follower.height = data.UI_EDITOR_GRID_SIZE
         self.follower.width = data.UI_EDITOR_GRID_SIZE
@@ -45,7 +44,6 @@ class LevelEditorView(arcade.View):
 
         self.moving_gate_offset: Tuple[int, int] = (0, 0)
 
-        # Camera state management
         self._real_camera_position: Tuple[int, int] = (0, 0)
         self.camera_position: Tuple[int, int] = (0, 0)
 
@@ -54,7 +52,6 @@ class LevelEditorView(arcade.View):
 
         self.background_color = arcade.types.Color.from_hex_string("121212")
 
-        # Performance and state variables
         self.camera_hold: bool = False
         self.fps: float = 0
         self.delta_time: float = 1
@@ -64,8 +61,7 @@ class LevelEditorView(arcade.View):
         self.engine: Engine = Engine()
         self.stress_test: bool = False
 
-        # Load or create level
-        if id == None:
+        if id is None:
             self.level = Level(random_id())
         else:
             if id in data.loaded_levels:
@@ -74,14 +70,19 @@ class LevelEditorView(arcade.View):
                 self.level = Level(random_id())
 
     def bottom_bar_width_sum(self) -> int:
-        """Calculate the total width of all gates in the bottom bar."""
+        """
+        Calculates the cumulative width of all gates currently in the toolbar.
+
+        Returns:
+            The total width in pixels.
+        """
         result = 0
         for i in self.bottom_gates:
             result += i.tile_width
         return result
 
     def bottom_gate_bar(self) -> None:
-        """Initialize the bottom toolbar with available gate types."""
+        """Populates the bottom toolbar with available gate types."""
         for i in gate_types:
             position = (
                 self.bottom_bar_width_sum() + len(self.bottom_gates)
@@ -92,38 +93,50 @@ class LevelEditorView(arcade.View):
             self.bottom_gates[-1].x = position
 
     def get_hovered_bottom_gate(self) -> Optional[str]:
-        """Check if any gate in the bottom bar is currently hovered by the mouse."""
+        """
+        Identifies if the cursor is hovering over a specific gate in the toolbar.
+
+        Returns:
+            The type of the hovered gate, or None if no gate is under the cursor.
+        """
         for i in self.bottom_gates:
             if i.entity.touched:
                 return i.gate_type
         return None
 
     def draw_bottom_gates(self) -> None:
-        """Render all gates located in the bottom UI bar."""
+        """Renders the UI elements within the bottom toolbar."""
         for i in self.bottom_gates:
             i.draw()
 
     def draw_tile(self, id: str, x: int, y: int) -> None:
-        """Draw a specific UI border tile at given coordinates."""
+        """
+        Renders an individual border tile.
+
+        Args:
+            id: The unique identifier for the texture.
+            x: Horizontal coordinate.
+            y: Vertical coordinate.
+        """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def reset(self) -> None:
-        """Placeholder for reset logic."""
+        """Clears or reinitializes the editor state."""
         pass
 
     def draw_frame_border(self) -> None:
-        """Draw the main editor window border overlay."""
+        """Renders the outer editor window interface overlay."""
         rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
         arcade.draw_sprite_rect(data.editor_border, rect)
 
     def draw_frame_background(self) -> None:
-        """Draw the grid background texture."""
+        """Renders the editor grid background."""
         rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
-        """Draw performance and level metadata on the screen."""
+        """Renders performance metrics and current level information."""
         debug_list = [
             f"Level Editor {self.level.id}",
             f"Camera: {self.camera_position}",
@@ -145,11 +158,11 @@ class LevelEditorView(arcade.View):
 
     @profile
     def on_draw(self) -> None:
-        """Render the editor view, including paths, gates, and UI elements."""
+        """Renders the active circuit and UI overlay."""
         self.clear()
 
         self.draw_frame_background()
-        # Draw all existing circuit components
+
         for p in self.level.chip.paths.values():
             p.draw()
 
@@ -162,50 +175,64 @@ class LevelEditorView(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
-        # Draw overlays
         self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()
 
-        # Update timing metrics
         self.frame_count += 1
         self.delta_time = time.time() - self.last_time
         self.last_time = time.time()
 
     def on_update(self, delta_time: float) -> None:
-        """Update logic for the editor, including simulation and frame rate."""
+        """
+        Updates simulation state and timing metrics.
+
+        Args:
+            delta_time: Time elapsed since the previous update.
+        """
         self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
 
     def save_frame(self) -> None:
-        """Trigger the save UI interface."""
+        """Opens the save dialogue window."""
         data.window.display(SaveFrame(self.level))
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handle keyboard input for editor controls."""
-        if key == 101:  # "e": Toggle logic gate state (if Input gate)
+        """
+        Processes keyboard inputs for editor commands.
+
+        Args:
+            key: The numeric code of the pressed key.
+            key_modifiers: Bitwise flags for modifier keys.
+        """
+        if key == 101:
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
 
-        if key == 97:  # "a": Go back
+        if key == 97:
             data.window.back()
-        if key == 116:  # "t": Show truth table
+        if key == 116:
             self.level.get_truth_table()
-        if key == 65307:  # ESC: Abort current path or selection
+        if key == 65307:
             if self.current_path:
                 self.current_path.abort()
             self.current_path = None
             self.selected_follower = None
 
-        if key == 115:  # "s": Save
+        if key == 115:
             self.save_frame()
 
-        if key == 65288:  # Backspace: Delete selected
+        if key == 65288:
             self.delete()
 
     def delete_gate(self, id: str) -> None:
-        """Remove a gate and all associated path connections."""
+        """
+        Removes a gate and prunes all orphaned paths.
+
+        Args:
+            id: The unique identifier of the gate to remove.
+        """
         to_delete = []
         for index in self.level.chip.paths.keys():
             p = self.level.chip.paths[index]
@@ -231,7 +258,7 @@ class LevelEditorView(arcade.View):
             del self.level.chip.paths[i]
 
     def delete(self) -> None:
-        """Determine if a gate or path is currently touched and delete it."""
+        """Initiates deletion of the object currently under the cursor."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
@@ -247,17 +274,22 @@ class LevelEditorView(arcade.View):
                 break
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Handle key release events."""
+        """Handles key release events."""
         pass
 
     @property
     def camera(self) -> Tuple[int, int]:
-        """Return current camera position."""
+        """Returns the current camera offset."""
         return self.camera_position
 
     @camera.setter
     def camera(self, value: Tuple[int, int]) -> None:
-        """Update camera position and adjust components for grid alignment."""
+        """
+        Sets the camera position and aligns it to the grid.
+
+        Args:
+            value: The target coordinate to align the camera.
+        """
         self._real_camera_position = value
         self.camera_position = (
             (self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE)
@@ -265,7 +297,6 @@ class LevelEditorView(arcade.View):
             (self._real_camera_position[1] // data.UI_EDITOR_GRID_SIZE)
             * data.UI_EDITOR_GRID_SIZE,
         )
-        # Sync all objects to new camera position
         for g in self.level.chip.gates:
             self.level.chip.gates[g].camera_moving(self.camera_position)
         for p in self.level.chip.paths:
@@ -274,7 +305,15 @@ class LevelEditorView(arcade.View):
             self.current_path.camera = self.camera_position
 
     def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
-        """Handle mouse movement, updates followers and camera drag."""
+        """
+        Handles mouse interaction updates, including dragging and movement.
+
+        Args:
+            x: Mouse horizontal position.
+            y: Mouse vertical position.
+            delta_x: Horizontal change.
+            delta_y: Vertical change.
+        """
         mouse.position = (x, y)
 
         self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
@@ -295,7 +334,6 @@ class LevelEditorView(arcade.View):
             self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
             self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
 
-            # Update paths connected to the moving gate
             for path in self.level.chip.paths.values():
                 connected_inputs, connected_outputs = path.get_connected_points(
                     self.moving_gate.id
@@ -330,30 +368,29 @@ class LevelEditorView(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self) -> None:
-        """Run the circuit engine simulation."""
+        """Executes the circuit logic propagation."""
         self.engine.propagate_values(self.level.chip)
 
     def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Handle mouse clicks for interacting with gates and paths."""
-        # Middle click camera hold
+        """
+        Handles mouse interaction triggers for path building and component placement.
+        """
         if button == 2:
             self.camera_hold = True
             return
         if self.camera_hold:
             return
 
-        # Attempt to click a gate
         for g in self.level.chip.gates.values():
             touched = g.touched
             if touched:
                 if self.current_path is None:
-                    # Start new path
                     pid = random_id()
                     self.current_path = Path(pid)
                     self.current_path.camera = self.camera
                     self.current_path.add_path()
 
-                    if touched[0] == 1:  # Input touched
+                    if touched[0] == 1:
                         self.current_path.outputs.append(
                             [
                                 1,
@@ -363,7 +400,7 @@ class LevelEditorView(arcade.View):
                                 self.current_path.current_branch_count,
                             ]
                         )
-                    else:  # Output touched
+                    else:
                         self.current_path.inputs.append(
                             [
                                 2,
@@ -375,8 +412,7 @@ class LevelEditorView(arcade.View):
                         )
                     return
                 else:
-                    # Finish existing path
-                    if touched[0] == 1:  # Input touched
+                    if touched[0] == 1:
                         self.current_path.outputs.append(
                             [
                                 1,
@@ -386,7 +422,7 @@ class LevelEditorView(arcade.View):
                                 self.current_path.current_branch_count,
                             ]
                         )
-                    else:  # Output touched
+                    else:
                         self.current_path.inputs.append(
                             [
                                 2,
@@ -404,7 +440,6 @@ class LevelEditorView(arcade.View):
                     self.current_path = None
                     return
 
-        # Click on an existing path
         if not self.current_path:
             for p in self.level.chip.paths.values():
                 if p.touched:
@@ -426,7 +461,6 @@ class LevelEditorView(arcade.View):
                 self.current_path.add_path()
                 return
 
-        # Move a gate
         if self.moving_gate is None:
             for g in self.level.chip.gates.values():
                 if g.entity.touched:
@@ -437,7 +471,6 @@ class LevelEditorView(arcade.View):
                     self.moving_gate = g
                     return
 
-        # Place new gate from bottom bar
         if self.selected_follower is None:
             hovered = self.get_hovered_bottom_gate()
             if hovered in gate_types:
@@ -455,7 +488,7 @@ class LevelEditorView(arcade.View):
                 )
 
     def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Handle mouse release for camera drag or gate placement finalization."""
+        """Finalizes camera drag or gate placement operations."""
         if button == 2:
             self.camera_hold = False
             for g in self.level.chip.gates:
@@ -463,10 +496,8 @@ class LevelEditorView(arcade.View):
         else:
             if self.selected_follower is not None:
                 if self.bottom_zone_collider.touched:
-                    # Return to sender if dropped in UI zone
                     self.selected_follower = None
                 else:
-                    # Place gate into level
                     self.level.chip.gates[self.selected_follower.id] = (
                         self.selected_follower
                     )

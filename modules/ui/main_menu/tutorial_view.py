@@ -7,31 +7,26 @@ from modules.ui.toolbox.text import Text
 
 from modules.data import data
 
+"""Provides the interface for the tutorial section of the application."""
+
 
 class TutorialView(arcade.View):
-    """
-    View class representing the tutorial interface.
-    """
+    """Manages the layout, rendering, and interaction logic for the tutorial screen."""
 
     def __init__(self) -> None:
-        """
-        Initialize the TutorialView, setting up UI components and buttons.
-        """
+        """Initializes the view, UI elements, and layout positions."""
         super().__init__()
 
         self.background_color = arcade.color.JET
 
-        # UI elements
         self.name_banner_sprite = data.name_banner
 
-        # Setup back navigation button
         self.back_button = Button()
         self.back_button.x = 192 / 2.5 - 30
         self.back_button.y = 1010 + 10
         self.back_button.width = 80
         self.back_button.height = 40
 
-        # Title and header text labels
         self.regletexte = Text(
             x=120,
             y=820,
@@ -45,7 +40,6 @@ class TutorialView(arcade.View):
             align=("left", "center"),
         )
 
-        # Main selection buttons as Text elements
         self.regleplay_button = Text(
             x=160,
             y=740,
@@ -61,7 +55,6 @@ class TutorialView(arcade.View):
             size=16,
         )
 
-        # Dynamic list of tutorial sub-buttons
         self.namebutton: List[str] = [
             "button_3",
             "button_4",
@@ -78,7 +71,7 @@ class TutorialView(arcade.View):
 
         a = 560
         for i in self.namebutton:
-            a = a - 45  # Offset position for each subsequent button
+            a = a - 45
             self.buttons.append(
                 Text(
                     x=160,
@@ -89,7 +82,6 @@ class TutorialView(arcade.View):
                 )
             )
 
-        # Text display area for tutorial content
         self.texte_button = Text(
             x=1000,
             y=750,
@@ -101,50 +93,43 @@ class TutorialView(arcade.View):
         )
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """
-        Handle keyboard inputs.
+        """Handles keyboard input events.
 
-        Parameters:
-        - key: integer representation of the key pressed
-        - key_modifiers: bitwise flags for modifier keys (Ctrl, Alt, etc.)
+        Args:
+            key: The key code of the pressed key.
+            key_modifiers: Bitwise flags indicating active modifier keys.
         """
-        if key == 97:  # "a" key to exit application
+        if key == 97:
             arcade.exit()
 
     def draw_tile(self, id: int, x: float, y: float) -> None:
-        """
-        Draw a UI tile from the sprite sheet at a given location.
+        """Renders a single UI tile at the specified coordinates.
 
-        Parameters:
-        - id: index of the tile texture
-        - x: x-coordinate
-        - y: y-coordinate
+        Args:
+            id: The index identifier for the texture to be drawn.
+            x: The horizontal position on the screen.
+            y: The vertical position on the screen.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
 
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def draw_frame_border(self) -> None:
-        """
-        Draw the decorative UI border surrounding the tutorial window.
-        """
+        """Renders the border components of the tutorial window."""
         start_x = 32
         start_y = 865
         y_len = 13
         x_len = 28
 
-        # Draw top border segments
         self.draw_tile(0, start_x, start_y)
         for i in range(x_len - 1):
             self.draw_tile(1, start_x + (i + 1) * 64, start_y)
         self.draw_tile(3, start_x + x_len * 64, start_y)
 
-        # Draw side borders
         for i in range(y_len - 1):
             self.draw_tile(4, start_x, start_y - (i + 1) * 64)
             self.draw_tile(7, start_x + x_len * 64, start_y - (i + 1) * 64)
 
-        # Draw bottom border segments
         self.draw_tile(12, start_x, start_y - y_len * 64)
         self.draw_tile(13, start_x + 64, start_y - y_len * 64)
         self.draw_tile(5, start_x + 2 * 64, start_y - y_len * 64)
@@ -155,9 +140,7 @@ class TutorialView(arcade.View):
         self.draw_tile(15, start_x + x_len * 64, start_y - y_len * 64)
 
     def draw_frame_background(self) -> None:
-        """
-        Fill the background of the UI frame with repeated tiles.
-        """
+        """Renders the background tiling for the UI frame."""
         start_x = 32
         start_y = 865 + 64
         y_len = 15
@@ -167,9 +150,7 @@ class TutorialView(arcade.View):
                 self.draw_tile(9, start_x + (a) * 64, start_y - (i + 1) * 64)
 
     def on_draw(self) -> None:
-        """
-        Render all UI components to the screen.
-        """
+        """Renders the current view state to the display."""
         self.clear(arcade.color.BLACK)
 
         self.draw_frame_background()
@@ -184,28 +165,36 @@ class TutorialView(arcade.View):
         self.regleplay_button.draw()
         self.commande_button.draw()
 
-        # Render each button in the dynamic button list
         for i in self.buttons:
             i.draw()
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """
-        Update global mouse position on movement.
+        """Updates the global mouse tracking state.
+
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Horizontal movement since last frame.
+            delta_y: Vertical movement since last frame.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """
-        Handle mouse clicks for UI interaction.
+        """Processes mouse interaction events for UI elements.
+
+        Args:
+            x: Horizontal mouse position at time of click.
+            y: Vertical mouse position at time of click.
+            button: The mouse button being pressed.
+            key_modifiers: Bitwise flags for active modifier keys.
         """
         if self.back_button.touched:
             data.window.back()
 
-        # Handle text display update for tutorial sections
         if self.regleplay_button.touched:
             self.texte_button.text = data.language.tutorial["button_01"]
 
@@ -214,4 +203,4 @@ class TutorialView(arcade.View):
 
         for i in self.buttons:
             if i.touched:
-                pass  # Placeholder for future button functionality
+                pass

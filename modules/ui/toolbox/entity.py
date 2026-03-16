@@ -2,11 +2,11 @@ import arcade
 from typing import Optional
 from modules.ui.toolbox.hitbox import HitBox
 
+"""Provides the base Entity class for spatial management and rendering."""
+
 
 class Entity:
-    """
-    Represents a basic game entity with position, dimensions, and collision capabilities.
-    """
+    """Manages an entity's spatial properties and rendering state."""
 
     def __init__(
         self,
@@ -17,16 +17,15 @@ class Entity:
         sprite: Optional[arcade.Sprite] = None,
         anchor: arcade.Vec2 = arcade.Vec2(0, 0),
     ):
-        """
-        Initialize the Entity.
+        """Initializes the entity.
 
-        Parameters:
-        - x: Initial X-coordinate
-        - y: Initial Y-coordinate
-        - width: Entity width
-        - height: Entity height
-        - sprite: Optional arcade Sprite object
-        - anchor: Vec2 object defining the anchor point
+        Args:
+            x: Horizontal position.
+            y: Vertical position.
+            width: Horizontal dimension.
+            height: Vertical dimension.
+            sprite: Optional visual representation.
+            anchor: Vector defining the pivot point.
         """
         self._x: float = x
         self._y: float = y
@@ -41,7 +40,7 @@ class Entity:
         self.color: arcade.Color = arcade.color.ALLOY_ORANGE
 
         self.hitbox: HitBox = HitBox()
-        self._update_hitbox()  # Sync hitbox with initial spatial properties
+        self._update_hitbox()
 
     @property
     def x(self) -> float:
@@ -88,23 +87,16 @@ class Entity:
         self._update_hitbox()
 
     def _update_hitbox(self) -> None:
-        """
-        Updates the internal hitbox properties based on the entity's spatial state.
-        Synchronizes all dimensions and coordinates.
-        """
+        """Synchronizes hitbox dimensions and position with the entity."""
         self.hitbox._x = self._x
         self.hitbox._y = self._y
         self.hitbox._width = self._width
         self.hitbox._height = self._height
-        self.hitbox.anchor = self._anchor  # Do the hitbox math only once.
+        self.hitbox.anchor = self._anchor
 
     def draw(self) -> None:
-        """
-        Draws the entity to the screen.
-        Uses a rectangle if no sprite is provided, otherwise draws the sprite.
-        """
+        """Renders the entity using either a primitive shape or a sprite."""
         if self.sprite is None:
-            # Draw a filled rectangle if no texture/sprite is present
             arcade.draw_rect_filled(
                 arcade.rect.XYWH(
                     self._x, self._y, self._width, self._height, anchor=self._anchor
@@ -112,7 +104,6 @@ class Entity:
                 self.color,
             )
         else:
-            # Draw the assigned sprite using the entity's dimensions
             arcade.draw_sprite_rect(
                 self.sprite,
                 arcade.rect.XYWH(
@@ -123,5 +114,5 @@ class Entity:
 
     @property
     def touched(self) -> bool:
-        """Returns the collision status from the internal hitbox."""
+        """Returns the current collision state from the hitbox."""
         return self.hitbox.touched

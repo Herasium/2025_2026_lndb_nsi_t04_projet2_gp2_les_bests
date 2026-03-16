@@ -1,8 +1,17 @@
+"""Module to handle font loading and identification utilities."""
+
 from PIL import ImageFont
 
-# Load a specific TrueType font file from the assets directory with a size of 24
-# The font variable holds an instance of FreeTypeFont
 font: ImageFont.FreeTypeFont = ImageFont.truetype("assets/UniverseCondensed.ttf", 24)
 
-# Print the name of the loaded font to the console
-print(font.getname())
+
+def display_font_metadata(font_instance: ImageFont.FreeTypeFont) -> None:
+    """Logs the identifying name of the provided font instance to the console.
+
+    Args:
+        font_instance: The initialized FreeTypeFont object to inspect.
+    """
+    print(font_instance.getname())
+
+
+display_font_metadata(font)

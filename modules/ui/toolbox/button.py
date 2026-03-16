@@ -1,15 +1,15 @@
+"""Provides a UI button implementation with geometric management and interaction hitboxes."""
+
 import arcade
 from modules.ui.toolbox.hitbox import HitBox
 from modules.data import data
 
 
 class Button:
-    """
-    Represents a UI button element with positioning, dimensions, and hitbox functionality.
-    """
+    """Represents a UI button element with positioning, dimensions, and hitbox functionality."""
 
     def __init__(self) -> None:
-        """Initialize the Button with default properties."""
+        """Initializes a new button instance with default physical and visual properties."""
         self._x: float = 0.0
         self._y: float = 0.0
 
@@ -30,61 +30,61 @@ class Button:
 
     @property
     def x(self) -> float:
-        """Get the x-coordinate."""
+        """Returns the horizontal position."""
         return self._x
 
     @x.setter
     def x(self, value: float) -> None:
-        """Set the x-coordinate and update geometry."""
+        """Sets the horizontal position and triggers a geometry update."""
         self._x = value
         self._recalculate_rect()
 
     @property
     def y(self) -> float:
-        """Get the y-coordinate."""
+        """Returns the vertical position."""
         return self._y
 
     @y.setter
     def y(self, value: float) -> None:
-        """Set the y-coordinate and update geometry."""
+        """Sets the vertical position and triggers a geometry update."""
         self._y = value
         self._recalculate_rect()
 
     @property
     def width(self) -> float:
-        """Get the width."""
+        """Returns the button width."""
         return self._width
 
     @width.setter
     def width(self, value: float) -> None:
-        """Set the width and update geometry."""
+        """Sets the button width and triggers a geometry update."""
         self._width = value
         self._recalculate_rect()
 
     @property
     def height(self) -> float:
-        """Get the height."""
+        """Returns the button height."""
         return self._height
 
     @height.setter
     def height(self, value: float) -> None:
-        """Set the height and update geometry."""
+        """Sets the button height and triggers a geometry update."""
         self._height = value
         self._recalculate_rect()
 
     @property
     def anchor(self) -> arcade.Vec2:
-        """Get the current anchor vector."""
+        """Returns the current anchor vector."""
         return self._anchor
 
     @anchor.setter
     def anchor(self, value: arcade.Vec2) -> None:
-        """Set the anchor and update geometry."""
+        """Sets the anchor vector and triggers a geometry update."""
         self._anchor = value
         self._recalculate_rect()
 
     def _recalculate_rect(self) -> None:
-        """Recalculate the internal XYWH rectangle, hitbox, and text element."""
+        """Updates the internal rectangle, syncs the hitbox, and recreates the display text."""
         self.rect = arcade.XYWH(
             x=self._x,
             y=self._y,
@@ -92,9 +92,8 @@ class Button:
             height=self._height,
             anchor=self._anchor,
         )
-        self._update_hitbox()  # Sync hitbox dimensions
+        self._update_hitbox()
 
-        # Create text instance for display
         self._text = arcade.Text(
             self._name,
             self._x,
@@ -105,62 +104,59 @@ class Button:
             anchor_y="center",
             font_name="Press Start 2P",
         )
-        # Position text relative to button center
         self._text.x = self._x + self._width / 2
         self._text.y = self._y - self._height / 2
 
     @property
     def name(self) -> str:
-        """Get the button name."""
+        """Returns the button label name."""
         return self._name
 
     @name.setter
     def name(self, value: str) -> None:
-        """Set the name and trigger geometry update."""
+        """Sets the button label name and triggers a geometry update."""
         self._name = value
         self._recalculate_rect()
 
     @property
     def text(self) -> arcade.Text:
-        """Get the text object."""
+        """Returns the underlying arcade text object."""
         return self._text
 
     @text.setter
     def text(self, value: arcade.Text) -> None:
-        """Set the text object and trigger geometry update."""
+        """Sets the text object and triggers a geometry update."""
         self._text = value
         self._recalculate_rect()
 
     @property
     def color(self) -> arcade.Color:
-        """Get the button color."""
+        """Returns the primary button color."""
         return self._color
 
     @color.setter
     def color(self, value: arcade.Color) -> None:
-        """Set the button color and trigger geometry update."""
+        """Sets the button color and triggers a geometry update."""
         self._color = value
         self._recalculate_rect()
 
     def _update_hitbox(self) -> None:
-        """Sync internal hitbox properties with current button dimensions."""
+        """Aligns the interaction hitbox dimensions and position with the button's bounds."""
         self.hitbox.x = self._x
         self.hitbox.y = self._y - self._height
         self.hitbox.width = self._width
         self.hitbox.height = self._height
 
     def draw(self) -> None:
-        """Draw the button text and its associated hitbox."""
+        """Renders the text and hitbox based on current scaling and grid constraints."""
         current_width = 10 * self.grid_size * self.scale
         current_height = 2 * self.grid_size * self.scale
 
-        # Adjust text position based on current scale and grid size
         self.text.x = self.x + (current_width / 1.7)
         self.text.y = self.y - (
             (current_height / 2) + (self.grid_size * self.scale * 0.6)
         )
 
-        # Scale text size dynamically
         self.text.font_size = 18 * self.scale
 
         self.text.draw()
@@ -168,5 +164,5 @@ class Button:
 
     @property
     def touched(self) -> bool:
-        """Check if the button hitbox is currently being touched/interacted with."""
+        """Returns the interaction state from the hitbox."""
         return self.hitbox.touched
