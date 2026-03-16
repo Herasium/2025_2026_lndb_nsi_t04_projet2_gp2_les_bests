@@ -1,25 +1,35 @@
-import arcade
-import math
+from typing import Any, List
 
-from modules.data.node import Node
 from modules.data.gate import Gate
 
-from line_profiler import profile
 
 class Pass(Gate):
+    """Represents a Pass gate in the logic circuit simulation.
 
-    def __init__(self, id):
+    Inherits from Gate and acts as a buffer component.
+    """
+
+    def __init__(self, id: Any) -> None:
+        """Initialize the Pass gate with a unique identifier.
+
+        Parameters:
+        - id: The unique identifier for the gate instance.
+        """
         super().__init__(id)
 
-        self.name = "PASS"
-        self.type = "Gate"
-        self.gate_type = "PASS"
+        # Set identity attributes for the gate
+        self.name: str = "PASS"
+        self.type: str = "Gate"
+        self.gate_type: str = "PASS"
 
-        self.inputs = [0,0]
-        self.outputs = [0,0]
-        self.inputs_sizes = [1,1]
-        self.outputs_sizes = [1,1]
+        # Initialize I/O state lists with default values
+        self.inputs: List[int] = [0, 0]
+        self.outputs: List[int] = [0, 0]
 
+        # Define the bit-widths for the input and output ports
+        self.inputs_sizes: List[int] = [1, 1]
+        self.outputs_sizes: List[int] = [1, 1]
+
+        # Prepare visual representation and internal tiling data
         self.calculate_display()
         self.gen_tile_pattern()
-        

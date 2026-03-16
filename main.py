@@ -2,31 +2,46 @@
 # -------------------------------------------------
 from modules.ui.window import Window
 from modules.ui.main_menu.in_progress_view import MainMenuView
-from modules.data import data # Global Shared Data
-from modules.data.loader import Loader # Data Loading
-from modules.logger import Logger # Debuging
-import arcade # Game Engine
-import os
+from modules.data import data  # Global shared data
+from modules.data.loader import Loader  # Data loading
+from modules.logger import Logger  # Debugging
+import arcade  # Game engine
+import os  # File system operations
+
 # -------------------------------------------------
 
-arcade.enable_timings() #Debug informations for stress test (fps,delta_time)
-path = os.path.dirname(os.path.abspath(__file__)) # The path for data loading, such as saves and levels.
+# Enable arcade's internal timing to track FPS and delta_time for debugging/stress testing
+arcade.enable_timings()
 
+# Get the directory path of the current script file for data loading (saves, levels, etc.)
+path: str = os.path.dirname(os.path.abspath(__file__))
+
+# Set the current path in the global data object
 data.current_path = path
 
-logger = Logger("Main") # Little logger for debug informations
-loader = Loader() # Data loader, critical part.
+# Initialize a logger instance for debugging purposes
+logger: Logger = Logger("Main")
 
-logger.print(f"Logic Box, v.{data.VERSION}.") # Simple debug info, regarding the version stored in data.
-logger.print(f"Current path: {path}")
+# Initialize the data loader, responsible for loading all game assets, saves, and levels
+loader: Loader = Loader()
 
-windows = Window() # Window creation, needed to bake the textures.
-data.window = windows
-logger.print("Created Window.")
+# Print the game version and current path for debug purposes
+logger.print(f"Logic Box, v.{data.VERSION}.")  # Version info from data
+logger.print(f"Current path: {path}")  # Current working directory
 
-loader.load() #Load process of all data, saves, levels and textures.
+# Create the main game window (handles textures and display)
+windows: Window = Window()
+data.window = windows  # Store the window instance in global data
+logger.print("Created Window.")  # Confirm window creation in logs
 
-view = MainMenuView() # Launching instance of the main menu
- 
+# Load all necessary game data (levels, saves, textures)
+loader.load()  # Critical step for initializing game content
+
+# Instantiate the main menu view (first UI displayed to the player)
+view: MainMenuView = MainMenuView()
+
+# Display the main menu view in the game window
 windows.display(view)
-windows.run() # Game Launch.
+
+# Start the game loop (blocks execution and runs the arcade window)
+windows.run()

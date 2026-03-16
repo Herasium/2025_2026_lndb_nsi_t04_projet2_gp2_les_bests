@@ -1,25 +1,37 @@
-import arcade
-import math
+from typing import List, Any
 
-from modules.data.node import Node
 from modules.data.gate import Gate
 
-from line_profiler import profile
 
 class Nor(Gate):
+    """
+    Represents a NOR logic gate in the circuit simulation.
+    Inherits from the Gate base class.
+    """
 
-    def __init__(self, id):
+    def __init__(self, id: Any) -> None:
+        """
+        Initialize the NOR gate instance.
+
+        Parameters:
+        - id: Unique identifier for the gate instance
+        """
+        # Initialize the parent Gate class
         super().__init__(id)
 
-        self.name = "NOR"
-        self.type = "Gate"
-        self.gate_type = "NOR"
+        # Define metadata for the gate
+        self.name: str = "NOR"
+        self.type: str = "Gate"
+        self.gate_type: str = "NOR"
 
-        self.inputs = [0,0]
-        self.outputs = [1]
-        self.inputs_sizes = [1,1]
-        self.outputs_sizes = [1]
+        # Initialize gate states (2 inputs, 1 output)
+        self.inputs: List[int] = [0, 0]
+        self.outputs: List[int] = [1]
 
+        # Define dimensions or sizes for inputs and outputs
+        self.inputs_sizes: List[int] = [1, 1]
+        self.outputs_sizes: List[int] = [1]
+
+        # Calculate display properties and generate visual pattern
         self.calculate_display()
         self.gen_tile_pattern()
-        

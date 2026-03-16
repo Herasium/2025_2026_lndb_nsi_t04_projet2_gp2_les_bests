@@ -1,47 +1,72 @@
-
 """
- This file includes code from the easing-functions library, originally written by
- Filippos Christianos (@semitable) and Steve C (@diceroll123).
- 
- The easing-functions library is licensed under the GNU General Public License version 3.
- For more information, see the LICENSE file in the easing-functions directory or visit
- https://github.com/semitable/easing-functions.
+This file includes code from the easing-functions library, originally written by
+Filippos Christianos (@semitable) and Steve C (@diceroll123).
+
+The easing-functions library is licensed under the GNU General Public License version 3.
+For more information, see the LICENSE file in the easing-functions directory or visit
+https://github.com/semitable/easing-functions.
 """
 
 import math
 
+
 class EasingBase:
+    """Base class for all easing functions."""
 
-    def __init__(self, start=0, end=1, duration=100):
-        self.start = start
-        self.end = end
-        self.duration = duration
-        self.current = 0
-        self.done = False
+    def __init__(self, start: float = 0, end: float = 1, duration: int = 100) -> None:
+        """Initialize the easing object.
 
-    def func(self):
+        Parameters:
+        - start: The starting value
+        - end: The ending value
+        - duration: Total number of steps/ticks to complete the animation
+        """
+        self.start: float = start
+        self.end: float = end
+        self.duration: int = duration
+        self.current: int = 0
+        self.done: bool = False
+
+    def func(self) -> float:
+        """Calculate the normalized easing progress.
+        Must be implemented by subclasses.
+
+        Returns:
+        - float: The progress value between 0.0 and 1.0
+        """
         raise NotImplementedError
 
-    def tick(self):
+    def tick(self) -> float:
+        """Advance the animation by one step and calculate the current value.
+
+        Returns:
+        - float: The calculated value at the current step
+        """
         if self.current < self.duration:
-            value = self.func()
-            self.current += 1
+            value: float = self.func()  # Get normalized progression from subclass
+            self.current += 1  # Increment progress counter
             return self.start + (self.end - self.start) * value
         else:
-            self.done = True
-            return self.end
+            self.done = True  # Mark as finished
+            return self.end  # Ensure final value is returned
 
-    def reset(self):
+    def reset(self) -> None:
+        """Reset the animation state to the beginning."""
         self.current = 0
         self.done = False
+
 
 """
 Linear
 """
+
+
 class LinearInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate linear easing."""
+        t: float = self.current / self.duration
         return t
+
 
 """
 Quadratic easing functions
@@ -50,7 +75,8 @@ Quadratic easing functions
 
 class QuadEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quadratic In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return 2 * t * t
         return (-2 * t * t) + (4 * t) - 1
@@ -58,13 +84,15 @@ class QuadEaseInOut(EasingBase):
 
 class QuadEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quadratic In easing."""
+        t: float = self.current / self.duration
         return t * t
 
 
 class QuadEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quadratic Out easing."""
+        t: float = self.current / self.duration
         return -(t * (t - 2))
 
 
@@ -75,22 +103,25 @@ Cubic easing functions
 
 class CubicEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate cubic In easing."""
+        t: float = self.current / self.duration
         return t * t * t
 
 
 class CubicEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate cubic Out easing."""
+        t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) + 1
 
 
 class CubicEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate cubic In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return 4 * t * t * t
-        p = 2 * t - 2
+        p: float = 2 * t - 2
         return 0.5 * p * p * p + 1
 
 
@@ -101,22 +132,25 @@ Quartic easing functions
 
 class QuarticEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quartic In easing."""
+        t: float = self.current / self.duration
         return t * t * t * t
 
 
 class QuarticEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quartic Out easing."""
+        t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) * (1 - t) + 1
 
 
 class QuarticEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quartic In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return 8 * t * t * t * t
-        p = t - 1
+        p: float = t - 1
         return -8 * p * p * p * p + 1
 
 
@@ -127,22 +161,25 @@ Quintic easing functions
 
 class QuinticEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quintic In easing."""
+        t: float = self.current / self.duration
         return t * t * t * t * t
 
 
 class QuinticEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quintic Out easing."""
+        t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1
 
 
 class QuinticEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate quintic In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return 16 * t * t * t * t * t
-        p = (2 * t) - 2
+        p: float = (2 * t) - 2
         return 0.5 * p * p * p * p * p + 1
 
 
@@ -153,19 +190,22 @@ Sine easing functions
 
 class SineEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate sine In easing."""
+        t: float = self.current / self.duration
         return math.sin((t - 1) * math.pi / 2) + 1
 
 
 class SineEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate sine Out easing."""
+        t: float = self.current / self.duration
         return math.sin(t * math.pi / 2)
 
 
 class SineEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate sine In-Out easing."""
+        t: float = self.current / self.duration
         return 0.5 * (1 - math.cos(t * math.pi))
 
 
@@ -176,19 +216,22 @@ Circular easing functions
 
 class CircularEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate circular In easing."""
+        t: float = self.current / self.duration
         return 1 - math.sqrt(1 - (t * t))
 
 
 class CircularEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate circular Out easing."""
+        t: float = self.current / self.duration
         return math.sqrt((2 - t) * t)
 
 
 class CircularEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate circular In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return 0.5 * (1 - math.sqrt(1 - 4 * (t * t)))
         return 0.5 * (math.sqrt(-((2 * t) - 3) * ((2 * t) - 1)) + 1)
@@ -201,7 +244,8 @@ Exponential easing functions
 
 class ExponentialEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate exponential In easing."""
+        t: float = self.current / self.duration
         if t == 0:
             return 0
         return math.pow(2, 10 * (t - 1))
@@ -209,7 +253,8 @@ class ExponentialEaseIn(EasingBase):
 
 class ExponentialEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate exponential Out easing."""
+        t: float = self.current / self.duration
         if t == 1:
             return 1
         return 1 - math.pow(2, -10 * t)
@@ -217,7 +262,8 @@ class ExponentialEaseOut(EasingBase):
 
 class ExponentialEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate exponential In-Out easing."""
+        t: float = self.current / self.duration
         if t == 0 or t == 1:
             return t
 
@@ -233,19 +279,22 @@ Elastic Easing Functions
 
 class ElasticEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate elastic In easing."""
+        t: float = self.current / self.duration
         return math.sin(13 * math.pi / 2 * t) * math.pow(2, 10 * (t - 1))
 
 
 class ElasticEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate elastic Out easing."""
+        t: float = self.current / self.duration
         return math.sin(-13 * math.pi / 2 * (t + 1)) * math.pow(2, -10 * t) + 1
 
 
 class ElasticEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate elastic In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
             return (
                 0.5
@@ -266,26 +315,28 @@ Back Easing Functions
 
 class BackEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate back In easing."""
+        t: float = self.current / self.duration
         return t * t * t - t * math.sin(t * math.pi)
 
 
 class BackEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
-        p = 1 - t
+        """Calculate back Out easing."""
+        t: float = self.current / self.duration
+        p: float = 1 - t
         return 1 - (p * p * p - p * math.sin(p * math.pi))
 
 
 class BackEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate back In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
-            p = 2 * t
+            p: float = 2 * t
             return 0.5 * (p * p * p - p * math.sin(p * math.pi))
 
-        p = 1 - (2 * t - 1)
-
+        p: float = 1 - (2 * t - 1)
         return 0.5 * (1 - (p * p * p - p * math.sin(p * math.pi))) + 0.5
 
 
@@ -296,8 +347,9 @@ Bounce Easing Functions
 
 class BounceEaseIn(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
-        n = BounceEaseOut()
+        """Calculate bounce In easing by delegating to BounceEaseOut."""
+        t: float = self.current / self.duration
+        n: BounceEaseOut = BounceEaseOut()  # Reuse logic for inversion
         n.current = 1 - t
         n.duration = 1
         return 1 - n.func()
@@ -305,7 +357,8 @@ class BounceEaseIn(EasingBase):
 
 class BounceEaseOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate bounce Out easing using piecewise functions."""
+        t: float = self.current / self.duration
         if t < 4 / 11:
             return 121 * t * t / 16
         elif t < 8 / 11:
@@ -317,9 +370,10 @@ class BounceEaseOut(EasingBase):
 
 class BounceEaseInOut(EasingBase):
     def func(self) -> float:
-        t = self.current / self.duration
+        """Calculate bounce In-Out easing."""
+        t: float = self.current / self.duration
         if t < 0.5:
-            n = BounceEaseIn()
+            n: BounceEaseIn = BounceEaseIn()
             n.current = t * 2
             n.duration = 1
             return 0.5 * n.func()
@@ -327,6 +381,3 @@ class BounceEaseInOut(EasingBase):
         n.current = t * 2 - 1
         n.duration = 1
         return 0.5 * n.func() + 0.5
-    
-
-

@@ -1,21 +1,15 @@
 import arcade
 from line_profiler import profile
-from PIL import Image
-import json
-import os
 import time
+from typing import Optional, List, Tuple, Any
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
-from modules.ui.toolbox.grid import Grid
-from modules.ui.toolbox.text import Text
-from modules.ui.toolbox.hitbox import HitBox
 from modules.ui.toolbox.id_generator import random_id
 from modules.ui.level_editor.save import SaveFrame
 
 from modules.data.nodes.path import Path
 
-from modules.data.chip import Chip
 from modules.data.level import Level
 
 
@@ -26,44 +20,51 @@ from modules.engine import Engine
 
 
 class LevelEditorView(arcade.View):
+    """
+    Manages the level editor interface, handling gate placement,
+    path creation, camera movement, and interaction logic.
+    """
 
-    def __init__(self, id=None):
+    def __init__(self, id: Optional[str] = None):
         super().__init__()
 
-        self.follower = Entity()
+        # UI elements and interaction states
+        self.follower: Entity = Entity()
         self.follower.height = data.UI_EDITOR_GRID_SIZE
         self.follower.width = data.UI_EDITOR_GRID_SIZE
 
-        self.bottom_zone_collider = Entity()
+        self.bottom_zone_collider: Entity = Entity()
         self.bottom_zone_collider.x = 0
         self.bottom_zone_collider.y = 0
         self.bottom_zone_collider.width = 1920
-        self.bottom_zone_collider.height = 3*64
+        self.bottom_zone_collider.height = 3 * 64
 
-        self.selected_follower = None
-        self.moving_gate = None
-        self.current_path = None
+        self.selected_follower: Optional[Any] = None
+        self.moving_gate: Optional[Any] = None
+        self.current_path: Optional[Path] = None
 
-        self.moving_gate_offset = (0, 0)
+        self.moving_gate_offset: Tuple[int, int] = (0, 0)
 
-        self._real_camera_position = (0,0)
-        self.camera_position = (0,0)
+        # Camera state management
+        self._real_camera_position: Tuple[int, int] = (0, 0)
+        self.camera_position: Tuple[int, int] = (0, 0)
 
-        self.bottom_gates = []
+        self.bottom_gates: List[Any] = []
         self.bottom_gate_bar()
 
         self.background_color = arcade.types.Color.from_hex_string("121212")
 
-        self.camera_hold = False
-        self.fps = 0
-        self.delta_time = 1
-        self.frame_count = 0
-        self.last_time = 1
+        # Performance and state variables
+        self.camera_hold: bool = False
+        self.fps: float = 0
+        self.delta_time: float = 1
+        self.frame_count: int = 0
+        self.last_time: float = 1
 
-        self.engine = Engine()
+        self.engine: Engine = Engine()
+        self.stress_test: bool = False
 
-        self.stress_test = False
-
+        # Load or create level
         if id == None:
             self.level = Level(random_id())
         else:
@@ -71,103 +72,84 @@ class LevelEditorView(arcade.View):
                 self.level = data.loaded_levels[id]
             else:
                 self.level = Level(random_id())
-                
 
-
-  
-    def bottom_bar_width_sum(self):
+    def bottom_bar_width_sum(self) -> int:
+        """Calculate the total width of all gates in the bottom bar."""
         result = 0
         for i in self.bottom_gates:
             result += i.tile_width
         return result
 
-    def bottom_gate_bar(self):
-
+    def bottom_gate_bar(self) -> None:
+        """Initialize the bottom toolbar with available gate types."""
         for i in gate_types:
-           
-            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 
+            position = (
+                self.bottom_bar_width_sum() + len(self.bottom_gates)
+            ) * data.UI_EDITOR_GRID_SIZE + 64
             self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
-            self.bottom_gates[-1].camera = (0,0)
-            self.bottom_gates[-1].y = (3*data.UI_EDITOR_GRID_SIZE)
+            self.bottom_gates[-1].camera = (0, 0)
+            self.bottom_gates[-1].y = 3 * data.UI_EDITOR_GRID_SIZE
             self.bottom_gates[-1].x = position
-            
-    def get_hovered_bottom_gate(self):
-        for i in self.bottom_gates:
-            if i.entity.touched :
-                return i.gate_type
 
-    def draw_bottom_gates(self):
+    def get_hovered_bottom_gate(self) -> Optional[str]:
+        """Check if any gate in the bottom bar is currently hovered by the mouse."""
+        for i in self.bottom_gates:
+            if i.entity.touched:
+                return i.gate_type
+        return None
+
+    def draw_bottom_gates(self) -> None:
+        """Render all gates located in the bottom UI bar."""
         for i in self.bottom_gates:
             i.draw()
 
-    def draw_tile(self,id,x,y):
-            
-            rect = arcade.XYWH(
-                x=x,
-                y=y,
-                width=64,
-                height=64,
-                anchor=arcade.Vec2(0,0)
-            )
+    def draw_tile(self, id: str, x: int, y: int) -> None:
+        """Draw a specific UI border tile at given coordinates."""
+        rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
+        arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
-            arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
-
-
-    def reset(self):
+    def reset(self) -> None:
+        """Placeholder for reset logic."""
         pass
 
-    def draw_frame_border(self):
+    def draw_frame_border(self) -> None:
+        """Draw the main editor window border overlay."""
+        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        arcade.draw_sprite_rect(data.editor_border, rect)
 
-        rect = arcade.XYWH(
-                x=0,
-                y=0,
-                width=1920,
-                height=1080,
-                anchor=arcade.Vec2(0,0)
-            )
+    def draw_frame_background(self) -> None:
+        """Draw the grid background texture."""
+        rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
+        arcade.draw_texture_rect(data.background_grid_texture, rect)
 
-        arcade.draw_sprite_rect(data.editor_border,rect)
-
-    def draw_frame_background(self):
-
-        rect = arcade.XYWH(
-                x=0,
-                y=0,
-                width=1920,
-                height=1088,
-                anchor=arcade.Vec2(0,0)
-            )
-
-        arcade.draw_texture_rect(data.background_grid_texture,rect)
-
-    
-    def draw_debug_text(self):
-
+    def draw_debug_text(self) -> None:
+        """Draw performance and level metadata on the screen."""
         debug_list = [
             f"Level Editor {self.level.id}",
             f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
-            f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p"
+            f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
         ]
 
-        start_y = 1080-70
-        
+        start_y = 1080 - 70
+
         for index, item in enumerate(debug_list):
             arcade.draw_text(
-                item, 
-                64,  
-                start_y - (index * 25), 
-                arcade.color.WHITE,  
+                item,
+                64,
+                start_y - (index * 25),
+                arcade.color.WHITE,
                 14,
                 font_name="Press Start 2P",
             )
 
-
     @profile
-    def on_draw(self):
+    def on_draw(self) -> None:
+        """Render the editor view, including paths, gates, and UI elements."""
         self.clear()
 
         self.draw_frame_background()
+        # Draw all existing circuit components
         for p in self.level.chip.paths.values():
             p.draw()
 
@@ -180,46 +162,50 @@ class LevelEditorView(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
+        # Draw overlays
         self.draw_debug_text()
         self.draw_frame_border()
         self.draw_bottom_gates()
 
+        # Update timing metrics
         self.frame_count += 1
         self.delta_time = time.time() - self.last_time
         self.last_time = time.time()
-        
-    def on_update(self, delta_time):
-        self.fps = 1/self.delta_time*10000//10000
+
+    def on_update(self, delta_time: float) -> None:
+        """Update logic for the editor, including simulation and frame rate."""
+        self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
 
-    def save_frame(self):
+    def save_frame(self) -> None:
+        """Trigger the save UI interface."""
         data.window.display(SaveFrame(self.level))
 
-
-    def on_key_press(self, key, key_modifiers):
-
-        if key == 101: #e
+    def on_key_press(self, key: int, key_modifiers: int) -> None:
+        """Handle keyboard input for editor controls."""
+        if key == 101:  # "e": Toggle logic gate state (if Input gate)
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
 
-        if key == 97:  # "a"
+        if key == 97:  # "a": Go back
             data.window.back()
-        if key == 116:  # "t"
+        if key == 116:  # "t": Show truth table
             self.level.get_truth_table()
-        if key == 65307:  # ESC
+        if key == 65307:  # ESC: Abort current path or selection
             if self.current_path:
                 self.current_path.abort()
             self.current_path = None
             self.selected_follower = None
 
-        if key == 115: # s
+        if key == 115:  # "s": Save
             self.save_frame()
 
-        if key == 65288:
+        if key == 65288:  # Backspace: Delete selected
             self.delete()
 
-    def delete_gate(self,id):
+    def delete_gate(self, id: str) -> None:
+        """Remove a gate and all associated path connections."""
         to_delete = []
         for index in self.level.chip.paths.keys():
             p = self.level.chip.paths[index]
@@ -244,8 +230,8 @@ class LevelEditorView(arcade.View):
         for i in to_delete:
             del self.level.chip.paths[i]
 
-    def delete(self):
-
+    def delete(self) -> None:
+        """Determine if a gate or path is currently touched and delete it."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
@@ -260,20 +246,26 @@ class LevelEditorView(arcade.View):
                 p.clean_out_single_branch()
                 break
 
-
-    def on_key_release(self, key, key_modifiers):
+    def on_key_release(self, key: int, key_modifiers: int) -> None:
+        """Handle key release events."""
         pass
 
-
     @property
-    def camera(self):
+    def camera(self) -> Tuple[int, int]:
+        """Return current camera position."""
         return self.camera_position
 
     @camera.setter
-    
-    def camera(self,value):
+    def camera(self, value: Tuple[int, int]) -> None:
+        """Update camera position and adjust components for grid alignment."""
         self._real_camera_position = value
-        self.camera_position = ((self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE,(self._real_camera_position[1] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE)
+        self.camera_position = (
+            (self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE)
+            * data.UI_EDITOR_GRID_SIZE,
+            (self._real_camera_position[1] // data.UI_EDITOR_GRID_SIZE)
+            * data.UI_EDITOR_GRID_SIZE,
+        )
+        # Sync all objects to new camera position
         for g in self.level.chip.gates:
             self.level.chip.gates[g].camera_moving(self.camera_position)
         for p in self.level.chip.paths:
@@ -281,158 +273,214 @@ class LevelEditorView(arcade.View):
         if self.current_path:
             self.current_path.camera = self.camera_position
 
-    
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-            mouse.position = (x, y)
+    def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
+        """Handle mouse movement, updates followers and camera drag."""
+        mouse.position = (x, y)
 
+        self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
+        self.follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
 
-            self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
-            self.follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
+        if self.camera_hold:
+            self.camera = (
+                self._real_camera_position[0] + delta_x,
+                self._real_camera_position[1] + delta_y,
+            )
 
-            if self.camera_hold:
-                self.camera = (self._real_camera_position[0] + delta_x, self._real_camera_position[1] + delta_y)
-                #self.camera = (self.camera_position[0] + delta_x, self.camera_position[1] + delta_y)
+        if self.selected_follower:
+            self.selected_follower._camera = (0, 0)
+            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
+            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2
 
+        if self.moving_gate:
+            self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
+            self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
 
-            if self.selected_follower:
-                self.selected_follower._camera = (0,0)
-                self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 
-                self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 
+            # Update paths connected to the moving gate
+            for path in self.level.chip.paths.values():
+                connected_inputs, connected_outputs = path.get_connected_points(
+                    self.moving_gate.id
+                )
+                modified = False
 
-            if self.moving_gate:
-                self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0] 
-                self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1] 
+                for i in connected_inputs:
+                    modified = True
+                    position = self.moving_gate.outputs_position[i[2]]
+                    position = (
+                        position[0] - self.camera_position[0],
+                        position[1] - self.camera_position[1],
+                    )
+                    if i[3] == 1:
+                        path.branch_points[i[4]][0] = position
+                    elif i[3] == 2:
+                        path.branch_points[i[4]][-1] = position
 
-                # update connected paths
-                for path in self.level.chip.paths.values():
-                    connected_inputs, connected_outputs = path.get_connected_points(self.moving_gate.id)
-                    modified = False
+                for i in connected_outputs:
+                    modified = True
+                    position = self.moving_gate.inputs_position[i[2]]
+                    position = (
+                        position[0] - self.camera_position[0],
+                        position[1] - self.camera_position[1],
+                    )
+                    if i[3] == 1:
+                        path.branch_points[i[4]][0] = position
+                    elif i[3] == 2:
+                        path.branch_points[i[4]][-1] = position
 
-                    for i in connected_inputs:
-                        modified = True
-                        position = self.moving_gate.outputs_position[i[2]]
-                        position = (position[0]- self.camera_position[0] ,position[1] - self.camera_position[1] )
-                        if i[3] == 1:
-                            path.branch_points[i[4]][0] = position
-                        elif i[3] == 2:
-                            path.branch_points[i[4]][-1] = position
+                if modified:
+                    path.recalculate_hitbox()
 
-                    for i in connected_outputs:
-                        modified = True
-                        position = self.moving_gate.inputs_position[i[2]]
-                        position = (position[0] - self.camera_position[0] ,position[1] - self.camera_position[1] )
-                        if i[3] == 1:
-                            path.branch_points[i[4]][0] = position
-                        elif i[3] == 2:
-                            path.branch_points[i[4]][-1] = position
-
-                    if modified:
-                        path.recalculate_hitbox()
-
-    def simulate(self):
+    def simulate(self) -> None:
+        """Run the circuit engine simulation."""
         self.engine.propagate_values(self.level.chip)
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
+    def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
+        """Handle mouse clicks for interacting with gates and paths."""
+        # Middle click camera hold
+        if button == 2:
+            self.camera_hold = True
+            return
+        if self.camera_hold:
+            return
 
+        # Attempt to click a gate
+        for g in self.level.chip.gates.values():
+            touched = g.touched
+            if touched:
+                if self.current_path is None:
+                    # Start new path
+                    pid = random_id()
+                    self.current_path = Path(pid)
+                    self.current_path.camera = self.camera
+                    self.current_path.add_path()
 
-            if button == 2:
-                self.camera_hold = True
-                return
-            if self.camera_hold:
-                return
+                    if touched[0] == 1:  # Input touched
+                        self.current_path.outputs.append(
+                            [
+                                1,
+                                g.id,
+                                touched[1],
+                                1,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    else:  # Output touched
+                        self.current_path.inputs.append(
+                            [
+                                2,
+                                g.id,
+                                touched[1],
+                                1,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    return
+                else:
+                    # Finish existing path
+                    if touched[0] == 1:  # Input touched
+                        self.current_path.outputs.append(
+                            [
+                                1,
+                                g.id,
+                                touched[1],
+                                2,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    else:  # Output touched
+                        self.current_path.inputs.append(
+                            [
+                                2,
+                                g.id,
+                                touched[1],
+                                2,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    self.current_path.camera = self.camera
+                    self.current_path.finish()
+                    if self.current_path.id not in self.level.chip.paths:
+                        self.level.chip.paths[self.current_path.id] = self.current_path
 
-            # Clicked a gate?
-            for g in self.level.chip.gates.values():
-                touched = g.touched
-                if touched:
-                    if self.current_path is None:
-                        # start new path
-                        pid = random_id()
-                        self.current_path = Path(pid)
-                        self.current_path.camera = self.camera
-                        self.current_path.add_path()
+                    self.current_path = None
+                    return
 
-                        if touched[0] == 1: #Input touched
-                            self.current_path.outputs.append([1, g.id, touched[1], 1, self.current_path.current_branch_count])
-                        else: #Output touched
-                            self.current_path.inputs.append([2, g.id, touched[1], 1, self.current_path.current_branch_count])
-                        return
+        # Click on an existing path
+        if not self.current_path:
+            for p in self.level.chip.paths.values():
+                if p.touched:
+                    p.add_path()
+                    self.current_path = p
+                    return
+        else:
+            for p in self.level.chip.paths.values():
+                if p.touched and p != self.current_path:
+                    self.current_path.add_path()
+                    p.merge(self.current_path)
 
-                    else:
-                        # finish existing path
-                        if touched[0] == 1:#Input touched
-                            self.current_path.outputs.append([1, g.id, touched[1], 2, self.current_path.current_branch_count])
-                        else:#Output touched
-                            self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
-                        self.current_path.camera = self.camera
-                        self.current_path.finish()
-                        if self.current_path.id not in self.level.chip.paths:
-                            self.level.chip.paths[self.current_path.id] = self.current_path
+                    if self.current_path.id in self.level.chip.paths:
+                        del self.level.chip.paths[self.current_path.id]
 
-                        self.current_path = None
-                        return
-
-            # Clicking on a path
-            if not self.current_path:
-                for p in self.level.chip.paths.values():
-                    if p.touched:
-                        p.add_path()
-                        self.current_path = p
-                        return
-            else:
-                for p in self.level.chip.paths.values():
-                    if p.touched and p != self.current_path:
-                        self.current_path.add_path()
-                        p.merge(self.current_path)
-
-                        if self.current_path.id in self.level.chip.paths:
-                            del self.level.chip.paths[self.current_path.id]
-
-                        self.current_path = None
-                        return
+                    self.current_path = None
+                    return
 
                 self.current_path.add_path()
                 return
 
-            # Move a gate
-            if self.moving_gate is None:
-                for g in self.level.chip.gates.values():
-                    if g.entity.touched:
-                        self.moving_gate_offset = (
-                            mouse.cursor[0] - g.x,
-                            mouse.cursor[1] - g.y
-                        )
-                        self.moving_gate = g
-                        return
+        # Move a gate
+        if self.moving_gate is None:
+            for g in self.level.chip.gates.values():
+                if g.entity.touched:
+                    self.moving_gate_offset = (
+                        mouse.cursor[0] - g.x,
+                        mouse.cursor[1] - g.y,
+                    )
+                    self.moving_gate = g
+                    return
 
-            # Place new gate
-            if self.selected_follower is None:
-                hovered = self.get_hovered_bottom_gate()
-                if hovered in gate_types:
-                    self.selected_follower =  gate_types[hovered](random_id())
-                    self.selected_follower.camera = self.camera
-                    self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
-                    self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-  
+        # Place new gate from bottom bar
+        if self.selected_follower is None:
+            hovered = self.get_hovered_bottom_gate()
+            if hovered in gate_types:
+                self.selected_follower = gate_types[hovered](random_id())
+                self.selected_follower.camera = self.camera
+                self.selected_follower.x = (
+                    mouse.cursor[0]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[0]
+                )
+                self.selected_follower.y = (
+                    mouse.cursor[1]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[1]
+                )
 
-    def on_mouse_release(self, x, y, button, key_modifiers):
-        
+    def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
+        """Handle mouse release for camera drag or gate placement finalization."""
         if button == 2:
             self.camera_hold = False
-
             for g in self.level.chip.gates:
                 self.level.chip.gates[g].camera = self.camera_position
-
         else:
-            if not self.selected_follower is None:
-
+            if self.selected_follower is not None:
                 if self.bottom_zone_collider.touched:
+                    # Return to sender if dropped in UI zone
                     self.selected_follower = None
                 else:
-                    self.level.chip.gates[self.selected_follower.id] = self.selected_follower
+                    # Place gate into level
+                    self.level.chip.gates[self.selected_follower.id] = (
+                        self.selected_follower
+                    )
                     self.selected_follower.camera = self.camera
-                    self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
-                    self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+                    self.selected_follower.x = (
+                        mouse.cursor[0]
+                        - data.UI_EDITOR_GRID_SIZE / 2
+                        - self.camera_position[0]
+                    )
+                    self.selected_follower.y = (
+                        mouse.cursor[1]
+                        - data.UI_EDITOR_GRID_SIZE / 2
+                        - self.camera_position[1]
+                    )
                     self.selected_follower = None
 
         self.moving_gate = None

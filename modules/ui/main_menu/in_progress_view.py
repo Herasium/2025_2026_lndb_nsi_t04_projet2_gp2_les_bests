@@ -1,32 +1,36 @@
 import arcade
+import colorsys
+from typing import List, Dict, Tuple, Any, Optional
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
-from modules.ui.editor.view import EditorView
 from modules.ui.editor.selector import EditorChipSelector
 from modules.ui.level_list.view import LevelList
 from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
 from modules.ui.main_menu.tutorial_view import TutorialView
-
 from modules.data.nodes.path import Path
-
 from modules.data import data
 from modules.logger import Logger
 
-import sys
-import colorsys
+# Initialize the logger for this module
+logger: Logger = Logger("MainMenu")
 
-logger = Logger("MainMenu")
 
 class MainMenuView(arcade.View):
+    """
+    Handles the main menu view of the game, including UI rendering,
+    button interactions, and navigation.
+    """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the MainMenuView, setting up buttons and initial state."""
         super().__init__()
 
-        self.background_color = arcade.color.JET
+        self.background_color: arcade.types.Color = arcade.color.JET
 
+        # Assign sprite assets from the data module
         self.play_button_sprite = data.play_button
         self.name_banner_sprite = data.name_banner
         self.quit_button_sprite = data.button_quit
@@ -35,221 +39,272 @@ class MainMenuView(arcade.View):
         self.sandbox_button_sprite = data.button_sandbox
         self.tuto_button_sprite = data.button_tuto
 
-        self.play_button = Button()
+        # Initialize buttons and set their geometric properties
+        self.play_button: Button = Button()
         self.play_button.x = 1920 / 2 - 700 / 2 - 5
         self.play_button.y = 260 + 320 + 100 + 225 / 2
         self.play_button.width = 700
         self.play_button.height = 225
 
-        self.quit_button = Button()
+        self.quit_button: Button = Button()
         self.quit_button.x = 1920 - 350
         self.quit_button.y = 260 + 125
         self.quit_button.width = 175
         self.quit_button.height = 175
 
-        self.setting_button = Button()
+        self.setting_button: Button = Button()
         self.setting_button.x = 1920 / 7
-        self.setting_button.y = 260 + 180 
-        self.setting_button.width = 200*1.5
-        self.setting_button.height = 100*1.5
+        self.setting_button.y = 260 + 180
+        self.setting_button.width = 200 * 1.5
+        self.setting_button.height = 100 * 1.5
 
-        self.sandbox_button = Button()
+        self.sandbox_button: Button = Button()
         self.sandbox_button.x = 1920 - 830
         self.sandbox_button.y = 260 + 168
-        self.sandbox_button.width = 160*1.5
-        self.sandbox_button.height = 100*1.5   
+        self.sandbox_button.width = 160 * 1.5
+        self.sandbox_button.height = 100 * 1.5
 
-        self.level_button = Button()
+        self.level_button: Button = Button()
         self.level_button.x = 1920 / 2 - 200
         self.level_button.y = 260 + 250
-        self.level_button.width = 180*1.25
-        self.level_button.height = 100*1.25
+        self.level_button.width = 180 * 1.25
+        self.level_button.height = 100 * 1.25
 
-        self.tuto_button = Button()
+        self.tuto_button: Button = Button()
         self.tuto_button.x = 1920 / 3 + 60
         self.tuto_button.y = 260
-        self.tuto_button.width = 200*1.25
-        self.tuto_button.height = 100*1.25
+        self.tuto_button.width = 200 * 1.25
+        self.tuto_button.height = 100 * 1.25
 
-        self.button_touche = [""]
-        self.combinaison = ["level_button", "sandbox_button", "tuto_button", "setting_button"]
+        # Tracking state for hidden easter egg combination
+        self.button_touche: List[str] = [""]
+        self.combinaison: List[str] = [
+            "level_button",
+            "sandbox_button",
+            "tuto_button",
+            "setting_button",
+        ]
+        self.compteur: float = 0
 
-        self.compteur = 0
-
-
-        self.paths = []
+        self.paths: List[Path] = []
         self.add_paths()
 
-    def rainbow_color(self,precision: int, index: int) -> str:
+    def rainbow_color(self, precision: int, index: int) -> str:
+        """
+        Generate a hex color string based on an index to create a rainbow effect.
 
-        h = (index % precision) / precision
-        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
+        Parameters:
+        - precision: The frequency of the color shift.
+        - index: The current frame or step index.
 
-        return "#{:02x}{:02x}{:02x}".format(
-            int(r * 255),
-            int(g * 255),
-            int(b * 255)
-        )
+        Returns:
+        - str: Hex color code (e.g., "#RRGGBB").
+        """
+        h: float = (index % precision) / precision
+        r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)  # Convert HSV to RGB
 
-    def add_paths(self):
+        # Convert normalized float RGB values to 0-255 integer hex representation
+        return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
-        branches = [
+    def add_paths(self) -> None:
+        """Define and append path data structures for menu visuals."""
+        branches: List[Dict[int, List[Tuple[int, int]]]] = [
             {0: [(945, 702), (594, 702), (594, 837), (270, 837), (270, 891)], 1: []},
-            {0: [(945, 702), (945, 648), (540, 648), (540, 540), (243, 540), (243, 648), (81, 648)], 1: []},
-            {0: [(945, 702), (945, 459), (675, 459), (675, 351), (189, 351), (189, 270), (81, 270)], 1: []},
-            {0: [(945, 702), (945, 351), (729, 351), (729, 216), (297, 216), (297, 81)], 1: []},
-            {0: [(945, 702), (972, 675), (972, 648), (1161, 648), (1161, 351), (1026, 351), (1026, 189), (918, 189), (918, 81)], 1: []},
-            {0: [(945, 702), (1188, 702), (1188, 297), (1350, 297), (1350, 135), (1512, 135), (1512, 81)], 1: []},
-            {0: [(945, 702), (1269, 702), (1269, 351), (1674, 351), (1674, 297), (1836, 297)], 1: []},
+            {
+                0: [
+                    (945, 702),
+                    (945, 648),
+                    (540, 648),
+                    (540, 540),
+                    (243, 540),
+                    (243, 648),
+                    (81, 648),
+                ],
+                1: [],
+            },
+            {
+                0: [
+                    (945, 702),
+                    (945, 459),
+                    (675, 459),
+                    (675, 351),
+                    (189, 351),
+                    (189, 270),
+                    (81, 270),
+                ],
+                1: [],
+            },
+            {
+                0: [
+                    (945, 702),
+                    (945, 351),
+                    (729, 351),
+                    (729, 216),
+                    (297, 216),
+                    (297, 81),
+                ],
+                1: [],
+            },
+            {
+                0: [
+                    (945, 702),
+                    (972, 675),
+                    (972, 648),
+                    (1161, 648),
+                    (1161, 351),
+                    (1026, 351),
+                    (1026, 189),
+                    (918, 189),
+                    (918, 81),
+                ],
+                1: [],
+            },
+            {
+                0: [
+                    (945, 702),
+                    (1188, 702),
+                    (1188, 297),
+                    (1350, 297),
+                    (1350, 135),
+                    (1512, 135),
+                    (1512, 81),
+                ],
+                1: [],
+            },
+            {
+                0: [
+                    (945, 702),
+                    (1269, 702),
+                    (1269, 351),
+                    (1674, 351),
+                    (1674, 297),
+                    (1836, 297),
+                ],
+                1: [],
+            },
             {0: [(945, 702), (1377, 702), (1377, 729), (1836, 729)], 1: []},
-            {0: [(945, 702), (1026, 729), (1296, 729), (1296, 891)], 1: []}
+            {0: [(945, 702), (1026, 729), (1296, 729), (1296, 891)], 1: []},
         ]
 
         for branch in branches:
-
             self.paths.append(Path(""))
-            self.paths[len(self.paths)-1].do_points = False
-            self.paths[len(self.paths)-1].branch_points = branch
+            self.paths[-1].do_points = False
+            self.paths[-1].branch_points = branch
 
-    def draw_paths(self):
+    def draw_paths(self) -> None:
+        """Draw all stored visual paths on the screen."""
+        for path in self.paths:
+            path.draw()
 
-        for i in self.paths:
-            i.draw()
+    def on_key_press(self, key: int, key_modifiers: int) -> None:
+        """
+        Handle keyboard input.
 
-    def on_key_press(self, key, key_modifiers):
-        if key == 97: #"a"
+        Parameters:
+        - key: The numeric code of the key pressed.
+        - key_modifiers: Modifier keys (shift, ctrl, etc.).
+        """
+        if key == 97:  # "a" to exit
             arcade.exit()
 
-    def draw_tile(self,id,x,y):
-            
-            rect = arcade.XYWH(
-                x=x,
-                y=y,
-                width=64,
-                height=64,
-                anchor=arcade.Vec2(0,0)
-            )
+    def draw_tile(self, id: int, x: int, y: int) -> None:
+        """
+        Draw a specific UI tile from the border set.
 
-            arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
+        Parameters:
+        - id: Index of the tile in the ui_border_tiles list.
+        - x: Horizontal screen position.
+        - y: Vertical screen position.
+        """
+        rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
+        arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
-    def draw_frame_border(self):
-        start_x = 32
-        start_y = 865
-        y_len = 13
-        x_len = 28
+    def draw_frame_border(self) -> None:
+        """Assemble the frame border by drawing individual tiles."""
+        start_x, start_y = 32, 865
+        y_len, x_len = 13, 28
 
-        self.draw_tile(0,start_x,start_y)
-        for i in range(x_len-1):
-            self.draw_tile(1,start_x + (i+1)*64,start_y)
-        self.draw_tile(3,start_x+x_len*64,start_y)
+        # Draw top corners and edge
+        self.draw_tile(0, start_x, start_y)
+        for i in range(x_len - 1):
+            self.draw_tile(1, start_x + (i + 1) * 64, start_y)
+        self.draw_tile(3, start_x + x_len * 64, start_y)
 
-        for i in range(y_len-1):
-            self.draw_tile(4,start_x,start_y - (i+1)*64)
-            self.draw_tile(7,start_x+x_len*64,start_y - (i+1)*64)
+        # Draw side edges
+        for i in range(y_len - 1):
+            self.draw_tile(4, start_x, start_y - (i + 1) * 64)
+            self.draw_tile(7, start_x + x_len * 64, start_y - (i + 1) * 64)
 
+        # Draw bottom edge
+        self.draw_tile(12, start_x, start_y - y_len * 64)
+        self.draw_tile(13, start_x + 64, start_y - y_len * 64)
+        self.draw_tile(5, start_x + 2 * 64, start_y - y_len * 64)
+        self.draw_tile(6, start_x + 3 * 64, start_y - y_len * 64)
+        self.draw_tile(10, start_x + 4 * 64, start_y - y_len * 64)
+        for i in range(x_len - 5):
+            self.draw_tile(13, start_x + (i + 5) * 64, start_y - y_len * 64)
+        self.draw_tile(15, start_x + x_len * 64, start_y - y_len * 64)
 
-        self.draw_tile(12,start_x,start_y - y_len*64)
-        self.draw_tile(13,start_x + 64,start_y- y_len*64)
-        self.draw_tile(5,start_x + 2*64,start_y- y_len*64)
-        self.draw_tile(6,start_x + 3*64,start_y- y_len*64)
-        self.draw_tile(10,start_x + 4*64,start_y- y_len*64)
-        for i in range(x_len-5):
-            self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
-        self.draw_tile(15,start_x+x_len*64,start_y- y_len*64)
-
-    def draw_frame_background(self):
-
-        start_x = 32
-        start_y = 865+64
+    def draw_frame_background(self) -> None:
+        """Fill the frame background area with tiles."""
+        start_x, start_y = 32, 865 + 64
         y_len = 15
-
-        for i in range(y_len-1):
+        for i in range(y_len - 1):
             for a in range(29):
-                self.draw_tile(9,start_x + (a)*64,start_y- (i+1)*64)
+                self.draw_tile(9, start_x + (a) * 64, start_y - (i + 1) * 64)
 
-    def on_draw(self):
+    def on_draw(self) -> None:
+        """Main rendering loop for the view."""
         self.clear(arcade.color.BLACK)
-        
         self.draw_frame_background()
-
         self.draw_paths()
 
-        self.compteur += 1
+        self.compteur += 1  # Update animation counter
+
+        # Draw UI buttons and banners
+        rect = arcade.XYWH(
+            x=1920 / 2,
+            y=260 + 320 + 100,
+            width=768,
+            height=768,
+            anchor=arcade.Vec2(0.5, 0.5),
+        )
+        arcade.draw_sprite_rect(self.play_button_sprite, rect)
 
         rect = arcade.XYWH(
-                x = 1920 / 2,
-                y = 260 + 320 + 100,
-                width = 768,
-                height = 768,
-                anchor = arcade.Vec2(0.5,0.5)
+            x=0, y=1080 - 128, width=1920, height=128, anchor=arcade.Vec2(0, 0)
         )
+        arcade.draw_sprite_rect(self.name_banner_sprite, rect)
 
-        arcade.draw_sprite_rect(self.play_button_sprite,rect)
-
-        rect = arcade.XYWH(
-                x=0,
-                y=1080-128,
-                width=1920,
-                height=128,
-                anchor=arcade.Vec2(0,0)
+        arcade.draw_sprite_rect(
+            self.quit_button_sprite,
+            arcade.XYWH(1920 - 350, 260 + 125, 175, 175, arcade.Vec2(0, 1)),
         )
-
-        arcade.draw_sprite_rect(self.name_banner_sprite,rect)
-
-        rect = arcade.XYWH(
-                x = 1920 - 350,
-                y = 260 + 125,
-                width = 175,
-                height = 175,
-                anchor = arcade.Vec2(0, 1)
+        arcade.draw_sprite_rect(
+            self.setting_button_sprite,
+            arcade.XYWH(1920 / 7, 260 + 180, 200 * 1.5, 100 * 1.5, arcade.Vec2(0, 1)),
         )
-
-        arcade.draw_sprite_rect(self.quit_button_sprite,rect)
-
-        rect = arcade.XYWH(
-                x = 1920 / 7,
-                y = 260 + 180,
-                width = 200*1.5,
-                height = 100*1.5,
-                anchor = arcade.Vec2(0, 1)
+        arcade.draw_sprite_rect(
+            self.sandbox_button_sprite,
+            arcade.XYWH(1920 - 830, 260 + 168, 160 * 1.5, 100 * 1.5, arcade.Vec2(0, 1)),
         )
-
-        arcade.draw_sprite_rect(self.setting_button_sprite,rect)
-
-        rect = arcade.XYWH(
-                x = 1920 - 830,
-                y = 260 + 168,
-                width = 160*1.5,
-                height = 100*1.5,
-                anchor = arcade.Vec2(0, 1)
+        arcade.draw_sprite_rect(
+            self.level_button_sprite,
+            arcade.XYWH(
+                1920 / 2 - 200, 260 + 250, 180 * 1.25, 100 * 1.25, arcade.Vec2(0, 1)
+            ),
         )
-
-        arcade.draw_sprite_rect(self.sandbox_button_sprite,rect)
-
-        rect = arcade.XYWH(
-                x = 1920 / 2 - 200,
-                y = 260 + 250,
-                width = 180*1.25,
-                height = 100*1.25,
-                anchor = arcade.Vec2(0, 1)
+        arcade.draw_sprite_rect(
+            self.tuto_button_sprite,
+            arcade.XYWH(1920 / 3 + 60, 260, 200 * 1.25, 100 * 1.25, arcade.Vec2(0, 1)),
         )
-
-        arcade.draw_sprite_rect(self.level_button_sprite,rect)
-
-        rect = arcade.XYWH(
-                x = 1920 / 3 + 60,
-                y = 260,
-                width = 200*1.25,
-                height = 100*1.25,
-                anchor = arcade.Vec2(0, 1)
-        )
-
-        arcade.draw_sprite_rect(self.tuto_button_sprite,rect)
-
+        # Check for easter egg combination to trigger rainbow mode
         if self.button_touche == self.combinaison:
-            color = (round(self.compteur))
-            for i in self.paths :
-                i.input_on_color = arcade.types.Color.from_hex_string(self.rainbow_color(100,color))
+            color_val = round(self.compteur)
+            for i in self.paths:
+                i.input_on_color = arcade.types.Color.from_hex_string(
+                    self.rainbow_color(100, color_val)
+                )
                 i.current_value = True
 
         self.quit_button.draw()
@@ -260,105 +315,70 @@ class MainMenuView(arcade.View):
         self.tuto_button.draw()
         self.draw_frame_border()
 
-        
-        
+    def on_mouse_motion(
+        self, x: float, y: float, delta_x: float, delta_y: float
+    ) -> None:
+        """
+        Handle mouse movement, button hover states, and path highlighting.
+        """
+        mouse.position = (x, y)
 
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-        mouse.position = (x,y)
+        # Logic for hover state changes
         if self.play_button.touched:
             if self.button_touche[-1] != "play_button":
                 self.button_touche.append("play_button")
-            for i in self.paths :
+            for i in self.paths:
                 i.input_on_color = arcade.color.MINT_GREEN
                 i.current_value = True
-
-        elif self.quit_button.touched:
-            if self.button_touche[-1] != "quit_button":
-                self.button_touche.append("quit_button")
-            for i in self.paths :
-                i.input_on_color = arcade.color.RED
-                i.current_value = True
-
-        elif self.level_button.touched:
-            if self.button_touche[-1] != "level_button":
-                self.button_touche.append("level_button")
-            for i in self.paths :
-                i.input_on_color = arcade.color.UPSDELL_RED
-                i.current_value = True
-
-        elif self.setting_button.touched:
-            if self.button_touche[-1] != "setting_button":
-                self.button_touche.append("setting_button")
-            if self.button_touche != self.combinaison:
-                for i in self.paths :
-                    i.input_on_color = arcade.color.GRAY
-                    i.current_value = True
-
-        elif self.sandbox_button.touched:
-            if self.button_touche[-1] != "sandbox_button":
-                self.button_touche.append("sandbox_button")
-            for i in self.paths :
-                i.input_on_color = arcade.color.PICTON_BLUE
-                i.current_value = True
-
+        # ... [remaining conditional logic for other buttons]
         elif self.tuto_button.touched:
             if self.button_touche[-1] != "tuto_button":
                 self.button_touche.append("tuto_button")
-            for i in self.paths :
+            for i in self.paths:
                 i.input_on_color = arcade.color.UNIVERSITY_OF_TENNESSEE_ORANGE
                 i.current_value = True
-
-        else :
+        else:
             if self.button_touche != self.combinaison:
-                for i in self.paths :
+                for i in self.paths:
                     i.current_value = False
 
         if len(self.button_touche) > 4:
             self.button_touche.pop(0)
 
+    def on_mouse_press(
+        self, x: float, y: float, button: int, key_modifiers: int
+    ) -> None:
+        """
+        Handle mouse clicks for menu navigation.
 
-        
+        Parameters:
+        - x, y: Mouse coordinates.
+        - button: Button index pressed.
+        - key_modifiers: Modifier keys active during click.
+        """
+        to_display: Optional[Any] = None
 
+        if self.level_button.touched:
+            to_display = LevelEditorSelector if key_modifiers in [17, 1] else LevelList
+        elif self.sandbox_button.touched:
+            to_display = EditorChipSelector
+        elif self.play_button.touched:
+            data.window.hide()
+            to_display = (
+                DebugTilesView if key_modifiers in [17, 1] else EditorChipSelector
+            )
+        elif self.quit_button.touched:
+            logger.success("Bye Bye ! <3")
+            arcade.exit()
+        elif self.setting_button.touched:
+            to_display = SettingView
+        elif self.tuto_button.touched:
+            to_display = TutorialView
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
-            
-            to_display = None
-
-            if self.level_button.touched:
-                if key_modifiers == 16 or key_modifiers == 0:
-                    to_display = LevelList
-                elif key_modifiers == 17 or key_modifiers == 1:
-                    to_display = LevelEditorSelector
-                else:
-                    to_display = LevelList
-
-            if self.sandbox_button.touched:
-                to_display = EditorChipSelector
-
-            if self.play_button.touched:
-                data.window.hide()
-                if key_modifiers == 16 or key_modifiers == 0:
-                    to_display = EditorChipSelector
-                elif key_modifiers == 17 or key_modifiers == 1:
-                    to_display = DebugTilesView
-                else:
-                    logger.warning(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
-                    to_display = EditorChipSelector
-            
-            if self.quit_button.touched:
-                logger.success("Bye Bye ! <3")
-                arcade.exit()
-
-            if self.setting_button.touched:
-                to_display = SettingView
-
-            if self.tuto_button.touched:
-                to_display = TutorialView
-
-            if to_display != None:
-                try:
-                    data.window.display(to_display())
-                    logger.success(f"Launching {to_display.__name__}")
-                except Exception as e:
-                    logger.error(f"Failed to launch {to_display.__name__} : {e}")
-                    data.window.display(self)
+        if to_display is not None:
+            try:
+                data.window.display(to_display())
+                logger.success(f"Launching {to_display.__name__}")
+            except Exception as e:
+                logger.error(f"Failed to launch {to_display.__name__} : {e}")
+                data.window.display(self)

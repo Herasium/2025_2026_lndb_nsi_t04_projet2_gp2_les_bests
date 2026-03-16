@@ -1,25 +1,38 @@
-import arcade
-import math
+from typing import Any
 
-from modules.data.node import Node
 from modules.data.gate import Gate
 
-from line_profiler import profile
 
 class Not(Gate):
+    """
+    Represents a logical NOT gate.
 
-    def __init__(self, id):
+    Inherits from the Gate base class and defines the specific
+    properties and input/output structures for a NOT operation.
+    """
+
+    def __init__(self, id: Any) -> None:
+        """
+        Initialize the Not gate with a unique identifier and default settings.
+
+        Parameters:
+        - id: The unique identifier for the gate instance.
+        """
         super().__init__(id)
 
-        self.name = "NOT"
-        self.type = "Gate"
-        self.gate_type = "NOT"
+        # Set identifying metadata for the gate
+        self.name: str = "NOT"
+        self.type: str = "Gate"
+        self.gate_type: str = "NOT"
 
-        self.inputs = [0]
-        self.outputs = [1]
-        self.inputs_sizes = [1]
-        self.outputs_sizes = [1]
+        # Define input/output structure: 1 input node, 1 output node
+        self.inputs: list[int] = [0]
+        self.outputs: list[int] = [1]
 
-        self.calculate_display()
-        self.gen_tile_pattern()
-        
+        # Define the size configuration for the ports
+        self.inputs_sizes: list[int] = [1]
+        self.outputs_sizes: list[int] = [1]
+
+        # Initialize visual and functional patterns
+        self.calculate_display()  # Calculate coordinate/visual bounds
+        self.gen_tile_pattern()  # Generate the grid/tile representation
