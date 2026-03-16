@@ -19,7 +19,7 @@ from modules.data.custom import CustomGate
 from modules.data import data
 from modules.data.gate_index import gate_types,gate_types_1,gate_types_8,gate_types_mix
 
-from modules.engine.logic import propagate_values
+from modules.engine import Engine
 
 from modules.ui.main_menu.pause_view import PauseView
 from modules.ui.level_editor.save import SaveFrame
@@ -44,6 +44,7 @@ class EditorView(arcade.View):
         self.moving_gate = None
         self.current_path = None
         self.level_editor = False
+        self.engine = Engine()
 
         if id == None:
             self.chip = Chip(random_id())
@@ -410,7 +411,7 @@ class EditorView(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self):
-        propagate_values(self.chip)
+        self.engine.propagate_values(self.chip)
 
     def on_mouse_scroll(self,x,y,scroll_x,scroll_y):
         if self.bottom_zone_collider.touched:

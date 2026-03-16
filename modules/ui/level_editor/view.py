@@ -22,7 +22,7 @@ from modules.data.level import Level
 from modules.data import data
 from modules.data.gate_index import gate_types
 
-from modules.engine.logic import propagate_values
+from modules.engine import Engine
 
 
 class LevelEditorView(arcade.View):
@@ -59,6 +59,8 @@ class LevelEditorView(arcade.View):
         self.delta_time = 1
         self.frame_count = 0
         self.last_time = 1
+
+        self.engine = Engine()
 
         self.stress_test = False
 
@@ -328,7 +330,7 @@ class LevelEditorView(arcade.View):
                         path.recalculate_hitbox()
 
     def simulate(self):
-        propagate_values(self.level.chip)
+        self.engine.propagate_values(self.level.chip)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 

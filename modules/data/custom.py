@@ -1,7 +1,6 @@
 import arcade
 import math
 
-from modules.data.node import Node
 from modules.data.complex import Complex
 from modules.data import data as data_module
 

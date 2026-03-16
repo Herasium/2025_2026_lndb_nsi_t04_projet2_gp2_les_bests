@@ -6,7 +6,7 @@ from modules.data.chip import Chip
 from modules.ui.toolbox.id_generator import random_id
 from modules.data import data
 from modules.logger import Logger
-from modules.engine.logic import propagate_values
+from modules.engine import Engine
 
 logger = Logger("Level")
 
@@ -35,6 +35,7 @@ class Level():
         self.shown_solution = False
         self.color = 0
         self.category = 0
+        self.engine = Engine()
 
     def play_mode(self):
         if self.play:
@@ -159,7 +160,7 @@ class Level():
         copy = chip.copy()
 
         self.start_chip(copy)
-        propagate_values(copy)
+        self.engine.propagate_values(copy)
         inputs = self.get_inputs(copy)
         outputs = self.get_outputs(copy)
         size = len(inputs)
@@ -172,7 +173,7 @@ class Level():
             values = [bool(current & (1 << i)) for i in range(size)]
             for index in range(len(inputs)):
                 copy.gates[inputs[index]].outputs[0] = values[index]
-            propagate_values(copy)
+            self.engine.propagate_values(copy)
             result = [copy.gates[i].inputs[0] for i in outputs]
             int_value = sum(b << i for i, b in enumerate(reversed(values)))
             self.truth[chip.id]["data"][int_value] = result

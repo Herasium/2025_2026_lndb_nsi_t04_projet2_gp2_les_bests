@@ -1,7 +1,7 @@
 import arcade
 import math
 
-from modules.data.node import Node
+
 from modules.data.gate import Gate
 
 from modules.data import data

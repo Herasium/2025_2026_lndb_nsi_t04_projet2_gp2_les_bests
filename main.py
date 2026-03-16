@@ -1,6 +1,7 @@
 #  Imports
 # -------------------------------------------------
-from modules.ui import Window, EditorView, MainMenuView # Menus
+from modules.ui.window import Window
+from modules.ui.main_menu.in_progress_view import MainMenuView
 from modules.data import data # Global Shared Data
 from modules.data.loader import Loader # Data Loading
 from modules.logger import Logger # Debuging

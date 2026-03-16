@@ -21,7 +21,7 @@ from modules.data.gate_index import gate_types
 
 from modules.logger import Logger
 
-from modules.engine.logic import propagate_values
+from modules.engine import Engine
 
 logger = Logger("LevelPlayer")
 
@@ -72,6 +72,8 @@ class LevelPlayer(arcade.View):
         self.delta_time = 1
         self.frame_count = 0
         self.last_time = 1
+
+        self.engine = Engine()
 
         self.stress_test = False
 
@@ -205,6 +207,7 @@ class LevelPlayer(arcade.View):
                     arcade.color.WHITE,  
                     14,
                     font_name="Press Start 2P",
+                    anchor_x="center"
                 ))
 
                 offset_x += add_x
@@ -216,6 +219,7 @@ class LevelPlayer(arcade.View):
                     arcade.color.WHITE,  
                     14,
                     font_name="Press Start 2P",
+                    anchor_x="center"
                 ))
 
                 offset_x += add_x
@@ -233,6 +237,7 @@ class LevelPlayer(arcade.View):
                         color,  
                         14,
                         font_name="Press Start 2P",
+                        anchor_x="center"
                     ))
 
                     offset_x += add_x
@@ -244,6 +249,7 @@ class LevelPlayer(arcade.View):
                         arcade.color.WHITE,  
                         14,
                         font_name="Press Start 2P",
+                        anchor_x="center"
                     ))
 
                     offset_x += add_x
@@ -579,7 +585,7 @@ class LevelPlayer(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self):
-        propagate_values(self.level.chip)
+        self.engine.propagate_values(self.level.chip)
 
         if self.level.chip.changed:
             self.level.chip.changed = False
