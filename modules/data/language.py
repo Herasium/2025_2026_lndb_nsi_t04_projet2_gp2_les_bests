@@ -31,10 +31,10 @@ class English:
             "button_06": "NOT : \n\nConnect an input to this component to reverse the logic. If you send a signal, it cuts it off at the output; if you don't send it any signal, it returns 1.",
             "button_07": "OR : \n\nConnect your inputs. The door will return a signal as soon as at least one of the input ports receives a signal 1.",
             "button_08": "NAND : \n\nThis gate functions like an AND gate, but with an inverted output. It outputs a constant 1 signal, except when all its inputs are activated.",
-            "button_09": "-> NOR",
-            "button_010": "-> XOR",
-            "button_011": "-> CLOCK",
-            "button_012": "fdref"
+            "button_09": "NOR : \n\nThis gate turns off its output (signal at 0) as soon as one of its inputs is 1. It only allows signal 1 to pass if both of its inputs are at 0.",
+            "button_010": "XOR : \n\nConnect two sources. The output will only go to 1 if the two input signals are different (one at 1, the other at 0).",
+            "button_011": "CLOCK : \n\nOnce installed, this gate automatically generates a signal alternating between 0 and 1 every second. Regardless of the inputs, the signal it outputs depends solely on the alternation each second.",
+            "button_012": "PASS : \n\nUse this gate to extend a connection or isolate a part of the circuit. It returns the incoming signal without any modification."
         }
 
     def get(self, menu: str, key: str) -> str:
@@ -84,10 +84,10 @@ class French:
             "button_06": "NOT : \n\nConnectez une entrée à ce composant pour inverser la logique. Si vous envoyez un signal, il le coupe en sortie, si vous ne lui partagez aucun signal, il renvoie 1.",
             "button_07": "OR : \n\nConnectez vos entrées. La porte retournera un signal dès qu'au moins un des ports d'entrée reçoit un signal 1.",
             "button_08": "NAND : \n\nCette porte fonctionne comme une AND, mais avec une sortie inversée. Elle émet un signal 1 en permanence, sauf quand toutes ses entrées sont activées.",
-            "button_09": "-> NOR",
-            "button_010": "-> XOR",
-            "button_011": "-> CLOCK",
-            "button_012": "fdref"
+            "button_09": "NOR : \n\nCette porte éteint sa sortie (signal à 0) dès qu'une de ses entrées est 1. Elle ne laisse passer le signal 1 que si ses deux entrées sont à 0.",
+            "button_010": "XOR : \n\nConnectez deux sources. La sortie passera à 1 uniquement si les deux signaux d'entrée sont différents (l'un à 1, l'autre à 0).",
+            "button_011": "CLOCK : \n\nUne fois placée, cette porte génère automatiquement un signal alternant entre 0 et 1 toutes les secondes. Qu'importe ces entrées, le signal qu'elle renvoie dépends uniquement de l'alternance chaque seconde.",
+            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger une connexion ou isoler une partie du circuit. Il renvoie le signal entrant sans aucune modification."
         }
 
     def get(self, menu: str, key: str) -> str:
