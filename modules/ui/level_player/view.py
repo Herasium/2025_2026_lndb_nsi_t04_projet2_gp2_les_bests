@@ -526,7 +526,7 @@ class LevelPlayer(arcade.View):
     def delete_gate(self, id: str) -> None:
         """Removes specified gate and reconciles affected circuit paths."""
         to_delete: List[str] = []
-        if self.level.chip.gates[id].type == "Gate":
+        if self.level.chip.gates[id].type in ["Gate","Custom","Complex"]:
             for index in self.level.chip.paths.keys():
                 p = self.level.chip.paths[index]
                 for input in p.inputs:
