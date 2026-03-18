@@ -384,6 +384,9 @@ class Loader:
         data.level_player_border = arcade.Sprite(
             "assets/borders/level_player_border.png"
         )
+        data.level_player_border_no_bg = arcade.Sprite(
+            "assets/borders/level_player_no_bg.png"
+        )
         data.level_player_win = arcade.Sprite("assets/borders/level_player_win.png")
         data.border_small = arcade.Sprite("assets/borders/border_small.png")
 

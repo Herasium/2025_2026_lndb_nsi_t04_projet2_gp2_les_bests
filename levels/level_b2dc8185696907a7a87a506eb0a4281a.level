@@ -1,0 +1,128 @@
+{
+ "chip": {
+  "type": "Chip",
+  "name": "Default Chip",
+  "id": "b2dc8185696907a7a87a506eb0a4281a",
+  "gates": {
+   "828b86808b8bbb2e1c05b1b7baba6475": {
+    "x": 121.5,
+    "y": 877.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     1
+    ],
+    "gate": "8Input",
+    "id": "828b86808b8bbb2e1c05b1b7baba6475"
+   },
+   "46e305f1dbb9bb90d76459cea3b595cf": {
+    "x": 121.5,
+    "y": 688.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     1
+    ],
+    "gate": "8Input",
+    "id": "46e305f1dbb9bb90d76459cea3b595cf"
+   },
+   "bf8a0ae9cc7e5525e0d5e89c4b04e0fb": {
+    "x": 121.5,
+    "y": 499.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     1
+    ],
+    "gate": "8Input",
+    "id": "bf8a0ae9cc7e5525e0d5e89c4b04e0fb"
+   },
+   "5697a63b4b888b8f1302878e0db8cfef": {
+    "x": 121.5,
+    "y": 310.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     1
+    ],
+    "gate": "8Input",
+    "id": "5697a63b4b888b8f1302878e0db8cfef"
+   },
+   "206b3741122b0f5193bed7993b9b1aac": {
+    "x": 364.5,
+    "y": 850.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "8Output",
+    "id": "206b3741122b0f5193bed7993b9b1aac"
+   },
+   "b54b8c49f732043c091ccb1172f320b7": {
+    "x": 364.5,
+    "y": 661.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "8Output",
+    "id": "b54b8c49f732043c091ccb1172f320b7"
+   },
+   "e6677f5d5b2df4a415acda2cbee2a98d": {
+    "x": 364.5,
+    "y": 472.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "8Output",
+    "id": "e6677f5d5b2df4a415acda2cbee2a98d"
+   },
+   "d6e15bce592a5c6170d90d72f4d744ae": {
+    "x": 364.5,
+    "y": 310.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "8Output",
+    "id": "d6e15bce592a5c6170d90d72f4d744ae"
+   },
+   "53404780d02591f9793c58a04165e3ea": {
+    "x": 688.5,
+    "y": 499.5,
+    "type": "Complex",
+    "inputs": [
+     0
+    ],
+    "outputs": [
+     255
+    ],
+    "gate": "8NOT",
+    "id": "53404780d02591f9793c58a04165e3ea"
+   }
+  },
+  "paths": {},
+  "version": 208,
+  "requirements": []
+ },
+ "requirements": [],
+ "level": {
+  "time": 300,
+  "id": "level_b2dc8185696907a7a87a506eb0a4281a",
+  "number": -4,
+  "name": "Default Level",
+  "description": "Basic level to learn the basis of gates.",
+  "hints": [],
+  "version": 208,
+  "start": 1,
+  "truth": {},
+  "color": 3,
+  "category": 0,
+  "is_custom": false
+ }
+}
