@@ -124,6 +124,7 @@ class Data:
             "Triple inputs gates",
             "Triple NANDuts gates",
             "Basics of arithmetic",
+            "The more the better"
         ]
 
         self.current_lang: str = "en"
