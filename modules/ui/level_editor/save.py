@@ -48,7 +48,9 @@ class SaveFrame(arcade.View):
             "- 1",
             "--------------",
             f"Level Color : {data.level_colors[self.level.color]}",
-            "->",
+            "-> Next",
+            f"Public Custom Chip : {self.level.is_custom}",
+            "-> Change",
             "--> Save <--",
         ]
 
@@ -140,7 +142,10 @@ class SaveFrame(arcade.View):
         if self.texts[20].touched:
             self.level.color = (self.level.color + 1) % len(data.level_colors)
             self.setup()
-        if self.texts[21].touched:
+        if self.texts[22].touched:
+            self.level.is_custom = not self.level.is_custom
+            self.setup()
+        if self.texts[23].touched:
             self.level.save()
 
     def on_mouse_release(

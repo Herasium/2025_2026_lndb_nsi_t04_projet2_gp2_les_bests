@@ -49,6 +49,7 @@ class Level:
         self.shown_solution: bool = False
         self.color: int = 0
         self.category: int = 0
+        self.is_custom: bool = False
         self.engine: Engine = Engine()
 
     def play_mode(self) -> None:
@@ -171,7 +172,7 @@ class Level:
         if chip is None:
             chip = self.chip
         return [
-            i for i in self.chip.gates if self.chip.gates[i].type in ["Gate", "Custom"]
+            i for i in self.chip.gates if self.chip.gates[i].type in ["Gate", "Custom","Complex"]
         ]
 
     def compare_truth_tables(self) -> bool:
@@ -266,6 +267,7 @@ class Level:
                 "truth": self.truth,
                 "color": self.color,
                 "category": self.category,
+                "is_custom": self.is_custom,
             },
         }
 
@@ -298,6 +300,9 @@ class Level:
         self.start = data["level"]["start"]
         self.color = data["level"]["color"]
         self.category = data["level"]["category"]
+
+        if data["level"]["version"] > 200:
+            self.is_custom = data["level"]["is_custom"]
 
         logger.debug(f"Loaded Level {self}")
 

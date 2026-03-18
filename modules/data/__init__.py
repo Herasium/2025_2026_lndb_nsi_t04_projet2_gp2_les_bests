@@ -107,7 +107,7 @@ class Data:
         self.WINDOW_HEIGHT: int = 1080
         self.WINDOW_FULLSCREEN: bool = True
         self.UI_EDITOR_GRID_SIZE: int = 27
-        self.VERSION: int = 200
+        self.VERSION: int = 208
         self.COLORS = COLORS
         self.IMAGE: ImageBuffer = ImageBuffer()
         self.LEVEL_BUTTONS: LevelButtonsBuffer = LevelButtonsBuffer()
