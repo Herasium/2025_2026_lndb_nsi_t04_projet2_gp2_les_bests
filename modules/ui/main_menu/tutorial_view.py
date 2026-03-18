@@ -67,6 +67,7 @@ class TutorialView(arcade.View):
             "button_11",
             "button_12",
         ]
+        
         self.buttons: List[Text] = []
 
         a = 560
@@ -202,5 +203,8 @@ class TutorialView(arcade.View):
             self.texte_button.text = data.language.tutorial["button_02"]
 
         for i in self.buttons:
+            p = self.buttons.index(i)
             if i.touched:
-                pass
+                keys = list(data.language.tutorial.keys())
+                ask_key = keys[p + 16]
+                self.texte_button.text = data.language.tutorial[ask_key]
