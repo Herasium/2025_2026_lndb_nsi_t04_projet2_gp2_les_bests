@@ -210,12 +210,12 @@ class Text:
         self._recalculate_rect()
 
     @property
-    def color(self) -> arcade.Color:
+    def color(self) -> arcade.color:
         """Returns the current text color."""
         return self._color
 
     @color.setter
-    def color(self, value: arcade.Color) -> None:
+    def color(self, value: arcade.color) -> None:
         """Updates text color and triggers layout recalculation."""
         self._color = value
         self._recalculate_rect()

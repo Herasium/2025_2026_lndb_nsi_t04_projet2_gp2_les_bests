@@ -16,7 +16,7 @@ class Button:
         self._width: float = 0.0
         self._height: float = 0.0
 
-        self._color: arcade.Color = arcade.color.BLUE
+        self._color: arcade.color = arcade.color.BLUE
         self.hitbox: HitBox = HitBox()
 
         self._name: str = ""
@@ -130,12 +130,12 @@ class Button:
         self._recalculate_rect()
 
     @property
-    def color(self) -> arcade.Color:
+    def color(self) -> arcade.color:
         """Returns the primary button color."""
         return self._color
 
     @color.setter
-    def color(self, value: arcade.Color) -> None:
+    def color(self, value: arcade.color) -> None:
         """Sets the button color and triggers a geometry update."""
         self._color = value
         self._recalculate_rect()
