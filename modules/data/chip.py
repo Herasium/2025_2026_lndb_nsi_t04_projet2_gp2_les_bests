@@ -130,7 +130,7 @@ class Chip:
             if gate["type"] in ["Gate", "Complex"]:
                 new = gate_types[gate["gate"]]("default_id")
             elif gate["type"] == "Custom":
-                new = CustomGate("default_id", self)
+                new = CustomGate("default_id", Chip("default_chip"))
             else:
                 new = gate_types[gate["gate"]]("default_id")
 
