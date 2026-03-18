@@ -145,7 +145,6 @@ class Loader:
                 self.load_saves_dependency()
                 level.load(raw_data)
                 if level.is_custom:
-                    print(level.chip,level.chip.id)
                     data.loaded_chips[level.chip.id] = level.chip
                 data.loaded_levels[raw_data["level"]["id"]] = level
             except Exception:
