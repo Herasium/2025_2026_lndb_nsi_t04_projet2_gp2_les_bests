@@ -2,6 +2,7 @@ import json
 import os
 import time
 from typing import List, Dict, Any, Optional, Union
+import random
 
 from modules.data.chip import Chip
 from modules.ui.toolbox.id_generator import random_id
@@ -50,6 +51,8 @@ class Level:
         self.color: int = 0
         self.category: int = 0
         self.is_custom: bool = False
+        self.is_complex: bool = False
+        self.truth_test_values: List[List[int]] = []
         self.engine: Engine = Engine()
 
     def play_mode(self) -> None:
@@ -70,6 +73,7 @@ class Level:
         self.shown_hints = False
         self.shown_solution = False
         self.chip.paths = {}
+        self.is_complex = False
 
         left: List[str] = self.get_gates(self.chip)
 
@@ -78,7 +82,21 @@ class Level:
             del self.chip.gates[key]
 
         self.calculate_inventory()
+        self.setup_random_test_values()
         self.get_truth_table(answer=True)
+
+    def setup_random_test_values(self):
+        
+        inputs: List[str] = self.get_inputs(self.answer)
+        self.truth_test_values = []
+
+        for _ in range(10):
+            values = []
+            for i in inputs:
+                values.append(random.randint(0,2**self.answer.gates[i].outputs_sizes[0]-1))
+            self.truth_test_values.append(values)
+
+
 
     def get_stars_count(self) -> int:
         """Calculates current star rating based on time and hint usage.
@@ -106,6 +124,9 @@ class Level:
             else:
                 key = self.answer.gates[i].gate_type
                 self.max_usage[key] = self.max_usage.get(key, 0) + 1
+            
+            if self.answer.gates[i].type == "Complex":
+                self.is_complex = True
 
         self.inventory = {}
         for i in self.chip.gates:
@@ -203,8 +224,8 @@ class Level:
         self.won = self.compare_truth_tables()
         return self.won
 
-    def get_single_truth_table(self, chip: Chip) -> None:
-        """Generates a truth table for the provided chip.
+    def get_single_truth_table_complex(self, chip: Chip) -> None:
+        """Generates a truth table for the provided simple chip.
 
         Args:
             chip: The instance to evaluate.
@@ -218,7 +239,35 @@ class Level:
         size: int = len(inputs)
 
         self.truth[chip.id]["meta"].update(
-            {"size": size, "inputs": inputs, "outputs": outputs, "power": 2**size}
+            {"size": size, "inputs": inputs, "outputs": outputs,"values":self.truth_test_values,"complex": True}
+        )
+        count = 0
+        for current in self.truth_test_values:
+            for index in range(len(inputs)):
+                copy.gates[inputs[index]].outputs[0] = current[index]
+
+            self.engine.propagate_values(copy)
+
+            result = [copy.gates[i].inputs[0] for i in outputs]
+            self.truth[chip.id]["data"][count] = result
+            count += 1
+
+    def get_single_truth_table_simple(self,chip: Chip) -> None:
+        """Generates a truth table for the provided complex chip.
+
+        Args:
+            chip: The instance to evaluate.
+        """
+        copy: Chip = chip.copy()
+        self.start_chip(copy)
+        self.engine.propagate_values(copy)
+
+        inputs: List[str] = self.get_inputs(copy)
+        outputs: List[str] = self.get_outputs(copy)
+        size: int = len(inputs)
+
+        self.truth[chip.id]["meta"].update(
+            {"size": size, "inputs": inputs, "outputs": outputs, "power": 2**size,"complex": False}
         )
 
         power: int = 2**size
@@ -243,7 +292,10 @@ class Level:
         """
         used: Chip = self.answer if answer else self.chip
         self.truth[used.id] = {"meta": {}, "data": {}}
-        self.get_single_truth_table(used)
+        if self.is_complex:
+            self.get_single_truth_table_complex(used)
+        else:
+            self.get_single_truth_table_simple(used)
 
     def save(self) -> None:
         """Serializes current level and chip configuration to a file."""

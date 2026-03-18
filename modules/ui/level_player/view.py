@@ -194,12 +194,20 @@ class LevelPlayer(arcade.View):
         if self.level.chip.id in self.level.truth:
             chip_truth = self.level.truth[self.level.chip.id]
 
-        self.truth_table_inputs: List[List[arcade.Text]] = [
-            [] for _ in range(len(table["meta"]["inputs"]))
-        ]
-        self.truth_table_outputs: List[List[arcade.Text]] = [
-            [] for _ in range(len(table["meta"]["outputs"]))
-        ]
+        if table["meta"]["complex"]:
+            self.truth_table_inputs: List[List[arcade.Text]] = [
+                [] for _ in range(len(table["meta"]["values"]))
+            ]
+            self.truth_table_outputs: List[List[arcade.Text]] = [
+                [] for _ in range(len(table["meta"]["values"]))
+            ]
+        else:
+            self.truth_table_inputs: List[List[arcade.Text]] = [
+                [] for _ in range(len(table["meta"]["inputs"]))
+            ]
+            self.truth_table_outputs: List[List[arcade.Text]] = [
+                [] for _ in range(len(table["meta"]["outputs"]))
+            ]
         self.line_set: List[List[Tuple[Tuple[float, float], Tuple[float, float]]]] = []
         self.truth_table_titles: List[arcade.Text] = []
 
@@ -259,58 +267,13 @@ class LevelPlayer(arcade.View):
             )
         )
 
-        for current in range(table["meta"]["power"]):
-            values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
-            for i in range(len(values)):
-                self.truth_table_inputs[i].append(
-                    arcade.Text(
-                        str(values[i] * 1),
-                        start_x + offset_x,
-                        start_y - offset_y,
-                        arcade.color.WHITE,
-                        14,
-                        font_name="Press Start 2P",
-                        anchor_x="center",
-                    )
-                )
-                offset_x += add_x
-            offset_x += add_x * 2
-            for i in range(len(table["data"][current])):
-                self.truth_table_outputs[i].append(
-                    arcade.Text(
-                        str(table["data"][current][i] * 1),
-                        start_x + offset_x,
-                        start_y - offset_y,
-                        arcade.color.WHITE,
-                        14,
-                        font_name="Press Start 2P",
-                        anchor_x="center",
-                    )
-                )
-                offset_x += add_x
-            offset_x += add_x * 2
-            if chip_truth:
-                for i in range(len(chip_truth["data"][current])):
-                    color = arcade.color.RED_PURPLE
-                    if table["data"][current][i] == chip_truth["data"][current][i]:
-                        color = arcade.color.GREEN_YELLOW
-                    self.truth_table_outputs[i].append(
+        if table["meta"]["complex"]:
+            for current in range(len(table["meta"]["values"])):
+                values = table["meta"]["values"][current]
+                for i in range(len(values)):
+                    self.truth_table_inputs[i].append(
                         arcade.Text(
-                            str(chip_truth["data"][current][i] * 1),
-                            start_x + offset_x,
-                            start_y - offset_y,
-                            color,
-                            14,
-                            font_name="Press Start 2P",
-                            anchor_x="center",
-                        )
-                    )
-                    offset_x += add_x
-            else:
-                for i in range(len(table["data"][current])):
-                    self.truth_table_outputs[i].append(
-                        arcade.Text(
-                            "?",
+                            str(values[i] * 1),
                             start_x + offset_x,
                             start_y - offset_y,
                             arcade.color.WHITE,
@@ -320,14 +283,131 @@ class LevelPlayer(arcade.View):
                         )
                     )
                     offset_x += add_x
-            self.line_set.append(
-                [
-                    (start_x - 10, start_y - offset_y - 4),
-                    (start_x + offset_x + 10, start_y - offset_y - 4),
-                ]
-            )
-            offset_x = 0
-            offset_y += add_y
+                offset_x += add_x * 2
+                for i in range(len(table["data"][current])):
+                    self.truth_table_outputs[i].append(
+                        arcade.Text(
+                            str(table["data"][current][i] * 1),
+                            start_x + offset_x,
+                            start_y - offset_y,
+                            arcade.color.WHITE,
+                            14,
+                            font_name="Press Start 2P",
+                            anchor_x="center",
+                        )
+                    )
+                    offset_x += add_x
+                offset_x += add_x * 2
+                if chip_truth:
+                    for i in range(len(chip_truth["data"][current])):
+                        color = arcade.color.RED_PURPLE
+                        if table["data"][current][i] == chip_truth["data"][current][i]:
+                            color = arcade.color.GREEN_YELLOW
+                        self.truth_table_outputs[i].append(
+                            arcade.Text(
+                                str(chip_truth["data"][current][i] * 1),
+                                start_x + offset_x,
+                                start_y - offset_y,
+                                color,
+                                14,
+                                font_name="Press Start 2P",
+                                anchor_x="center",
+                            )
+                        )
+                        offset_x += add_x
+                else:
+                    for i in range(len(table["data"][current])):
+                        self.truth_table_outputs[i].append(
+                            arcade.Text(
+                                "?",
+                                start_x + offset_x,
+                                start_y - offset_y,
+                                arcade.color.WHITE,
+                                14,
+                                font_name="Press Start 2P",
+                                anchor_x="center",
+                            )
+                        )
+                        offset_x += add_x
+                self.line_set.append(
+                    [
+                        (start_x - 10, start_y - offset_y - 4),
+                        (start_x + offset_x + 10, start_y - offset_y - 4),
+                    ]
+                )
+                offset_x = 0
+                offset_y += add_y
+        else:
+
+            for current in range(table["meta"]["power"]):
+                values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
+                for i in range(len(values)):
+                    self.truth_table_inputs[i].append(
+                        arcade.Text(
+                            str(values[i] * 1),
+                            start_x + offset_x,
+                            start_y - offset_y,
+                            arcade.color.WHITE,
+                            14,
+                            font_name="Press Start 2P",
+                            anchor_x="center",
+                        )
+                    )
+                    offset_x += add_x
+                offset_x += add_x * 2
+                for i in range(len(table["data"][current])):
+                    self.truth_table_outputs[i].append(
+                        arcade.Text(
+                            str(table["data"][current][i] * 1),
+                            start_x + offset_x,
+                            start_y - offset_y,
+                            arcade.color.WHITE,
+                            14,
+                            font_name="Press Start 2P",
+                            anchor_x="center",
+                        )
+                    )
+                    offset_x += add_x
+                offset_x += add_x * 2
+                if chip_truth:
+                    for i in range(len(chip_truth["data"][current])):
+                        color = arcade.color.RED_PURPLE
+                        if table["data"][current][i] == chip_truth["data"][current][i]:
+                            color = arcade.color.GREEN_YELLOW
+                        self.truth_table_outputs[i].append(
+                            arcade.Text(
+                                str(chip_truth["data"][current][i] * 1),
+                                start_x + offset_x,
+                                start_y - offset_y,
+                                color,
+                                14,
+                                font_name="Press Start 2P",
+                                anchor_x="center",
+                            )
+                        )
+                        offset_x += add_x
+                else:
+                    for i in range(len(table["data"][current])):
+                        self.truth_table_outputs[i].append(
+                            arcade.Text(
+                                "?",
+                                start_x + offset_x,
+                                start_y - offset_y,
+                                arcade.color.WHITE,
+                                14,
+                                font_name="Press Start 2P",
+                                anchor_x="center",
+                            )
+                        )
+                        offset_x += add_x
+                self.line_set.append(
+                    [
+                        (start_x - 10, start_y - offset_y - 4),
+                        (start_x + offset_x + 10, start_y - offset_y - 4),
+                    ]
+                )
+                offset_x = 0
+                offset_y += add_y
 
     def bottom_bar_width_sum(self) -> int:
         """Returns the aggregate width of all gate icons in the bottom toolbar."""
