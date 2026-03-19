@@ -6,6 +6,7 @@ and the primary window management, before launching the initial UI view.
 
 from modules.ui.window import Window
 from modules.ui.main_menu.in_progress_view import MainMenuView
+from modules.ui.loading.view import LoadingScreen
 from modules.data import data
 from modules.data.loader import Loader
 from modules.logger import Logger
@@ -26,6 +27,8 @@ logger.print(f"Current path: {path}")
 windows: Window = Window()
 data.window = windows
 logger.print("Created Window.")
+
+windows.display(LoadingScreen())
 
 loader.load()
 
