@@ -5,8 +5,8 @@ from modules.data.complex import Complex
 """Provides 8-bit logic gate implementations for circuit simulation."""
 
 
-class Not(Complex):
-    """Represents an 8-bit NOT logic gate component.
+class Nor(Complex):
+    """Represents an 8-bit Nor logic gate component.
 
     Attributes:
         name: The display name of the gate.
@@ -18,19 +18,19 @@ class Not(Complex):
     """
 
     def __init__(self, id: Any) -> None:
-        """Initializes the NOT gate instance.
+        """Initializes the Nor gate instance.
 
         Args:
             id: A unique identifier for the component.
         """
         super().__init__(id)
 
-        self.name: str = "NOT"
-        self.gate_type: str = "8NOT"
+        self.name: str = "NOR"
+        self.gate_type: str = "8NOR"
 
-        self.inputs: list[int] = [0]
-        self.outputs: list[int] = [255]
-        self.inputs_sizes: list[int] = [8]
+        self.inputs: list[int] = [0,0]
+        self.outputs: list[int] = [0]
+        self.inputs_sizes: list[int] = [8,8]
         self.outputs_sizes: list[int] = [8]
 
         self.calculate_display()

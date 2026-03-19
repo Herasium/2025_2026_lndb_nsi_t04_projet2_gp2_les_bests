@@ -3,6 +3,7 @@ import time
 from modules.logger import Logger
 from modules.data.custom import CustomGate
 from modules.data.chip import Chip
+from modules.data.gate import Gate
 
 """Provides simulation logic for circuit chips, including gate operations, 
 signal propagation, and circuit traversal."""
@@ -21,6 +22,37 @@ def gate_and(inputs: list[int]) -> list[int]:
     """
     return [(inputs[0] and inputs[1]) * 1]
 
+def gate_adder(inputs: list[int]) -> list[int]:
+    """Calculates Full Adder operation.
+
+    Args:
+        inputs: List containing three input bits [A, B, Cin].
+
+    Returns:
+        [Sum, Carry]
+    """
+    A, B, Cin = inputs
+
+    sum_bit = A ^ B ^ Cin
+    carry = (A & B) | (Cin & (A ^ B))
+
+    return [sum_bit, carry]
+
+def gate_subtractor(inputs: list[int]) -> list[int]:
+    """Calculates Full Subtractor operation.
+
+    Args:
+        inputs: List containing three input bits [A, B, Bin].
+
+    Returns:
+        [Difference, Borrow]
+    """
+    A, B, Bin = inputs
+
+    diff = A ^ B ^ Bin
+    borrow = ((~A & 1) & B) | (Bin & (~(A ^ B) & 1))
+
+    return [diff, borrow]
 
 def gate_or(inputs: list[int]) -> list[int]:
     """Calculates OR operation.
@@ -106,7 +138,7 @@ def gate_pass(inputs: list[int]) -> list[int]:
     return inputs
 
 
-def gate_8nor(inputs: list[int]) -> list[int]:
+def gate_8not(inputs: list[int]) -> list[int]:
     """Performs 8-bit inversion via XOR.
 
     Args:
@@ -117,6 +149,52 @@ def gate_8nor(inputs: list[int]) -> list[int]:
     """
     return [inputs[0] ^ ((1 << 8) - 1)]
 
+def gate_8and(inputs: list[int]) -> list[int]:
+    """Performs 8-bit AND.
+
+    Args:
+        inputs: List containing two 8-bit integer values.
+
+    Returns:
+        Bitwise AND of inputs.
+    """
+    return [(inputs[0] & inputs[1]) & ((1 << 8) - 1)]
+
+
+def gate_8or(inputs: list[int]) -> list[int]:
+    """Performs 8-bit OR.
+
+    Args:
+        inputs: List containing two 8-bit integer values.
+
+    Returns:
+        Bitwise OR of inputs.
+    """
+    return [(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
+
+
+def gate_8nand(inputs: list[int]) -> list[int]:
+    """Performs 8-bit NAND.
+
+    Args:
+        inputs: List containing two 8-bit integer values.
+
+    Returns:
+        Bitwise NAND of inputs.
+    """
+    return [~(inputs[0] & inputs[1]) & ((1 << 8) - 1)]
+
+
+def gate_8nor(inputs: list[int]) -> list[int]:
+    """Performs 8-bit NOR.
+
+    Args:
+        inputs: List containing two 8-bit integer values.
+
+    Returns:
+        Bitwise NOR of inputs.
+    """
+    return [~(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
 def gate_8maker(inputs: list[int]) -> list[int]:
     """Converts a sequence of bits into an 8-bit integer.
@@ -141,6 +219,42 @@ def gate_8breaker(inputs: list[int]) -> list[int]:
     """
     return [int(bit) for bit in format(inputs[0], "08b")]
 
+def gate_delay(inputs: list[int], gate: Gate) -> list[int]:
+    """Hold the signal for 1 tick.
+
+    Args:
+        inputs: List containing one input bit.
+
+    Returns:
+        Bit as it was one tick ago.
+    """
+    old = gate.old_output
+    gate.old_output = inputs[0]
+    return [old]
+
+def gate_8adder(inputs: list[int]) -> int:
+    """8-bit adder without carry output.
+
+    Args:
+        inputs: [A, B] where 0 <= A, B <= 255
+
+    Returns:
+        8-bit result (0–255)
+    """
+    A, B = inputs
+    return [(A + B) & 0xFF]
+
+def gate_8subtractor(inputs: list[int]) -> int:
+    """8-bit subtractor without borrow output.
+
+    Args:
+        inputs: [A, B] where 0 <= A, B <= 255
+
+    Returns:
+        8-bit result (0–255)
+    """
+    A, B = inputs
+    return [(A - B) & 0xFF]
 
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
@@ -151,16 +265,25 @@ LOGIC_MAP: dict[str, callable] = {
     "NOR": gate_nor,
     "CLK": gate_clk,
     "PASS": gate_pass,
-    "8NOT": gate_8nor,
+    "8NOT": gate_8not,
     "8BREAK": gate_8breaker,
     "8MAKER": gate_8maker,
+    "DLY": gate_delay,
+    "8AND": gate_8and,
+    "8OR": gate_8or,
+    "8NAND": gate_8nand,
+    "8NOR": gate_8nor,
+    "ADDER": gate_adder,
+    "SUB": gate_subtractor,
+    "8ADDER": gate_8adder,
+    "8SUB": gate_8subtractor,
 }
 
 
 class Engine:
     """Simulates circuit chip behavior and signal propagation."""
 
-    def calculate_output(self, gate_type: str, inputs: list[int]) -> list[int]:
+    def calculate_output(self, gate_type: str, inputs: list[int], gate: Gate) -> list[int]:
         """Calculates output for a standard logic gate.
 
         Args:
@@ -171,6 +294,8 @@ class Engine:
             Output values as a list.
         """
         if gate_type in LOGIC_MAP:
+            if gate_type == "DLY":
+                return LOGIC_MAP[gate_type](inputs,gate)
             return LOGIC_MAP[gate_type](inputs)
         return [False]
 
@@ -308,12 +433,16 @@ class Engine:
                     target_port = conn[2]
                     path_id = conn[5]
 
-                    # Stochastic conflict resolution for signal contention
-                    if target_gate.val_inputs[target_port] and random.random() < 0.5:
-                        continue
-
-                    target_gate.inputs[target_port] = signal_value
-                    target_gate.val_inputs[target_port] = True
+                    should_write = True
+                    if target_gate.val_inputs[target_port]:
+                        if random.random() < 0.5:
+                            should_write = False 
+                        else:
+                            should_write = True 
+                    
+                    if should_write:
+                        target_gate.inputs[target_port] = signal_value
+                        target_gate.val_inputs[target_port] = True
 
                     if path_id in chip.paths:
                         chip.paths[path_id].current_value = signal_value
@@ -362,7 +491,7 @@ class Engine:
                 if is_ready:
                     if gate.type in ["Gate", "Complex"]:
                         gate.outputs = self.calculate_output(
-                            gate.gate_type, gate.inputs
+                            gate.gate_type, gate.inputs, gate
                         )
                     elif gate.type == "Custom":
                         self.calculate_custom(gate)
@@ -380,7 +509,7 @@ class Engine:
                 gate = chip.gates[random_id]
 
                 if gate.type in ["Gate", "Complex"]:
-                    gate.outputs = self.calculate_output(gate.gate_type, gate.inputs)
+                    gate.outputs = self.calculate_output(gate.gate_type, gate.inputs, gate)
                 elif gate.type == "Custom":
                     self.calculate_custom(gate)
 
