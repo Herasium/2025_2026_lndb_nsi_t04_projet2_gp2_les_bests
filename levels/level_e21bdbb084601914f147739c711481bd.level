@@ -1439,21 +1439,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 200,
+  "version": 208,
   "requirements": []
  },
  "requirements": [],
  "level": {
   "time": 360,
   "id": "level_e21bdbb084601914f147739c711481bd",
-  "number": 21,
+  "number": 22,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 200,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 3,
-  "category": 5
+  "category": 5,
+  "is_custom": false
  }
 }

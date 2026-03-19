@@ -35,7 +35,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "91ff821dbe65861153be2138f13413a4"
@@ -49,7 +49,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "fa97f5b4d399dee4ce02c0c94f44e60b"
@@ -59,11 +59,11 @@
     "y": 607.5,
     "type": "Gate",
     "inputs": [
-     false,
-     false
+     0,
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "50163ff3b3ade9441eed7c1cbb64168b"
@@ -73,7 +73,7 @@
     "y": 607.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -597,20 +597,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 150,
   "id": "level_302f4a66c55abd848b8790ba25a3ddae",
-  "number": 10,
+  "number": 11,
   "name": "A OR B v2",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 2
+  "category": 2,
+  "is_custom": false
  }
 }
