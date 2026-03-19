@@ -35,7 +35,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "7c55c4af81c276f007eeb775f1bae562"
@@ -46,10 +46,10 @@
     "type": "Gate",
     "inputs": [
      true,
-     false
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "edaa4dc68622c7a588b7aaadb9c6d437"
@@ -60,10 +60,10 @@
     "type": "Gate",
     "inputs": [
      true,
-     false
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "033ad07e417e86602c86621e51ed8ea1"
@@ -73,11 +73,11 @@
     "y": 553.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "11def58021cbe919c62c12743831352a"
@@ -87,7 +87,7 @@
     "y": 553.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -782,20 +782,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 150,
   "id": "level_e18f8acceb2714b3c5ce066585d0cb20",
-  "number": 11,
+  "number": 12,
   "name": "A XOR B v2",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 2
+  "category": 2,
+  "is_custom": false
  }
 }

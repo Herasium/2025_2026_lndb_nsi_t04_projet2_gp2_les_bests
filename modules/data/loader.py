@@ -144,6 +144,8 @@ class Loader:
 
                 self.load_saves_dependency()
                 level.load(raw_data)
+                if level.is_custom:
+                    data.loaded_chips[level.chip.id] = level.chip
                 data.loaded_levels[raw_data["level"]["id"]] = level
             except Exception:
                 logger.error(f"Failed to load level: {traceback.format_exc()}")
@@ -381,6 +383,9 @@ class Loader:
         )
         data.level_player_border = arcade.Sprite(
             "assets/borders/level_player_border.png"
+        )
+        data.level_player_border_no_bg = arcade.Sprite(
+            "assets/borders/level_player_no_bg.png"
         )
         data.level_player_win = arcade.Sprite("assets/borders/level_player_win.png")
         data.border_small = arcade.Sprite("assets/borders/border_small.png")

@@ -29,7 +29,7 @@ class Not(Complex):
         self.gate_type: str = "8NOT"
 
         self.inputs: list[int] = [0]
-        self.outputs: list[int] = [15]
+        self.outputs: list[int] = [255]
         self.inputs_sizes: list[int] = [8]
         self.outputs_sizes: list[int] = [8]
 

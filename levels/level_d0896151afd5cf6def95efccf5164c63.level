@@ -666,7 +666,7 @@
   "number": 8,
   "name": "A XOR B",
   "description": "Basic level to learn the basis of gates.",
-  "hints": [],
+  "hints": ["Hello World"],
   "version": 160,
   "start": 1,
   "truth": {},

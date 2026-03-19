@@ -124,8 +124,8 @@ class CustomGate(Complex):
         self.outputs = data.get("outputs", [])
         self.gate_type = data.get("gate", "")
         self.id = data["id"]
-        self.x = data["x"]
-        self.y = data["y"]
+        self._x = data["x"]
+        self._y = data["y"]
         self.base_chip_id = data["parent"]
 
         self.chip = data_module.loaded_chips[self.base_chip_id].copy()

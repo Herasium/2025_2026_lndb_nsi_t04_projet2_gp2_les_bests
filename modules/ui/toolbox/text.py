@@ -44,7 +44,7 @@ class Text:
         self._width: float = width
         self._height: float = height
 
-        self._color: arcade.Color = arcade.color.WHITE
+        self._color: arcade.color = arcade.color.WHITE
         self.hitbox: HitBox = HitBox()
 
         self._name: str = text
@@ -210,12 +210,12 @@ class Text:
         self._recalculate_rect()
 
     @property
-    def color(self) -> arcade.Color:
+    def color(self) -> arcade.color:
         """Returns the current text color."""
         return self._color
 
     @color.setter
-    def color(self, value: arcade.Color) -> None:
+    def color(self, value: arcade.color) -> None:
         """Updates text color and triggers layout recalculation."""
         self._color = value
         self._recalculate_rect()

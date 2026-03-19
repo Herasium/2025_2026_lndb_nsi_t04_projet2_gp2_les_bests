@@ -31,7 +31,7 @@
     "y": 715.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -42,7 +42,7 @@
     "y": 418.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -57,7 +57,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "ebb35ed77c0c847119cad1fa81679601"
@@ -70,7 +70,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NOT",
     "id": "f728a2aeeb5834be4bef1dc7f4d30fb0"
@@ -84,7 +84,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "e335225ae932f55510d821284929adf2"
@@ -98,7 +98,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "OR",
     "id": "b712254722b2d29740c23e4dad56373a"
@@ -112,7 +112,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "XOR",
     "id": "b5c3d62de8215c4d13e2e17b2fdd7188"
@@ -126,7 +126,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "XOR",
     "id": "5cae9ad8a6fd38f22c3149ada2c18d2c"
@@ -139,7 +139,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NOT",
     "id": "bdf4c750bf7e5378e076d9c7779f921c"
@@ -150,10 +150,10 @@
     "type": "Gate",
     "inputs": [
      true,
-     false
+     0
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "d7bcd7f17101f1b6f0e6f7d2d16e3568"
@@ -673,20 +673,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 240,
   "id": "level_9472d75cd406e0ee47148a855ab73bbc",
-  "number": 20,
+  "number": 21,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 5
+  "category": 5,
+  "is_custom": false
  }
 }

@@ -42,7 +42,7 @@
     "y": 688.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -53,7 +53,7 @@
     "y": 418.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -68,7 +68,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "0c42a8415248d4eb3cd619e5887a39da"
@@ -81,7 +81,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NOT",
     "id": "b707af7f7f84b60ef648ab00167f0645"
@@ -95,7 +95,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "845403f1a38b2c444ca4ed25ea08e04b"
@@ -109,7 +109,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "OR",
     "id": "2fdf4b0afed272571744289010310c52"
@@ -123,7 +123,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "XOR",
     "id": "ac9e3bdeedad5eede1945f061e5af0eb"
@@ -137,7 +137,7 @@
      true
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "XOR",
     "id": "60a11824510ccc2856bb887fda0b1da9"
@@ -147,11 +147,11 @@
     "y": 499.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "XOR",
     "id": "73aec7ae0ebaad74d9f68fde3239eb86"
@@ -165,7 +165,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "0bd03024dd264033ccc671c74f6f1569"
@@ -175,11 +175,11 @@
     "y": 364.5,
     "type": "Gate",
     "inputs": [
-     true,
-     false
+     1,
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "OR",
     "id": "ae07070d35c4de32d8d757ea676a0b92"
@@ -190,10 +190,10 @@
     "type": "Gate",
     "inputs": [
      true,
-     true
+     1
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "AND",
     "id": "8257663bb054afaa1709baba30082707"
@@ -1229,20 +1229,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 300,
   "id": "level_42af18a46c8de30d50e9e01c28b11e45",
-  "number": 19,
+  "number": 20,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 2,
-  "category": 5
+  "category": 5,
+  "is_custom": true
  }
 }
