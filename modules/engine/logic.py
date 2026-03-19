@@ -172,6 +172,16 @@ def gate_8or(inputs: list[int]) -> list[int]:
     """
     return [(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
+def gate_8xor(inputs: list[int]) -> list[int]:
+    """Performs 8-bit XOR.
+
+    Args:
+        inputs: List containing two 8-bit integer values.
+
+    Returns:
+        Bitwise XOR of inputs.
+    """
+    return [(inputs[0] ^ inputs[1]) & ((1 << 8) - 1)]
 
 def gate_8nand(inputs: list[int]) -> list[int]:
     """Performs 8-bit NAND.
@@ -277,6 +287,7 @@ LOGIC_MAP: dict[str, callable] = {
     "SUB": gate_subtractor,
     "8ADDER": gate_8adder,
     "8SUB": gate_8subtractor,
+    "8XOR": gate_8xor
 }
 
 

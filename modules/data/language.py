@@ -26,15 +26,15 @@ class English:
             "button_01": "Drag gates from the hotbar to \n\nthe playground. You can click on \n\nthe output port of a gate to create \n\na wire and then on the input port \n\nof another gate to connect them.",
             "button_02": "def",
             "button_03": "INPUT is your signal source. It \n\nis permanently placed at the \n\nbeginning of a program. You can \n\nclick on it to manually switch its \n\nstate between 0 (off) and 1 (on).",
-            "button_04": "OUTPUT closes a program; it's the one that sends the signal back. Connect a cable to its input port. It will light up green if it receives a signal 1 and remain red for a signal 0.",
-            "button_05": "AND: \n\nConnect two cables to the input ports on the left. The gate will only transmit a signal to the output if both input cables carry a signal.",
-            "button_06": "NOT : \n\nConnect an input to this component to reverse the logic. If you send a signal, it cuts it off at the output; if you don't send it any signal, it returns 1.",
-            "button_07": "OR : \n\nConnect your inputs. The door will return a signal as soon as at least one of the input ports receives a signal 1.",
-            "button_08": "NAND : \n\nThis gate functions like an AND gate, but with an inverted output. It outputs a constant 1 signal, except when all its inputs are activated.",
-            "button_09": "NOR : \n\nThis gate turns off its output (signal at 0) as soon as one of its inputs is 1. It only allows signal 1 to pass if both of its inputs are at 0.",
-            "button_010": "XOR : \n\nConnect two sources. The output will only go to 1 if the two input signals are different (one at 1, the other at 0).",
-            "button_011": "CLOCK : \n\nOnce installed, this gate automatically generates a signal alternating between 0 and 1 every second. Regardless of the inputs, the signal it outputs depends solely on the alternation each second.",
-            "button_012": "PASS : \n\nUse this gate to extend a connection or isolate a part of the circuit. It returns the incoming signal without any modification."
+            "button_04": "OUTPUT closes a program; it's the \n\none that sends the signal back. \n\nConnect a cable to its input port. \n\nIt will light up green if it \n\nreceives a signal 1 and remain red \n\nfor a signal 0.",
+            "button_05": "AND : \n\nConnect two cables to the input \n\nports on the left. The gate will \n\nonly transmit a signal to the \n\noutput if both input cables carry \n\na signal.",
+            "button_06": "NOT : \n\nConnect an input to this component \n\nto reverse the logic. If you send \n\na signal, it cuts it off at the \n\noutput; if you don't send it any \n\nsignal, it returns 1.",
+            "button_07": "OR : \n\nConnect your inputs. The door will \n\nreturn a signal as soon as at least \n\none of the input ports receives a \n\nsignal 1.",
+            "button_08": "NAND : \n\nThis gate functions like an AND \n\ngate, but with an inverted output. \n\nIt outputs a constant 1 signal, \n\nexcept when all its inputs are \n\nactivated.",
+            "button_09": "NOR : \n\nThis gate turns off its output \n\n(signal at 0) as soon as one of its \n\ninputs is 1. It only allows \n\nsignal 1 to pass if both of its \n\ninputs are at 0.",
+            "button_010": "XOR : \n\nConnect two sources. The output \n\nwill only go to 1 if the two input \n\nsignals are different (one at 1, \n\nthe other at 0).",
+            "button_011": "CLOCK : \n\nOnce installed, this gate \n\nautomatically generates a signal \n\nalternating between 0 and 1 every \n\nsecond. Regardless of the inputs, \n\nthe signal it outputs depends \n\nsolely on the alternation each \n\nsecond.",
+            "button_012": "PASS : \n\nUse this gate to extend a \n\nconnection or isolate a part of the \n\ncircuit. It returns the incoming \n\nsignal without any modification."
         }
 
     def get(self, menu: str, key: str) -> str:
