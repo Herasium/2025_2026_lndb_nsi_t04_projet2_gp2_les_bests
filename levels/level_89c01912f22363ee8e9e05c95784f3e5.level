@@ -1,0 +1,447 @@
+{
+ "chip": {
+  "type": "Chip",
+  "name": "Default Chip",
+  "id": "89c01912f22363ee8e9e05c95784f3e5",
+  "gates": {
+   "d9fb8924009cb50370be81bec0691acd": {
+    "x": 229.5,
+    "y": 607.5,
+    "type": "Input",
+    "inputs": [],
+    "outputs": [
+     1
+    ],
+    "gate": "Input",
+    "id": "d9fb8924009cb50370be81bec0691acd"
+   },
+   "99ec886757643af15b2c62a5912833eb": {
+    "x": 742.5,
+    "y": 607.5,
+    "type": "Output",
+    "inputs": [
+     1
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "99ec886757643af15b2c62a5912833eb"
+   },
+   "433544dfe2218679bf1dde8966b3b9e5": {
+    "x": 1606.5,
+    "y": 931.5,
+    "type": "Gate",
+    "inputs": [
+     0,
+     0
+    ],
+    "outputs": [
+     1
+    ],
+    "gate": "NAND",
+    "id": "433544dfe2218679bf1dde8966b3b9e5"
+   },
+   "3a1f1663079784bf76f18053c91d7f96": {
+    "x": 1714.5,
+    "y": 796.5,
+    "type": "Gate",
+    "inputs": [
+     0
+    ],
+    "outputs": [
+     1
+    ],
+    "gate": "NOT",
+    "id": "3a1f1663079784bf76f18053c91d7f96"
+   },
+   "cf2def4ae913c16b8ab3b1b65cc459c0": {
+    "x": 1687.5,
+    "y": 985.5,
+    "type": "Gate",
+    "inputs": [
+     0,
+     0
+    ],
+    "outputs": [
+     0
+    ],
+    "gate": "AND",
+    "id": "cf2def4ae913c16b8ab3b1b65cc459c0"
+   },
+   "b8cac455e242305aa048773b0a30dde2": {
+    "x": 1822.5,
+    "y": 985.5,
+    "type": "Gate",
+    "inputs": [
+     0,
+     0
+    ],
+    "outputs": [
+     0
+    ],
+    "gate": "OR",
+    "id": "b8cac455e242305aa048773b0a30dde2"
+   },
+   "128cb6a243092dec4bb2c7ab9b4817ca": {
+    "x": 1714.5,
+    "y": 1039.5,
+    "type": "Gate",
+    "inputs": [
+     0,
+     0
+    ],
+    "outputs": [
+     0
+    ],
+    "gate": "XOR",
+    "id": "128cb6a243092dec4bb2c7ab9b4817ca"
+   },
+   "8d733ca510fc3a147949c83ab4743025": {
+    "x": 364.5,
+    "y": 688.5,
+    "type": "Gate",
+    "inputs": [
+     1
+    ],
+    "outputs": [
+     0
+    ],
+    "gate": "NOT",
+    "id": "8d733ca510fc3a147949c83ab4743025"
+   },
+   "d4221a0b5ea4b48e906393629ba002ea": {
+    "x": 553.5,
+    "y": 607.5,
+    "type": "Gate",
+    "inputs": [
+     1,
+     0
+    ],
+    "outputs": [
+     1
+    ],
+    "gate": "OR",
+    "id": "d4221a0b5ea4b48e906393629ba002ea"
+   }
+  },
+  "paths": {
+   "56b6b79ad89b8e92b14ba5e119083b68": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "d4221a0b5ea4b48e906393629ba002ea",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "99ec886757643af15b2c62a5912833eb",
+      0,
+      2,
+      0
+     ]
+    ],
+    "id": "56b6b79ad89b8e92b14ba5e119083b68",
+    "branch_points": {
+     "0": [
+      [
+       675,
+       621
+      ],
+      [
+       810,
+       621
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         675.0,
+         627.0
+        ],
+        [
+         810.0,
+         627.0
+        ],
+        [
+         810.0,
+         615.0
+        ],
+        [
+         675.0,
+         615.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   },
+   "0cb7556e13c500b84997630fcba879a4": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "d9fb8924009cb50370be81bec0691acd",
+      0,
+      2,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "d4221a0b5ea4b48e906393629ba002ea",
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      "8d733ca510fc3a147949c83ab4743025",
+      0,
+      2,
+      1
+     ]
+    ],
+    "id": "0cb7556e13c500b84997630fcba879a4",
+    "branch_points": {
+     "0": [
+      [
+       594,
+       621
+      ],
+      [
+       405.0,
+       621.0
+      ],
+      [
+       378.0,
+       621.0
+      ],
+      [
+       297.0,
+       621.0
+      ]
+     ],
+     "1": [
+      [
+       405.0,
+       621.0
+      ],
+      [
+       405,
+       702
+      ]
+     ],
+     "2": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         594.0,
+         615.0
+        ],
+        [
+         405.0,
+         615.0
+        ],
+        [
+         405.0,
+         627.0
+        ],
+        [
+         594.0,
+         627.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         405.0,
+         615.0
+        ],
+        [
+         378.0,
+         615.0
+        ],
+        [
+         378.0,
+         627.0
+        ],
+        [
+         405.0,
+         627.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         378.0,
+         615.0
+        ],
+        [
+         297.0,
+         615.0
+        ],
+        [
+         297.0,
+         627.0
+        ],
+        [
+         378.0,
+         627.0
+        ]
+       ]
+      }
+     ],
+     "1": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         399.0,
+         621.0
+        ],
+        [
+         399.0,
+         702.0
+        ],
+        [
+         411.0,
+         702.0
+        ],
+        [
+         411.0,
+         621.0
+        ]
+       ]
+      }
+     ],
+     "2": []
+    },
+    "current_branch_count": 2
+   },
+   "74fff118ec1b67c76383d989db9cace5": {
+    "type": "path",
+    "inputs": [
+     [
+      2,
+      "8d733ca510fc3a147949c83ab4743025",
+      0,
+      1,
+      0
+     ]
+    ],
+    "outputs": [
+     [
+      1,
+      "d4221a0b5ea4b48e906393629ba002ea",
+      1,
+      2,
+      0
+     ]
+    ],
+    "id": "74fff118ec1b67c76383d989db9cace5",
+    "branch_points": {
+     "0": [
+      [
+       459,
+       702
+      ],
+      [
+       621,
+       702
+      ],
+      [
+       621,
+       621
+      ]
+     ],
+     "1": []
+    },
+    "branch_hitboxes": {
+     "0": [
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         459.0,
+         708.0
+        ],
+        [
+         621.0,
+         708.0
+        ],
+        [
+         621.0,
+         696.0
+        ],
+        [
+         459.0,
+         696.0
+        ]
+       ]
+      },
+      {
+       "type": "PolyHitbox",
+       "points": [
+        [
+         627.0,
+         702.0
+        ],
+        [
+         627.0,
+         621.0
+        ],
+        [
+         615.0,
+         621.0
+        ],
+        [
+         615.0,
+         702.0
+        ]
+       ]
+      }
+     ],
+     "1": []
+    },
+    "current_branch_count": 1
+   }
+  },
+  "version": 208,
+  "requirements": []
+ },
+ "requirements": [],
+ "level": {
+  "time": 120,
+  "id": "level_89c01912f22363ee8e9e05c95784f3e5",
+  "number": 9,
+  "name": "Default Level",
+  "description": "Basic level to learn the basis of gates.",
+  "hints": [],
+  "version": 208,
+  "start": 1,
+  "truth": {},
+  "color": 0,
+  "category": 1,
+  "is_custom": false
+ }
+}

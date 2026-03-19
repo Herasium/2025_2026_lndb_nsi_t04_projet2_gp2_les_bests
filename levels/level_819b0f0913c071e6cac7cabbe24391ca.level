@@ -3600,7 +3600,7 @@
  "level": {
   "time": 300,
   "id": "level_819b0f0913c071e6cac7cabbe24391ca",
-  "number": 27,
+  "number": 28,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],

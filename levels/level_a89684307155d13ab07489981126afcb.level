@@ -37,32 +37,6 @@
     "gate": "8Input",
     "id": "30f96dc7c06d8c84f516e0d2ab7b0458"
    },
-   "24579dbb59b687ff1b5a31ee5a58ecec": {
-    "x": 1633.5,
-    "y": 742.5,
-    "type": "Gate",
-    "inputs": [
-     0
-    ],
-    "outputs": [
-     1
-    ],
-    "gate": "NOT",
-    "id": "24579dbb59b687ff1b5a31ee5a58ecec"
-   },
-   "06daa82c1ec09a287b99f3efbed96c34": {
-    "x": 1633.5,
-    "y": 850.5,
-    "type": "Complex",
-    "inputs": [
-     0
-    ],
-    "outputs": [
-     255
-    ],
-    "gate": "8NOT",
-    "id": "06daa82c1ec09a287b99f3efbed96c34"
-   },
    "9104938f8009615d050e50310b62a513": {
     "x": 310.5,
     "y": 769.5,
@@ -2357,7 +2331,7 @@
  "level": {
   "time": 240,
   "id": "level_a89684307155d13ab07489981126afcb",
-  "number": 23,
+  "number": 24,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],

@@ -42,7 +42,7 @@
     "y": 526.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -57,7 +57,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "e6763a1b65cfd2248d05ece54744cec5"
@@ -70,7 +70,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NOT",
     "id": "1ab20ba9b59be8daf2a9a6e97c1a288d"
@@ -84,7 +84,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "09ac948aeb167a720af0d0f2ae954fc9"
@@ -94,11 +94,11 @@
     "y": 526.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      true
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "OR",
     "id": "5ee56741525ea71d3ee5407aabf4f553"
@@ -112,7 +112,7 @@
      true
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "OR",
     "id": "a0176ccbaa07ff635e6b47576c7f0472"
@@ -126,7 +126,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "XOR",
     "id": "0a14a4f9dff65425ed63fa9bd6164aea"
@@ -544,20 +544,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 150,
   "id": "level_82dc46ec74df36dd0a6a6b410d33c762",
-  "number": 13,
+  "number": 14,
   "name": "Triple OR",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 3
+  "category": 3,
+  "is_custom": false
  }
 }

@@ -46,7 +46,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "4b41dc2c4ec7a32763d4ddfcbe9b7617"
@@ -60,7 +60,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "007baf6bf8e7058ce0a4d9f43a2e7205"
@@ -74,7 +74,7 @@
      true
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "f4ff2eb9b4b7c0ee1de36c76a50d2731"
@@ -84,11 +84,11 @@
     "y": 661.5,
     "type": "Gate",
     "inputs": [
-     false,
-     false
+     0,
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "e0f2de685c2be791c578c1958003504e"
@@ -98,11 +98,11 @@
     "y": 661.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "e183f29f9e6d5e120a71e7c7ef19ac87"
@@ -112,11 +112,11 @@
     "y": 499.5,
     "type": "Gate",
     "inputs": [
-     false,
-     false
+     0,
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "84e76c9dba89b7275ce4382ad123fff6"
@@ -126,7 +126,7 @@
     "y": 553.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -1066,20 +1066,22 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 240,
   "id": "level_6ae7f549b17294741b02d710709b550c",
-  "number": 16,
+  "number": 17,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 4
+  "category": 4,
+  "is_custom": false
  }
 }
