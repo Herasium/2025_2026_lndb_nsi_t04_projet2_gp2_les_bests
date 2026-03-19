@@ -384,6 +384,7 @@ class Loader:
         )
         data.level_player_win = arcade.Sprite("assets/borders/level_player_win.png")
         data.border_small = arcade.Sprite("assets/borders/border_small.png")
+        data.level_player_empty = arcade.Sprite("assets/borders/level_player_empty.png")
 
         data.star = arcade.Sprite("assets/icons/star.png")
         data.star_empty = arcade.Sprite("assets/icons/star_empty.png")

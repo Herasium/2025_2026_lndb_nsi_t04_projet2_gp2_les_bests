@@ -324,6 +324,30 @@ class MainMenuView(arcade.View):
             for i in self.paths:
                 i.input_on_color = arcade.color.UNIVERSITY_OF_TENNESSEE_ORANGE
                 i.current_value = True
+        elif self.setting_button.touched and not self.button_touche == self.combinaison:
+            if self.button_touche[-1] != "setting_button":
+                self.button_touche.append("setting_button")
+            for i in self.paths:
+                i.input_on_color = arcade.color.SONIC_SILVER
+                i.current_value = True
+        elif self.sandbox_button.touched:
+            if self.button_touche[-1] != "sandbox_button":
+                self.button_touche.append("sandbox_button")
+            for i in self.paths:
+                i.input_on_color = arcade.color.SPIRO_DISCO_BALL
+                i.current_value = True
+        elif self.level_button.touched:
+            if self.button_touche[-1] != "level_button":
+                self.button_touche.append("level_button")
+            for i in self.paths:
+                i.input_on_color = arcade.color.ROSSO_CORSA
+                i.current_value = True
+        elif self.quit_button.touched:
+            if self.button_touche[-1] != "quit_button":
+                self.button_touche.append("quit_button")
+            for i in self.paths:
+                i.input_on_color = arcade.color.RUDDY
+                i.current_value = True
         else:
             if self.button_touche != self.combinaison:
                 for i in self.paths:

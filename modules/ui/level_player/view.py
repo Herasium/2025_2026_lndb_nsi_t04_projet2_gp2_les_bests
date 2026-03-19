@@ -7,6 +7,7 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.id_generator import random_id
 from modules.ui.toolbox.easing import BackEaseOut, ElasticEaseOut
+from modules.ui.toolbox.text import Text
 
 from modules.data.nodes.path import Path
 
@@ -31,7 +32,7 @@ class LevelPlayer(arcade.View):
         """Initializes the LevelPlayer view and loads level configuration.
 
         Args:
-            id: Unique identifier for the level.
+            id: Identifier of the level.
         """
         super().__init__()
 
@@ -80,6 +81,9 @@ class LevelPlayer(arcade.View):
         self.engine: Engine = Engine()
         self.stress_test: bool = False
 
+        self.display_hint_frame: bool = True
+        self.current_hint_frame: int = 0
+
         if self.stress_test:
             self.perf_graph_list = arcade.SpriteList()
             graph = arcade.PerfGraph(400, 400, graph_data="FPS")
@@ -88,6 +92,23 @@ class LevelPlayer(arcade.View):
 
         self.prepare_right_frame()
         self.prepare_won_frame()
+        self.prepare_hint_frame()
+
+    def prepare_hint_frame(self) -> None:
+        """Initializes UI elements for the hints screen. (Level Instructions.)"""
+
+        self.hint_frame = Entity(
+            x=384, y=220, width=576 * 2, height=320 * 2, sprite=data.level_player_empty
+        )
+        self.hint_frame_text = Text(x=1920/2,y=1080/2,width=1000,height=300,text="",multiline= True)
+
+        if len(self.level.hints) < 1:
+            self.display_hint_frame = False
+            return
+
+        self.hint_frame_text.text = self.level.hints[0]
+
+        
 
     def prepare_won_frame(self) -> None:
         """Initializes UI elements for the victory screen."""
@@ -473,6 +494,13 @@ class LevelPlayer(arcade.View):
         for i in self.truth_table_titles:
             i.draw()
 
+    def draw_hint(self) -> None:
+        """Render the hints frame, to provide basic level instructions."""
+
+        if self.display_hint_frame:
+            self.hint_frame.draw()
+            self.hint_frame_text.draw()
+
     @profile
     def on_draw(self) -> None:
         """Main rendering loop: updates component visual states and draws layers."""
@@ -492,6 +520,7 @@ class LevelPlayer(arcade.View):
         self.draw_bottom_gates()
         self.draw_right()
         self.draw_level_time()
+        self.draw_hint()
 
         if self.level.won:
             self.draw_won()
