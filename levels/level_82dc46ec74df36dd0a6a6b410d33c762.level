@@ -553,7 +553,7 @@
   "id": "level_82dc46ec74df36dd0a6a6b410d33c762",
   "number": 14,
   "name": "Triple OR",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Combine A, B, and C using any unlocked gates. Output is true if at least one input is true.",
   "hints": [],
   "version": 208,
   "start": 1,

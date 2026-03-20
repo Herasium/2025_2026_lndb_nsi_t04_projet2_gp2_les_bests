@@ -791,7 +791,7 @@
   "id": "level_e18f8acceb2714b3c5ce066585d0cb20",
   "number": 12,
   "name": "A XOR B v2",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build A XOR B using only NAND gates. Output is true if A and B are different.",
   "hints": [],
   "version": 208,
   "start": 1,
