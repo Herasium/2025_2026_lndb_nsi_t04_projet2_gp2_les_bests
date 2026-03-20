@@ -553,7 +553,7 @@
   "id": "level_d0fb7341907f00a1608ce41267e6374b",
   "number": 13,
   "name": "Triple AND",
-  "description": "ombine A, B, and C using any unlocked gates. Output is true only if all inputs are true.",
+  "description": "Combine A, B, and C using any unlocked gates. Output is true only if all inputs are true.",
   "hints": [],
   "version": 208,
   "start": 1,
