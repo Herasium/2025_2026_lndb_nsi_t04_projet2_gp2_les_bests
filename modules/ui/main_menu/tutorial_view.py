@@ -4,6 +4,7 @@ from typing import List
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.toolbox.text import Text
+from modules.ui.toolbox.entity import Entity
 
 from modules.data import data
 
@@ -21,11 +22,13 @@ class TutorialView(arcade.View):
 
         self.name_banner_sprite = data.name_banner
 
-        self.back_button = Button()
-        self.back_button.x = 192 / 2.5 - 30
-        self.back_button.y = 1010 + 10
-        self.back_button.width = 80
-        self.back_button.height = 40
+        self.back_button = Entity(
+            x=1654,
+            y=100,
+            width=160,
+            height=100,
+            sprite=data.button_back
+        )
 
         self.regletexte = Text(
             x=120,
@@ -93,6 +96,51 @@ class TutorialView(arcade.View):
             width=750,
         )
 
+        self.porte_actuelle = 0
+
+        self.and_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["and"],
+        )
+        self.not_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["not"],
+        )
+        self.or_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["or"],
+        )
+        self.nand_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["nand"],
+        )
+        self.nor_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["nor"],
+        )
+        self.xor_truth = Entity(
+            x=1065, 
+            y=20, 
+            width=620, 
+            height=620, 
+            sprite=data.tuto_truth["xor"],
+        )
+
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles keyboard input events.
 
@@ -101,7 +149,7 @@ class TutorialView(arcade.View):
             key_modifiers: Bitwise flags indicating active modifier keys.
         """
         if key == 97:
-            arcade.exit()
+            data.window.back()
 
     def draw_tile(self, id: int, x: float, y: float) -> None:
         """Renders a single UI tile at the specified coordinates.
@@ -157,6 +205,11 @@ class TutorialView(arcade.View):
         self.draw_frame_background()
         self.draw_frame_border()
 
+        rect = arcade.XYWH(
+            x=0, y=1080 - 128, width=1920, height=128, anchor=arcade.Vec2(0, 0)
+        )
+        arcade.draw_sprite_rect(self.name_banner_sprite, rect)
+
         self.texte_button.draw()
         self.back_button.draw()
 
@@ -168,6 +221,19 @@ class TutorialView(arcade.View):
 
         for i in self.buttons:
             i.draw()
+
+        if self.porte_actuelle == 2 :
+            self.and_truth.draw()
+        if self.porte_actuelle == 3 :
+            self.not_truth.draw()
+        if self.porte_actuelle == 4 :
+            self.or_truth.draw()
+        if self.porte_actuelle == 5 :
+            self.nand_truth.draw()
+        if self.porte_actuelle == 6 :
+            self.nor_truth.draw()
+        if self.porte_actuelle == 7 :
+            self.xor_truth.draw()
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
@@ -197,14 +263,17 @@ class TutorialView(arcade.View):
             data.window.back()
 
         if self.regleplay_button.touched:
+            self.porte_actuelle = 0
             self.texte_button.text = data.language.tutorial["button_01"]
 
         if self.commande_button.touched:
+            self.porte_actuelle = 0
             self.texte_button.text = data.language.tutorial["button_02"]
 
         for i in self.buttons:
             p = self.buttons.index(i)
             if i.touched:
+                self.porte_actuelle = p
                 keys = list(data.language.tutorial.keys())
                 ask_key = keys[p + 16]
                 self.texte_button.text = data.language.tutorial[ask_key]
