@@ -21,6 +21,7 @@ from modules.data.gate_index import (
 from modules.engine import Engine
 from modules.ui.main_menu.pause_view import PauseView
 from modules.ui.level_editor.save import SaveFrame
+from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 
 """Provides the primary interface for the circuit design environment, 
 managing editor state, user interactions, and visual rendering."""
@@ -293,7 +294,7 @@ class EditorView(arcade.View):
             if self.level_editor:
                 data.window.display(SaveFrame(self.level))
             else:
-                self.chip.save()
+                data.window.display(EditorSaveFrame(self.chip))
 
         if key == 65288:
             self.delete()
@@ -439,7 +440,7 @@ class EditorView(arcade.View):
     ) -> None:
         """Handles scrolling within the bottom bar UI."""
         if self.bottom_zone_collider.touched:
-            self.bottom_camera_position[0] += scroll_y * -15
+            self.bottom_camera_position[0] += scroll_y * -data.MOUSE_SENSI
             self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
             self.bottom_bar_update_camera()
 
