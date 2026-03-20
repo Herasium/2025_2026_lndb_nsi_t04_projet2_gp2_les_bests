@@ -224,7 +224,7 @@
   "id": "level_75ef61c72ec69179f868a784ab5642e1",
   "number": 1,
   "name": "NOT A",
-  "description": "This isn't A.",
+  "description": "Invert the value of A using a NOT gate.",
   "hints": [],
   "version": 160,
   "start": 1,
