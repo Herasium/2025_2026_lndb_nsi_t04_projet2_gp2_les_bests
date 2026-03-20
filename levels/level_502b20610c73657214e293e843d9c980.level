@@ -298,7 +298,7 @@
   "id": "level_502b20610c73657214e293e843d9c980",
   "number": 3,
   "name": "A OR B",
-  "description": "Same thing, different gate.",
+  "description": "Use an OR gate to combine A and B. Output is true if at least one is true.",
   "hints": [],
   "version": 160,
   "start": 1,

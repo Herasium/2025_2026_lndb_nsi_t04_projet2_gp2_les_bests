@@ -578,7 +578,7 @@
   "id": "level_19b1e6aa32b59cb41dff8aee4a9be62f",
   "number": 15,
   "name": "Odd selector",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Use any unlocked gates to output true when an odd number of inputs are true.",
   "hints": [],
   "version": 208,
   "start": 1,

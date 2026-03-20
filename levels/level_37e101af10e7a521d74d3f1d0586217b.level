@@ -298,7 +298,7 @@
   "id": "level_37e101af10e7a521d74d3f1d0586217b",
   "number": 4,
   "name": "A NAND B",
-  "description": "The beginning.",
+  "description": "Use a NAND gate on A and B. Output is false only if both are true.",
   "hints": [],
   "version": 160,
   "start": 1,
