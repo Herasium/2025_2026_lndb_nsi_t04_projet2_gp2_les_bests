@@ -95,6 +95,9 @@ class LevelPlayer(arcade.View):
         self.prepare_won_frame()
         self.prepare_hint_frame()
 
+    def reload_hint(self):
+        self.hint_frame_text.text = self.level.hints[self.current_hint_frame]
+
     def prepare_hint_frame(self) -> None:
         """Initializes UI elements for the hints screen. (Level Instructions.)"""
 
@@ -102,8 +105,11 @@ class LevelPlayer(arcade.View):
             x=384, y=220, width=576 * 2, height=320 * 2, sprite=data.level_player_empty
         )
         self.hint_frame_text = Text(x=1920/2,y=1080/2,width=1000,height=300,text="",multiline= True)
+        self.hint_frame_ok = Entity(x=384+576*2-137*1.2-90,y=310,width=137*1.2,height=120,sprite=data.button_ok)
+        self.hint_frame_next = Entity(x=384+576*2-169*1.2-90,y=310,width=169*1.2,height=120,sprite=data.button_next_on)
+        self.hint_frame_back = Entity(x=384+90,y=310,width=160*1.2,height=120,sprite=data.button_back)
 
-        if len(self.level.hints) < 1:
+        if (len(self.level.hints)-1) < 1:
             self.display_hint_frame = False
             return
 
@@ -588,6 +594,13 @@ class LevelPlayer(arcade.View):
             self.hint_frame.draw()
             self.hint_frame_text.draw()
 
+            if self.current_hint_frame == (len(self.level.hints)-1):
+                self.hint_frame_ok.draw()
+            if self.current_hint_frame < (len(self.level.hints)-1):
+                self.hint_frame_next.draw()
+            if self.current_hint_frame > 0:
+                self.hint_frame_back.draw()
+
     @profile
     def on_draw(self) -> None:
         """Main rendering loop: updates component visual states and draws layers."""
@@ -782,12 +795,32 @@ class LevelPlayer(arcade.View):
         if (current + 1) < len(levels):
             data.window.display(LevelPlayer(levels[current + 1]))
 
+    def next_hint(self):
+        if self.current_hint_frame < (len(self.level.hints)-1):
+            self.current_hint_frame += 1
+        else:
+            self.display_hint_frame = False
+        self.reload_hint()
+
+    def previous_hint(self):
+        if self.current_hint_frame > 0:
+            self.current_hint_frame = 0
+        self.reload_hint()
+
     def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
         """Handles click events for UI navigation, wiring paths, and gate placement."""
         if self.level.won:
             if self.win_button_next.touched:
                 self.launch_next_level()
             return
+        
+        if self.display_hint_frame:
+            if self.hint_frame_ok.touched or self.hint_frame_next.touched:
+                self.next_hint()
+            if self.hint_frame_back.touched:
+                self.previous_hint()
+            return
+
         if button == 2:
             self.camera_hold = True
             return
