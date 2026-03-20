@@ -462,7 +462,7 @@
   "id": "level_3f47b14997f5b71fa9bf62e4e9d7070b",
   "number": 7,
   "name": "Default Level",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Use previous gates (NAND, NOT, AND) to build A OR B. Output is true if either input is true.",
   "hints": [],
   "version": 160,
   "start": 1,
