@@ -298,7 +298,7 @@
   "id": "level_8aa94331df573c290337d755cee0ff4c",
   "number": 2,
   "name": "A AND B",
-  "description": "Combine the inputs A and B using an AND gate to produce an output that is true only when both inputs are true.",
+  "description": "Use an AND gate to combine A and B. Output is true only if both are true.",
   "hints": [],
   "version": 160,
   "start": 1,
