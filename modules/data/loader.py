@@ -372,6 +372,7 @@ class Loader:
         data.button_next_on = arcade.Sprite("assets/buttons/button_next_on.png")
         data.button_next_off = arcade.Sprite("assets/buttons/button_next_off.png")
         data.button_back = arcade.Sprite("assets/buttons/button_back.png")
+        data.button_ok = arcade.Sprite("assets/buttons/button_ok.png")
 
         data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
         data.level_info = arcade.Sprite("assets/titles/level_info.png")
@@ -417,6 +418,13 @@ class Loader:
             "assets/buttons/editor_categories/custom.png"
         )
 
+        data.tuto_truth = {}
+        data.tuto_truth["or"] = arcade.Sprite("assets/truth/or_gate.png")
+        data.tuto_truth["and"] = arcade.Sprite("assets/truth/and_gate.png")
+        data.tuto_truth["nand"] = arcade.Sprite("assets/truth/nand_gate.png")
+        data.tuto_truth["nor"] = arcade.Sprite("assets/truth/nor_gate.png")
+        data.tuto_truth["not"] = arcade.Sprite("assets/truth/not_gate.png")
+        data.tuto_truth["xor"] = arcade.Sprite("assets/truth/xor_gate.png")
     def load(self) -> None:
         """Executes the full asset loading and initialization pipeline."""
         logger.print("Loading Game Stuff.")

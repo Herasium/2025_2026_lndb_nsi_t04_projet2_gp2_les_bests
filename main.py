@@ -12,6 +12,7 @@ from modules.data.loader import Loader
 from modules.logger import Logger
 import arcade
 import os
+import threading
 
 arcade.enable_timings()
 
@@ -27,8 +28,6 @@ logger.print(f"Current path: {path}")
 windows: Window = Window()
 data.window = windows
 logger.print("Created Window.")
-
-windows.display(LoadingScreen())
 
 loader.load()
 
