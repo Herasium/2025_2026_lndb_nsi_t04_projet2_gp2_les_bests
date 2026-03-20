@@ -111,6 +111,7 @@ class Data:
         self.COLORS = COLORS
         self.IMAGE: ImageBuffer = ImageBuffer()
         self.LEVEL_BUTTONS: LevelButtonsBuffer = LevelButtonsBuffer()
+        self.MOUSE_SENSI = 40
 
         self.loaded_chips: Dict[str, Any] = {}
         self.loaded_levels: Dict[str, Any] = {}

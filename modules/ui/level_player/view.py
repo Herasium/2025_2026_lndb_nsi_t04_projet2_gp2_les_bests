@@ -961,7 +961,7 @@ class LevelPlayer(arcade.View):
     ) -> None:
         """Handles scrolling within the bottom bar UI."""
         if self.bottom_zone_collider.touched:
-            self.bottom_camera_position[0] += scroll_y * -15
+            self.bottom_camera_position[0] += scroll_y * -data.MOUSE_SENSI
             self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
             self.bottom_bar_update_camera()
 

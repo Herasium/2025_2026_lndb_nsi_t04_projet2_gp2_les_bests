@@ -1,4 +1,5 @@
-"""Entry point for the Logic Box application.
+"""
+aEntry point for the Logic Box application.
 
 This module initializes the core game systems, including logging, data loading,
 and the primary window management, before launching the initial UI view.
@@ -12,7 +13,7 @@ from modules.data.loader import Loader
 from modules.logger import Logger
 import arcade
 import os
-import threading
+
 
 arcade.enable_timings()
 

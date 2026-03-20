@@ -134,7 +134,7 @@ class LevelList(arcade.View):
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
         """Updates vertical camera offset and rebuilds layout."""
-        self.camera_y += scroll_y * -15
+        self.camera_y += scroll_y * -data.MOUSE_SENSI
         self.camera_y = max(self.camera_y, 0)
         self.setup()
 
