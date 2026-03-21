@@ -8,13 +8,14 @@ from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.keys import apply_key
 from modules.data import data
+from modules.ui.editor.view import EditorView
 
 
-class SaveFrame(arcade.View):
+class ChipList(arcade.View):
     """Manages the UI layout and user interactions for editing chip properties."""
 
-    def __init__(self, chip: Any) -> None:
-        """Initializes the SaveFrame instance.
+    def __init__(self) -> None:
+        """Initializes the ChipList instance.
 
         Args:
             chip: The configuration object containing chip data to be modified.
@@ -22,9 +23,7 @@ class SaveFrame(arcade.View):
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
-        self.chip: Any = chip
-        self.typing: bool = False
-        self.current_text = "Default Chip"
+        self.camera = -70
 
         self.setup()
 
@@ -33,15 +32,41 @@ class SaveFrame(arcade.View):
         self.bg = Entity(0, 0, 1920, 1088, arcade.Sprite(data.background_grid_texture))
         self.border = Entity(0, 0, 1920, 960, data.border_small)
         self.title = Entity(0, 952, 1920, 128, data.name_banner)
-        self.chip_save = Entity(1920/2-896/2, 700, 896, 128, data.chip_save)
-        self.chip_name = Text(x=1920/2-200,y=1080/2,width=500,height=200,text=self.current_text,align=("left","center"))
-        self.save_button = Entity(x=1920/2-262.5/2,y=1080/2-400,width=262.5,height=150,sprite=data.button_save)
-        self.sub_title = Text(x=1920/2-200,y=1080/2+30,width=500,height=200,text="Chip Name (Click to Edit.)",align=("left","center"), size=12)
 
-        self.chip_id = Text(x=1920/2,y=1080/2-100,width=500,height=200,text=f"Chip Id: {self.chip.id}",align=("center","center"), size=18)
-        self.chip_version = Text(x=1920/2,y=1080/2-150,width=500,height=200,text=f"Chip Version: {data.VERSION}",align=("center","center"), size=18)
+        self.chips = []
 
-        self.typing_collider = Entity(x=1920/2-250,y=1080/2-50,width=500,height=100)
+        offset = 150
+
+        for chip_id in data.loaded_chips:
+            result = {}
+            chip = data.loaded_chips[chip_id]
+            i = len(self.chips)
+            result["bg"] = Entity(x=400,y=800- offset*i + self.camera,width=1120,height=125,sprite=data.chip_select)
+            result["name"] = Text(x=450,y=885 - offset*i  + self.camera,width=920,height=30,text=chip.name,align=("left","center"))
+            result["id"] = Text(x=450,y=840 - offset*i  + self.camera,width=920,height=30,text=f"Chip Id:{chip.id}",align=("left","center"),size=12)
+            result["button"] = Entity(x=1920/2+510-144,y=820-offset*i  + self.camera,width=144,height=90,sprite=data.button_edit)
+            result["index"] = i
+            result["chip_id"] = chip_id
+            self.chips.append(result)
+
+    def move(self) -> None:
+        offset = 150
+        for a in self.chips:
+            i = a["index"]
+
+            a["bg"].y = 800- offset*i + self.camera
+            a["name"].y = 885 - offset*i  + self.camera
+            a["id"].y = 840 - offset*i  + self.camera
+            a["button"].y = 820-offset*i  + self.camera
+
+
+    def on_mouse_scroll(
+        self, x: float, y: float, scroll_x: float, scroll_y: float
+    ) -> None:
+        """Updates vertical camera offset and rebuilds layout."""
+        self.camera += scroll_y * -data.MOUSE_SENSI
+        self.camera = max(self.camera, -70)
+        self.move()
 
     def reset(self) -> None:
         """Resets the internal state of the view."""
@@ -51,19 +76,15 @@ class SaveFrame(arcade.View):
         """Renders all configured UI text elements."""
         self.clear()
         self.bg.draw()
+
+        for i in self.chips:
+            i["bg"].draw()
+            i["name"].draw()
+            i["id"].draw()
+            i["button"].draw()
+
         self.border.draw()
         self.title.draw()
-        self.chip_save.draw()
-        self.chip_name.draw()
-        self.save_button.draw()
-        self.sub_title.draw()
-        self.chip_id.draw()
-        self.chip_version.draw()
-
-        if self.typing:
-            arcade.draw_line(1920/2-200,1080/2-20,1920/2+200,1080/2-20,arcade.color.RED,2)
-        else:
-            arcade.draw_line(1920/2-200,1080/2-20,1920/2+200,1080/2-20,arcade.color.WHITE,2)
 
 
     def on_update(self, delta_time: float) -> None:
@@ -77,15 +98,8 @@ class SaveFrame(arcade.View):
             key: The identifier of the pressed key.
             key_modifiers: Bitwise flags for modifier keys.
         """
-        if self.typing:
-            if key == 65307:
-                self.typing = False
-                return
-            self.current_text = apply_key(self.current_text,key,key_modifiers)[:17]
-            self.chip_name.text = self.current_text
-        else:
-            if key == 97:
-                arcade.exit()
+        if key == 97:
+            arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key release events."""
@@ -115,14 +129,9 @@ class SaveFrame(arcade.View):
             button: The mouse button pressed.
             key_modifiers: Bitwise flags for modifier keys.
         """
-
-        if self.typing_collider.touched:
-            self.typing = not self.typing
-
-        if self.save_button.touched:
-            self.chip.name = self.current_text
-            self.chip.save()
-            data.window.back()
+        for i in self.chips:
+            if i["button"].touched:
+                data.window.display(EditorView(id=i["chip_id"]))
 
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int

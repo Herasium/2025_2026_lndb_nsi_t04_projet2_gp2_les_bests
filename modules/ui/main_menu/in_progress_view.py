@@ -10,6 +10,7 @@ from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 from modules.ui.main_menu.settings_view import SettingView
 from modules.ui.main_menu.tutorial_view import TutorialView
+from modules.ui.saves_list.view import ChipList
 from modules.data.nodes.path import Path
 from modules.data import data
 from modules.logger import Logger
@@ -372,7 +373,7 @@ class MainMenuView(arcade.View):
         if self.level_button.touched:
             to_display = LevelEditorSelector if key_modifiers in [17, 1] else LevelList
         elif self.sandbox_button.touched:
-            to_display = EditorChipSelector
+            to_display = ChipList
         elif self.play_button.touched:
             data.window.hide()
             to_display = (

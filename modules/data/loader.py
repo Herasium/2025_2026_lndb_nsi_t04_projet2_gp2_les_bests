@@ -71,6 +71,9 @@ class Loader:
 
         if len(chip.requirements) == 0:
             chip.load()
+            if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
+                logger.warning(f"Empty Chip {chip}, not loading.")
+                return
             data.loaded_chips[raw_data["id"]] = chip
         else:
             can_load: bool = True
@@ -81,6 +84,9 @@ class Loader:
 
             if can_load:
                 chip.load()
+                if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
+                    logger.warning(f"Empty Chip {chip}, not loading.")
+                    return
                 data.loaded_chips[raw_data["id"]] = chip
             else:
                 self.to_load_buffer.append(chip)
@@ -110,6 +116,9 @@ class Loader:
 
             if can_load:
                 chip.load()
+                if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
+                    logger.warning(f"Empty Chip {chip}, not loading.")
+                    return
                 self.to_load_buffer.remove(chip)
                 data.loaded_chips[chip.id] = chip
 
@@ -373,12 +382,16 @@ class Loader:
         data.button_next_off = arcade.Sprite("assets/buttons/button_next_off.png")
         data.button_back = arcade.Sprite("assets/buttons/button_back.png")
         data.button_ok = arcade.Sprite("assets/buttons/button_ok.png")
+        data.button_save = arcade.Sprite("assets/buttons/button_save.png")
+        data.button_edit = arcade.Sprite("assets/buttons/button_edit.png")
 
         data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
         data.level_info = arcade.Sprite("assets/titles/level_info.png")
         data.truth_table = arcade.Sprite("assets/titles/truth_table.png")
+        data.chip_save = arcade.Sprite("assets/titles/chip_save.png")
 
         data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
+        data.chip_select = arcade.Sprite("assets/borders/chip_select.png")
         data.editor_border_no_bg = arcade.Sprite(
             "assets/borders/editor_border_no_bg.png"
         )

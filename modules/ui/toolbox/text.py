@@ -181,7 +181,7 @@ class Text:
             )
         if self._align[0] == "center":
             self.rect = arcade.XYWH(
-                x=self._x + self._width / 2,
+                x=self._x - self._width / 2,
                 y=self._y + self._height / 2,
                 width=self._width,
                 height=self._height,
@@ -189,7 +189,7 @@ class Text:
             )
         if self._align[0] == "right":
             self.rect = arcade.XYWH(
-                x=self._x + self._width,
+                x=self._x - self._width,
                 y=self._y + self._height / 2,
                 width=self._width,
                 height=self._height,

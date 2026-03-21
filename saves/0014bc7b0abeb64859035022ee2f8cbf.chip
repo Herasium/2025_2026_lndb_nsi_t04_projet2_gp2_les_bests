@@ -1,6 +1,6 @@
 {
  "type": "Chip",
- "name": "NAND",
+ "name": "Default Chip",
  "id": "0014bc7b0abeb64859035022ee2f8cbf",
  "gates": {
   "69bb9fdf9111a9456f1cad3429b73ea1": {
@@ -889,7 +889,7 @@
    "current_branch_count": 1
   }
  },
- "version": 200,
+ "version": 208,
  "requirements": [
   "56efe412563abea22bd1d975f11aca33"
  ]

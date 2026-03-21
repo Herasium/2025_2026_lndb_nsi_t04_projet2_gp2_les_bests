@@ -19,6 +19,7 @@ from modules.data.gate_index import (
     gate_types_mix,
 )
 from modules.engine import Engine
+from modules.logger import Logger
 from modules.ui.main_menu.pause_view import PauseView
 from modules.ui.level_editor.save import SaveFrame
 from modules.ui.editor.save import SaveFrame as EditorSaveFrame
@@ -26,6 +27,7 @@ from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 """Provides the primary interface for the circuit design environment, 
 managing editor state, user interactions, and visual rendering."""
 
+logger: Logger = Logger("EditorView")
 
 class EditorView(arcade.View):
     """Orchestrates the circuit editing workflow, including UI components,
@@ -272,6 +274,12 @@ class EditorView(arcade.View):
                 a = random_id()
                 self.chip.gates[a] = And(a)
 
+        if (self.frame_count+1) % (60*60*1) == 0:
+            logger.info("Auto-Save")
+            if self.level_editor:
+                self.level.save()
+            else:
+                self.chip.save()
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles keyboard-triggered actions for input switching, navigation, and editing."""
         if key == 101:

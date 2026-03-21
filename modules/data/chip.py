@@ -161,7 +161,7 @@ class Chip:
         """
         result: List[str] = []
         for i in self.gates:
-            if self.gates[i].type == "Input":
+            if self.gates[i].gate_type in ["Input","8Inputs"]:
                 result.append(i)
         return result
 
