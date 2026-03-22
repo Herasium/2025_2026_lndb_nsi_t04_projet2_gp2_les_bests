@@ -86,17 +86,17 @@ class Level:
         self.get_truth_table(answer=True)
 
     def setup_random_test_values(self):
-        
+
         inputs: List[str] = self.get_inputs(self.answer)
         self.truth_test_values = []
 
         for _ in range(10):
             values = []
             for i in inputs:
-                values.append(random.randint(0,2**self.answer.gates[i].outputs_sizes[0]-1))
+                values.append(
+                    random.randint(0, 2 ** self.answer.gates[i].outputs_sizes[0] - 1)
+                )
             self.truth_test_values.append(values)
-
-
 
     def get_stars_count(self) -> int:
         """Calculates current star rating based on time and hint usage.
@@ -124,7 +124,7 @@ class Level:
             else:
                 key = self.answer.gates[i].gate_type
                 self.max_usage[key] = self.max_usage.get(key, 0) + 1
-            
+
             if self.answer.gates[i].type == "Complex":
                 self.is_complex = True
 
@@ -193,7 +193,9 @@ class Level:
         if chip is None:
             chip = self.chip
         return [
-            i for i in self.chip.gates if self.chip.gates[i].type in ["Gate", "Custom","Complex"]
+            i
+            for i in self.chip.gates
+            if self.chip.gates[i].type in ["Gate", "Custom", "Complex"]
         ]
 
     def compare_truth_tables(self) -> bool:
@@ -239,7 +241,13 @@ class Level:
         size: int = len(inputs)
 
         self.truth[chip.id]["meta"].update(
-            {"size": size, "inputs": inputs, "outputs": outputs,"values":self.truth_test_values,"complex": True}
+            {
+                "size": size,
+                "inputs": inputs,
+                "outputs": outputs,
+                "values": self.truth_test_values,
+                "complex": True,
+            }
         )
         count = 0
         for current in self.truth_test_values:
@@ -252,7 +260,7 @@ class Level:
             self.truth[chip.id]["data"][count] = result
             count += 1
 
-    def get_single_truth_table_simple(self,chip: Chip) -> None:
+    def get_single_truth_table_simple(self, chip: Chip) -> None:
         """Generates a truth table for the provided complex chip.
 
         Args:
@@ -267,7 +275,13 @@ class Level:
         size: int = len(inputs)
 
         self.truth[chip.id]["meta"].update(
-            {"size": size, "inputs": inputs, "outputs": outputs, "power": 2**size,"complex": False}
+            {
+                "size": size,
+                "inputs": inputs,
+                "outputs": outputs,
+                "power": 2**size,
+                "complex": False,
+            }
         )
 
         power: int = 2**size
@@ -342,6 +356,7 @@ class Level:
         """
         self.chip.partial_load(data["chip"])
         self.chip.load()
+        self.chip.private = True
 
         self.time = data["level"]["time"]
         self.id = data["level"]["id"]

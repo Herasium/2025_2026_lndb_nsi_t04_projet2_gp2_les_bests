@@ -7,13 +7,11 @@ and the primary window management, before launching the initial UI view.
 
 from modules.ui.window import Window
 from modules.ui.main_menu.in_progress_view import MainMenuView
-from modules.ui.loading.view import LoadingScreen
 from modules.data import data
 from modules.data.loader import Loader
 from modules.logger import Logger
 import arcade
 import os
-
 
 arcade.enable_timings()
 
@@ -32,7 +30,12 @@ logger.print("Created Window.")
 
 loader.load()
 
-view: MainMenuView = MainMenuView()
-windows.display(view)
+Main: MainMenuView = MainMenuView()
+Pause: MainMenuView = MainMenuView(pause=True)
+
+data.main = Main
+data.pause = Pause
+
+windows.display(Main)
 
 windows.run()

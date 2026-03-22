@@ -64,6 +64,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 0:
+            return
         log_data: str = f"{self._header(0)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)
@@ -74,6 +76,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 1:
+            return
         log_data: str = f"{self._header(1)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)
@@ -84,6 +88,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 1:
+            return
         log_data: str = f"{self._header(1)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)
@@ -94,6 +100,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 2:
+            return
         log_data: str = f"{self._header(2)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)
@@ -104,6 +112,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 2:
+            return
         log_data: str = f"{self._header(3)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)
@@ -114,6 +124,8 @@ class Logger:
         Args:
             message: The content to be logged.
         """
+        if data.LOGGER_MIN > 4:
+            return
         log_data: str = f"{self._header(4)}{message}{self.colors[0]}"
         self.history.append(log_data)
         print(log_data)

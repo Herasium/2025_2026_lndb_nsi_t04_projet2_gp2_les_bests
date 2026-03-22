@@ -3,6 +3,7 @@
 from typing import List, Union
 from modules.data.complex import Complex
 
+
 class Adder(Complex):
     """Represents an 8-bit Full Adder logic gate component.
 

@@ -1,5 +1,4 @@
 import arcade
-from line_profiler import profile
 import time
 from typing import Optional, List, Tuple, Any, Dict
 
@@ -104,18 +103,32 @@ class LevelPlayer(arcade.View):
         self.hint_frame = Entity(
             x=384, y=220, width=576 * 2, height=320 * 2, sprite=data.level_player_empty
         )
-        self.hint_frame_text = Text(x=1920/2,y=1080/2,width=1000,height=300,text="",multiline= True)
-        self.hint_frame_ok = Entity(x=384+576*2-137*1.2-90,y=310,width=137*1.2,height=120,sprite=data.button_ok)
-        self.hint_frame_next = Entity(x=384+576*2-169*1.2-90,y=310,width=169*1.2,height=120,sprite=data.button_next_on)
-        self.hint_frame_back = Entity(x=384+90,y=310,width=160*1.2,height=120,sprite=data.button_back)
+        self.hint_frame_text = Text(
+            x=1920 / 2, y=1080 / 2, width=1000, height=300, text="", multiline=True
+        )
+        self.hint_frame_ok = Entity(
+            x=384 + 576 * 2 - 137 * 1.2 - 90,
+            y=310,
+            width=137 * 1.2,
+            height=120,
+            sprite=data.button_ok,
+        )
+        self.hint_frame_next = Entity(
+            x=384 + 576 * 2 - 169 * 1.2 - 90,
+            y=310,
+            width=169 * 1.2,
+            height=120,
+            sprite=data.button_next_on,
+        )
+        self.hint_frame_back = Entity(
+            x=384 + 90, y=310, width=160 * 1.2, height=120, sprite=data.button_back
+        )
 
-        if (len(self.level.hints)-1) < 1:
+        if (len(self.level.hints) - 1) < 1:
             self.display_hint_frame = False
             return
 
         self.hint_frame_text.text = self.level.hints[0]
-
-        
 
     def prepare_won_frame(self) -> None:
         """Initializes UI elements for the victory screen."""
@@ -313,7 +326,7 @@ class LevelPlayer(arcade.View):
                         )
                     )
                     offset_x += add_x
-                offset_x += add_x 
+                offset_x += add_x
                 for i in range(len(table["data"][current])):
                     self.truth_table_outputs[i].append(
                         arcade.Text(
@@ -327,7 +340,7 @@ class LevelPlayer(arcade.View):
                         )
                     )
                     offset_x += add_x
-                offset_x += add_x 
+                offset_x += add_x
                 if chip_truth:
                     for i in range(len(chip_truth["data"][current])):
                         color = arcade.color.RED_PURPLE
@@ -369,7 +382,9 @@ class LevelPlayer(arcade.View):
                 offset_y += add_y
         else:
             for current in range(table["meta"]["power"]):
-                values = [bool(current & (1 << i)) for i in range(table["meta"]["size"])]
+                values = [
+                    bool(current & (1 << i)) for i in range(table["meta"]["size"])
+                ]
                 for i in range(len(values)):
                     self.truth_table_inputs[i].append(
                         arcade.Text(
@@ -594,14 +609,13 @@ class LevelPlayer(arcade.View):
             self.hint_frame.draw()
             self.hint_frame_text.draw()
 
-            if self.current_hint_frame == (len(self.level.hints)-1):
+            if self.current_hint_frame == (len(self.level.hints) - 1):
                 self.hint_frame_ok.draw()
-            if self.current_hint_frame < (len(self.level.hints)-1):
+            if self.current_hint_frame < (len(self.level.hints) - 1):
                 self.hint_frame_next.draw()
             if self.current_hint_frame > 0:
                 self.hint_frame_back.draw()
 
-    @profile
     def on_draw(self) -> None:
         """Main rendering loop: updates component visual states and draws layers."""
         self.clear()
@@ -643,20 +657,24 @@ class LevelPlayer(arcade.View):
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
-        if key == 97:
-            data.window.back()
+        if key == 65473:  # Emergency exit: F4
+            arcade.exit()
+
         if key == 65307:
-            if self.current_path:
-                self.current_path.abort()
-            self.current_path = None
-            self.selected_follower = None
-        if key == 65288 and not self.level.won:
+            if self.current_path or self.selected_follower:
+                if self.current_path:
+                    self.current_path.abort()
+                self.current_path = None
+                self.selected_follower = None
+            else:
+                data.window.display(data.pause)
+        if key == 65288 and not self.level.won and self.current_path is not None:
             self.delete()
 
     def delete_gate(self, id: str) -> None:
         """Removes specified gate and reconciles affected circuit paths."""
         to_delete: List[str] = []
-        if self.level.chip.gates[id].type in ["Gate","Custom","Complex"]:
+        if self.level.chip.gates[id].type in ["Gate", "Custom", "Complex"]:
             for index in self.level.chip.paths.keys():
                 p = self.level.chip.paths[index]
                 for input in p.inputs:
@@ -796,7 +814,7 @@ class LevelPlayer(arcade.View):
             data.window.display(LevelPlayer(levels[current + 1]))
 
     def next_hint(self):
-        if self.current_hint_frame < (len(self.level.hints)-1):
+        if self.current_hint_frame < (len(self.level.hints) - 1):
             self.current_hint_frame += 1
         else:
             self.display_hint_frame = False
@@ -813,7 +831,7 @@ class LevelPlayer(arcade.View):
             if self.win_button_next.touched:
                 self.launch_next_level()
             return
-        
+
         if self.display_hint_frame:
             if self.hint_frame_ok.touched or self.hint_frame_next.touched:
                 self.next_hint()
@@ -964,7 +982,6 @@ class LevelPlayer(arcade.View):
             self.bottom_camera_position[0] += scroll_y * -data.MOUSE_SENSI
             self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
             self.bottom_bar_update_camera()
-
 
     def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
         """Handles mouse button release interactions."""

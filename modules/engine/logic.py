@@ -1,5 +1,6 @@
 import random
 import time
+from line_profiler import profile
 from modules.logger import Logger
 from modules.data.custom import CustomGate
 from modules.data.chip import Chip
@@ -22,6 +23,7 @@ def gate_and(inputs: list[int]) -> list[int]:
     """
     return [(inputs[0] and inputs[1]) * 1]
 
+
 def gate_adder(inputs: list[int]) -> list[int]:
     """Calculates Full Adder operation.
 
@@ -38,6 +40,7 @@ def gate_adder(inputs: list[int]) -> list[int]:
 
     return [sum_bit, carry]
 
+
 def gate_subtractor(inputs: list[int]) -> list[int]:
     """Calculates Full Subtractor operation.
 
@@ -53,6 +56,7 @@ def gate_subtractor(inputs: list[int]) -> list[int]:
     borrow = ((~A & 1) & B) | (Bin & (~(A ^ B) & 1))
 
     return [diff, borrow]
+
 
 def gate_or(inputs: list[int]) -> list[int]:
     """Calculates OR operation.
@@ -149,6 +153,7 @@ def gate_8not(inputs: list[int]) -> list[int]:
     """
     return [inputs[0] ^ ((1 << 8) - 1)]
 
+
 def gate_8and(inputs: list[int]) -> list[int]:
     """Performs 8-bit AND.
 
@@ -172,6 +177,7 @@ def gate_8or(inputs: list[int]) -> list[int]:
     """
     return [(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
+
 def gate_8xor(inputs: list[int]) -> list[int]:
     """Performs 8-bit XOR.
 
@@ -182,6 +188,7 @@ def gate_8xor(inputs: list[int]) -> list[int]:
         Bitwise XOR of inputs.
     """
     return [(inputs[0] ^ inputs[1]) & ((1 << 8) - 1)]
+
 
 def gate_8nand(inputs: list[int]) -> list[int]:
     """Performs 8-bit NAND.
@@ -206,6 +213,7 @@ def gate_8nor(inputs: list[int]) -> list[int]:
     """
     return [~(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
+
 def gate_8maker(inputs: list[int]) -> list[int]:
     """Converts a sequence of bits into an 8-bit integer.
 
@@ -229,6 +237,7 @@ def gate_8breaker(inputs: list[int]) -> list[int]:
     """
     return [int(bit) for bit in format(inputs[0], "08b")]
 
+
 def gate_delay(inputs: list[int], gate: Gate) -> list[int]:
     """Hold the signal for 1 tick.
 
@@ -242,6 +251,7 @@ def gate_delay(inputs: list[int], gate: Gate) -> list[int]:
     gate.old_output = inputs[0]
     return [old]
 
+
 def gate_8adder(inputs: list[int]) -> int:
     """8-bit adder without carry output.
 
@@ -254,6 +264,7 @@ def gate_8adder(inputs: list[int]) -> int:
     A, B = inputs
     return [(A + B) & 0xFF]
 
+
 def gate_8subtractor(inputs: list[int]) -> int:
     """8-bit subtractor without borrow output.
 
@@ -265,6 +276,7 @@ def gate_8subtractor(inputs: list[int]) -> int:
     """
     A, B = inputs
     return [(A - B) & 0xFF]
+
 
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
@@ -287,14 +299,17 @@ LOGIC_MAP: dict[str, callable] = {
     "SUB": gate_subtractor,
     "8ADDER": gate_8adder,
     "8SUB": gate_8subtractor,
-    "8XOR": gate_8xor
+    "8XOR": gate_8xor,
 }
 
 
 class Engine:
     """Simulates circuit chip behavior and signal propagation."""
 
-    def calculate_output(self, gate_type: str, inputs: list[int], gate: Gate) -> list[int]:
+    @profile
+    def calculate_output(
+        self, gate_type: str, inputs: list[int], gate: Gate
+    ) -> list[int]:
         """Calculates output for a standard logic gate.
 
         Args:
@@ -306,10 +321,11 @@ class Engine:
         """
         if gate_type in LOGIC_MAP:
             if gate_type == "DLY":
-                return LOGIC_MAP[gate_type](inputs,gate)
+                return LOGIC_MAP[gate_type](inputs, gate)
             return LOGIC_MAP[gate_type](inputs)
         return [False]
 
+    @profile
     def calculate_custom(self, gate: CustomGate) -> None:
         """Simulates internal logic for a custom gate component.
 
@@ -317,9 +333,10 @@ class Engine:
             gate: Custom gate object to be simulated.
         """
         gate.prop_io()
-        self.propagate_values(gate.chip)
+        self.propagate_values(gate.chip, visible=False)
         gate.update_io()
 
+    @profile
     def sort_gates(self, chip: Chip) -> tuple[list[str], list[str], list[str]]:
         """Categorizes chip components into logic, input, and output gates.
 
@@ -341,6 +358,7 @@ class Engine:
                 gates.append(gate.id)
         return gates, inputs, outputs
 
+    @profile
     def draw_connections(
         self, chip: Chip, inputs: list[str], outputs: list[str], gates: list[str]
     ) -> dict[str, list]:
@@ -381,6 +399,7 @@ class Engine:
 
         return result
 
+    @profile
     def reset_input_validation(
         self, chip: Chip, gates: list[str], outputs: list[str]
     ) -> None:
@@ -399,6 +418,7 @@ class Engine:
         for path in chip.paths.values():
             path.val_done = False
 
+    @profile
     def get_wired_inputs_map(self, connections: dict[str, list]) -> dict[str, set[int]]:
         """Maps gate input ports to their wired status.
 
@@ -417,8 +437,9 @@ class Engine:
                         wired_map.setdefault(target_id, set()).add(target_port)
         return wired_map
 
+    @profile
     def propagate_outputs(
-        self, chip: Chip, connections: dict[str, list], source_id: str
+        self, chip: Chip, connections: dict[str, list], source_id: str, visible=False
     ) -> None:
         """Propagates signal from a source gate to connected targets.
 
@@ -447,10 +468,10 @@ class Engine:
                     should_write = True
                     if target_gate.val_inputs[target_port]:
                         if random.random() < 0.5:
-                            should_write = False 
+                            should_write = False
                         else:
-                            should_write = True 
-                    
+                            should_write = True
+
                     if should_write:
                         target_gate.inputs[target_port] = signal_value
                         target_gate.val_inputs[target_port] = True
@@ -458,15 +479,16 @@ class Engine:
                     if path_id in chip.paths:
                         chip.paths[path_id].current_value = signal_value
                         chip.paths[path_id].val_done = True
+                    if visible:
+                        if target_gate.type in ["Output", "Gate"]:
+                            target_gate.gen_tile_pattern()
+                        if (
+                            target_gate.type == "Complex"
+                            or target_gate.gate_type == "8Output"
+                        ):
+                            target_gate.update_text_readings()
 
-                    if target_gate.type in ["Output", "Gate"]:
-                        target_gate.gen_tile_pattern()
-                    if (
-                        target_gate.type == "Complex"
-                        or target_gate.gate_type == "8Output"
-                    ):
-                        target_gate.update_text_readings()
-
+    @profile
     def run_propagation_loop(
         self,
         chip: Chip,
@@ -474,6 +496,7 @@ class Engine:
         gates: list[str],
         inputs: list[str],
         outputs: list[str],
+        visible: bool = False,
     ) -> None:
         """Iteratively simulates signal propagation through logic gates.
 
@@ -507,7 +530,7 @@ class Engine:
                     elif gate.type == "Custom":
                         self.calculate_custom(gate)
 
-                    self.propagate_outputs(chip, connections, gate_id)
+                    self.propagate_outputs(chip, connections, gate_id, visible=visible)
                     gate.val_done = True
                     processed_this_frame.append(gate_id)
 
@@ -520,18 +543,21 @@ class Engine:
                 gate = chip.gates[random_id]
 
                 if gate.type in ["Gate", "Complex"]:
-                    gate.outputs = self.calculate_output(gate.gate_type, gate.inputs, gate)
+                    gate.outputs = self.calculate_output(
+                        gate.gate_type, gate.inputs, gate
+                    )
                 elif gate.type == "Custom":
                     self.calculate_custom(gate)
 
-                self.propagate_outputs(chip, connections, random_id)
+                self.propagate_outputs(chip, connections, random_id, visible=visible)
                 gate.val_done = True
                 unprocessed.remove(random_id)
 
         if iterations >= safeguard_max:
-            print("Safeguard reached. Infinite loop or too complex.")
+            logger.warning("Safeguard reached. Infinite loop or too complex.")
 
-    def propagate_values(self, chip: Chip) -> None:
+    @profile
+    def propagate_values(self, chip: Chip, visible=True) -> None:
         """Initializes and runs the signal propagation sequence.
 
         Args:
@@ -542,6 +568,8 @@ class Engine:
         self.reset_input_validation(chip, gates, outputs)
 
         for inp_id in inputs:
-            self.propagate_outputs(chip, connections, inp_id)
+            self.propagate_outputs(chip, connections, inp_id, visible=visible)
 
-        self.run_propagation_loop(chip, connections, gates, inputs, outputs)
+        self.run_propagation_loop(
+            chip, connections, gates, inputs, outputs, visible=visible
+        )

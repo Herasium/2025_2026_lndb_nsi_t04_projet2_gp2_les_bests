@@ -3,6 +3,9 @@
 import arcade
 from modules.data import data
 from typing import List
+from modules.logger import Logger
+
+logger: Logger = Logger("Window")
 
 
 class Window:
@@ -28,6 +31,9 @@ class Window:
 
     def back(self) -> None:
         """Navigates to the previous view in the history stack."""
+        if len(self.view_history) < 2:
+            logger.warning("No view to go back to. Doing Nothing.")
+            return
         self.view_history.pop()
         view: arcade.View = self.view_history[-1]
         self.window.show_view(view)

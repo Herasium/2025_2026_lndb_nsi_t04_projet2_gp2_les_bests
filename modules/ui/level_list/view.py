@@ -38,6 +38,10 @@ class LevelList(arcade.View):
         self.border = Entity(0, 0, 1920, 960, data.border_small)
         self.title = Entity(0, 952, 1920, 128, data.name_banner)
 
+        self.back_button = Entity(
+            x=1680, y=100, width=160, height=100, sprite=data.button_back
+        )
+
         self.buttons = {}
         self.texts = []
 
@@ -100,6 +104,7 @@ class LevelList(arcade.View):
 
         self.border.draw()
         self.title.draw()
+        self.back_button.draw()
 
     def on_update(self, delta_time: float) -> None:
         """Performs frame-by-frame logic updates."""
@@ -107,9 +112,10 @@ class LevelList(arcade.View):
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles navigation inputs."""
-        # 97 corresponds to the 'a' key used for navigation back
-        if key == 97:
-            data.window.back()
+        if key == 65307:
+            data.window.display(data.main)
+        if key == 65473:  # Emergency exit: F4
+            arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key release events."""
@@ -129,6 +135,9 @@ class LevelList(arcade.View):
             if self.buttons[i].touched:
                 logger.success(f"Launching Level {i}")
                 data.window.display(LevelPlayer(i))
+
+        if self.back_button.touched:
+            data.window.display(data.main)
 
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float

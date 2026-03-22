@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Dict, List, Any, Union, Optional
+from line_profiler import profile
 
 from modules.data import data
 from modules.data.gate_index import gate_types
@@ -29,7 +30,9 @@ class Chip:
         self.changed: bool = False
         self.requirements: List[str] = []
         self.temp_data: Optional[Dict] = None
+        self.private = False
 
+    @profile
     def copy(self) -> "Chip":
         """Creates a deep copy of the chip with a newly generated identifier.
 
@@ -42,6 +45,7 @@ class Chip:
         new.id = random_id()
         return new
 
+    @profile
     def save(
         self, no_file: bool = False, dojson: bool = False
     ) -> Union[Dict, str, None]:
@@ -99,6 +103,7 @@ class Chip:
         logger.print(f"Saved {self.name}, #{self.id}")
         return None
 
+    @profile
     def partial_load(self, data: Dict[str, Any]) -> None:
         """Loads core metadata and buffers structural data for final initialization.
 
@@ -114,6 +119,7 @@ class Chip:
 
         self.temp_data = data
 
+    @profile
     def load(self) -> None:
         """Constructs gates and paths from buffered data.
 
@@ -161,7 +167,7 @@ class Chip:
         """
         result: List[str] = []
         for i in self.gates:
-            if self.gates[i].gate_type in ["Input","8Inputs"]:
+            if self.gates[i].gate_type in ["Input", "8Inputs"]:
                 result.append(i)
         return result
 

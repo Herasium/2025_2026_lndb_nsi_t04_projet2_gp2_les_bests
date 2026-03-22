@@ -97,7 +97,7 @@ gate_types_8: Dict[str, Type[Any]] = {
     "8ADDER": Adder_8,
     "8SUB": Sub_8,
     "8ONE": One_8,
-    "8XOR": Xor_8
+    "8XOR": Xor_8,
 }
 
 gate_types_mix: Dict[str, Type[Any]] = {"8BREAK": Breaker_8, "8MAKER": Maker_8}

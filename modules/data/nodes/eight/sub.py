@@ -3,6 +3,7 @@
 from typing import List, Union
 from modules.data.complex import Complex
 
+
 class Sub(Complex):
     """Represents an 8-bit Full Sub logic gate component.
 

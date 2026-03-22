@@ -20,7 +20,6 @@ from modules.data.gate_index import (
 )
 from modules.engine import Engine
 from modules.logger import Logger
-from modules.ui.main_menu.pause_view import PauseView
 from modules.ui.level_editor.save import SaveFrame
 from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 
@@ -28,6 +27,7 @@ from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 managing editor state, user interactions, and visual rendering."""
 
 logger: Logger = Logger("EditorView")
+
 
 class EditorView(arcade.View):
     """Orchestrates the circuit editing workflow, including UI components,
@@ -77,8 +77,15 @@ class EditorView(arcade.View):
         self.bottom_camera_position: List[int] = [0, 0]
         self.current_bottom_categorie: int = 0
         self.bottom_gates: List[Any] = []
+        self.bottom_gates_cache = {}
 
+        for i in range(3):
+            self.current_bottom_categorie = i
+            self.bottom_gate_bar()
+
+        self.current_bottom_categorie = 0
         self.bottom_gate_bar()
+
         self.editor_categories: List[Entity] = []
         self.setup_editor_categories()
 
@@ -122,9 +129,15 @@ class EditorView(arcade.View):
             result += i.tile_width
         return result
 
+    @profile
     def bottom_gate_bar(self) -> None:
         """Refreshes the bottom UI bar contents based on the active category."""
         self.bottom_gates = []
+
+        if self.current_bottom_categorie in self.bottom_gates_cache:
+            self.bottom_gates = self.bottom_gates_cache[self.current_bottom_categorie]
+            self.bottom_bar_update_camera()
+            return
 
         if self.current_bottom_categorie == 1:
             for chip_id in data.loaded_chips:
@@ -140,6 +153,7 @@ class EditorView(arcade.View):
                         self.bottom_gates[-1].camera = (0, 0)
                         self.bottom_gates[-1].y = 3 * data.UI_EDITOR_GRID_SIZE
                         self.bottom_gates[-1].x = position
+            self.bottom_gates_cache[1] = self.bottom_gates
 
         elif self.current_bottom_categorie == 0:
             for i in gate_types_1:
@@ -150,7 +164,7 @@ class EditorView(arcade.View):
                 self.bottom_gates[-1].camera = (0, 0)
                 self.bottom_gates[-1].y = 3 * data.UI_EDITOR_GRID_SIZE
                 self.bottom_gates[-1].x = position
-
+            self.bottom_gates_cache[0] = self.bottom_gates
         elif self.current_bottom_categorie == 2:
             for i in {**gate_types_8, **gate_types_mix}:
                 position = (
@@ -160,6 +174,7 @@ class EditorView(arcade.View):
                 self.bottom_gates[-1].camera = (0, 0)
                 self.bottom_gates[-1].y = 3 * data.UI_EDITOR_GRID_SIZE
                 self.bottom_gates[-1].x = position
+            self.bottom_gates_cache[2] = self.bottom_gates
 
     def bottom_bar_update_camera(self) -> None:
         """Syncs the scroll position of bottom bar gates."""
@@ -234,7 +249,6 @@ class EditorView(arcade.View):
                 font_name="Press Start 2P",
             )
 
-    @profile
     def on_draw(self) -> None:
         """Executes the primary frame rendering sequence."""
         self.clear()
@@ -274,12 +288,13 @@ class EditorView(arcade.View):
                 a = random_id()
                 self.chip.gates[a] = And(a)
 
-        if (self.frame_count+1) % (60*60*1) == 0:
+        if (self.frame_count + 1) % (60 * 60 * 1) == 0:
             logger.info("Auto-Save")
             if self.level_editor:
                 self.level.save()
             else:
                 self.chip.save()
+
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles keyboard-triggered actions for input switching, navigation, and editing."""
         if key == 101:
@@ -287,8 +302,8 @@ class EditorView(arcade.View):
                 if g.entity.touched and g.type == "Input":
                     g.switch()
 
-        if key == 97:
-            data.window.back()
+        if key == 65473:  # Emergency exit: F4
+            arcade.exit()
         if key == 65307:
             if self.current_path:
                 self.current_path.abort()
@@ -296,8 +311,7 @@ class EditorView(arcade.View):
                 self.current_path = None
                 self.selected_follower = None
             else:
-                data.window.display(PauseView())
-
+                data.window.display(data.pause)
         if key == 115:
             if self.level_editor:
                 data.window.display(SaveFrame(self.level))
@@ -452,6 +466,7 @@ class EditorView(arcade.View):
             self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
             self.bottom_bar_update_camera()
 
+    @profile
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:

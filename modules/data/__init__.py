@@ -112,6 +112,7 @@ class Data:
         self.IMAGE: ImageBuffer = ImageBuffer()
         self.LEVEL_BUTTONS: LevelButtonsBuffer = LevelButtonsBuffer()
         self.MOUSE_SENSI = 40
+        self.LOGGER_MIN = 1
 
         self.loaded_chips: Dict[str, Any] = {}
         self.loaded_levels: Dict[str, Any] = {}
@@ -125,7 +126,7 @@ class Data:
             "Triple inputs gates",
             "Triple NANDuts gates",
             "Basics of arithmetic",
-            "The more the better"
+            "The more the better",
         ]
 
         self.current_lang: str = "en"

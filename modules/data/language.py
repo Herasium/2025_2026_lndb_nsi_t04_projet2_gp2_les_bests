@@ -34,7 +34,7 @@ class English:
             "button_09": "NOR : \n\nThis gate turns off its output \n\n(signal at 0) as soon as one of its \n\ninputs is 1. It only allows \n\nsignal 1 to pass if both of its \n\ninputs are at 0.",
             "button_010": "XOR : \n\nConnect two sources. The output \n\nwill only go to 1 if the two input \n\nsignals are different (one at 1, \n\nthe other at 0).",
             "button_011": "CLOCK : \n\nOnce installed, this gate \n\nautomatically generates a signal \n\nalternating between 0 and 1 every \n\nsecond. Regardless of the inputs, \n\nthe signal it outputs depends \n\nsolely on the alternation each \n\nsecond.",
-            "button_012": "PASS : \n\nUse this gate to extend a \n\nconnection or isolate a part of the \n\ncircuit. It returns the incoming \n\nsignal without any modification."
+            "button_012": "PASS : \n\nUse this gate to extend a \n\nconnection or isolate a part of the \n\ncircuit. It returns the incoming \n\nsignal without any modification.",
         }
 
     def get(self, menu: str, key: str) -> str:
@@ -87,7 +87,7 @@ class French:
             "button_09": "NOR : \n\nCette porte éteint sa sortie (signal à 0) dès qu'une de ses entrées est 1. Elle ne laisse passer le signal 1 que si ses deux entrées sont à 0.",
             "button_010": "XOR : \n\nConnectez deux sources. La sortie passera à 1 uniquement si les deux signaux d'entrée sont différents (l'un à 1, l'autre à 0).",
             "button_011": "CLOCK : \n\nUne fois placée, cette porte génère automatiquement un signal alternant entre 0 et 1 toutes les secondes. Qu'importe ces entrées, le signal qu'elle renvoie dépends uniquement de l'alternance chaque seconde.",
-            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger une connexion ou isoler une partie du circuit. Il renvoie le signal entrant sans aucune modification."
+            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger une connexion ou isoler une partie du circuit. Il renvoie le signal entrant sans aucune modification.",
         }
 
     def get(self, menu: str, key: str) -> str:

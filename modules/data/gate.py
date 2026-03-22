@@ -20,6 +20,7 @@ class Gate(Node):
     logic gate node in the UI editor.
     """
 
+    @profile
     def __init__(self, id: int) -> None:
         """
         Args:
@@ -54,28 +55,6 @@ class Gate(Node):
             data.COLORS.VALUE_ON
         )
 
-        self.text: arcade.Text = arcade.Text(
-            self._name,
-            self.x,
-            self.y,
-            arcade.types.Color.from_hex_string("b45252"),
-            24,
-            anchor_x="center",
-            anchor_y="center",
-            font_name="Press Start 2P",
-        )
-
-        self.bg_text: arcade.Text = arcade.Text(
-            self._name,
-            self.x,
-            self.y,
-            arcade.types.Color.from_hex_string("5f556a"),
-            24,
-            anchor_x="center",
-            anchor_y="center",
-            font_name="Press Start 2P",
-        )
-
         self.tiles: Any = data.gate_tiles
         self.draw_hitboxes: bool = False
         self.exceptional_size_offset: int = 0
@@ -99,10 +78,6 @@ class Gate(Node):
             self.inputs = [0]
         else:
             self.inputs = [0, 0]
-
-        if hasattr(self, "text"):
-            self.text.text = self._name
-            self.bg_text.text = self._name
 
         if hasattr(self, "grid_size"):
             self.calculate_display()
@@ -138,13 +113,6 @@ class Gate(Node):
     def calculate_display_lite(self) -> None:
         """Performs optimized visual update for camera movement scenarios."""
         self.hide_text: bool = True
-        self.text.x = self.x + self.width / 2 + self._camera[0]
-        self.text.y = (
-            self.y + self.height / 1.6 + data.UI_EDITOR_GRID_SIZE / 4 + self._camera[1]
-        )
-
-        self.bg_text.x = self.text.x - 1
-        self.bg_text.y = self.text.y + 2
 
         self.entity._x = self.x + self._camera[0]
         self.entity._y = self.y + self._camera[1]
@@ -172,14 +140,6 @@ class Gate(Node):
         self.width: float = self.tile_width * data.UI_EDITOR_GRID_SIZE
         self.height: float = 4 * data.UI_EDITOR_GRID_SIZE
         self.max: int = max(len(self.inputs), len(self.outputs)) + 1
-
-        self.text.x = self.x + self.width / 2 + self._camera[0]
-        self.text.y = (
-            self.y + self.height / 1.6 + data.UI_EDITOR_GRID_SIZE / 4 + self._camera[1]
-        )
-
-        self.bg_text.x = self.text.x - 1
-        self.bg_text.y = self.text.y + 2
 
         self.entity.x = self.x + self._camera[0]
         self.entity.y = self.y + self._camera[1]
@@ -307,7 +267,6 @@ class Gate(Node):
 
         self.gate_tile_pattern = gate_tile_pattern
 
-    @profile
     def draw_tiles(self) -> None:
         """Renders the graphical texture representation of the gate state."""
         width: int = self.tile_width
@@ -341,7 +300,6 @@ class Gate(Node):
 
         arcade.draw_texture_rect(data.IMAGE.get_texture(self.gate_type, current), rect)
 
-    @profile
     def draw(self) -> None:
         """Executes rendering logic for the gate and optional debug hitboxes."""
         self.draw_tiles()

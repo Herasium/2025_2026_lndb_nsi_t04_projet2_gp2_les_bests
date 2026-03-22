@@ -4,6 +4,7 @@ from typing import Any
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.data import data
+from modules.ui.toolbox.entity import Entity
 
 
 class SettingView(arcade.View):
@@ -15,12 +16,6 @@ class SettingView(arcade.View):
 
         self.background_color: arcade.Color = arcade.color.JET
         self.name_banner_sprite: Any = data.name_banner
-
-        self.back_button: Button = Button()
-        self.back_button.x = 192 / 2.5 - 30
-        self.back_button.y = 1010 + 10
-        self.back_button.width = 80
-        self.back_button.height = 40
 
         self.settings1_button: Button = Button()
         self.settings1_button.x = 600
@@ -46,6 +41,10 @@ class SettingView(arcade.View):
         self.settings4_button.width = 200
         self.settings4_button.height = 100
 
+        self.back_button = Entity(
+            x=1654, y=100, width=160, height=100, sprite=data.button_back
+        )
+
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Processes keyboard input.
 
@@ -53,7 +52,9 @@ class SettingView(arcade.View):
             key: The numeric code of the key pressed.
             key_modifiers: Bitwise flags for held modifier keys.
         """
-        if key == 97:
+        if key == 65307:
+            data.window.display(data.main)
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
     def draw_tile(self, id: int, x: float, y: float) -> None:
@@ -112,11 +113,11 @@ class SettingView(arcade.View):
         self.draw_frame_background()
         self.draw_frame_border()
 
-        self.back_button.draw()
         self.settings1_button.draw()
         self.settings2_button.draw()
         self.settings3_button.draw()
         self.settings4_button.draw()
+        self.back_button.draw()
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
@@ -143,4 +144,4 @@ class SettingView(arcade.View):
             key_modifiers: Bitwise flags for held modifier keys.
         """
         if self.back_button.touched:
-            data.window.back()
+            data.window.display(data.main)

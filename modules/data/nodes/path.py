@@ -8,8 +8,9 @@ from modules.data.node import Node
 from modules.ui.toolbox.poly_hitbox import PolyHitbox
 from modules.ui.mouse import mouse
 from modules.data import data
+from modules.logger import Logger
 
-from line_profiler import profile
+logger: Logger = Logger("Path")
 
 
 class Path(Node):
@@ -137,7 +138,7 @@ class Path(Node):
             depth: Current recursion depth used to terminate cycles.
         """
         if depth > 100:
-            print("Max depth on branch clean out.")
+            logger.warning("Max depth on branch clean out.")
             return
 
         branch_counts = [0 for _ in range(len(self.branch_points.keys()))]
@@ -251,7 +252,6 @@ class Path(Node):
         self.branch_hitboxes[self.current_branch_count] = []
         self.recalculate_hitbox()
 
-    @profile
     def draw(self) -> None:
         """Renders path lines, active points, and hitboxes."""
         self.color = (

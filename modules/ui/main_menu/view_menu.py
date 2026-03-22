@@ -9,7 +9,7 @@ from modules.ui.main_menu.in_progress_view import MainMenuView
 
 from modules.data import data
 
-"""Provides the primary interface and logic for the game's main menu view."""
+"""Old Menu, not used anymore."""
 
 
 class GameView(arcade.View):
@@ -152,9 +152,6 @@ class GameView(arcade.View):
             elif key_modifiers == 2 or key_modifiers == 18:
                 data.window.display(MainMenuView())
             else:
-                print(
-                    f"Modificator not found, defaulting to EditorView. ({key_modifiers})"
-                )
                 data.window.display(EditorView())
 
         if self.button_quit.touched:

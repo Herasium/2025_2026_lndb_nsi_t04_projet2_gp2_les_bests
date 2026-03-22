@@ -2,7 +2,6 @@ import arcade
 from typing import List
 
 from modules.ui.mouse import mouse
-from modules.ui.toolbox.button import Button
 from modules.ui.toolbox.text import Text
 from modules.ui.toolbox.entity import Entity
 
@@ -23,11 +22,7 @@ class TutorialView(arcade.View):
         self.name_banner_sprite = data.name_banner
 
         self.back_button = Entity(
-            x=1654,
-            y=100,
-            width=160,
-            height=100,
-            sprite=data.button_back
+            x=1654, y=100, width=160, height=100, sprite=data.button_back
         )
 
         self.regletexte = Text(
@@ -70,7 +65,7 @@ class TutorialView(arcade.View):
             "button_11",
             "button_12",
         ]
-        
+
         self.buttons: List[Text] = []
 
         a = 560
@@ -99,45 +94,45 @@ class TutorialView(arcade.View):
         self.porte_actuelle = 0
 
         self.and_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["and"],
         )
         self.not_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["not"],
         )
         self.or_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["or"],
         )
         self.nand_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["nand"],
         )
         self.nor_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["nor"],
         )
         self.xor_truth = Entity(
-            x=1065, 
-            y=20, 
-            width=620, 
-            height=620, 
+            x=1065,
+            y=20,
+            width=620,
+            height=620,
             sprite=data.tuto_truth["xor"],
         )
 
@@ -148,8 +143,10 @@ class TutorialView(arcade.View):
             key: The key code of the pressed key.
             key_modifiers: Bitwise flags indicating active modifier keys.
         """
-        if key == 97:
-            data.window.back()
+        if key == 65307:
+            data.window.display(data.main)
+        if key == 65473:  # Emergency exit: F4
+            arcade.exit()
 
     def draw_tile(self, id: int, x: float, y: float) -> None:
         """Renders a single UI tile at the specified coordinates.
@@ -222,17 +219,17 @@ class TutorialView(arcade.View):
         for i in self.buttons:
             i.draw()
 
-        if self.porte_actuelle == 2 :
+        if self.porte_actuelle == 2:
             self.and_truth.draw()
-        if self.porte_actuelle == 3 :
+        if self.porte_actuelle == 3:
             self.not_truth.draw()
-        if self.porte_actuelle == 4 :
+        if self.porte_actuelle == 4:
             self.or_truth.draw()
-        if self.porte_actuelle == 5 :
+        if self.porte_actuelle == 5:
             self.nand_truth.draw()
-        if self.porte_actuelle == 6 :
+        if self.porte_actuelle == 6:
             self.nor_truth.draw()
-        if self.porte_actuelle == 7 :
+        if self.porte_actuelle == 7:
             self.xor_truth.draw()
 
     def on_mouse_motion(
@@ -260,7 +257,7 @@ class TutorialView(arcade.View):
             key_modifiers: Bitwise flags for active modifier keys.
         """
         if self.back_button.touched:
-            data.window.back()
+            data.window.display(data.main)
 
         if self.regleplay_button.touched:
             self.porte_actuelle = 0

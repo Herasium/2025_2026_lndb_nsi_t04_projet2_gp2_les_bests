@@ -1,7 +1,7 @@
 """Provides the SaveFrame view for editing and saving chip configuration data."""
 
 import arcade
-from typing import Any, Dict, List
+from typing import Any
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.text import Text
@@ -33,15 +33,54 @@ class SaveFrame(arcade.View):
         self.bg = Entity(0, 0, 1920, 1088, arcade.Sprite(data.background_grid_texture))
         self.border = Entity(0, 0, 1920, 960, data.border_small)
         self.title = Entity(0, 952, 1920, 128, data.name_banner)
-        self.chip_save = Entity(1920/2-896/2, 700, 896, 128, data.chip_save)
-        self.chip_name = Text(x=1920/2-200,y=1080/2,width=500,height=200,text=self.current_text,align=("left","center"))
-        self.save_button = Entity(x=1920/2-262.5/2,y=1080/2-400,width=262.5,height=150,sprite=data.button_save)
-        self.sub_title = Text(x=1920/2-200,y=1080/2+30,width=500,height=200,text="Chip Name (Click to Edit.)",align=("left","center"), size=12)
+        self.chip_save = Entity(1920 / 2 - 896 / 2, 700, 896, 128, data.chip_save)
+        self.chip_name = Text(
+            x=1920 / 2 - 200,
+            y=1080 / 2,
+            width=500,
+            height=200,
+            text=self.current_text,
+            align=("left", "center"),
+        )
+        self.save_button = Entity(
+            x=1920 / 2 - 262.5 / 2,
+            y=1080 / 2 - 400,
+            width=262.5,
+            height=150,
+            sprite=data.button_save,
+        )
+        self.sub_title = Text(
+            x=1920 / 2 - 200,
+            y=1080 / 2 + 30,
+            width=500,
+            height=200,
+            text="Chip Name (Click to Edit.)",
+            align=("left", "center"),
+            size=12,
+        )
 
-        self.chip_id = Text(x=1920/2,y=1080/2-100,width=500,height=200,text=f"Chip Id: {self.chip.id}",align=("center","center"), size=18)
-        self.chip_version = Text(x=1920/2,y=1080/2-150,width=500,height=200,text=f"Chip Version: {data.VERSION}",align=("center","center"), size=18)
+        self.chip_id = Text(
+            x=1920 / 2,
+            y=1080 / 2 - 100,
+            width=500,
+            height=200,
+            text=f"Chip Id: {self.chip.id}",
+            align=("center", "center"),
+            size=18,
+        )
+        self.chip_version = Text(
+            x=1920 / 2,
+            y=1080 / 2 - 150,
+            width=500,
+            height=200,
+            text=f"Chip Version: {data.VERSION}",
+            align=("center", "center"),
+            size=18,
+        )
 
-        self.typing_collider = Entity(x=1920/2-250,y=1080/2-50,width=500,height=100)
+        self.typing_collider = Entity(
+            x=1920 / 2 - 250, y=1080 / 2 - 50, width=500, height=100
+        )
 
     def reset(self) -> None:
         """Resets the internal state of the view."""
@@ -61,10 +100,23 @@ class SaveFrame(arcade.View):
         self.chip_version.draw()
 
         if self.typing:
-            arcade.draw_line(1920/2-200,1080/2-20,1920/2+200,1080/2-20,arcade.color.RED,2)
+            arcade.draw_line(
+                1920 / 2 - 200,
+                1080 / 2 - 20,
+                1920 / 2 + 200,
+                1080 / 2 - 20,
+                arcade.color.RED,
+                2,
+            )
         else:
-            arcade.draw_line(1920/2-200,1080/2-20,1920/2+200,1080/2-20,arcade.color.WHITE,2)
-
+            arcade.draw_line(
+                1920 / 2 - 200,
+                1080 / 2 - 20,
+                1920 / 2 + 200,
+                1080 / 2 - 20,
+                arcade.color.WHITE,
+                2,
+            )
 
     def on_update(self, delta_time: float) -> None:
         """Handles periodic logic updates."""
@@ -81,11 +133,12 @@ class SaveFrame(arcade.View):
             if key == 65307:
                 self.typing = False
                 return
-            self.current_text = apply_key(self.current_text,key,key_modifiers)[:17]
+            self.current_text = apply_key(self.current_text, key, key_modifiers)[:17]
             self.chip_name.text = self.current_text
-        else:
-            if key == 97:
-                arcade.exit()
+        if key == 65307:
+            data.window.back()
+        if key == 65473:  # Emergency exit: F4
+            arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key release events."""
@@ -129,4 +182,3 @@ class SaveFrame(arcade.View):
     ) -> None:
         """Handles mouse release events."""
         pass
-

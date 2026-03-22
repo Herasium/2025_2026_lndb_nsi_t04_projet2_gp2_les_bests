@@ -4,7 +4,6 @@ interface for constructing and managing circuit levels within the application.
 """
 
 import arcade
-from line_profiler import profile
 import time
 from typing import Optional, List, Tuple, Any
 
@@ -156,7 +155,6 @@ class LevelEditorView(arcade.View):
                 font_name="Press Start 2P",
             )
 
-    @profile
     def on_draw(self) -> None:
         """Renders the active circuit and UI overlay."""
         self.clear()

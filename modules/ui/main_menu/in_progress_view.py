@@ -21,13 +21,17 @@ logger: Logger = Logger("MainMenu")
 class MainMenuView(arcade.View):
     """Manages the main menu interface, including UI rendering and navigation."""
 
-    def __init__(self) -> None:
+    def __init__(self, pause=False) -> None:
         """Initializes the view, UI elements, and navigation state."""
         super().__init__()
 
         self.background_color: arcade.types.Color = arcade.color.JET
+        self.pause = pause
 
-        self.play_button_sprite = data.play_button
+        if self.pause:
+            self.play_button_sprite = data.button_resume
+        else:
+            self.play_button_sprite = data.play_button
         self.name_banner_sprite = data.name_banner
         self.quit_button_sprite = data.button_quit
         self.level_button_sprite = data.button_level
@@ -194,7 +198,7 @@ class MainMenuView(arcade.View):
             key: The numeric key code.
             key_modifiers: Bitmask of modifier keys.
         """
-        if key == 97:
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
     def draw_tile(self, id: int, x: int, y: int) -> None:
@@ -375,10 +379,12 @@ class MainMenuView(arcade.View):
         elif self.sandbox_button.touched:
             to_display = ChipList
         elif self.play_button.touched:
-            data.window.hide()
-            to_display = (
-                DebugTilesView if key_modifiers in [17, 1] else EditorChipSelector
-            )
+            if self.pause:
+                data.window.back()
+            else:
+                to_display = (
+                    DebugTilesView if key_modifiers in [17, 1] else EditorChipSelector
+                )
         elif self.quit_button.touched:
             logger.success("Bye Bye ! <3")
             arcade.exit()

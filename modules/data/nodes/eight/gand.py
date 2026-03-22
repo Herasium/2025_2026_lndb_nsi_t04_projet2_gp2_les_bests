@@ -28,9 +28,9 @@ class And(Complex):
         self.name: str = "AND"
         self.gate_type: str = "8AND"
 
-        self.inputs: list[int] = [0,0]
+        self.inputs: list[int] = [0, 0]
         self.outputs: list[int] = [0]
-        self.inputs_sizes: list[int] = [8,8]
+        self.inputs_sizes: list[int] = [8, 8]
         self.outputs_sizes: list[int] = [8]
 
         self.calculate_display()

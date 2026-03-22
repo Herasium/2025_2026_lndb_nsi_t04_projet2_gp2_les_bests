@@ -1,5 +1,6 @@
 import arcade
 
+
 def apply_key(text: str, keycode: int, modifiers: int = 0) -> str:
     if keycode == arcade.key.BACKSPACE:
         return text[:-1]
@@ -36,7 +37,7 @@ def apply_key(text: str, keycode: int, modifiers: int = 0) -> str:
             "]": "}",
             "\\": "|",
             ";": ":",
-            "'": "\"",
+            "'": '"',
             ",": "<",
             ".": ">",
             "/": "?",

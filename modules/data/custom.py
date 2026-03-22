@@ -2,6 +2,7 @@
 
 import arcade
 from typing import Any, Dict, List, Optional
+from line_profiler import profile
 
 from modules.data.complex import Complex
 from modules.data import data as data_module
@@ -113,6 +114,7 @@ class CustomGate(Complex):
             "parent": self.base_chip_id,
         }
 
+    @profile
     def load(self, data: Dict[str, Any]) -> None:
         """Hydrates the gate state from provided configuration data.
 
