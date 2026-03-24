@@ -49,7 +49,7 @@ class EditorView(arcade.View):
         self.bottom_zone_collider: Entity = Entity()
         self.bottom_zone_collider.x = 0
         self.bottom_zone_collider.y = 0
-        self.bottom_zone_collider.width = 1920
+        self.bottom_zone_collider.width = data.WINDOW_WIDTH
         self.bottom_zone_collider.height = 3 * 64
 
         self.selected_follower: Optional[Any] = None
@@ -217,17 +217,35 @@ class EditorView(arcade.View):
 
     def draw_frame_border(self) -> None:
         """Renders the outer UI window boundary and its background."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=data.WINDOW_HEIGHT,
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_sprite_rect(data.editor_border, rect)
 
     def draw_frame_border_no_bg(self) -> None:
         """Renders the UI window boundary foreground elements."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=data.WINDOW_HEIGHT,
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_sprite_rect(data.editor_border_no_bg, rect)
 
     def draw_frame_background(self) -> None:
         """Renders the editor's grid-based workspace background."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=(((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
@@ -238,7 +256,7 @@ class EditorView(arcade.View):
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
             f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",
         ]
-        start_y = 1080 - 70
+        start_y = data.WINDOW_HEIGHT - 70
         for index, item in enumerate(debug_list):
             arcade.draw_text(
                 item,
@@ -297,14 +315,14 @@ class EditorView(arcade.View):
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles keyboard-triggered actions for input switching, navigation, and editing."""
-        if key == 101:
+        if key == data.keys.input_toggle:
             for g in self.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
 
         if key == 65473:  # Emergency exit: F4
             arcade.exit()
-        if key == 65307:
+        if key == data.keys.back:
             if self.current_path:
                 self.current_path.abort()
             if self.current_path or self.selected_follower:
@@ -312,13 +330,13 @@ class EditorView(arcade.View):
                 self.selected_follower = None
             else:
                 data.window.display(data.pause)
-        if key == 115:
+        if key == data.keys.chip_save:
             if self.level_editor:
                 data.window.display(SaveFrame(self.level))
             else:
                 data.window.display(EditorSaveFrame(self.chip))
 
-        if key == 65288:
+        if key == data.keys.gate_delete and self.current_path is None:
             self.delete()
 
     def delete_gate(self, id: str) -> None:

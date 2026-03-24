@@ -42,7 +42,7 @@ class LevelPlayer(arcade.View):
         self.bottom_zone_collider: Entity = Entity()
         self.bottom_zone_collider.x = 0
         self.bottom_zone_collider.y = 0
-        self.bottom_zone_collider.width = 1920
+        self.bottom_zone_collider.width = data.WINDOW_WIDTH
         self.bottom_zone_collider.height = 3 * 64
 
         self.selected_follower: Optional[Any] = None
@@ -104,7 +104,12 @@ class LevelPlayer(arcade.View):
             x=384, y=220, width=576 * 2, height=320 * 2, sprite=data.level_player_empty
         )
         self.hint_frame_text = Text(
-            x=1920 / 2, y=1080 / 2, width=1000, height=300, text="", multiline=True
+            x=data.WINDOW_WIDTH / 2,
+            y=data.WINDOW_HEIGHT / 2,
+            width=1000,
+            height=300,
+            text="",
+            multiline=True,
         )
         self.hint_frame_ok = Entity(
             x=384 + 576 * 2 - 137 * 1.2 - 90,
@@ -179,19 +184,27 @@ class LevelPlayer(arcade.View):
                 ElasticEaseOut(-20 + i * -20, end=108, duration=128 + i * 20)
             )
 
-    def prepare_right_frame(self) -> None:
+    def prepare_right_frame_basic(self) -> None:
         """Constructs the right-hand sidebar UI, including the truth table rendering."""
         self.check_button = Entity(
             x=1402, y=57, width=216, height=128, sprite=data.button_check
         )
         self.truth_table = Entity(
-            x=1402, y=1080 - 383, width=448, height=64, sprite=data.truth_table
+            x=1402,
+            y=data.WINDOW_HEIGHT - 383,
+            width=448,
+            height=64,
+            sprite=data.truth_table,
         )
         self.button_next_off = Entity(
             x=1634, y=57, width=216, height=128, sprite=data.button_next_off
         )
         self.level_info = Entity(
-            x=1402, y=1080 - 127, width=448, height=64, sprite=data.level_info
+            x=1402,
+            y=data.WINDOW_HEIGHT - 127,
+            width=448,
+            height=64,
+            sprite=data.level_info,
         )
 
         self.level_name_text = arcade.Text(
@@ -229,40 +242,114 @@ class LevelPlayer(arcade.View):
                 )
             )
 
+    def prepare_right_frame(self) -> None:
+        self.prepare_right_frame_basic()
+        if self.level.is_complex:
+            self.prepare_right_frame_complex()
+        else:
+            self.prepare_right_frame_simple()
+
+    def prepare_right_frame_complex(self) -> None:
+        self.truth_inputs = arcade.Text(
+            "Input(s)",
+            1626,
+            data.WINDOW_HEIGHT - (447),
+            arcade.color.WHITE,
+            18,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+        result = ""
+
+        for i in self.level.compare_fail["in"]:
+            result += f"{i} "
+
+        self.truth_inputs_values = arcade.Text(
+            result,
+            1626,
+            data.WINDOW_HEIGHT - (497),
+            arcade.color.WHITE,
+            16,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+
+        self.truth_targets = arcade.Text(
+            "Target(s)",
+            1626,
+            data.WINDOW_HEIGHT - (547),
+            arcade.color.WHITE,
+            18,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+
+        result = ""
+
+        for i in self.level.compare_fail["target"]:
+            result += f"{i} "
+
+        self.truth_targets_values = arcade.Text(
+            result,
+            1626,
+            data.WINDOW_HEIGHT - (597),
+            arcade.color.WHITE,
+            16,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+
+        self.truth_outputs = arcade.Text(
+            "Output(s)",
+            1626,
+            data.WINDOW_HEIGHT - (647),
+            arcade.color.WHITE,
+            18,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+
+        result = ""
+
+        for i in self.level.compare_fail["out"]:
+            result += f"{i} "
+
+        self.truth_outputs_values = arcade.Text(
+            result,
+            1626,
+            data.WINDOW_HEIGHT - (697),
+            arcade.color.WHITE,
+            16,
+            font_name="Press Start 2P",
+            anchor_x="center",
+        )
+
+    def prepare_right_frame_simple(self) -> None:
+
         table = self.level.truth[self.level.answer.id]
         chip_truth: Optional[Dict] = None
 
         if self.level.chip.id in self.level.truth:
             chip_truth = self.level.truth[self.level.chip.id]
 
-        if table["meta"]["complex"]:
-            self.truth_table_inputs: List[List[arcade.Text]] = [
-                [] for _ in range(len(table["meta"]["values"]))
-            ]
-            self.truth_table_outputs: List[List[arcade.Text]] = [
-                [] for _ in range(len(table["meta"]["values"]))
-            ]
-        else:
-            self.truth_table_inputs: List[List[arcade.Text]] = [
-                [] for _ in range(len(table["meta"]["inputs"]))
-            ]
-            self.truth_table_outputs: List[List[arcade.Text]] = [
-                [] for _ in range(len(table["meta"]["outputs"]))
-            ]
+        self.truth_table_inputs: List[List[arcade.Text]] = [
+            [] for _ in range(len(table["meta"]["inputs"]))
+        ]
+        self.truth_table_outputs: List[List[arcade.Text]] = [
+            [] for _ in range(len(table["meta"]["outputs"]))
+        ]
         self.line_set: List[List[Tuple[Tuple[float, float], Tuple[float, float]]]] = []
         self.truth_table_titles: List[arcade.Text] = []
 
         add_y = 28
         add_x = 27
-        if table["meta"]["complex"]:
-            add_x = 60
         total_len = (len(table["data"][0]) * 2 + table["meta"]["size"] + 4) * add_x
         start_x = (
             1402
             + (7 * 32)
             - ((len(table["data"][0]) * 2 + table["meta"]["size"] + 4) / 2 * add_x)
         )
-        start_y = 1080 - (447)
+        start_y = data.WINDOW_HEIGHT - (447)
 
         offset_x = 0
         offset_y = 0
@@ -310,77 +397,7 @@ class LevelPlayer(arcade.View):
             )
         )
 
-        if table["meta"]["complex"]:
-            for current in range(len(table["meta"]["values"])):
-                values = table["meta"]["values"][current]
-                for i in range(len(values)):
-                    self.truth_table_inputs[i].append(
-                        arcade.Text(
-                            str(values[i] * 1),
-                            start_x + offset_x,
-                            start_y - offset_y,
-                            arcade.color.WHITE,
-                            14,
-                            font_name="Press Start 2P",
-                            anchor_x="center",
-                        )
-                    )
-                    offset_x += add_x
-                offset_x += add_x
-                for i in range(len(table["data"][current])):
-                    self.truth_table_outputs[i].append(
-                        arcade.Text(
-                            str(table["data"][current][i] * 1),
-                            start_x + offset_x,
-                            start_y - offset_y,
-                            arcade.color.WHITE,
-                            14,
-                            font_name="Press Start 2P",
-                            anchor_x="center",
-                        )
-                    )
-                    offset_x += add_x
-                offset_x += add_x
-                if chip_truth:
-                    for i in range(len(chip_truth["data"][current])):
-                        color = arcade.color.RED_PURPLE
-                        if table["data"][current][i] == chip_truth["data"][current][i]:
-                            color = arcade.color.GREEN_YELLOW
-                        self.truth_table_outputs[i].append(
-                            arcade.Text(
-                                str(chip_truth["data"][current][i] * 1),
-                                start_x + offset_x,
-                                start_y - offset_y,
-                                color,
-                                14,
-                                font_name="Press Start 2P",
-                                anchor_x="center",
-                            )
-                        )
-                        offset_x += add_x
-                else:
-                    for i in range(len(table["data"][current])):
-                        self.truth_table_outputs[i].append(
-                            arcade.Text(
-                                "?",
-                                start_x + offset_x,
-                                start_y - offset_y,
-                                arcade.color.WHITE,
-                                14,
-                                font_name="Press Start 2P",
-                                anchor_x="center",
-                            )
-                        )
-                        offset_x += add_x
-                self.line_set.append(
-                    [
-                        (start_x - 10, start_y - offset_y - 4),
-                        (start_x + offset_x + 10, start_y - offset_y - 4),
-                    ]
-                )
-                offset_x = 0
-                offset_y += add_y
-        else:
+        if not table["meta"]["complex"]:
             for current in range(table["meta"]["power"]):
                 values = [
                     bool(current & (1 << i)) for i in range(table["meta"]["size"])
@@ -507,17 +524,35 @@ class LevelPlayer(arcade.View):
 
     def draw_frame_border(self) -> None:
         """Renders the outer UI window boundary."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=data.WINDOW_HEIGHT,
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_sprite_rect(data.level_player_border, rect)
 
     def draw_frame_border_top(self) -> None:
         """Renders the outer UI window boundary top (second layer to prevent clipping)."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=data.WINDOW_HEIGHT,
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_sprite_rect(data.level_player_border_no_bg, rect)
 
     def draw_frame_background(self) -> None:
         """Renders the level grid background texture."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=(((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
@@ -527,7 +562,7 @@ class LevelPlayer(arcade.View):
             f"FPS: {self.fps} / {round(self.delta_time * 100000) / 100} ms / {self.frame_count}",
             f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
         ]
-        start_y = 1080 - 70
+        start_y = data.WINDOW_HEIGHT - 70
         for index, item in enumerate(debug_list):
             arcade.draw_text(
                 item,
@@ -544,7 +579,7 @@ class LevelPlayer(arcade.View):
             f"Time Limit: {round(time.time() - self.level.start_time)}s / {self.level.time}s",
             f"Stars: {self.level.get_stars_count()}",
         ]
-        start_y = 1080 - 80
+        start_y = data.WINDOW_HEIGHT - 80
         for index, item in enumerate(debug_list):
             arcade.draw_text(
                 item,
@@ -584,23 +619,32 @@ class LevelPlayer(arcade.View):
         self.level_name_text.draw()
         for i in self.level_desc_text:
             i.draw()
-        for i in self.truth_table_inputs:
-            for a in i:
-                a.draw()
-        for i in self.truth_table_outputs:
-            for a in i:
-                a.draw()
-        for coords in self.line_set:
-            arcade.draw_line(
-                coords[0][0],
-                coords[0][1],
-                coords[1][0],
-                coords[1][1],
-                arcade.color.WHITE,
-                1,
-            )
-        for i in self.truth_table_titles:
-            i.draw()
+
+        if not self.level.is_complex:
+            for i in self.truth_table_inputs:
+                for a in i:
+                    a.draw()
+            for i in self.truth_table_outputs:
+                for a in i:
+                    a.draw()
+            for coords in self.line_set:
+                arcade.draw_line(
+                    coords[0][0],
+                    coords[0][1],
+                    coords[1][0],
+                    coords[1][1],
+                    arcade.color.WHITE,
+                    1,
+                )
+            for i in self.truth_table_titles:
+                i.draw()
+        else:
+            self.truth_inputs.draw()
+            self.truth_outputs.draw()
+            self.truth_targets.draw()
+            self.truth_inputs_values.draw()
+            self.truth_targets_values.draw()
+            self.truth_outputs_values.draw()
 
     def draw_hint(self) -> None:
         """Render the hints frame, to provide basic level instructions."""
@@ -653,14 +697,14 @@ class LevelPlayer(arcade.View):
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles keyboard shortcuts for interaction, deletion, and navigation."""
-        if key == 101 and not self.level.won:
+        if key == data.keys.input_toggle and not self.level.won:
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
                     g.switch()
         if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
-        if key == 65307:
+        if key == data.keys.back:
             if self.current_path or self.selected_follower:
                 if self.current_path:
                     self.current_path.abort()
@@ -668,7 +712,12 @@ class LevelPlayer(arcade.View):
                 self.selected_follower = None
             else:
                 data.window.display(data.pause)
-        if key == 65288 and not self.level.won and self.current_path is not None:
+
+        if (
+            key == data.keys.gate_delete
+            and not self.level.won
+            and self.current_path is None
+        ):
             self.delete()
 
     def delete_gate(self, id: str) -> None:

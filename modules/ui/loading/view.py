@@ -1,5 +1,5 @@
 import arcade
-
+import data
 
 class LoadingScreen(arcade.View):
     def __init__(self) -> None:
@@ -13,7 +13,9 @@ class LoadingScreen(arcade.View):
     def on_draw(self) -> None:
         self.clear()
 
-        arcade.draw_text("Loading", 1920 / 2, 1080 / 2, arcade.color.WHITE)
+        arcade.draw_text(
+            "Loading", data.WINDOW_WIDTH / 2, data.WINDOW_HEIGHT / 2, arcade.color.WHITE
+        )
 
     def on_update(self, delta_time: float) -> None:
         pass

@@ -47,12 +47,12 @@ class CustomGate(Complex):
 
         chip_inputs: List[int] = self.chip.get_inputs()
         for i in chip_inputs:
-            self.inputs.append(self.chip.gates[i].outputs[0])
+            self.inputs.append(self.chip.gates[i].outputs[0] * 1)
             self.inputs_sizes.append(self.chip.gates[i].outputs_sizes[0])
 
         chip_outputs: List[int] = self.chip.get_outputs()
         for i in chip_outputs:
-            self.outputs.append(self.chip.gates[i].inputs[0])
+            self.outputs.append(self.chip.gates[i].inputs[0] * 1)
             self.outputs_sizes.append(self.chip.gates[i].inputs_sizes[0])
 
         self.update_text_readings()

@@ -32,9 +32,15 @@ class ChipList(arcade.View):
             x=1680, y=100, width=160, height=100, sprite=data.button_back
         )
 
-        self.bg = Entity(0, 0, 1920, 1088, arcade.Sprite(data.background_grid_texture))
-        self.border = Entity(0, 0, 1920, 960, data.border_small)
-        self.title = Entity(0, 952, 1920, 128, data.name_banner)
+        self.bg = Entity(
+            0,
+            0,
+            data.WINDOW_WIDTH,
+            (((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            arcade.Sprite(data.background_grid_texture),
+        )
+        self.border = Entity(0, 0, data.WINDOW_WIDTH, 960, data.border_small)
+        self.title = Entity(0, 952, data.WINDOW_WIDTH, 128, data.name_banner)
         self.private_count = 0
         self.chips = []
 
@@ -72,7 +78,7 @@ class ChipList(arcade.View):
                 size=12,
             )
             result["button"] = Entity(
-                x=1920 / 2 + 510 - 144,
+                x=data.WINDOW_WIDTH / 2 + 510 - 144,
                 y=820 - offset * i + self.camera,
                 width=144,
                 height=90,
@@ -83,7 +89,7 @@ class ChipList(arcade.View):
             self.chips.append(result)
 
         self.new = Entity(
-            x=1920 / 2 - 216 / 2,
+            x=data.WINDOW_WIDTH / 2 - 216 / 2,
             y=800
             - offset * (len(data.loaded_chips) - self.private_count)
             + self.camera,
@@ -144,7 +150,7 @@ class ChipList(arcade.View):
             key: The identifier of the pressed key.
             key_modifiers: Bitwise flags for modifier keys.
         """
-        if key == 65307:
+        if key == data.keys.back:
             data.window.display(data.main)
         if key == 65473:  # Emergency exit: F4
             arcade.exit()

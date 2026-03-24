@@ -4,7 +4,6 @@ from typing import List, Dict, Tuple, Any, Optional
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
-from modules.ui.editor.selector import EditorChipSelector
 from modules.ui.level_list.view import LevelList
 from modules.ui.level_editor.selector import LevelEditorSelector
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
@@ -40,37 +39,37 @@ class MainMenuView(arcade.View):
         self.tuto_button_sprite = data.button_tuto
 
         self.play_button: Button = Button()
-        self.play_button.x = 1920 / 2 - 700 / 2 - 5
+        self.play_button.x = data.WINDOW_WIDTH / 2 - 700 / 2 - 5
         self.play_button.y = 260 + 320 + 100 + 225 / 2
         self.play_button.width = 700
         self.play_button.height = 225
 
         self.quit_button: Button = Button()
-        self.quit_button.x = 1920 - 350
+        self.quit_button.x = data.WINDOW_WIDTH - 350
         self.quit_button.y = 260 + 125
         self.quit_button.width = 175
         self.quit_button.height = 175
 
         self.setting_button: Button = Button()
-        self.setting_button.x = 1920 / 7
+        self.setting_button.x = data.WINDOW_WIDTH / 7
         self.setting_button.y = 260 + 180
         self.setting_button.width = 200 * 1.5
         self.setting_button.height = 100 * 1.5
 
         self.sandbox_button: Button = Button()
-        self.sandbox_button.x = 1920 - 830
+        self.sandbox_button.x = data.WINDOW_WIDTH - 830
         self.sandbox_button.y = 260 + 168
         self.sandbox_button.width = 160 * 1.5
         self.sandbox_button.height = 100 * 1.5
 
         self.level_button: Button = Button()
-        self.level_button.x = 1920 / 2 - 200
+        self.level_button.x = data.WINDOW_WIDTH / 2 - 200
         self.level_button.y = 260 + 250
         self.level_button.width = 180 * 1.25
         self.level_button.height = 100 * 1.25
 
         self.tuto_button: Button = Button()
-        self.tuto_button.x = 1920 / 3 + 60
+        self.tuto_button.x = data.WINDOW_WIDTH / 3 + 60
         self.tuto_button.y = 260
         self.tuto_button.width = 200 * 1.25
         self.tuto_button.height = 100 * 1.25
@@ -252,7 +251,7 @@ class MainMenuView(arcade.View):
         self.compteur += 1
 
         rect = arcade.XYWH(
-            x=1920 / 2,
+            x=data.WINDOW_WIDTH / 2,
             y=260 + 320 + 100,
             width=768,
             height=768,
@@ -261,31 +260,59 @@ class MainMenuView(arcade.View):
         arcade.draw_sprite_rect(self.play_button_sprite, rect)
 
         rect = arcade.XYWH(
-            x=0, y=1080 - 128, width=1920, height=128, anchor=arcade.Vec2(0, 0)
+            x=0,
+            y=data.WINDOW_HEIGHT - 128,
+            width=data.WINDOW_WIDTH,
+            height=128,
+            anchor=arcade.Vec2(0, 0),
         )
         arcade.draw_sprite_rect(self.name_banner_sprite, rect)
 
         arcade.draw_sprite_rect(
             self.quit_button_sprite,
-            arcade.XYWH(1920 - 350, 260 + 125, 175, 175, arcade.Vec2(0, 1)),
+            arcade.XYWH(
+                data.WINDOW_WIDTH - 350, 260 + 125, 175, 175, arcade.Vec2(0, 1)
+            ),
         )
         arcade.draw_sprite_rect(
             self.setting_button_sprite,
-            arcade.XYWH(1920 / 7, 260 + 180, 200 * 1.5, 100 * 1.5, arcade.Vec2(0, 1)),
+            arcade.XYWH(
+                data.WINDOW_WIDTH / 7,
+                260 + 180,
+                200 * 1.5,
+                100 * 1.5,
+                arcade.Vec2(0, 1),
+            ),
         )
         arcade.draw_sprite_rect(
             self.sandbox_button_sprite,
-            arcade.XYWH(1920 - 830, 260 + 168, 160 * 1.5, 100 * 1.5, arcade.Vec2(0, 1)),
+            arcade.XYWH(
+                data.WINDOW_WIDTH - 830,
+                260 + 168,
+                160 * 1.5,
+                100 * 1.5,
+                arcade.Vec2(0, 1),
+            ),
         )
         arcade.draw_sprite_rect(
             self.level_button_sprite,
             arcade.XYWH(
-                1920 / 2 - 200, 260 + 250, 180 * 1.25, 100 * 1.25, arcade.Vec2(0, 1)
+                data.WINDOW_WIDTH / 2 - 200,
+                260 + 250,
+                180 * 1.25,
+                100 * 1.25,
+                arcade.Vec2(0, 1),
             ),
         )
         arcade.draw_sprite_rect(
             self.tuto_button_sprite,
-            arcade.XYWH(1920 / 3 + 60, 260, 200 * 1.25, 100 * 1.25, arcade.Vec2(0, 1)),
+            arcade.XYWH(
+                data.WINDOW_WIDTH / 3 + 60,
+                260,
+                200 * 1.25,
+                100 * 1.25,
+                arcade.Vec2(0, 1),
+            ),
         )
 
         if self.button_touche == self.combinaison:
@@ -382,9 +409,7 @@ class MainMenuView(arcade.View):
             if self.pause:
                 data.window.back()
             else:
-                to_display = (
-                    DebugTilesView if key_modifiers in [17, 1] else EditorChipSelector
-                )
+                to_display = DebugTilesView if key_modifiers in [17, 1] else LevelList
         elif self.quit_button.touched:
             logger.success("Bye Bye ! <3")
             arcade.exit()

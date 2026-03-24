@@ -23,8 +23,8 @@ class Window:
             self.title,
             fullscreen=data.WINDOW_FULLSCREEN,
             # Set update and draw rates to approximately 60 FPS
-            update_rate=1 / 60,
-            draw_rate=1 / 60,
+            update_rate=1 / data.WINDOW_FRAMERATE,
+            draw_rate=1 / data.WINDOW_FRAMERATE,
         )
 
         self.view_history: List[arcade.View] = []

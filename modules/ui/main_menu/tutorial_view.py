@@ -143,7 +143,7 @@ class TutorialView(arcade.View):
             key: The key code of the pressed key.
             key_modifiers: Bitwise flags indicating active modifier keys.
         """
-        if key == 65307:
+        if key == data.keys.back:
             data.window.display(data.main)
         if key == 65473:  # Emergency exit: F4
             arcade.exit()
@@ -203,7 +203,11 @@ class TutorialView(arcade.View):
         self.draw_frame_border()
 
         rect = arcade.XYWH(
-            x=0, y=1080 - 128, width=1920, height=128, anchor=arcade.Vec2(0, 0)
+            x=0,
+            y=data.WINDOW_HEIGHT - 128,
+            width=data.WINDOW_WIDTH,
+            height=128,
+            anchor=arcade.Vec2(0, 0),
         )
         arcade.draw_sprite_rect(self.name_banner_sprite, rect)
 

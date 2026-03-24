@@ -30,28 +30,36 @@ class SaveFrame(arcade.View):
 
     def setup(self) -> None:
 
-        self.bg = Entity(0, 0, 1920, 1088, arcade.Sprite(data.background_grid_texture))
-        self.border = Entity(0, 0, 1920, 960, data.border_small)
-        self.title = Entity(0, 952, 1920, 128, data.name_banner)
-        self.chip_save = Entity(1920 / 2 - 896 / 2, 700, 896, 128, data.chip_save)
+        self.bg = Entity(
+            0,
+            0,
+            data.WINDOW_WIDTH,
+            (((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            arcade.Sprite(data.background_grid_texture),
+        )
+        self.border = Entity(0, 0, data.WINDOW_WIDTH, 960, data.border_small)
+        self.title = Entity(0, 952, data.WINDOW_WIDTH, 128, data.name_banner)
+        self.chip_save = Entity(
+            data.WINDOW_WIDTH / 2 - 896 / 2, 700, 896, 128, data.chip_save
+        )
         self.chip_name = Text(
-            x=1920 / 2 - 200,
-            y=1080 / 2,
+            x=data.WINDOW_WIDTH / 2 - 200,
+            y=data.WINDOW_HEIGHT / 2,
             width=500,
             height=200,
             text=self.current_text,
             align=("left", "center"),
         )
         self.save_button = Entity(
-            x=1920 / 2 - 262.5 / 2,
-            y=1080 / 2 - 400,
+            x=data.WINDOW_WIDTH / 2 - 262.5 / 2,
+            y=data.WINDOW_HEIGHT / 2 - 400,
             width=262.5,
             height=150,
             sprite=data.button_save,
         )
         self.sub_title = Text(
-            x=1920 / 2 - 200,
-            y=1080 / 2 + 30,
+            x=data.WINDOW_WIDTH / 2 - 200,
+            y=data.WINDOW_HEIGHT / 2 + 30,
             width=500,
             height=200,
             text="Chip Name (Click to Edit.)",
@@ -60,8 +68,8 @@ class SaveFrame(arcade.View):
         )
 
         self.chip_id = Text(
-            x=1920 / 2,
-            y=1080 / 2 - 100,
+            x=data.WINDOW_WIDTH / 2,
+            y=data.WINDOW_HEIGHT / 2 - 100,
             width=500,
             height=200,
             text=f"Chip Id: {self.chip.id}",
@@ -69,8 +77,8 @@ class SaveFrame(arcade.View):
             size=18,
         )
         self.chip_version = Text(
-            x=1920 / 2,
-            y=1080 / 2 - 150,
+            x=data.WINDOW_WIDTH / 2,
+            y=data.WINDOW_HEIGHT / 2 - 150,
             width=500,
             height=200,
             text=f"Chip Version: {data.VERSION}",
@@ -79,7 +87,10 @@ class SaveFrame(arcade.View):
         )
 
         self.typing_collider = Entity(
-            x=1920 / 2 - 250, y=1080 / 2 - 50, width=500, height=100
+            x=data.WINDOW_WIDTH / 2 - 250,
+            y=data.WINDOW_HEIGHT / 2 - 50,
+            width=500,
+            height=100,
         )
 
     def reset(self) -> None:
@@ -101,19 +112,19 @@ class SaveFrame(arcade.View):
 
         if self.typing:
             arcade.draw_line(
-                1920 / 2 - 200,
-                1080 / 2 - 20,
-                1920 / 2 + 200,
-                1080 / 2 - 20,
+                data.WINDOW_WIDTH / 2 - 200,
+                data.WINDOW_HEIGHT / 2 - 20,
+                data.WINDOW_WIDTH / 2 + 200,
+                data.WINDOW_HEIGHT / 2 - 20,
                 arcade.color.RED,
                 2,
             )
         else:
             arcade.draw_line(
-                1920 / 2 - 200,
-                1080 / 2 - 20,
-                1920 / 2 + 200,
-                1080 / 2 - 20,
+                data.WINDOW_WIDTH / 2 - 200,
+                data.WINDOW_HEIGHT / 2 - 20,
+                data.WINDOW_WIDTH / 2 + 200,
+                data.WINDOW_HEIGHT / 2 - 20,
                 arcade.color.WHITE,
                 2,
             )
@@ -130,12 +141,12 @@ class SaveFrame(arcade.View):
             key_modifiers: Bitwise flags for modifier keys.
         """
         if self.typing:
-            if key == 65307:
+            if key == data.keys.back:
                 self.typing = False
                 return
             self.current_text = apply_key(self.current_text, key, key_modifiers)[:17]
             self.chip_name.text = self.current_text
-        if key == 65307:
+        if key == data.keys.back:
             data.window.back()
         if key == 65473:  # Emergency exit: F4
             arcade.exit()

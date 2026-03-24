@@ -34,9 +34,15 @@ class LevelList(arcade.View):
 
     def setup(self) -> None:
         """Constructs UI layout, organizes levels into categories, and initializes buttons."""
-        self.bg = Entity(0, 0, 1920, 1088, arcade.Sprite(data.background_grid_texture))
-        self.border = Entity(0, 0, 1920, 960, data.border_small)
-        self.title = Entity(0, 952, 1920, 128, data.name_banner)
+        self.bg = Entity(
+            0,
+            0,
+            data.WINDOW_WIDTH,
+            (((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            arcade.Sprite(data.background_grid_texture),
+        )
+        self.border = Entity(0, 0, data.WINDOW_WIDTH, 960, data.border_small)
+        self.title = Entity(0, 952, data.WINDOW_WIDTH, 128, data.name_banner)
 
         self.back_button = Entity(
             x=1680, y=100, width=160, height=100, sprite=data.button_back
@@ -112,7 +118,7 @@ class LevelList(arcade.View):
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """Handles navigation inputs."""
-        if key == 65307:
+        if key == data.keys.back:
             data.window.display(data.main)
         if key == 65473:  # Emergency exit: F4
             arcade.exit()

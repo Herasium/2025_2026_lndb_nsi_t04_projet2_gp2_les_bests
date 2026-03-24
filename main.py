@@ -11,18 +11,20 @@ from modules.data import data
 from modules.data.loader import Loader
 from modules.logger import Logger
 import arcade
-import os
 
 arcade.enable_timings()
-
-path: str = os.path.dirname(os.path.abspath(__file__))
-data.current_path = path
 
 logger: Logger = Logger("Main")
 loader: Loader = Loader()
 
 logger.print(f"Logic Box, v.{data.VERSION}.")
-logger.print(f"Current path: {path}")
+logger.print(f"Current path: {data.current_path}")
+
+try:
+    data.load()
+    logger.print("Loaded Preferences.")
+except Exception as e:
+    logger.warning(f"Failed to load preferences, back to default. {e}")
 
 windows: Window = Window()
 data.window = windows

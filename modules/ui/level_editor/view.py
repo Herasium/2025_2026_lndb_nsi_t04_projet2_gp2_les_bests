@@ -34,7 +34,7 @@ class LevelEditorView(arcade.View):
         self.bottom_zone_collider: Entity = Entity()
         self.bottom_zone_collider.x = 0
         self.bottom_zone_collider.y = 0
-        self.bottom_zone_collider.width = 1920
+        self.bottom_zone_collider.width = data.WINDOW_WIDTH
         self.bottom_zone_collider.height = 3 * 64
 
         self.selected_follower: Optional[Any] = None
@@ -126,12 +126,24 @@ class LevelEditorView(arcade.View):
 
     def draw_frame_border(self) -> None:
         """Renders the outer editor window interface overlay."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1080, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=data.WINDOW_HEIGHT,
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_sprite_rect(data.editor_border, rect)
 
     def draw_frame_background(self) -> None:
         """Renders the editor grid background."""
-        rect = arcade.XYWH(x=0, y=0, width=1920, height=1088, anchor=arcade.Vec2(0, 0))
+        rect = arcade.XYWH(
+            x=0,
+            y=0,
+            width=data.WINDOW_WIDTH,
+            height=(((data.WINDOW_HEIGHT + 32) // 64) * 64),
+            anchor=arcade.Vec2(0, 0),
+        )
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
@@ -143,7 +155,7 @@ class LevelEditorView(arcade.View):
             f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
         ]
 
-        start_y = 1080 - 70
+        start_y = data.WINDOW_HEIGHT - 70
 
         for index, item in enumerate(debug_list):
             arcade.draw_text(
@@ -212,7 +224,7 @@ class LevelEditorView(arcade.View):
             data.window.back()
         if key == 116:
             self.level.get_truth_table()
-        if key == 65307:
+        if key == data.keys.back:
             if self.current_path:
                 self.current_path.abort()
             self.current_path = None

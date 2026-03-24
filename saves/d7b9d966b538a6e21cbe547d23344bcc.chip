@@ -1,0 +1,52 @@
+{
+ "type": "Chip",
+ "name": "Default Chip",
+ "id": "d7b9d966b538a6e21cbe547d23344bcc",
+ "gates": {
+  "494bec529777a81c31692ae298cc445a": {
+   "x": 499.5,
+   "y": 553.5,
+   "type": "Gate",
+   "inputs": [
+    0,
+    0
+   ],
+   "outputs": [
+    0
+   ],
+   "gate": "OR",
+   "id": "494bec529777a81c31692ae298cc445a"
+  },
+  "349320b7fc1abf5f9be80b12a653185e": {
+   "x": 796.5,
+   "y": 472.5,
+   "type": "Gate",
+   "inputs": [
+    0,
+    0
+   ],
+   "outputs": [
+    1
+   ],
+   "gate": "NAND",
+   "id": "349320b7fc1abf5f9be80b12a653185e"
+  }
+ },
+ "paths": {
+  "803765d3562e579f0e61e1501a374d90": {
+   "type": "path",
+   "inputs": [],
+   "outputs": [],
+   "id": "803765d3562e579f0e61e1501a374d90",
+   "branch_points": {
+    "0": []
+   },
+   "branch_hitboxes": {
+    "0": []
+   },
+   "current_branch_count": 0
+  }
+ },
+ "version": 208,
+ "requirements": []
+}

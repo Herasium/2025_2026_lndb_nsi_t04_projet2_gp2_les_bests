@@ -364,7 +364,9 @@ class Loader:
     def bake_textures(self) -> None:
         """Coordinates the full procedural texture generation workflow."""
         logger.debug("Baking Textures")
-        data.background_grid_texture = self._bake_grid(1920, 1088)
+        data.background_grid_texture = self._bake_grid(
+            data.WINDOW_WIDTH, (((data.WINDOW_HEIGHT + 32) // 64) * 64)
+        )
         self.bake_predefined_gates()
         self.bake_custom_gates()
         self.bake_level_buttons()
@@ -391,6 +393,7 @@ class Loader:
         data.level_info = arcade.Sprite("assets/titles/level_info.png")
         data.truth_table = arcade.Sprite("assets/titles/truth_table.png")
         data.chip_save = arcade.Sprite("assets/titles/chip_save.png")
+        data.option_title = arcade.Sprite("assets/titles/options.png")
 
         data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
         data.chip_select = arcade.Sprite("assets/borders/chip_select.png")

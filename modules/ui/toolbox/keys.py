@@ -1,7 +1,7 @@
 import arcade
 
 
-def apply_key(text: str, keycode: int, modifiers: int = 0) -> str:
+def apply_key(text: str, keycode: int, modifiers: int = 0, int_only=False) -> str:
     if keycode == arcade.key.BACKSPACE:
         return text[:-1]
 
@@ -45,4 +45,21 @@ def apply_key(text: str, keycode: int, modifiers: int = 0) -> str:
         }
         char = shift_map.get(char, char)
 
+    if int_only:
+        try:
+            return str(int(text + char))
+        except Exception:
+            return str(text)
+
     return text + char
+
+
+def visual_key(key_code):
+
+    key_name = "UNKNOWN"
+    for name in dir(arcade.key):
+        if getattr(arcade.key, name) == key_code:
+            key_name = name
+            break
+
+    return key_name

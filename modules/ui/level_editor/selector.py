@@ -51,7 +51,7 @@ class LevelEditorSelector(arcade.View):
             debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
-        start_y: int = 1080 - 70
+        start_y: int = data.WINDOW_HEIGHT - 70
 
         for index, item in enumerate(debug_list):
             self.texts.append(Text())

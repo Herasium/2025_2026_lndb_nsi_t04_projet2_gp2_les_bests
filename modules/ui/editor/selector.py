@@ -30,7 +30,7 @@ class EditorChipSelector(arcade.View):
             debug_list.append(f"Chip #{chip.id}")
             self.chips.append(i)
 
-        start_y: int = 1080 - 70
+        start_y: int = data.WINDOW_HEIGHT - 70
 
         for index, item in enumerate(debug_list):
             self.texts.append(Text())

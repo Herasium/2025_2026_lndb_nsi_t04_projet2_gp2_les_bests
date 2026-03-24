@@ -53,6 +53,7 @@ class Level:
         self.is_custom: bool = False
         self.is_complex: bool = False
         self.truth_test_values: List[List[int]] = []
+        self.compare_fail = {}
         self.engine: Engine = Engine()
 
     def play_mode(self) -> None:
@@ -90,12 +91,21 @@ class Level:
         inputs: List[str] = self.get_inputs(self.answer)
         self.truth_test_values = []
 
-        for _ in range(10):
+        self.compare_fail = {"in": [], "out": [], "target": []}
+
+        for _ in range(255):
             values = []
             for i in inputs:
-                values.append(
-                    random.randint(0, 2 ** self.answer.gates[i].outputs_sizes[0] - 1)
-                )
+                if self.answer.gates[i].gate_type in ["ON", "8ONE"]:
+                    values.append(1)
+                elif self.answer.gates[i].gate_type in ["OFF"]:
+                    values.append(0)
+                else:
+                    values.append(
+                        random.randint(
+                            0, 2 ** self.answer.gates[i].outputs_sizes[0] - 1
+                        )
+                    )
             self.truth_test_values.append(values)
 
     def get_stars_count(self) -> int:
@@ -214,6 +224,12 @@ class Level:
                 self.truth[self.answer.id]["data"][i]
                 != self.truth[self.chip.id]["data"][i]
             ):
+                if self.is_complex:
+                    self.compare_fail = {
+                        "in": self.truth[self.answer.id]["meta"]["values"][i],
+                        "out": self.truth[self.chip.id]["data"][i],
+                        "target": self.truth[self.answer.id]["data"][i],
+                    }
                 return False
         return True
 
