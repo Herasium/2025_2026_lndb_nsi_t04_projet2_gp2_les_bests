@@ -370,10 +370,6 @@ class Level:
         Args:
             data: The source dictionary containing level parameters.
         """
-        self.chip.partial_load(data["chip"])
-        self.chip.load()
-        self.chip.private = True
-
         self.time = data["level"]["time"]
         self.id = data["level"]["id"]
         self.number = data["level"]["number"]
@@ -383,6 +379,12 @@ class Level:
         self.start = data["level"]["start"]
         self.color = data["level"]["color"]
         self.category = data["level"]["category"]
+
+        self.chip.partial_load(data["chip"])
+        self.chip.load()
+        self.chip.name = f"L{self.number}"
+        self.chip.private = True
+
 
         if data["level"]["version"] > 200:
             self.is_custom = data["level"]["is_custom"]
