@@ -108,6 +108,12 @@ class TutorialView(arcade.View):
             text=data.language.get("tutorial", "title_2"),
             align=("left", "center"),
         )
+        self.listeportetextebits = Text(
+            x=120,
+            y=30 + self.camera,
+            text=data.language.get("tutorial", "title_3"),
+            align=("left", "center"),
+        )
 
         self.regleplay_button = Text(
             x=160,
@@ -123,7 +129,7 @@ class TutorialView(arcade.View):
             align=("left", "center"),
             size=16,
         )
-
+        
         self.namebutton: List[str] = [
             "button_3",
             "button_4",
@@ -135,7 +141,12 @@ class TutorialView(arcade.View):
             "button_10",
             "button_11",
             "button_12",
+            "button_13",
+            "button_14",
+            "button_15",
         ]
+
+        # Ajouter MAKER, ON, BREAKER
 
         self.buttons: List[Text] = []
 
@@ -176,6 +187,7 @@ class TutorialView(arcade.View):
 
         self.regletexte.draw()
         self.listeportetexte.draw()
+        self.listeportetextebits.draw()
 
         self.regleplay_button.draw()
         self.commande_button.draw()
@@ -239,7 +251,7 @@ class TutorialView(arcade.View):
             if i.touched:
                 self.porte_actuelle = p
                 keys = list(data.language.tutorial.keys())
-                ask_key = keys[p + 16]
+                ask_key = keys[p + 20]
                 self.texte_button.text = data.language.tutorial[ask_key]
 
     def on_mouse_scroll(
