@@ -366,8 +366,8 @@ class EditorView(arcade.View):
         for i in self.chip.paths[path_id].outputs:
                     gate_id = i[1]
                     gate_output_id = i[2]    
-                    print(gate_id,gate_output_id,self.chip.gates[gate_id])
-                    self.chip.gates[gate_id].inputs[gate_output_id] = 0
+                    if gate_id in self.chip.gates:
+                        self.chip.gates[gate_id].inputs[gate_output_id] = 0
         del self.chip.paths[path_id]
 
     def delete(self) -> None:
