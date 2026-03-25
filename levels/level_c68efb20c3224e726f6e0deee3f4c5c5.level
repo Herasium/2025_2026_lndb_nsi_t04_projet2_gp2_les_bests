@@ -2,22 +2,22 @@
  "chip": {
   "type": "Chip",
   "name": "Default Chip",
-  "id": "8f01e10f564616e3404df4766b11a053",
+  "id": "c68efb20c3224e726f6e0deee3f4c5c5",
   "gates": {
-   "acd0a63a4c14db33c741d2e611d2aac7": {
-    "x": -67.5,
-    "y": 526.5,
+   "682857e2b6ec3c88ea6b1dc40fb99562": {
+    "x": 67.5,
+    "y": 553.5,
     "type": "Input",
     "inputs": [],
     "outputs": [
      1
     ],
     "gate": "8Input",
-    "id": "acd0a63a4c14db33c741d2e611d2aac7"
+    "id": "682857e2b6ec3c88ea6b1dc40fb99562"
    },
-   "622d8a26fcf9d08dea5e55fa5b2f3894": {
-    "x": 67.5,
-    "y": 526.5,
+   "48fc91e31e24609050d055b2826d4361": {
+    "x": 202.5,
+    "y": 553.5,
     "type": "Complex",
     "inputs": [
      1
@@ -33,118 +33,104 @@
      1
     ],
     "gate": "8BREAK",
-    "id": "622d8a26fcf9d08dea5e55fa5b2f3894"
+    "id": "48fc91e31e24609050d055b2826d4361"
    },
-   "ec574132253407f65eeb1435adaca01e": {
-    "x": 958.5,
-    "y": 715.5,
+   "c901fc7a97fad2281f3d563bc5a9ba05": {
+    "x": 1309.5,
+    "y": 850.5,
     "type": "Output",
     "inputs": [
      0
     ],
     "outputs": [],
     "gate": "Output",
-    "id": "ec574132253407f65eeb1435adaca01e"
+    "id": "c901fc7a97fad2281f3d563bc5a9ba05"
    },
-   "6f9f2efee4d2b7f8a4a457ade5e0a4a0": {
-    "x": 1363.5,
-    "y": 715.5,
+   "42eb022f8a04755808c13ceca45f297f": {
+    "x": 1309.5,
+    "y": 688.5,
     "type": "Output",
     "inputs": [
      0
     ],
     "outputs": [],
     "gate": "Output",
-    "id": "6f9f2efee4d2b7f8a4a457ade5e0a4a0"
+    "id": "42eb022f8a04755808c13ceca45f297f"
    },
-   "0d7e147d9d14e67d07569ef7ed804543": {
-    "x": 1363.5,
-    "y": 607.5,
+   "42d6e5f750b3004ec8cf0ae767297f03": {
+    "x": 1309.5,
+    "y": 526.5,
     "type": "Output",
     "inputs": [
      0
     ],
     "outputs": [],
     "gate": "Output",
-    "id": "0d7e147d9d14e67d07569ef7ed804543"
+    "id": "42d6e5f750b3004ec8cf0ae767297f03"
    },
-   "57297b94503873e28dee755da03cd857": {
-    "x": 1363.5,
-    "y": 499.5,
-    "type": "Output",
-    "inputs": [
-     0
-    ],
-    "outputs": [],
-    "gate": "Output",
-    "id": "57297b94503873e28dee755da03cd857"
-   },
-   "5ef4db3cbea05454922139eaf1640301": {
-    "x": 958.5,
-    "y": 607.5,
-    "type": "Output",
-    "inputs": [
-     0
-    ],
-    "outputs": [],
-    "gate": "Output",
-    "id": "5ef4db3cbea05454922139eaf1640301"
-   },
-   "d0df0de467d980344b820de24025b4cd": {
-    "x": 958.5,
-    "y": 499.5,
-    "type": "Output",
-    "inputs": [
-     0
-    ],
-    "outputs": [],
-    "gate": "Output",
-    "id": "d0df0de467d980344b820de24025b4cd"
-   },
-   "69641dabc30afd82b4406364b82ccfe8": {
-    "x": 958.5,
-    "y": 391.5,
-    "type": "Output",
-    "inputs": [
-     0
-    ],
-    "outputs": [],
-    "gate": "Output",
-    "id": "69641dabc30afd82b4406364b82ccfe8"
-   },
-   "e08e730593b8f9609724d638e0f65b11": {
-    "x": 1363.5,
-    "y": 391.5,
-    "type": "Output",
-    "inputs": [
-     0
-    ],
-    "outputs": [],
-    "gate": "Output",
-    "id": "e08e730593b8f9609724d638e0f65b11"
-   },
-   "b5565ca46d9da95f133708c337d2e2ea": {
-    "x": 256.5,
+   "80393c59ead787e075503cd0a5a915e5": {
+    "x": 1309.5,
     "y": 364.5,
-    "type": "Gate",
+    "type": "Output",
     "inputs": [
-     0,
      0
     ],
-    "outputs": [
+    "outputs": [],
+    "gate": "Output",
+    "id": "80393c59ead787e075503cd0a5a915e5"
+   },
+   "2b16bfc9f4ea7a83896ee7f784acf7df": {
+    "x": 1066.5,
+    "y": 850.5,
+    "type": "Output",
+    "inputs": [
      0
     ],
-    "gate": "AND",
-    "id": "b5565ca46d9da95f133708c337d2e2ea"
+    "outputs": [],
+    "gate": "Output",
+    "id": "2b16bfc9f4ea7a83896ee7f784acf7df"
+   },
+   "d69c9cfee2c83f2a3f99bf1114593f65": {
+    "x": 1066.5,
+    "y": 688.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "d69c9cfee2c83f2a3f99bf1114593f65"
+   },
+   "b4820575b6fe2d37dbe185939b4f7afc": {
+    "x": 1066.5,
+    "y": 526.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "b4820575b6fe2d37dbe185939b4f7afc"
+   },
+   "d4550e56f95b189a73edfbf99b5d3192": {
+    "x": 1066.5,
+    "y": 364.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "Output",
+    "id": "d4550e56f95b189a73edfbf99b5d3192"
    }
   },
   "paths": {
-   "605c9a638cb1f498da3e7d7d3947d676": {
+   "c473065ac72b58e769a44f1f2c5a3871": {
     "type": "path",
     "inputs": [
      [
       2,
-      "acd0a63a4c14db33c741d2e611d2aac7",
+      "682857e2b6ec3c88ea6b1dc40fb99562",
       0,
       1,
       0
@@ -153,22 +139,22 @@
     "outputs": [
      [
       1,
-      "622d8a26fcf9d08dea5e55fa5b2f3894",
+      "48fc91e31e24609050d055b2826d4361",
       0,
       2,
       0
      ]
     ],
-    "id": "605c9a638cb1f498da3e7d7d3947d676",
+    "id": "c473065ac72b58e769a44f1f2c5a3871",
     "branch_points": {
      "0": [
       [
-       0.0,
-       540.0
+       135.0,
+       567.0
       ],
       [
-       108.0,
-       540.0
+       243.0,
+       567.0
       ]
      ],
      "1": []
@@ -179,20 +165,20 @@
        "type": "PolyHitbox",
        "points": [
         [
-         243.0,
-         600.0
-        ],
-        [
-         351.0,
-         600.0
-        ],
-        [
-         351.0,
-         588.0
+         135.0,
+         573.0
         ],
         [
          243.0,
-         588.0
+         573.0
+        ],
+        [
+         243.0,
+         561.0
+        ],
+        [
+         135.0,
+         561.0
         ]
        ]
       }
@@ -208,7 +194,7 @@
  "requirements": [],
  "level": {
   "time": 300,
-  "id": "level_8f01e10f564616e3404df4766b11a053",
+  "id": "level_c68efb20c3224e726f6e0deee3f4c5c5",
   "number": 0,
   "name": "Default Level",
   "description": "Basic level to learn the basis of gates.",

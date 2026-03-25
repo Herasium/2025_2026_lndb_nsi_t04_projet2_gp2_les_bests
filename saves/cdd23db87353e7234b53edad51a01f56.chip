@@ -1,6 +1,6 @@
 {
  "type": "Chip",
- "name": "Default Chip",
+ "name": "nbqfjbgigfj   v2",
  "id": "cdd23db87353e7234b53edad51a01f56",
  "gates": {
   "b477f0d9c06ef388371772c8c4a5394a": {
@@ -8,8 +8,8 @@
    "y": 553.5,
    "type": "Gate",
    "inputs": [
-    1,
-    1
+    0,
+    0
    ],
    "outputs": [
     0
@@ -23,7 +23,7 @@
    "type": "Gate",
    "inputs": [],
    "outputs": [
-    1
+    0
    ],
    "gate": "CLK",
    "id": "e4a749ddaf69ebb079ddfe4bd8416217"
@@ -57,10 +57,10 @@
    "y": 634.5,
    "type": "Gate",
    "inputs": [
-    1
+    0
    ],
    "outputs": [
-    1
+    0
    ],
    "gate": "DLY",
    "id": "9b34782887c77d3ebc7088234365a63a"
@@ -71,7 +71,7 @@
    "type": "Gate",
    "inputs": [],
    "outputs": [
-    1
+    0
    ],
    "gate": "CLK",
    "id": "b2084c54fffd92d7a8481c1f3938fdd0"
