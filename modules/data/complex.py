@@ -59,7 +59,7 @@ class Complex(Gate):
                     width=data.UI_EDITOR_GRID_SIZE,
                     height=data.UI_EDITOR_GRID_SIZE,
                     text=str(self.inputs[i]),
-                    size=10,
+                    size=7,
                 )
                 self.texts[f"i{i}"] = new
 
@@ -73,7 +73,7 @@ class Complex(Gate):
                     width=data.UI_EDITOR_GRID_SIZE,
                     height=data.UI_EDITOR_GRID_SIZE,
                     text=str(self.outputs[i]),
-                    size=10,
+                    size=7,
                 )
                 self.texts[f"o{i}"] = new
 
