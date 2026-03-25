@@ -464,15 +464,8 @@ class Engine:
                     target_gate = chip.gates[conn[1]]
                     target_port = conn[2]
                     path_id = conn[5]
-
-                    should_write = True
-                    if target_gate.val_inputs[target_port]:
-                        if random.random() < 0.5:
-                            should_write = False
-                        else:
-                            should_write = True
-
-                    if should_write:
+                    
+                    if signal_value:
                         target_gate.inputs[target_port] = signal_value
                         target_gate.val_inputs[target_port] = True
 

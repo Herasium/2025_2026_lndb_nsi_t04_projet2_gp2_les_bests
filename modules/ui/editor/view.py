@@ -350,23 +350,25 @@ class EditorView(arcade.View):
             p = self.chip.paths[index]
             for input_node in p.inputs:
                 if input_node[1] == id:
-                    p.remove_branch(input_node[4])
-                    if p.empty:
-                        to_delete.append(index)
-                        continue
-                    p.clean_out_single_branch()
+                    to_delete.append(p.id)
 
             for output_node in p.outputs:
                 if output_node[1] == id:
-                    p.remove_branch(output_node[4])
-                    if p.empty:
-                        to_delete.append(index)
-                        continue
-                    p.clean_out_single_branch()
+                    to_delete.append(p.id)
 
         del self.chip.gates[id]
         for i in to_delete:
-            del self.chip.paths[i]
+            self.delete_path(i)
+
+    def delete_path(self,path_id):
+
+        p = self.chip.paths[path_id]
+        for i in self.chip.paths[path_id].outputs:
+                    gate_id = i[1]
+                    gate_output_id = i[2]    
+                    print(gate_id,gate_output_id,self.chip.gates[gate_id])
+                    self.chip.gates[gate_id].inputs[gate_output_id] = 0
+        del self.chip.paths[path_id]
 
     def delete(self) -> None:
         """Initiates the deletion process for the currently selected object."""
@@ -375,14 +377,13 @@ class EditorView(arcade.View):
                 self.delete_gate(g.id)
                 break
 
+        to_delete = []
         for p in self.chip.paths.values():
             if p.touched:
-                p.remove_branch(p.get_touched_branch)
-                if p.empty:
-                    del self.chip.paths[p.id]
-                    break
-                p.clean_out_single_branch()
-                break
+                to_delete.append(p.id)
+
+        for p in to_delete:
+            self.delete_path(p)
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key release events."""
