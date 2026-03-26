@@ -226,7 +226,7 @@ def gate_8maker(inputs: list[int]) -> list[int]:
     result = []
     for i in inputs:
         result.append(i*1)
-    return [int("".join(map(str, inputs)), 2)]
+    return [int("".join(map(str, result)), 2)]
 
 
 def gate_8breaker(inputs: list[int]) -> list[int]:
