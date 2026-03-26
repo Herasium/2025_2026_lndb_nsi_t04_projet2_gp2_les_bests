@@ -156,7 +156,7 @@ class Data:
             "Divide and conquer"
         ]
 
-        self.current_lang: str = "en"
+        self.current_lang: str = "fr"
         if self.current_lang == "en":
             self.language = English()
         else:

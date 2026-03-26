@@ -223,6 +223,7 @@ def gate_8maker(inputs: list[int]) -> list[int]:
     Returns:
         Single-element list containing the integer representation.
     """
+
     return [int("".join(map(str, inputs)), 2)]
 
 
@@ -457,7 +458,7 @@ class Engine:
             if out_idx >= len(gate.outputs):
                 continue
 
-            signal_value = gate.outputs[out_idx]
+            signal_value = gate.outputs[out_idx]*1
 
             for path_group in target_paths:
                 for conn in path_group:
@@ -466,11 +467,6 @@ class Engine:
                     path_id = conn[5]
 
                     should_write = True
-                    if target_gate.val_inputs[target_port]:
-                        if random.random() < 0.5:
-                            should_write = False
-                        else:
-                            should_write = False
 
                     if should_write:
                         target_gate.inputs[target_port] = signal_value

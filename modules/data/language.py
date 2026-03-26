@@ -42,7 +42,6 @@ class English:
             "button_013": "ON plays the same role as INPUT. \n\nHowever, the values ​​of ON do not \n\nvary; it sends a continuous \n\nsignal (1).",
             "button_014": "BREAKER: \n\nThis module acts as a safety \n\nand diagnostic switch. It analyzes \n\nthe incoming signal and cuts \n\noff transmission (output to 0) \n\nto isolate a section of the \n\ncircuit. Use it to test the \n\nresistance of your logic.",
             "button_015": "MAKER: \n\nThis is the final production \n\nmodule. Connect your processed \n\nsignals to its input port. It \n\nconverts the incoming stream into a \n\nconcrete result and only transmits \n\na validation signal if it receives \n\na stable 1 signal.",
-            "button_00": " "
         }
 
     def get(self, menu: str, key: str) -> str:
@@ -88,22 +87,21 @@ class French:
             "title_1": "Règles",
             "title_2": "Portes logiques",
             "title_3": "Logic gates 8 bits",
-            "button_01": "zyx",
+            "button_01": "Faites glisser les portes depuis la barre d'accès vers l'aire de jeu. Vous pouvez cliquer sur le port de sortie d'une porte pour créer un câble, puis sur le port d'entrée d'une autre porte pour les connecter.",
             "button_02": "wvu",
-            "button_03": "INPUT est votre source de signal. Elle se place en permanance au début d'un programme. Vous pouvez cliquer dessus pour basculer manuellement son état entre 0 (éteint) et 1 (allumé).",
-            "button_04": "OUPUT ferme un programme, c'est elle qui renvoie le signal. Connectez un câble à son port d'entrée. Elle s'illuminera en vert si elle reçoit un signal 1 et restera rouge pour un signal 0.",
-            "button_05": "NOT : \n\nConnectez une entrée à ce composant pour inverser la logique. Si vous envoyez un signal, il le coupe en sortie, si vous ne lui partagez aucun signal, il renvoie 1.",
-            "button_06": "AND : \n\nReliez deux câbles aux ports d'entrée à gauche. La porte ne transmettra un signal à la sortie que si les deux câbles d'entree transportent un signal 1.",
-            "button_07": "OR : \n\nConnectez vos entrées. La porte retournera un signal dès qu'au moins un des ports d'entrée reçoit un signal 1.",
-            "button_08": "NAND : \n\nCette porte fonctionne comme une AND, mais avec une sortie inversée. Elle émet un signal 1 en permanence, sauf quand toutes ses entrées sont activées.",
-            "button_09": "NOR : \n\nCette porte éteint sa sortie (signal à 0) dès qu'une de ses entrées est 1. Elle ne laisse passer le signal 1 que si ses deux entrées sont à 0.",
-            "button_010": "XOR : \n\nConnectez deux sources. La sortie passera à 1 uniquement si les deux signaux d'entrée sont différents (l'un à 1, l'autre à 0).",
-            "button_011": "CLOCK : \n\nUne fois placée, cette porte génère automatiquement un signal alternant entre 0 et 1 toutes les secondes. Qu'importe ces entrées, le signal qu'elle renvoie dépends uniquement de l'alternance chaque seconde.",
-            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger une connexion ou isoler une partie du circuit. Il renvoie le signal entrant sans aucune modification.",
-            "button_013": "ON tient le même role que INPUT. Cependant, les valeurs de ON ne varient pas, il envoie un signal en continu (1).",
-            "button_014": "BREAKER : \n\nCe module agit comme un interrupteur de sécurité et de diagnostic. Il analyse le signal entrant et coupe la transmission (sortie à 0) pour isoler une section du circuit. Utilisez-le pour tester la résistance de votre logique.",
-            "button_015": "MAKER : \n\nC'est le module de production finale. Connectez vos signaux traités à son port d'entrée. Il convertit le flux entrant en un résultat concret et ne transmet un signal de validation que s'il reçoit un signal 1 stable.",
-            "button_00": " "
+            "button_03": "INPUT est votre source de signal. \n\nElle se place en permanance au \n\ndébut d'un programme. Vous pouvez \n\ncliquer dessus pour basculer \n\nmanuellement son état entre 0 \n\n(éteint) et 1 (allumé).",
+            "button_04": "OUPUT ferme un programme, c'est \n\nelle qui renvoie le signal. \n\nConnectez un câble à son port \n\nd'entrée. Elle s'illuminera en vert \n\nsi elle reçoit un signal 1 et \n\nrestera rouge pour un signal 0.",
+            "button_05": "NOT : \n\nConnectez une entrée à ce composant \n\npour inverser la logique. Si vous \n\nenvoyez un signal, il le coupe en \n\nsortie, si vous ne lui partagez \n\naucun signal, il renvoie 1.",
+            "button_06": "AND : \n\nReliez deux câbles aux ports \n\nd'entrée à gauche. La porte ne \n\ntransmettra un signal à la sortie \n\nque si les deux câbles d'entrée \n\ntransportent un signal 1.",
+            "button_07": "OR : \n\nConnectez vos entrées. La porte \n\nretournera un signal dès qu'au \n\nmoins un des ports d'entrée reçoit \n\nun signal 1.",
+            "button_08": "NAND : \n\nCette porte fonctionne comme une \n\nAND, mais avec une sortie inversée. \n\nElle émet un signal 1 en \n\npermanence, sauf quand toutes ses \n\nentrées sont activées.",
+            "button_09": "NOR : \n\nCette porte éteint sa sortie \n\n(signal à 0) dès qu'une de ses \n\nentrées est 1. Elle ne laisse \n\npasser le signal 1 que si ses deux \n\nentrées sont à 0.",
+            "button_010": "XOR : \n\nConnectez deux sources. La sortie \n\npassera à 1 uniquement si les deux \n\nsignaux d'entrée sont différents \n\n(l'un à 1, l'autre à 0).",
+            "button_011": "CLOCK : \n\nUne fois placée, cette porte génère \n\nautomatiquement un signal alternant \n\nentre 0 et 1 toutes les secondes. \n\nQu'importe ces entrées, le signal \n\nqu'elle renvoie dépends uniquement \n\nde l'alternance chaque seconde.",
+            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger \n\nune connexion ou isoler une partie \n\ndu circuit. Il renvoie le signal \n\nentrant sans aucune modification.",
+            "button_013": "ON tient le même role que INPUT. \n\nCependant, les valeurs de ON ne \n\nvarient pas, il envoie un signal en \n\ncontinu (1).",
+            "button_014": "BREAKER : \n\nCe module agit comme un \n\ninterrupteur de sécurité et de \n\ndiagnostic. Il analyse le signal \n\nentrant et coupe la transmission \n\n(sortie à 0) pour isoler une \n\nsection du circuit. Utilisez-le \n\npour tester la résistance de \n\nvotre logique.",
+            "button_015": "MAKER : \n\nC'est le module de production \n\nfinale. Connectez vos signaux \n\ntraités à son port d'entrée. Il \n\nconvertit le flux entrant en un \n\nrésultat concret et ne transmet un \n\nsignal de validation que s'il \n\nreçoit un signal 1 stable.",
         }
 
     def get(self, menu: str, key: str) -> str:
