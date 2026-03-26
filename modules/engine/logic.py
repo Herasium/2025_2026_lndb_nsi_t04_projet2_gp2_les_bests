@@ -223,6 +223,9 @@ def gate_8maker(inputs: list[int]) -> list[int]:
     Returns:
         Single-element list containing the integer representation.
     """
+    result = []
+    for i in inputs:
+        result.append(i*1)
     return [int("".join(map(str, inputs)), 2)]
 
 
