@@ -32,6 +32,7 @@ class LevelEditorSelector(arcade.View):
         self.background_color: arcade.Color = arcade.color.BLACK
         self.texts: List[Text] = []
         self.levels: List[Any] = []
+        self.camera: int = 0
         self.setup()
 
     def setup(self) -> None:
@@ -45,13 +46,16 @@ class LevelEditorSelector(arcade.View):
             "Play Level Selector",
             "",
         ]
+        self.texts: List[Text] = []
+        self.levels: List[Any] = []
+        
 
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
             debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
-        start_y: int = data.WINDOW_HEIGHT - 70
+        start_y: int = data.WINDOW_HEIGHT - 70 + self.camera
 
         for index, item in enumerate(debug_list):
             self.texts.append(Text())
@@ -160,3 +164,11 @@ class LevelEditorSelector(arcade.View):
             key_modifiers: Bitmask of modifier keys currently held.
         """
         pass
+    def on_mouse_scroll(
+        self, x: float, y: float, scroll_x: float, scroll_y: float
+    ) -> None:
+        """Updates vertical camera offset and rebuilds layout."""
+        self.camera += scroll_y * -data.MOUSE_SENSI
+        self.camera = max(self.camera, 0)
+        print(self.camera)
+        self.setup()

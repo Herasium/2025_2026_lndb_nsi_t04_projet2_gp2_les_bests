@@ -19,24 +19,26 @@ class LevelPlayerSelector(arcade.View):
 
         self.background_color: arcade.Color = arcade.color.BLACK
         self.texts: List[Text] = []
+        self.camera: int = 0
         self.levels: List[Any] = []
         self.setup()
 
     def setup(self) -> None:
         """Configures the UI layout and maps available levels to selectable elements."""
         debug_list: List[str] = ["Chip Editor Selector", "<- Back", ""]
+        self.texts: List[Text] = []
+        self.levels: List[Any] = []
 
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
             debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
-        start_y: int = data.WINDOW_HEIGHT - 70
-
+        start_y: int = data.WINDOW_HEIGHT - 70 + self.camera
         for index, item in enumerate(debug_list):
             self.texts.append(Text())
             self.texts[-1].x = 64
-            self.texts[-1].y = start_y - (index * 25)
+            self.texts[-1].y = start_y - (index * 25) 
             self.texts[-1].text = item
             self.texts[-1].align = ("left", "center")
 
@@ -118,3 +120,11 @@ class LevelPlayerSelector(arcade.View):
             key_modifiers: Bitmask of active modifier keys.
         """
         pass
+
+    def on_mouse_scroll(
+        self, x: float, y: float, scroll_x: float, scroll_y: float
+    ) -> None:
+        """Updates vertical camera offset and rebuilds layout."""
+        self.camera += scroll_y * -data.MOUSE_SENSI
+        self.camera = max(self.camera, 0)
+        self.setup()

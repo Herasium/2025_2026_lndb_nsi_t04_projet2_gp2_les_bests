@@ -25,6 +25,7 @@ class CustomGate(Complex):
         self.base_chip_id: int = chip.id
         self.chip: Any = chip.copy()
         self.gate_type: str = "Custom"
+        self.safe_mode = False
 
         self.update_io()
 
@@ -76,7 +77,10 @@ class CustomGate(Complex):
         out.reverse()
         inp.reverse()
         # Pack state bits into an integer to select the appropriate texture index
-        current: int = int("".join(map(str, map(int, (out + inp)))), 2)
+        if self.safe_mode:
+            current: int = 0
+        else:
+            current: int = int("".join(map(str, map(int, (out + inp)))), 2)
 
         tile_x: float = self.x + self._camera[0]
         tile_y: float = self.y + self._camera[1]
@@ -131,6 +135,24 @@ class CustomGate(Complex):
         self.base_chip_id = data["parent"]
 
         self.chip = data_module.loaded_chips[self.base_chip_id].copy()
+
+        try:       
+            out: List[int] = self.outputs.copy()
+            inp: List[int] = self.inputs.copy()
+
+            for i in range(len(inp)):
+                if self.inputs_sizes[i] != 1:
+                    inp[i] = 0
+
+            for i in range(len(out)):
+                if self.outputs_sizes[i] != 1:
+                    out[i] = 0
+
+            out.reverse()
+            inp.reverse()
+            a = int("".join(map(str, map(int, (out + inp)))), 2)
+        except:
+            self.safe_mode = True
 
         self.update_io()
         self.calculate_display()
