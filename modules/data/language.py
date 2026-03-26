@@ -42,7 +42,6 @@ class English:
             "button_013": "ON plays the same role as INPUT. \n\nHowever, the values ​​of ON do not \n\nvary; it sends a continuous \n\nsignal (1).",
             "button_014": "BREAKER: \n\nThis module acts as a safety \n\nand diagnostic switch. It analyzes \n\nthe incoming signal and cuts \n\noff transmission (output to 0) \n\nto isolate a section of the \n\ncircuit. Use it to test the \n\nresistance of your logic.",
             "button_015": "MAKER: \n\nThis is the final production \n\nmodule. Connect your processed \n\nsignals to its input port. It \n\nconverts the incoming stream into a \n\nconcrete result and only transmits \n\na validation signal if it receives \n\na stable 1 signal.",
-            "button_00": " "
         }
 
     def get(self, menu: str, key: str) -> str:
@@ -103,7 +102,6 @@ class French:
             "button_013": "ON tient le même role que INPUT. Cependant, les valeurs de ON ne varient pas, il envoie un signal en continu (1).",
             "button_014": "BREAKER : \n\nCe module agit comme un interrupteur de sécurité et de diagnostic. Il analyse le signal entrant et coupe la transmission (sortie à 0) pour isoler une section du circuit. Utilisez-le pour tester la résistance de votre logique.",
             "button_015": "MAKER : \n\nC'est le module de production finale. Connectez vos signaux traités à son port d'entrée. Il convertit le flux entrant en un résultat concret et ne transmet un signal de validation que s'il reçoit un signal 1 stable.",
-            "button_00": " "
         }
 
     def get(self, menu: str, key: str) -> str:

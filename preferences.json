@@ -12,7 +12,7 @@
         "back": 65307,
         "input_toggle": 101,
         "chip_save": 115,
-        "gate_delete": 65288
+        "gate_delete": 32
     },
     "current_lang": "en"
 }

@@ -141,9 +141,11 @@ class TutorialView(arcade.View):
             "button_10",
             "button_11",
             "button_12",
+        ]
+        self.bitsbutton: List[str] = [
             "button_13",
             "button_14",
-            "button_15",
+            "button_14",
         ]
 
         # Ajouter MAKER, ON, BREAKER
@@ -157,6 +159,19 @@ class TutorialView(arcade.View):
                 Text(
                     x=160,
                     y=a + self.camera,
+                    text=data.language.get("tutorial", i),
+                    align=("left", "center"),
+                    size=16,
+                )
+            )
+
+        b = 0
+        for i in self.bitsbutton:
+            b = b - 45
+            self.buttons.append(
+                Text(
+                    x=160,
+                    y=b + self.camera,
                     text=data.language.get("tutorial", i),
                     align=("left", "center"),
                     size=16,
