@@ -300,6 +300,22 @@ def gate_8subtractor(inputs: list[int]) -> int:
     A, B = inputs
     return [(A - B) & 0xFF]
 
+def gate_8mux(inputs: list[int]) -> list[int]:
+    """
+    Uses the first input as a selector to choose one of the following 8 inputs.
+    
+    Args:
+        inputs: A list where index 0 is the selector (0-7) 
+                and indices 1-8 are the data inputs.
+
+    Returns:
+        The chosen input value.
+    """
+
+    selector = inputs[0] % 8
+    data_bits = inputs[1:9]
+    
+    return [data_bits[selector]]
 
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
@@ -325,6 +341,7 @@ LOGIC_MAP: dict[str, callable] = {
     "8ADDER": gate_8adder,
     "8SUB": gate_8subtractor,
     "8XOR": gate_8xor,
+    "8MUX": gate_8mux,
 }
 
 

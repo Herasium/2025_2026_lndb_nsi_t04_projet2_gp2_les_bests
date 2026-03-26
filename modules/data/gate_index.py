@@ -35,6 +35,7 @@ from modules.data.nodes.eight.addr import Adder as Adder_8
 from modules.data.nodes.eight.sub import Sub as Sub_8
 from modules.data.nodes.eight.xor import Xor as Xor_8
 from modules.data.nodes.eight.one import ONE as One_8
+from modules.data.nodes.eight.mux import Mux as Mux_8
 
 from modules.data.nodes.mix.eight_breaker import Breaker as Breaker_8
 from modules.data.nodes.mix.eight_maker import Maker as Maker_8
@@ -70,6 +71,7 @@ gate_types: Dict[str, Type[Any]] = {
     "OFF": Off,
     "TOR": TOr,
     "TAND": TAnd,
+    "8MUX": Mux_8,
 }
 
 gate_types_1: Dict[str, Type[Any]] = {
@@ -104,6 +106,7 @@ gate_types_8: Dict[str, Type[Any]] = {
     "8SUB": Sub_8,
     "8ONE": One_8,
     "8XOR": Xor_8,
+    "8MUX": Mux_8,
 }
 
 gate_types_mix: Dict[str, Type[Any]] = {"8BREAK": Breaker_8, "8MAKER": Maker_8}
