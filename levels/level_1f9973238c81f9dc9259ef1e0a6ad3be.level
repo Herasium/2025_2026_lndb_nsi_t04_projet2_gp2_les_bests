@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L36",
   "id": "1f9973238c81f9dc9259ef1e0a6ad3be",
   "gates": {
    "72a93cb1a6a32dec989040ce5dcba5b7": {
@@ -31,8 +31,8 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -438,7 +438,7 @@
  "level": {
   "time": 90,
   "id": "level_1f9973238c81f9dc9259ef1e0a6ad3be",
-  "number": 10,
+  "number": 30,
   "name": "A AND B v2",
   "description": "Build A AND B using only NAND gates. Output is true only if both inputs are true.",
   "hints": [],
@@ -446,7 +446,7 @@
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 2,
+  "category": 8,
   "is_custom": false
  }
 }

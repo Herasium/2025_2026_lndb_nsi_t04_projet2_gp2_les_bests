@@ -296,7 +296,7 @@
  "level": {
   "time": 150,
   "id": "level_ef07316dda297d0ed8cecd71eb4a7dd8",
-  "number": 30,
+  "number": 24,
   "name": "1 Bit Decoder",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
@@ -304,7 +304,7 @@
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 9,
+  "category": 6,
   "is_custom": true
  }
 }

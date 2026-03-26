@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L33",
   "id": "0778039726c92c2e7e9d13185fd13c6e",
   "gates": {
    "955e2ac4aca3a3e8130940188aa6f82e": {
@@ -42,8 +42,8 @@
     "y": 634.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -71,7 +71,7 @@
     "type": "Gate",
     "inputs": [
      1,
-     true
+     1
     ],
     "outputs": [
      0
@@ -775,7 +775,7 @@
  "level": {
   "time": 210,
   "id": "level_0778039726c92c2e7e9d13185fd13c6e",
-  "number": 16,
+  "number": 34,
   "name": "Triple AND v2",
   "description": "Build Triple AND using only NAND gates. Output is true only if all inputs are true.",
   "hints": [],
@@ -783,7 +783,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 4,
+  "category": 9,
   "is_custom": false
  }
 }

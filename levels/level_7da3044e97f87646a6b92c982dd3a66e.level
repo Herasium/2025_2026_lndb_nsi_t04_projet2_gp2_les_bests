@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L27",
   "id": "7da3044e97f87646a6b92c982dd3a66e",
   "gates": {
    "4615cc101c91926ef02ee77dd50d290b": {
@@ -2681,7 +2681,7 @@
  "level": {
   "time": 240,
   "id": "level_7da3044e97f87646a6b92c982dd3a66e",
-  "number": 27,
+  "number": 21,
   "name": "8 Bits XOR",
   "description": "Compare two 8-bit inputs using breaker, maker, and other gates. Output is true when bits differ.",
   "hints": [],
@@ -2689,7 +2689,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 8,
+  "category": 5,
   "is_custom": true
  }
 }

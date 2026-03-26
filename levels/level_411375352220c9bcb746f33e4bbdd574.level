@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L6",
   "id": "411375352220c9bcb746f33e4bbdd574",
   "gates": {
    "4c66c7373e51dd399ab3d607e3474378": {
@@ -31,11 +31,11 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "98ee4902cc08a496002c1434d31c60d6"
@@ -45,10 +45,10 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     false
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NOT",
     "id": "be10beb45f11236a10f4931f4fba65a2"
@@ -58,7 +58,7 @@
     "y": 580.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -365,9 +365,10 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 90,
   "id": "level_411375352220c9bcb746f33e4bbdd574",
@@ -375,10 +376,11 @@
   "name": "Basic level",
   "description": "Use NAND and NOT gates to get A AND B.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 1
+  "category": 2,
+  "is_custom": false
  }
 }

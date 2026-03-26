@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L7",
   "id": "3f47b14997f5b71fa9bf62e4e9d7070b",
   "gates": {
    "b3f4ae9d69e916f14704fa3182fa755e": {
@@ -31,7 +31,7 @@
     "y": 553.5,
     "type": "Output",
     "inputs": [
-     true
+     1
     ],
     "outputs": [],
     "gate": "Output",
@@ -42,11 +42,11 @@
     "y": 553.5,
     "type": "Gate",
     "inputs": [
-     false,
-     false
+     0,
+     0
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NAND",
     "id": "b13ab68b111cbc598a20e52819da68d9"
@@ -56,10 +56,10 @@
     "y": 418.5,
     "type": "Gate",
     "inputs": [
-     true
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NOT",
     "id": "c2a93e3d2467ff7043e8abd892801f05"
@@ -69,10 +69,10 @@
     "y": 688.5,
     "type": "Gate",
     "inputs": [
-     true
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NOT",
     "id": "7ab0abe047f7ffbaf192537d2723fb13"
@@ -86,7 +86,7 @@
      false
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "56ec5fc6096faccfe6cc2b91904f6eb9"
@@ -454,9 +454,10 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 120,
   "id": "level_3f47b14997f5b71fa9bf62e4e9d7070b",
@@ -464,10 +465,11 @@
   "name": "Default Level",
   "description": "Use previous gates (NAND, NOT, AND) to build A OR B. Output is true if either input is true.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 1
+  "category": 2,
+  "is_custom": false
  }
 }

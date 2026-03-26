@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L5",
   "id": "4a3148ca15d59a5eeb23dd7b748b49fc",
   "gates": {
    "133ebc5759bf478a10ef465cebc71048": {
@@ -20,7 +20,7 @@
     "y": 580.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -31,11 +31,11 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "92e805aab2b90b6e9067072ccc2b04f2"
@@ -229,9 +229,10 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 60,
   "id": "level_4a3148ca15d59a5eeb23dd7b748b49fc",
@@ -239,10 +240,11 @@
   "name": "NOT A v2",
   "description": "Build NOT A using only a NAND gate. Output is the inverse of A.",
   "hints": [],
-  "version": 160,
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 1
+  "category": 2,
+  "is_custom": false
  }
 }

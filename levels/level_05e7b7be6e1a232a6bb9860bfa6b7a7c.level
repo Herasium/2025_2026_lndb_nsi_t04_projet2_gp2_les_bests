@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L35",
   "id": "05e7b7be6e1a232a6bb9860bfa6b7a7c",
   "gates": {
    "48f30960e61fa3589c725b532e3b53d8": {
@@ -42,8 +42,8 @@
     "y": 661.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -56,7 +56,7 @@
     "y": 553.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      0
     ],
     "outputs": [
@@ -71,7 +71,7 @@
     "type": "Gate",
     "inputs": [
      0,
-     true
+     1
     ],
     "outputs": [
      1
@@ -98,7 +98,7 @@
     "y": 418.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      0
     ],
     "outputs": [
@@ -112,7 +112,7 @@
     "y": 364.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      1
     ],
     "outputs": [
@@ -1536,7 +1536,7 @@
  "level": {
   "time": 270,
   "id": "level_05e7b7be6e1a232a6bb9860bfa6b7a7c",
-  "number": 18,
+  "number": 36,
   "name": "Odd selector v2",
   "description": "Build Odd selector using only NAND gates. Output is true when an odd number of inputs are true.",
   "hints": [],
@@ -1544,7 +1544,7 @@
   "start": 1,
   "truth": {},
   "color": 2,
-  "category": 4,
+  "category": 9,
   "is_custom": false
  }
 }

@@ -148,13 +148,17 @@ class Data:
         self.categories: List[str] = [
             "Fondamentals of logic",
             "Some basic gates",
-            "Some NANDic gates",
             "Triple inputs gates",
-            "Triple NANDuts gates",
             "Basics of arithmetic",
             "The more the better",
             "Divide and conquer",
-            "States and Memory"
+            "The END",
+            "Some NANDic gates",
+            "Triple NANDuts gates",
+            "NANDics of arithmetic",
+            "The more the NANDier",
+            "Divide and NANDquer",
+            "The NEND"
         ]
 
         self.current_lang: str = "fr"

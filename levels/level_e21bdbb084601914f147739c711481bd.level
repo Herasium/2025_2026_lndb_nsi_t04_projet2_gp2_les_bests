@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L22",
   "id": "e21bdbb084601914f147739c711481bd",
   "gates": {
    "07ba669fe07466c86379d67d699fcbb6": {
@@ -133,8 +133,8 @@
     "y": 661.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -148,7 +148,7 @@
     "type": "Gate",
     "inputs": [
      0,
-     true
+     1
     ],
     "outputs": [
      1
@@ -175,7 +175,7 @@
     "type": "Gate",
     "inputs": [
      1,
-     true
+     1
     ],
     "outputs": [
      1
@@ -188,7 +188,7 @@
     "y": 445.5,
     "type": "Gate",
     "inputs": [
-     true
+     1
     ],
     "outputs": [
      0
@@ -202,7 +202,7 @@
     "type": "Gate",
     "inputs": [
      0,
-     true
+     1
     ],
     "outputs": [
      0
@@ -1446,7 +1446,7 @@
  "level": {
   "time": 360,
   "id": "level_e21bdbb084601914f147739c711481bd",
-  "number": 22,
+  "number": 16,
   "name": "Full Substract",
   "description": "Use any unlocked gates to subtract B and Bin from A. Outputs are DIFFERENCE and BORROW.",
   "hints": [],
@@ -1454,7 +1454,7 @@
   "start": 1,
   "truth": {},
   "color": 3,
-  "category": 5,
+  "category": 4,
   "is_custom": false
  }
 }

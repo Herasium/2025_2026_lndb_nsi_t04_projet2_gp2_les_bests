@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L9",
   "id": "89c01912f22363ee8e9e05c95784f3e5",
   "gates": {
    "d9fb8924009cb50370be81bec0691acd": {
@@ -441,7 +441,7 @@
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 1,
+  "category": 2,
   "is_custom": false
  }
 }

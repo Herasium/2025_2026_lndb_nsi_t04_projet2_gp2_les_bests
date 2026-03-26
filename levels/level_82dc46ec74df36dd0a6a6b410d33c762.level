@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L14",
   "id": "82dc46ec74df36dd0a6a6b410d33c762",
   "gates": {
    "e903375ea932ebae984c613af9a50a48": {
@@ -95,7 +95,7 @@
     "type": "Gate",
     "inputs": [
      1,
-     true
+     1
     ],
     "outputs": [
      1
@@ -108,8 +108,8 @@
     "y": 634.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      1
@@ -551,7 +551,7 @@
  "level": {
   "time": 150,
   "id": "level_82dc46ec74df36dd0a6a6b410d33c762",
-  "number": 14,
+  "number": 11,
   "name": "Triple OR",
   "description": "Combine A, B, and C using any unlocked gates. Output is true if at least one input is true.",
   "hints": [],
