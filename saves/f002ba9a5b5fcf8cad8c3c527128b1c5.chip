@@ -1,0 +1,32 @@
+{
+ "type": "Chip",
+ "name": "Default Chip",
+ "id": "f002ba9a5b5fcf8cad8c3c527128b1c5",
+ "gates": {
+  "8f9d314783a95891050aec54e8041bf7": {
+   "x": 931.5,
+   "y": 580.5,
+   "type": "Input",
+   "inputs": [],
+   "outputs": [
+    1
+   ],
+   "gate": "Input",
+   "id": "8f9d314783a95891050aec54e8041bf7"
+  },
+  "5b63326696c8719d92e7276267eb365e": {
+   "x": 661.5,
+   "y": 553.5,
+   "type": "Input",
+   "inputs": [],
+   "outputs": [
+    255
+   ],
+   "gate": "8Input",
+   "id": "5b63326696c8719d92e7276267eb365e"
+  }
+ },
+ "paths": {},
+ "version": 208,
+ "requirements": []
+}

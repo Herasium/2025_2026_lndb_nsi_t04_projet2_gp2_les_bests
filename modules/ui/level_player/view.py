@@ -728,38 +728,41 @@ class LevelPlayer(arcade.View):
                 p = self.level.chip.paths[index]
                 for input in p.inputs:
                     if input[1] == id:
-                        p.remove_branch(input[4])
-                        if p.empty:
-                            to_delete.append(index)
-                            continue
-                        p.clean_out_single_branch()
+                        to_delete.append(index)
+   
                 for output in p.outputs:
                     if output[1] == id:
-                        p.remove_branch(output[4])
-                        if p.empty:
-                            to_delete.append(index)
-                            continue
-                        p.clean_out_single_branch()
+                        to_delete.append(index)
+
             del self.level.chip.gates[id]
             for i in to_delete:
-                del self.level.chip.paths[i]
+                self.delete_path(i)
             self.level.chip.changed = True
 
+    def delete_path(self,path_id):
+
+        p = self.level.chip.paths[path_id]
+        for i in self.level.chip.paths[path_id].outputs:
+                    gate_id = i[1]
+                    gate_output_id = i[2]    
+                    if gate_id in self.level.chip.gates:
+                        self.level.chip.gates[gate_id].inputs[gate_output_id] = 0
+        del self.level.chip.paths[path_id]
+
     def delete(self) -> None:
-        """Determines which gate or path component is targeted for deletion."""
+        """Initiates the deletion process for the currently selected object."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
                 break
+
+        to_delete = []
         for p in self.level.chip.paths.values():
             if p.touched:
-                p.remove_branch(p.get_touched_branch)
-                if p.empty:
-                    del self.level.chip.paths[p.id]
-                    break
-                p.clean_out_single_branch()
-                break
-        self.level.chip.changed = True
+                to_delete.append(p.id)
+
+        for p in to_delete:
+            self.delete_path(p)
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key-up events."""

@@ -394,6 +394,7 @@ class Loader:
         data.truth_table = arcade.Sprite("assets/titles/truth_table.png")
         data.chip_save = arcade.Sprite("assets/titles/chip_save.png")
         data.option_title = arcade.Sprite("assets/titles/options.png")
+        data.input_title = arcade.Sprite("assets/titles/input.png")
 
         data.editor_border = arcade.Sprite("assets/borders/editor_border.png")
         data.chip_select = arcade.Sprite("assets/borders/chip_select.png")

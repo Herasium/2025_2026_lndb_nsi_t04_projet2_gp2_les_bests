@@ -21,6 +21,7 @@ from modules.data.gate_index import (
 from modules.engine import Engine
 from modules.logger import Logger
 from modules.ui.level_editor.save import SaveFrame
+from modules.ui.editor.input import InputFrame
 from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 
 """Provides the primary interface for the circuit design environment, 
@@ -318,7 +319,10 @@ class EditorView(arcade.View):
         if key == data.keys.input_toggle:
             for g in self.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
-                    g.switch()
+                    if g.outputs_sizes[0] == 1:
+                        g.switch()
+                    elif g.gate_type in ["8Input"]:
+                        data.window.display(InputFrame(self.chip,g.id))
 
         if key == 65473:  # Emergency exit: F4
             arcade.exit()
