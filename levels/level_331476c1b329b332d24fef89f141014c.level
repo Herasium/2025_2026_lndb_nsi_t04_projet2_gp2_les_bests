@@ -159,6 +159,17 @@
     ],
     "gate": "8SUB",
     "id": "0b49c5e665a2ee102e3b2ad9ab7fd77d"
+   },
+   "b80f3ad5dd92202c7ab3959fb518f421": {
+    "x": 1012.5,
+    "y": 526.5,
+    "type": "Output",
+    "inputs": [
+     0
+    ],
+    "outputs": [],
+    "gate": "8Output",
+    "id": "b80f3ad5dd92202c7ab3959fb518f421"
    }
   },
   "paths": {
@@ -1281,7 +1292,7 @@
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 3,
+  "color": 4,
   "category": 9,
   "is_custom": false
  }

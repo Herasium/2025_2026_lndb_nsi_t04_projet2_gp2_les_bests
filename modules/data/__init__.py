@@ -153,7 +153,8 @@ class Data:
             "Triple NANDuts gates",
             "Basics of arithmetic",
             "The more the better",
-            "Divide and conquer"
+            "Divide and conquer",
+            "States and Memory"
         ]
 
         self.current_lang: str = "fr"
