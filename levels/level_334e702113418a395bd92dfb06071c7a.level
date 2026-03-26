@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L32",
   "id": "334e702113418a395bd92dfb06071c7a",
   "gates": {
    "dcf31bd33c046704a05534e7be7e4459": {
@@ -659,7 +659,7 @@
  "level": {
   "time": 150,
   "id": "level_334e702113418a395bd92dfb06071c7a",
-  "number": 32,
+  "number": 33,
   "name": "1 Bit MUX",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
