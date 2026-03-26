@@ -42,7 +42,7 @@ class TutorialView(arcade.View):
 
         self.texte_button = Text(
             x=1000,
-            y=750,
+            y=800,
             text="",
             align=("left", "top"),
             size=16,
