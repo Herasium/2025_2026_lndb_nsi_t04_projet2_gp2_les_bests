@@ -425,6 +425,8 @@ class Loader:
         data.level_buttons_empty["green"] = arcade.Sprite(
             "assets/buttons/levels/green.png"
         )
+        data.level_buttons_empty["black"] = arcade.Sprite("assets/buttons/levels/black.png")
+        data.level_buttons_empty["purple"] = arcade.Sprite("assets/buttons/levels/purple.png")
 
         data.editor_categories = {}
         data.editor_categories["1_bit"] = arcade.Sprite(

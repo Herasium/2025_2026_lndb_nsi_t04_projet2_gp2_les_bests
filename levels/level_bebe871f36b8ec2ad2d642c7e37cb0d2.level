@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "NOTL",
+  "name": "L-3",
   "id": "bebe871f36b8ec2ad2d642c7e37cb0d2",
   "gates": {
    "b31cf29cd57be5e108092e2b5d7b1b95": {
@@ -280,7 +280,7 @@
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 3,
+  "color": 4,
   "category": 0,
   "is_custom": false
  }

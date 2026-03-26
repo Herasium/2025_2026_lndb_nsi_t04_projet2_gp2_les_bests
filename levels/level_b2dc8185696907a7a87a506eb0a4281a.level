@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L-4",
   "id": "b2dc8185696907a7a87a506eb0a4281a",
   "gates": {
    "828b86808b8bbb2e1c05b1b7baba6475": {
@@ -121,7 +121,7 @@
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 3,
+  "color": 5,
   "category": 0,
   "is_custom": false
  }

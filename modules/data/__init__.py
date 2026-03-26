@@ -144,7 +144,7 @@ class Data:
         self.loaded_levels: Dict[str, Any] = {}
 
         self.window: Optional[Any] = None
-        self.level_colors: List[str] = ["green", "yellow", "orange", "red"]
+        self.level_colors: List[str] = ["green", "yellow", "orange", "red","purple","black"]
         self.categories: List[str] = [
             "Fondamentals of logic",
             "Some basic gates",

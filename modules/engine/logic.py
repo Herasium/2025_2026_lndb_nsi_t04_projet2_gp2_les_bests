@@ -23,6 +23,17 @@ def gate_and(inputs: list[int]) -> list[int]:
     """
     return [(inputs[0] and inputs[1]) * 1]
 
+def gate_tand(inputs: list[int]) -> list[int]:
+    """Calculates AND operation.
+
+    Args:
+        inputs: List containing three input bits.
+
+    Returns:
+        Result of the AND operation.
+    """
+    return [(inputs[0] and inputs[1] and inputs[2]) * 1]
+
 
 def gate_adder(inputs: list[int]) -> list[int]:
     """Calculates Full Adder operation.
@@ -68,6 +79,17 @@ def gate_or(inputs: list[int]) -> list[int]:
         Result of the OR operation.
     """
     return [(inputs[0] or inputs[1]) * 1]
+
+def gate_tor(inputs: list[int]) -> list[int]:
+    """Calculates OR operation.
+
+    Args:
+        inputs: List containing three input bits.
+
+    Returns:
+        Result of the OR operation.
+    """
+    return [(inputs[0] or inputs[1] or inputs[2]) * 1]
 
 
 def gate_not(inputs: list[int]) -> list[int]:
@@ -282,6 +304,8 @@ def gate_8subtractor(inputs: list[int]) -> int:
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
     "OR": gate_or,
+    "TAND": gate_tand,
+    "TOR": gate_tor,
     "NOT": gate_not,
     "XOR": gate_xor,
     "NAND": gate_nand,
