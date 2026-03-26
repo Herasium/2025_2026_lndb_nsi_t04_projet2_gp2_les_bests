@@ -158,12 +158,12 @@ class Level:
 
         if self.start == 1:
             for i in chip.gates:
-                chip.gates[i].inputs = [False for _ in chip.gates[i].inputs]
-                chip.gates[i].outputs = [False for _ in chip.gates[i].outputs]
+                chip.gates[i].inputs = [0 for _ in chip.gates[i].inputs]
+                chip.gates[i].outputs = [0 for _ in chip.gates[i].outputs]
         elif self.start == 2:
             for i in chip.gates:
-                chip.gates[i].inputs = [True for _ in chip.gates[i].inputs]
-                chip.gates[i].outputs = [True for _ in chip.gates[i].outputs]
+                chip.gates[i].inputs = [1 for _ in chip.gates[i].inputs]
+                chip.gates[i].outputs = [1 for _ in chip.gates[i].outputs]
 
     def get_inputs(self, chip: Optional[Chip] = None) -> List[str]:
         """Identifies all input gate IDs.

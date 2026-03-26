@@ -170,5 +170,5 @@ class LevelEditorSelector(arcade.View):
         """Updates vertical camera offset and rebuilds layout."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
-        print(self.camera)
+
         self.setup()
