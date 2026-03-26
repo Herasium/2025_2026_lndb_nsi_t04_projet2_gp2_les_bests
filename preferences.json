@@ -1,7 +1,7 @@
 {
     "window_fullscreen": true,
     "window_framerate": 60,
-    "mouse_sensitivity": 100,
+    "mouse_sensitivity": 40,
     "audio": {
         "global_volume": 100,
         "music_volume": 100,
@@ -12,7 +12,7 @@
         "back": 65307,
         "input_toggle": 101,
         "chip_save": 115,
-        "gate_delete": 32
+        "gate_delete": 65288
     },
-    "current_lang": "en"
+    "current_lang": "fr"
 }
