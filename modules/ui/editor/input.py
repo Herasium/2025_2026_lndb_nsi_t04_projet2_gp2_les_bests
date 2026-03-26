@@ -2,6 +2,7 @@
 
 import arcade
 from typing import Any
+import random
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.text import Text
@@ -169,7 +170,10 @@ class InputFrame(arcade.View):
             self.typing = False
         self.chip_name.text = self.current_text
         if self.save_button.touched:
-            self.chip.gates[self.gate].outputs[0] = max(min(2**self.chip.gates[self.gate].outputs_sizes[0]-1,int(self.current_text)),0)
+            if key_modifiers in [17, 1]:
+                self.chip.gates[self.gate].outputs[0] = random.randint(0,2**self.chip.gates[self.gate].outputs_sizes[0]-1)
+            else:
+                self.chip.gates[self.gate].outputs[0] = max(min(2**self.chip.gates[self.gate].outputs_sizes[0]-1,int(self.current_text)),0)
             self.chip.gates[self.gate].update_text_readings()
             data.window.back()
 
