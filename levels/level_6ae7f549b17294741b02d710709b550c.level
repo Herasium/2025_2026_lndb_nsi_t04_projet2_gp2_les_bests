@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L34",
   "id": "6ae7f549b17294741b02d710709b550c",
   "gates": {
    "1c59f57f088b1182e030155944bcec5d": {
@@ -42,8 +42,8 @@
     "y": 742.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -56,8 +56,8 @@
     "y": 553.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -70,8 +70,8 @@
     "y": 364.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -1073,7 +1073,7 @@
  "level": {
   "time": 240,
   "id": "level_6ae7f549b17294741b02d710709b550c",
-  "number": 17,
+  "number": 35,
   "name": "Triple OR v2",
   "description": "Build Triple OR using only NAND gates. Output is true if at least one input is true.",
   "hints": [],
@@ -1081,7 +1081,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 4,
+  "category": 9,
   "is_custom": false
  }
 }

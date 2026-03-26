@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L15",
   "id": "19b1e6aa32b59cb41dff8aee4a9be62f",
   "gates": {
    "5ca238496fea16c199950b9fe887d02e": {
@@ -108,8 +108,8 @@
     "y": 661.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -122,7 +122,7 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      0
     ],
     "outputs": [
@@ -576,7 +576,7 @@
  "level": {
   "time": 180,
   "id": "level_19b1e6aa32b59cb41dff8aee4a9be62f",
-  "number": 15,
+  "number": 12,
   "name": "Odd selector",
   "description": "Use any unlocked gates to output true when an odd number of inputs are true.",
   "hints": [],

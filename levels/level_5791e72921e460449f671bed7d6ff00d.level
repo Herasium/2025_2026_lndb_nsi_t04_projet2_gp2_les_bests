@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L26",
   "id": "5791e72921e460449f671bed7d6ff00d",
   "gates": {
    "4d0338ce70ced65d0336afa0da0a2dbd": {
@@ -2393,7 +2393,7 @@
  "level": {
   "time": 240,
   "id": "level_5791e72921e460449f671bed7d6ff00d",
-  "number": 26,
+  "number": 20,
   "name": "8 Bits NAND",
   "description": "Combine 8 input bits using breaker, maker, and other gates. Output is false only if all bits are true.",
   "hints": [],
@@ -2401,7 +2401,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 8,
+  "category": 5,
   "is_custom": false
  }
 }

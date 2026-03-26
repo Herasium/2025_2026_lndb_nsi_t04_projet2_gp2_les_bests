@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L19",
   "id": "5e4b1cf1a9c2482c1186b76d5ac8c3a0",
   "gates": {
    "9e8d6f0ca1fcf452c22bc35cb4e12af8": {
@@ -122,8 +122,8 @@
     "y": 688.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -136,8 +136,8 @@
     "y": 445.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      1
@@ -605,7 +605,7 @@
  "level": {
   "time": 210,
   "id": "level_5e4b1cf1a9c2482c1186b76d5ac8c3a0",
-  "number": 19,
+  "number": 13,
   "name": "Half Adder",
   "description": "Use any unlocked gates to add A and B. Output gives SUM and CARRY.",
   "hints": [],
@@ -613,7 +613,7 @@
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 5,
+  "category": 4,
   "is_custom": false
  }
 }

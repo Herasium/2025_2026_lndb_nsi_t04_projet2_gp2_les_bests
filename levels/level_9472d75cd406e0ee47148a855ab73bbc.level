@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L21",
   "id": "9472d75cd406e0ee47148a855ab73bbc",
   "gates": {
    "e2686a8bdb41f32cdce8153bf6760c8e": {
@@ -122,8 +122,8 @@
     "y": 715.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -136,7 +136,7 @@
     "y": 418.5,
     "type": "Gate",
     "inputs": [
-     true
+     1
     ],
     "outputs": [
      0
@@ -149,7 +149,7 @@
     "y": 553.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      0
     ],
     "outputs": [
@@ -680,7 +680,7 @@
  "level": {
   "time": 240,
   "id": "level_9472d75cd406e0ee47148a855ab73bbc",
-  "number": 21,
+  "number": 15,
   "name": "Half Substract",
   "description": "Use any unlocked gates to subtract B from A. Outputs are DIFFERENCE and BORROW.",
   "hints": [],
@@ -688,7 +688,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 5,
+  "category": 4,
   "is_custom": false
  }
 }

@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L23",
   "id": "5d2e684f8f8a3715312a5e4140acf23b",
   "gates": {
    "66a84dd6dd1206d9dfb0b565abd018ac": {
@@ -1808,7 +1808,7 @@
  "level": {
   "time": 180,
   "id": "level_5d2e684f8f8a3715312a5e4140acf23b",
-  "number": 23,
+  "number": 17,
   "name": "8 Bits NOT",
   "description": "Invert all 8 input bits using breaker, maker, and other gates.",
   "hints": [],
@@ -1816,7 +1816,7 @@
   "start": 1,
   "truth": {},
   "color": 1,
-  "category": 8,
+  "category": 5,
   "is_custom": true
  }
 }

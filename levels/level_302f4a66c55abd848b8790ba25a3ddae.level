@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L37",
   "id": "302f4a66c55abd848b8790ba25a3ddae",
   "gates": {
    "e8f00754af16f3f4c24deb2122dc0827": {
@@ -31,8 +31,8 @@
     "y": 472.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -45,8 +45,8 @@
     "y": 715.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
      0
@@ -604,7 +604,7 @@
  "level": {
   "time": 150,
   "id": "level_302f4a66c55abd848b8790ba25a3ddae",
-  "number": 11,
+  "number": 31,
   "name": "A OR B v2",
   "description": "Build A OR B using only NAND gates. Output is true if at least one input is true.",
   "hints": [],
@@ -612,7 +612,7 @@
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 2,
+  "category": 8,
   "is_custom": false
  }
 }

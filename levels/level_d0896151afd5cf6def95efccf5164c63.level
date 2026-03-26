@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L8",
   "id": "d0896151afd5cf6def95efccf5164c63",
   "gates": {
    "919ea3a502d109211124a6df23fb0489": {
@@ -31,7 +31,7 @@
     "y": 580.5,
     "type": "Output",
     "inputs": [
-     false
+     0
     ],
     "outputs": [],
     "gate": "Output",
@@ -42,11 +42,11 @@
     "y": 688.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "NAND",
     "id": "7a1e9822a848f1c367db242f79c236c5"
@@ -59,7 +59,7 @@
      false
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "NOT",
     "id": "d8b385c72a8822f348c4fc92daf94821"
@@ -69,11 +69,11 @@
     "y": 580.5,
     "type": "Gate",
     "inputs": [
-     false,
-     true
+     0,
+     1
     ],
     "outputs": [
-     false
+     0
     ],
     "gate": "AND",
     "id": "10d7d927c52a195528483d787b0db6e5"
@@ -83,11 +83,11 @@
     "y": 445.5,
     "type": "Gate",
     "inputs": [
-     true,
-     true
+     1,
+     1
     ],
     "outputs": [
-     true
+     1
     ],
     "gate": "OR",
     "id": "3761297ec4d7810455b76699b7fd1582"
@@ -657,20 +657,24 @@
     "current_branch_count": 1
    }
   },
-  "version": 160,
+  "version": 208,
   "requirements": []
  },
+ "requirements": [],
  "level": {
   "time": 180,
   "id": "level_d0896151afd5cf6def95efccf5164c63",
   "number": 8,
   "name": "A XOR B",
   "description": "Basic level to learn the basis of gates.",
-  "hints": ["Hello World"],
-  "version": 160,
+  "hints": [
+   "Hello World"
+  ],
+  "version": 208,
   "start": 1,
   "truth": {},
   "color": 0,
-  "category": 1
+  "category": 2,
+  "is_custom": false
  }
 }

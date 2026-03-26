@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L28",
   "id": "1c18b01f2f3dbccd9d19082f177edd73",
   "gates": {
    "7b554b87f9e8fc116bb61db5375c58be": {
@@ -3229,7 +3229,7 @@
  "level": {
   "time": 330,
   "id": "level_1c18b01f2f3dbccd9d19082f177edd73",
-  "number": 28,
+  "number": 22,
   "name": "8 Bits Adder",
   "description": "Add two 8-bit inputs using breaker, maker, and other gates. Output is SUM.",
   "hints": [],
@@ -3237,7 +3237,7 @@
   "start": 1,
   "truth": {},
   "color": 2,
-  "category": 8,
+  "category": 5,
   "is_custom": true
  }
 }

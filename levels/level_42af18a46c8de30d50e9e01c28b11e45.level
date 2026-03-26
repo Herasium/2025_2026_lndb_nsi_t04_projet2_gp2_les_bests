@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L20",
   "id": "42af18a46c8de30d50e9e01c28b11e45",
   "gates": {
    "a7eec47e5aa2f6edbadc061905e08f1c": {
@@ -133,8 +133,8 @@
     "y": 634.5,
     "type": "Gate",
     "inputs": [
-     false,
-     true
+     0,
+     1
     ],
     "outputs": [
      1
@@ -148,7 +148,7 @@
     "type": "Gate",
     "inputs": [
      1,
-     true
+     1
     ],
     "outputs": [
      0
@@ -161,8 +161,8 @@
     "y": 796.5,
     "type": "Gate",
     "inputs": [
-     false,
-     true
+     0,
+     1
     ],
     "outputs": [
      0
@@ -189,7 +189,7 @@
     "y": 445.5,
     "type": "Gate",
     "inputs": [
-     true,
+     1,
      1
     ],
     "outputs": [
@@ -1236,7 +1236,7 @@
  "level": {
   "time": 300,
   "id": "level_42af18a46c8de30d50e9e01c28b11e45",
-  "number": 20,
+  "number": 14,
   "name": "Full Adder",
   "description": "Use any unlocked gates to add A, B, and Cin. Outputs are SUM and CARRY.",
   "hints": [],
@@ -1244,7 +1244,7 @@
   "start": 1,
   "truth": {},
   "color": 2,
-  "category": 5,
+  "category": 4,
   "is_custom": true
  }
 }
