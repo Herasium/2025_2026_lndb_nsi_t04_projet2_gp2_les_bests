@@ -8,4 +8,6 @@ Documentation for the project.
    :caption: Contents:
 
    presentation
+   install
+   usage
    api

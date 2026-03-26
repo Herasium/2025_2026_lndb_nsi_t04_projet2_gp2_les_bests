@@ -1,5 +1,5 @@
-Project Overview
-================
+LogicBox Overview
+=================
 
 Overview
 --------

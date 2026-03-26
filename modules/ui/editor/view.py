@@ -590,6 +590,7 @@ class EditorView(arcade.View):
                         mouse.cursor[1] - g.y,
                     )
                     self.moving_gate = g
+                    self.moving_gate.moving = True
                     return
 
         if self.selected_follower is None:
@@ -598,6 +599,7 @@ class EditorView(arcade.View):
                 if hovered in gate_types:
                     self.selected_follower = gate_types[hovered](random_id())
                     self.selected_follower.camera = self.camera
+                    self.selected_follower.moving = True
                     self.selected_follower.x = (
                         mouse.cursor[0]
                         - data.UI_EDITOR_GRID_SIZE / 2
@@ -614,6 +616,7 @@ class EditorView(arcade.View):
                         random_id(), data.loaded_chips[hovered]
                     )
                     self.selected_follower.camera = self.camera
+                    self.selected_follower.moving = True
                     self.selected_follower.x = (
                         mouse.cursor[0]
                         - data.UI_EDITOR_GRID_SIZE / 2
@@ -650,7 +653,10 @@ class EditorView(arcade.View):
                         - data.UI_EDITOR_GRID_SIZE / 2
                         - self.camera_position[1]
                     )
+                    self.selected_follower.moving = False
                     self.selected_follower = None
 
+        if self.moving_gate:
+            self.moving_gate.moving = False
         self.moving_gate = None
         self.moving_gate_offset = (0, 0)

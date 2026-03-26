@@ -1,5 +1,6 @@
 import arcade
 from typing import List, Dict, Tuple, Any, Union
+import math
 
 from modules.data.node import Node
 from modules.ui.toolbox.hitbox import HitBox
@@ -36,7 +37,7 @@ class Gate(Node):
         self.inputs_sizes: List[int] = []
         self.outputs_sizes: List[int] = []
 
-        self._name: str = "Default Gate"
+        self._name: str = "DG"
         self.type: str = "Gate"
         self.gate_type: str = "Default"
         self.texts: Dict[str, Any] = {}
@@ -56,8 +57,9 @@ class Gate(Node):
         )
 
         self.tiles: Any = data.gate_tiles
-        self.draw_hitboxes: bool = False
+        self.draw_hitboxes: bool = True
         self.exceptional_size_offset: int = 0
+        self._moving = False
 
         self.calculate_display()
         self.gen_tile_pattern()
@@ -74,12 +76,18 @@ class Gate(Node):
             value: String identifier to apply to the gate.
         """
         self._name = value
-        if self._name == "NOT":
-            self.inputs = [0]
-        else:
-            self.inputs = [0, 0]
 
-        if hasattr(self, "grid_size"):
+        self.calculate_display()
+
+    @property
+    def moving(self) -> str:
+        return self._moving
+
+    @name.setter
+    def moving(self, value: str) -> None:
+        self._moving = value
+        self.hide_text = value
+        if self._moving == False:
             self.calculate_display()
 
     @property
@@ -132,10 +140,15 @@ class Gate(Node):
         """Calculates internal dimensions and refreshes input/output interaction hitboxes."""
         self.both: bool = len(self.inputs) > 0 and len(self.outputs) > 0
 
-        self.tile_width: int = (
-            2 + len(self.inputs) + len(self.outputs) + self.exceptional_size_offset
-        )
-        self.tile_width += int(self.both) * 1
+        pin_width_required = 2 + len(self.inputs) + len(self.outputs) + (1 if self.both else 0)
+        text_width_required = max(round(len(self._name) * 40/27),5)
+
+        if text_width_required > pin_width_required:
+            self.exceptional_size_offset = text_width_required - pin_width_required
+        else:
+            self.exceptional_size_offset = 0
+
+        self.tile_width = pin_width_required + self.exceptional_size_offset
 
         self.width: float = self.tile_width * data.UI_EDITOR_GRID_SIZE
         self.height: float = 4 * data.UI_EDITOR_GRID_SIZE
@@ -158,9 +171,10 @@ class Gate(Node):
 
         for i in range(len(self.inputs)):
             y = self.y + self._camera[1]
+            input_index = i + 1 
             x = (
                 self.x
-                + data.UI_EDITOR_GRID_SIZE * (i + 1 + self.exceptional_size_offset // 2)
+                + data.UI_EDITOR_GRID_SIZE * input_index
                 + self._camera[0]
             )
 
@@ -178,16 +192,10 @@ class Gate(Node):
 
         for i in range(len(self.outputs)):
             y = self.y + self._camera[1]
+            output_index = self.tile_width - len(self.outputs) - 1 + i
             x = (
                 self.x
-                + data.UI_EDITOR_GRID_SIZE
-                * (
-                    i
-                    + 1
-                    + int(self.both) * 1
-                    + len(self.inputs)
-                    + self.exceptional_size_offset // 2
-                )
+                + data.UI_EDITOR_GRID_SIZE * output_index
                 + self._camera[0]
             )
 
@@ -202,8 +210,8 @@ class Gate(Node):
                     height=data.UI_EDITOR_GRID_SIZE,
                 )
             )
-
-        self.update_text_position()
+        if not self._moving:
+            self.update_text_position()
 
     @property
     def camera(self) -> Tuple[float, float]:
@@ -231,34 +239,55 @@ class Gate(Node):
         """Generates the grid-based tile indices array based on node configuration."""
         gate_tile_pattern: List[int] = []
 
+        sum_io = len(self.inputs) + len(self.outputs) + 2
+
         gate_tile_pattern.append(7)
         for _ in range(len(self.inputs)):
             gate_tile_pattern.append(6)
-        if self.both:
+        for i in range(self.tile_width - sum_io):
             gate_tile_pattern.append(0)
         for _ in range(len(self.outputs)):
             gate_tile_pattern.append(6)
         gate_tile_pattern.append(8)
 
-        gate_tile_pattern.append(26)
+        if len(self.inputs) > 0:
+            gate_tile_pattern.append(26)
+        else:
+            gate_tile_pattern.append(30)
         for i in range(len(self.inputs)):
             if self.inputs_sizes[i] == 1:
                 gate_tile_pattern.append(15 if self.inputs[i] else 21)
             else:
                 gate_tile_pattern.append(22)
-        if self.both:
-            gate_tile_pattern.append(1)
+
+        for i in range(self.tile_width - sum_io):
+            if i == 0 and i == self.tile_width - sum_io -1 and self.both:
+                gate_tile_pattern.append(1)
+            elif i == 0 and len(self.inputs)>0:
+                gate_tile_pattern.append(33)
+            elif i == self.tile_width - sum_io - 1 and len(self.outputs)>0:
+                gate_tile_pattern.append(34)
+            else:
+                gate_tile_pattern.append(13)
+
+
         for i in range(len(self.outputs)):
             if self.outputs_sizes[i] == 1:
                 gate_tile_pattern.append(15 if self.outputs[i] else 21)
             else:
                 gate_tile_pattern.append(22)
-        gate_tile_pattern.append(19)
+
+        if len(self.outputs) > 0:
+            gate_tile_pattern.append(19)
+        else:
+            gate_tile_pattern.append(32)
+
+
 
         gate_tile_pattern.append(31)
         for _ in range(self.tile_width - 2):
             gate_tile_pattern.append(13)
-        gate_tile_pattern.append(25)
+        gate_tile_pattern.append(25) 
 
         gate_tile_pattern.append(28)
         for _ in range(self.tile_width - 2):
