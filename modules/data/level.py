@@ -54,6 +54,8 @@ class Level:
         self.is_complex: bool = False
         self.truth_test_values: List[List[int]] = []
         self.compare_fail = {}
+        self.prepared_tt = []
+        self.is_prepared_tt = False
         self.engine: Engine = Engine()
 
     def play_mode(self) -> None:
@@ -385,7 +387,10 @@ class Level:
         self.chip.name = f"L{self.number}"
         self.chip.private = True
 
-
+        if data["level"]["version"] > 250:
+            self.prepared_tt = data["level"]["prepared_tt"]
+            self.is_prepared_tt = data["level"]["is_prepared_tt"]
+ 
         if data["level"]["version"] > 200:
             self.is_custom = data["level"]["is_custom"]
 

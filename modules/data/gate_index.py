@@ -39,6 +39,7 @@ from modules.data.nodes.eight.mux import Mux as Mux_8
 
 from modules.data.nodes.mix.eight_breaker import Breaker as Breaker_8
 from modules.data.nodes.mix.eight_maker import Maker as Maker_8
+from modules.data.nodes.mix.register import Register
 
 gate_types: Dict[str, Type[Any]] = {
     "AND": And,
@@ -72,6 +73,7 @@ gate_types: Dict[str, Type[Any]] = {
     "TOR": TOr,
     "TAND": TAnd,
     "8MUX": Mux_8,
+    "8REGISTER": Register,
 }
 
 gate_types_1: Dict[str, Type[Any]] = {
@@ -109,4 +111,8 @@ gate_types_8: Dict[str, Type[Any]] = {
     "8MUX": Mux_8,
 }
 
-gate_types_mix: Dict[str, Type[Any]] = {"8BREAK": Breaker_8, "8MAKER": Maker_8}
+gate_types_mix: Dict[str, Type[Any]] = {
+    "8BREAK": Breaker_8, 
+    "8MAKER": Maker_8,
+    "8REGISTER": Register
+}

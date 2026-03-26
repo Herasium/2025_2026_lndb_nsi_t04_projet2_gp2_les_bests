@@ -28,7 +28,6 @@ class Complex(Gate):
         self.type: str = "Complex"
         self.gate_type: str = "COMP"
 
-        self.draw_hitboxes: bool = False
         self.hide_text: bool = False
 
         self.inputs: List[int] = []

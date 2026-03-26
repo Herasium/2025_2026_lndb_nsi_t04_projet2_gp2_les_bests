@@ -317,6 +317,24 @@ def gate_8mux(inputs: list[int]) -> list[int]:
     
     return [data_bits[selector]]
 
+def gate_register(inputs: list[int],gate: Gate) -> list[int]:
+    """
+    Stores a single 8 bit value
+
+    Args:
+        inputs: Input Value (8), Save, Load
+
+    Returns:
+        0 or the Stored value
+    """
+
+    if inputs[1] == True:
+        gate.current_value = inputs[0]
+
+    if inputs[2] == True:
+        return [gate.current_value]
+    return [0]
+
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
     "OR": gate_or,
@@ -342,6 +360,7 @@ LOGIC_MAP: dict[str, callable] = {
     "8SUB": gate_8subtractor,
     "8XOR": gate_8xor,
     "8MUX": gate_8mux,
+    "8REGISTER": gate_register,
 }
 
 
@@ -362,7 +381,7 @@ class Engine:
             Output values as a list.
         """
         if gate_type in LOGIC_MAP:
-            if gate_type == "DLY":
+            if gate_type in ["DLY","8REGISTER"]:
                 return LOGIC_MAP[gate_type](inputs, gate)
             return LOGIC_MAP[gate_type](inputs)
         return [False]
@@ -576,7 +595,7 @@ class Engine:
 
             # Force resolution of stalled gates
             if not processed_this_frame and unprocessed:
-                random_id = random.choice(list(unprocessed))
+                random_id = list(unprocessed)[0]
                 gate = chip.gates[random_id]
 
                 if gate.type in ["Gate", "Complex"]:
