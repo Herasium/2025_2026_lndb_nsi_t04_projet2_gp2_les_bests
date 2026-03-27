@@ -2395,7 +2395,7 @@
   "id": "level_5791e72921e460449f671bed7d6ff00d",
   "number": 20,
   "name": "8 Bits NAND",
-  "description": "Combine 8 inputs using breaker, maker, and gates. Output is false only if all bits are true.",
+  "description": "Combine 8 input bits. Output is false only if all bits are true.",
   "hints": [],
   "version": 208,
   "start": 1,
