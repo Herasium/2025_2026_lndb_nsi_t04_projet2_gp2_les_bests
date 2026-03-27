@@ -1,7 +1,7 @@
 {
  "chip": {
   "type": "Chip",
-  "name": "Default Chip",
+  "name": "L41",
   "id": "4e0db4794515e4b836be3ce4ed06e00c",
   "gates": {
    "fdecf50c4f3f3b078fd958ddc591d811": {
@@ -10,7 +10,7 @@
     "type": "Input",
     "inputs": [],
     "outputs": [
-     0
+     179
     ],
     "gate": "8Input",
     "id": "fdecf50c4f3f3b078fd958ddc591d811"
@@ -20,17 +20,17 @@
     "y": 580.5,
     "type": "Complex",
     "inputs": [
-     0
+     179
     ],
     "outputs": [
+     1,
+     0,
+     1,
+     1,
      0,
      0,
-     0,
-     0,
-     0,
-     0,
-     0,
-     0
+     1,
+     1
     ],
     "gate": "8BREAK",
     "id": "2372f94889d70750990b0d02ced6698a"
@@ -40,17 +40,17 @@
     "y": 904.5,
     "type": "Complex",
     "inputs": [
+     0,
+     1,
+     0,
+     0,
      1,
      1,
-     1,
-     1,
-     1,
-     1,
-     1,
-     1
+     0,
+     0
     ],
     "outputs": [
-     255
+     76
     ],
     "gate": "8MAKER",
     "id": "8d2d5c8042257d7eaa4cd977de14a1e4"
@@ -60,7 +60,7 @@
     "y": 580.5,
     "type": "Output",
     "inputs": [
-     255
+     76
     ],
     "outputs": [],
     "gate": "8Output",
@@ -71,11 +71,11 @@
     "y": 634.5,
     "type": "Gate",
     "inputs": [
-     0,
-     0
+     1,
+     1
     ],
     "outputs": [
-     1
+     0
     ],
     "gate": "NAND",
     "id": "43f557afec4485fba1837b5a0d87e109"
@@ -85,11 +85,11 @@
     "y": 769.5,
     "type": "Gate",
     "inputs": [
-     0,
-     0
+     1,
+     1
     ],
     "outputs": [
-     1
+     0
     ],
     "gate": "NAND",
     "id": "c7cf9958485742e2aae8b5a3e633e296"
@@ -127,11 +127,11 @@
     "y": 364.5,
     "type": "Gate",
     "inputs": [
-     0,
-     0
+     1,
+     1
     ],
     "outputs": [
-     1
+     0
     ],
     "gate": "NAND",
     "id": "9caaa90f1cc18433f133267516b1fa1e"
@@ -155,11 +155,11 @@
     "y": 634.5,
     "type": "Gate",
     "inputs": [
-     0,
-     0
+     1,
+     1
     ],
     "outputs": [
-     1
+     0
     ],
     "gate": "NAND",
     "id": "7b9364de6869cfff15db6b9cfa80091e"
@@ -169,11 +169,11 @@
     "y": 769.5,
     "type": "Gate",
     "inputs": [
-     0,
-     0
+     1,
+     1
     ],
     "outputs": [
-     1
+     0
     ],
     "gate": "NAND",
     "id": "375e59d27f11ede4275252ca3b45afd6"
