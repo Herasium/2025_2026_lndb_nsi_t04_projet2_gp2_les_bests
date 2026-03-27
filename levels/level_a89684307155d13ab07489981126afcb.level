@@ -2334,7 +2334,7 @@
   "number": 18,
   "name": "8 Bits AND",
   "description": "Combine 8 input bits using breaker, maker, and other gates. Output is true only if all bits are true.",
-  "hints": [],
+  "hints": ["Use the Breaker and Maker to divide the byte in 8 bits."],
   "version": 208,
   "start": 1,
   "truth": {},

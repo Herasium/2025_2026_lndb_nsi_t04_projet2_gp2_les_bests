@@ -2631,7 +2631,7 @@
   "id": "level_37db9cd93b1fc6c6551097fffd3a8eb9",
   "number": 26,
   "name": "SWC",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Output the input byte only if the control bit is true, otherwise output 0.",
   "hints": [],
   "version": 208,
   "start": 1,

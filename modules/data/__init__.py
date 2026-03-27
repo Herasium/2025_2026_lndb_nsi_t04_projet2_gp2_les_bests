@@ -156,9 +156,7 @@ class Data:
             "Some NANDic gates",
             "Triple NANDuts gates",
             "NANDics of arithmetic",
-            "The more the NANDier",
-            "Divide and NANDquer",
-            "The NEND"
+            "The more the NANDier"
         ]
 
         self.current_lang: str = "en"
