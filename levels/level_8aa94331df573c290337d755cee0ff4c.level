@@ -299,7 +299,7 @@
   "number": 2,
   "name": "A AND B",
   "description": "Use an AND gate to combine A and B. Output is true only if both are true.",
-  "hints": [],
+  "hints": ["Output is false if at least one input is false", "Both A and B must be true for the output to be true"],
   "version": 160,
   "start": 1,
   "truth": {},

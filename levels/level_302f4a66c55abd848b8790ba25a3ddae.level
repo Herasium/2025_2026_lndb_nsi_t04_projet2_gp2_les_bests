@@ -611,7 +611,7 @@
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 0,
+  "color": 1,
   "category": 8,
   "is_custom": false
  }

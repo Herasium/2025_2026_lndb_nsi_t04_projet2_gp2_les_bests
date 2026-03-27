@@ -375,7 +375,7 @@
   "number": 6,
   "name": "A AND B",
   "description": "Use NAND and NOT gates to get A AND B.",
-  "hints": [],
+  "hints": ["A AND B can be built by inverting A NAND B", "First compute A NAND B, then invert the result"],
   "version": 208,
   "start": 1,
   "truth": {},

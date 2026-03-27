@@ -2154,11 +2154,11 @@
   "number": 38,
   "name": "Full Adder v2",
   "description": "Build a full adder using only NAND gates. Inputs: A, B, Carry-In. Outputs: SUM and CARRY-OUT.",
-  "hints": [],
+  "hints": ["SUM is A XOR B XOR Carry-In, CARRY-OUT is true when at least two inputs are true"],
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 3,
+  "color": 4,
   "category": 10,
   "is_custom": false
  }

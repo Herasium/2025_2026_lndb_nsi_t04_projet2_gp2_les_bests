@@ -608,11 +608,11 @@
   "number": 13,
   "name": "Half Adder",
   "description": "Use any unlocked gates to add A and B. Output gives SUM and CARRY.",
-  "hints": [],
+  "hints": ["SUM is A XOR B", "CARRY is A AND B"],
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 0,
+  "color": 1,
   "category": 4,
   "is_custom": false
  }

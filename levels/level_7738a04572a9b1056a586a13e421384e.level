@@ -17918,7 +17918,7 @@
   "number": 46,
   "name": "8 Bits Adder v2",
     "description": "Build an 8-bit adder using only NAND gates. Inputs: two 8-bit numbers A and B. Outputs: 8-bit SUM.",
-  "hints": [],
+  "hints": ["Each bit addition requires a full adder chain", "Carry must be propagated from the least significant bit to the most significant bit"],
   "version": 208,
   "start": 1,
   "truth": {},

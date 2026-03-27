@@ -464,7 +464,7 @@
   "number": 7,
   "name": "A OR B",
   "description": "Use previous gates (NAND, NOT, AND) to build A OR B. Output is true if either input is true.",
-  "hints": [],
+  "hints": ["A OR B is false only when both inputs are false", "A OR B can be built using De Morgan: NOT(NOT A AND NOT B)"],
   "version": 208,
   "start": 1,
   "truth": {},
