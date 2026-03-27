@@ -1,1 +1,1 @@
-"""Level player, to play levels."""
+"""Joueur de niveau, pour jouer aux niveaux."""

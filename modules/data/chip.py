@@ -63,9 +63,11 @@ class Chip:
 
         self.requirements = []
 
+        # Sauvegarde de tous les chemins
         for id in self.paths:
             paths[id] = self.paths[id].save()
 
+        # Sauvegarde de toutes les portes et gestion des dépendances
         for id in self.gates:
             gates[id] = self.gates[id].save()
             if self.gates[id].type == "Custom":
@@ -74,6 +76,7 @@ class Chip:
                     self.gates[id].base_chip_id
                 ].requirements
 
+        # Suppression des doublons dans les prérequis
         self.requirements = list(set(self.requirements))
 
         result: Dict[str, Any] = {
@@ -93,6 +96,7 @@ class Chip:
         if dojson:
             return dump
 
+        # Gestion de l'écriture sur le système de fichiers
         path: str = data.current_path
         os.makedirs(os.path.join(path, "saves"), exist_ok=True)
         file_path: str = os.path.join(os.path.join(path, "saves"), f"{self.id}.chip")
@@ -105,7 +109,7 @@ class Chip:
 
     @profile
     def partial_load(self, data: Dict[str, Any]) -> None:
-        """Charge les métadonnées de base et met en tampon les données structurelles pour l'initialisation finale.
+        """Charge les métadonnées de base et met en mémoire tampon les données structurelles.
 
         Args:
             data: Dictionnaire d'état brut.
@@ -131,6 +135,7 @@ class Chip:
 
         data_map: Dict[str, Any] = self.temp_data
 
+        # Instanciation des portes selon leur type
         for key in data_map["gates"]:
             gate = data_map["gates"][key]
             if gate["type"] in ["Gate", "Complex"]:
@@ -143,6 +148,7 @@ class Chip:
             new.load(gate)
             self.gates[key] = new
 
+        # Instanciation des chemins réseaux
         for key in data_map["paths"]:
             new_path = Path("default_id")
             new_path.load(data_map["paths"][key])
@@ -163,7 +169,7 @@ class Chip:
         """Récupère les identifiants pour toutes les portes de type entrée (input).
 
         Returns:
-            Liste des IDs de portes.
+            Liste des IDs de portes d'entrée.
         """
         result: List[str] = []
         for i in self.gates:
@@ -175,7 +181,7 @@ class Chip:
         """Récupère les identifiants pour toutes les portes de type sortie (output).
 
         Returns:
-            Liste des IDs de portes.
+            Liste des IDs de portes de sortie.
         """
         result: List[str] = []
         for i in self.gates:
@@ -187,7 +193,7 @@ class Chip:
         """Récupère les identifiants pour tous les composants de type porte standard.
 
         Returns:
-            Liste des IDs de portes.
+            Liste des IDs de portes standards.
         """
         result: List[str] = []
         for i in self.gates:

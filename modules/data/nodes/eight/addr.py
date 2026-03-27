@@ -1,26 +1,26 @@
-"""Provides 8-bit logic gate implementations for circuit simulation."""
+"""Fournit des implémentations de portes logiques 8 bits pour la simulation de circuits."""
 
 from typing import List, Union
 from modules.data.complex import Complex
 
 
 class Adder(Complex):
-    """Represents an 8-bit Full Adder logic gate component.
+    """Représente un composant de porte logique de type additionneur complet (Full Adder) 8 bits.
 
-    Attributes:
-        name: The display name of the gate.
-        gate_type: The identifier for the logic gate category.
-        inputs: Pin offsets for input signals.
-        outputs: Pin offsets for output signals.
-        inputs_sizes: Bit width of input pins.
-        outputs_sizes: Bit width of output pins.
+    Attributs:
+        name: Le nom d'affichage de la porte.
+        gate_type: L'identifiant de la catégorie de la porte logique.
+        inputs: Décalages (offsets) des broches pour les signaux d'entrée.
+        outputs: Décalages (offsets) des broches pour les signaux de sortie.
+        inputs_sizes: Largeur en bits des broches d'entrée.
+        outputs_sizes: Largeur en bits des broches de sortie.
     """
 
     def __init__(self, id: Union[int, str]) -> None:
-        """Initializes the Adder gate with default binary input/output states.
+        """Initialise la porte d'addition avec les états d'entrée/sortie binaires par défaut.
 
         Args:
-            id: Unique identifier used for tracking the gate instance.
+            id: Identifiant unique utilisé pour le suivi de l'instance de la porte.
         """
         super().__init__(id)
 

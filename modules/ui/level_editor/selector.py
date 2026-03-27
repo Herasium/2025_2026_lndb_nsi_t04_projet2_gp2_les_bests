@@ -13,19 +13,19 @@ from modules.ui.editor.view import EditorView
 from modules.ui.level_player.selector import LevelPlayerSelector
 
 """
-Provides the LevelEditorSelector class for managing level selection and creation
-workflows within the arcade application.
+Fournit la classe LevelEditorSelector pour la gestion des flux de sélection et de création
+de niveaux au sein de l'application arcade.
 """
 
 
 class LevelEditorSelector(arcade.View):
     """
-    Manages the UI view for browsing existing levels or creating new ones.
+    Gère la vue de l'interface utilisateur pour parcourir les niveaux existants ou en créer de nouveaux.
     """
 
     def __init__(self) -> None:
         """
-        Initializes the view with default background and container structures.
+        Initialise la vue avec l'arrière-plan par défaut et les structures de conteneurs.
         """
         super().__init__()
 
@@ -37,7 +37,7 @@ class LevelEditorSelector(arcade.View):
 
     def setup(self) -> None:
         """
-        Populates the UI labels and initializes interaction objects for levels.
+        Remplit les étiquettes de l'interface utilisateur et initialise les objets d'interaction pour les niveaux.
         """
         debug_list: List[str] = [
             "Level Editor Selector",
@@ -66,13 +66,13 @@ class LevelEditorSelector(arcade.View):
 
     def reset(self) -> None:
         """
-        Resets the current view state.
+        Réinitialise l'état actuel de la vue.
         """
         pass
 
     def on_draw(self) -> None:
         """
-        Renders all UI text elements and their associated hitboxes.
+        Rendu de tous les éléments de texte de l'interface utilisateur et de leurs zones de collision (hitboxes) associées.
         """
         self.clear()
 
@@ -82,31 +82,31 @@ class LevelEditorSelector(arcade.View):
 
     def on_update(self, delta_time: float) -> None:
         """
-        Updates logic state per frame.
+        Met à jour la logique d'état à chaque image.
 
         Args:
-            delta_time: Time elapsed since the previous update.
+            delta_time: Temps écoulé depuis la mise à jour précédente.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Handles keyboard input events.
+        Gère les événements d'entrée au clavier.
 
         Args:
-            key: Integer identifier of the pressed key.
-            key_modifiers: Bitmask of modifier keys currently held.
+            key: Identifiant entier de la touche pressée.
+            key_modifiers: Masque de bits des touches de modification actuellement maintenues.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
-        Handles key release events.
+        Gère les événements de relâchement de touches.
 
         Args:
-            key: Integer identifier of the released key.
-            key_modifiers: Bitmask of modifier keys currently held.
+            key: Identifiant entier de la touche relâchée.
+            key_modifiers: Masque de bits des touches de modification actuellement maintenues.
         """
         pass
 
@@ -114,13 +114,13 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
         """
-        Updates the global mouse tracking state.
+        Met à jour l'état global du suivi de la souris.
 
         Args:
-            x: Current horizontal mouse position.
-            y: Current vertical mouse position.
-            delta_x: Change in x position.
-            delta_y: Change in y position.
+            x: Position horizontale actuelle de la souris.
+            y: Position verticale actuelle de la souris.
+            delta_x: Changement de position en x.
+            delta_y: Changement de position en y.
         """
         mouse.position = (x, y)
 
@@ -128,13 +128,13 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Triggers UI navigation based on interaction with text element hitboxes.
+        Déclenche la navigation de l'interface en fonction de l'interaction avec les zones de collision des éléments de texte.
 
         Args:
-            x: Current horizontal mouse position.
-            y: Current vertical mouse position.
-            button: Identifier of the pressed mouse button.
-            key_modifiers: Bitmask of modifier keys currently held.
+            x: Position horizontale actuelle de la souris.
+            y: Position verticale actuelle de la souris.
+            button: Identifiant du bouton de la souris pressé.
+            key_modifiers: Masque de bits des touches de modification actuellement maintenues.
         """
         for index in range(len(self.texts)):
             text = self.texts[index]
@@ -155,19 +155,19 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Handles mouse release events.
+        Gère les événements de relâchement du bouton de la souris.
 
         Args:
-            x: Current horizontal mouse position.
-            y: Current vertical mouse position.
-            button: Identifier of the released mouse button.
-            key_modifiers: Bitmask of modifier keys currently held.
+            x: Position horizontale actuelle de la souris.
+            y: Position verticale actuelle de la souris.
+            button: Identifiant du bouton de la souris relâché.
+            key_modifiers: Masque de bits des touches de modification actuellement maintenues.
         """
         pass
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Updates vertical camera offset and rebuilds layout."""
+        """Met à jour le décalage vertical de la caméra et reconstruit la mise en page."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
 

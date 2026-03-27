@@ -1,4 +1,4 @@
-"""Provides implementations for standard logic gate components."""
+"""Fournit des implémentations pour les composants de portes logiques standards."""
 
 from typing import List, Union
 
@@ -6,13 +6,13 @@ from modules.data.gate import Gate
 
 
 class Sub(Gate):
-    """Represents a standard Full Sub gate."""
+    """Représente une porte logique standard de type Soustracteur Complet (Full Sub)."""
 
     def __init__(self, id: Union[int, str]) -> None:
-        """Initializes the Sub gate with default binary input/output states.
+        """Initialise la porte Sub avec des états d'entrée/sortie binaires par défaut.
 
         Args:
-            id: Unique identifier used for tracking the gate instance.
+            id: Identifiant unique utilisé pour le suivi de l'instance de la porte.
         """
         super().__init__(id)
 

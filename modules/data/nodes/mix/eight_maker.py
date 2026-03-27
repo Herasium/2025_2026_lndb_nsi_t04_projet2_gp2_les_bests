@@ -1,17 +1,17 @@
-"""Provides the Maker gate implementation for 8-bit signal aggregation."""
+"""Fournit l'implémentation de la porte Maker pour l'agrégation de signaux 8 bits."""
 
 from typing import List, Any
 from modules.data.complex import Complex
 
 
 class Maker(Complex):
-    """Aggregates eight 1-bit signal inputs into a single 8-bit output."""
+    """Agrège huit entrées de signaux 1 bit en une seule sortie de 8 bits."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the Maker gate instance.
+        """Initialise l'instance de la porte Maker.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

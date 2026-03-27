@@ -2,17 +2,17 @@ from typing import Any
 
 from modules.data.gate import Gate
 
-"""Logic gate implementation for the OFF."""
+"""Implémentation de la porte logique pour l'état OFF."""
 
 
 class Off(Gate):
-    """Represents a logical OFF gate."""
+    """Représente une porte logique OFF."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the gate instance with required metadata and port configurations.
+        """Initialise l'instance de la porte avec les métadonnées requises et les configurations de ports.
 
         Args:
-            id: Unique identifier assigned to this gate instance.
+            id: Identifiant unique attribué à cette instance de porte.
         """
         super().__init__(id)
 

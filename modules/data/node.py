@@ -1,17 +1,17 @@
-"""Provides the base Node class for UI toolbox elements."""
+"""Fournit la classe de base Node pour les éléments de la boîte à outils de l'interface utilisateur."""
 
 from typing import Any
 from modules.ui.toolbox.entity import Entity
 
 
 class Node:
-    """Represents a structural element within the UI toolbox system."""
+    """Représente un élément structurel au sein du système de boîte à outils de l'interface utilisateur."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the node with a unique identifier and default state.
+        """Initialise le nœud avec un identifiant unique et un état par défaut.
 
         Args:
-            id: The unique identifier to be assigned to this node.
+            id: L'identifiant unique à assigner à ce nœud.
         """
         self.entity: Entity = Entity()
         self.type: str = "DefaultNode"
@@ -19,5 +19,5 @@ class Node:
         self._name: str = f"{self.type} ({self.id})"
 
     def draw(self) -> None:
-        """Renders the node to the UI."""
+        """Affiche le nœud dans l'interface utilisateur."""
         self.entity.draw()

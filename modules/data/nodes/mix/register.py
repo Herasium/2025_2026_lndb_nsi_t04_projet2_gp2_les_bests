@@ -2,17 +2,17 @@ from typing import Any, List
 
 from modules.data.complex import Complex
 
-"""Provides logic for the 8-bit register component."""
+"""Fournit la logique pour le composant registre 8 bits."""
 
 
 class Register(Complex):
-    """Represents an 8-bit register component for system data routing."""
+    """Représente un composant de registre 8 bits pour le routage des données du système."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the register instance.
+        """Initialise l'instance du registre.
 
         Args:
-            id: Unique identifier used for system component tracking.
+            id: Identifiant unique utilisé pour le suivi des composants du système.
         """
         super().__init__(id)
 

@@ -4,13 +4,13 @@ from modules.data.gate import Gate
 
 
 class Xor(Gate):
-    """Represents an XOR logic gate component."""
+    """Représente un composant de porte logique XOR."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the XOR gate with default pin configurations.
+        """Initialise la porte XOR avec les configurations de broches par défaut.
 
         Args:
-            id: The unique identifier for the gate instance.
+            id: L'identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

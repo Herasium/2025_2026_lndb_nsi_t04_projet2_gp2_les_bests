@@ -1,4 +1,4 @@
-"""Provides the Delay gate implementation for logic circuit simulations."""
+"""Fournit l'implémentation de la porte de retard (Delay) pour les simulations de circuits logiques."""
 
 from typing import Any, List
 
@@ -6,13 +6,13 @@ from modules.data.gate import Gate
 
 
 class Delay(Gate):
-    """Delay gate, hold the signal for 1 tick."""
+    """Porte de retard, maintient le signal pendant 1 cycle (tick)."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes a new Delay gate instance.
+        """Initialise une nouvelle instance de la porte Delay.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

@@ -1,4 +1,4 @@
-"""Provides the Pass gate implementation for logic circuit simulations."""
+"""Fournit l'implémentation de la porte Pass pour les simulations de circuits logiques."""
 
 from typing import Any, List
 
@@ -6,13 +6,13 @@ from modules.data.gate import Gate
 
 
 class Pass(Gate):
-    """Buffer component that propagates input signals without modification."""
+    """Composant tampon (buffer) qui propage les signaux d'entrée sans modification."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes a new Pass gate instance.
+        """Initialise une nouvelle instance de la porte Pass.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

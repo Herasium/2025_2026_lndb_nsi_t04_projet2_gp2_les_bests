@@ -4,13 +4,13 @@ from modules.data.gate import Gate
 
 
 class Or(Gate):
-    """Represents an OR logic gate component within the simulation."""
+    """Représente un composant de porte logique OU au sein de la simulation."""
 
     def __init__(self, id: str) -> None:
-        """Initializes the OR gate instance.
+        """Initialise l'instance de la porte OU.
 
         Args:
-            id: A unique identifier for the gate instance.
+            id: Un identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

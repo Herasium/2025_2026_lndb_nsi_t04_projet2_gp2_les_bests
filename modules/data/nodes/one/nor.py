@@ -2,17 +2,17 @@ from typing import List, Any
 
 from modules.data.gate import Gate
 
-"""Logic gate definitions for circuit simulation."""
+"""Définitions des portes logiques pour la simulation de circuits."""
 
 
 class Nor(Gate):
-    """Represents a NOR logic gate with two inputs and one output."""
+    """Représente une porte logique NON-OU (NOR) avec deux entrées et une sortie."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the NOR gate with default state and configuration.
+        """Initialise la porte NOR avec l'état et la configuration par défaut.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

@@ -1,4 +1,4 @@
-"""Provides the SWC gate implementation for logic circuit simulations."""
+"""Fournit l'implémentation de la porte SWC pour les simulations de circuits logiques."""
 
 from typing import Any, List
 
@@ -6,13 +6,13 @@ from modules.data.gate import Gate
 
 
 class Swc(Gate):
-    """Swc gate, provide a way to shut a gate output down, not propagating it futher."""
+    """Porte Swc, offrant un moyen d'interrompre la sortie d'une porte, empêchant sa propagation ultérieure."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes a new Swc gate instance.
+        """Initialise une nouvelle instance de la porte Swc.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

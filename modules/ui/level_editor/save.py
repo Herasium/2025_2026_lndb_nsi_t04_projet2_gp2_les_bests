@@ -1,4 +1,4 @@
-"""Provides the SaveFrame view for editing and saving level configuration data."""
+"""Fournit la vue SaveFrame pour l'édition et la sauvegarde des données de configuration de niveau."""
 
 import arcade
 from typing import Any, Dict, List
@@ -9,13 +9,13 @@ from modules.data import data
 
 
 class SaveFrame(arcade.View):
-    """Manages the UI layout and user interactions for editing level properties."""
+    """Gère la disposition de l'interface utilisateur et les interactions pour modifier les propriétés d'un niveau."""
 
     def __init__(self, level: Any) -> None:
-        """Initializes the SaveFrame instance.
+        """Initialise l'instance SaveFrame.
 
         Args:
-            level: The configuration object containing level data to be modified.
+            level: L'objet de configuration contenant les données de niveau à modifier.
         """
         super().__init__()
 
@@ -25,7 +25,7 @@ class SaveFrame(arcade.View):
         self.setup()
 
     def setup(self) -> None:
-        """Initializes and positions UI text elements based on current level data."""
+        """Initialise et positionne les éléments textuels de l'interface basés sur les données actuelles du niveau."""
         self.texts = []
         debug_list: List[str] = [
             "Level Saver",
@@ -64,56 +64,56 @@ class SaveFrame(arcade.View):
             self.texts[-1].align = ("left", "center")
 
     def reset(self) -> None:
-        """Resets the internal state of the view."""
+        """Réinitialise l'état interne de la vue."""
         pass
 
     def on_draw(self) -> None:
-        """Renders all configured UI text elements."""
+        """Affiche tous les éléments textuels configurés de l'interface utilisateur."""
         self.clear()
         for i in self.texts:
             i.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Handles periodic logic updates."""
+        """Gère les mises à jour logiques périodiques."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handles keyboard input events.
+        """Gère les événements de pression de touches du clavier.
 
         Args:
-            key: The identifier of the pressed key.
-            key_modifiers: Bitwise flags for modifier keys.
+            key: L'identifiant de la touche pressée.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Handles key release events."""
+        """Gère les événements de relâchement de touches."""
         pass
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Updates the global mouse tracking state.
+        """Met à jour l'état global du suivi de la souris.
 
         Args:
-            x: The current x-coordinate of the mouse.
-            y: The current y-coordinate of the mouse.
-            delta_x: The change in x-coordinate since the last frame.
-            delta_y: The change in y-coordinate since the last frame.
+            x: La coordonnée x actuelle de la souris.
+            y: La coordonnée y actuelle de la souris.
+            delta_x: La variation de la coordonnée x depuis la dernière image.
+            delta_y: La variation de la coordonnée y depuis la dernière image.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Processes mouse click interactions with UI elements.
+        """Traite les interactions de clic de souris avec les éléments de l'interface.
 
         Args:
-            x: The x-coordinate of the mouse click.
-            y: The y-coordinate of the mouse click.
-            button: The mouse button pressed.
-            key_modifiers: Bitwise flags for modifier keys.
+            x: La coordonnée x du clic de souris.
+            y: La coordonnée y du clic de souris.
+            button: Le bouton de la souris pressé.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
         if self.texts[1].touched:
             data.window.back()
@@ -151,14 +151,14 @@ class SaveFrame(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Handles mouse release events."""
+        """Gère les événements de relâchement du bouton de la souris."""
         pass
 
     def get_save_gate_counts(self) -> Dict[Any, int]:
-        """Calculates the frequency of gate types used in the current level.
+        """Calcule la fréquence des types de portes utilisés dans le niveau actuel.
 
         Returns:
-            A dictionary mapping specific gate types to their total occurrences.
+            Un dictionnaire associant les types de portes spécifiques à leur nombre total d'occurrences.
         """
         result: Dict[Any, int] = {}
         for i in self.level.chip.gates:

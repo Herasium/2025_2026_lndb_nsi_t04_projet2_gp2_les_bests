@@ -1,4 +1,4 @@
-"""Provides mouse tracking capabilities with grid-snapping and directional analysis."""
+"""Fournit des capacités de suivi de la souris avec alignement sur la grille et analyse directionnelle."""
 
 from typing import List, Tuple
 from arcade import Vec2
@@ -6,10 +6,10 @@ from modules.data import data
 
 
 class _Mouse:
-    """Manages mouse state, including raw position, grid-aligned coordinates, and movement vectors."""
+    """Gère l'état de la souris, incluant la position brute, les coordonnées alignées sur la grille et les vecteurs de mouvement."""
 
     def __init__(self) -> None:
-        """Initializes the mouse tracker with default state."""
+        """Initialise le traqueur de souris avec un état par défaut."""
         self._x: float = 0.0
         self._y: float = 0.0
         self._cursor: Vec2 = Vec2(0, 0)
@@ -24,14 +24,14 @@ class _Mouse:
         self._grid_size: int = data.UI_EDITOR_GRID_SIZE
 
     def _calculate_cursor(self) -> None:
-        """Updates the grid-snapped cursor position based on current raw coordinates."""
+        """Met à jour la position du curseur alignée sur la grille en fonction des coordonnées brutes actuelles."""
         self._cursor = Vec2(
             round(self._x / self._grid_size) * self._grid_size,
             round(self._y / self._grid_size) * self._grid_size,
         )
 
     def _calculate_direction(self) -> None:
-        """Analyzes recent position history to determine current movement direction."""
+        """Analyse l'historique récent des positions pour déterminer la direction actuelle du mouvement."""
         if len(self.history) > 4:
             self.history.pop(0)
             self.history.append(self.cursor)
@@ -63,18 +63,18 @@ class _Mouse:
 
     @property
     def position(self) -> Tuple[float, float]:
-        """Returns the raw mouse coordinates."""
+        """Retourne les coordonnées brutes de la souris."""
         return self._position
 
     @position.setter
     def position(self, value: Tuple[float, float]) -> Tuple[float, float]:
-        """Updates the raw mouse position and triggers dependent state calculations.
+        """Met à jour la position brute de la souris et déclenche les calculs d'état dépendants.
 
         Args:
-            value: The (x, y) coordinates.
+            value: Les coordonnées (x, y).
 
         Returns:
-            The updated position tuple.
+            Le tuple de position mis à jour.
         """
         self._position = value
         self._x = self._position[0]
@@ -85,30 +85,30 @@ class _Mouse:
 
     @property
     def x(self) -> float:
-        """Returns the current x coordinate."""
+        """Retourne la coordonnée x actuelle."""
         return self._x
 
     @property
     def y(self) -> float:
-        """Returns the current y coordinate."""
+        """Retourne la coordonnée y actuelle."""
         return self._y
 
     @property
     def cursor(self) -> Vec2:
-        """Returns the current grid-snapped cursor position."""
+        """Retourne la position actuelle du curseur alignée sur la grille."""
         return self._cursor
 
     @property
     def grid_size(self) -> int:
-        """Returns the active grid size."""
+        """Retourne la taille de grille active."""
         return self._grid_size
 
     @grid_size.setter
     def grid_size(self, value: int) -> None:
-        """Updates the grid size and adjusts the snapped cursor position.
+        """Met à jour la taille de la grille et ajuste la position alignée du curseur.
 
         Args:
-            value: The pixel size of the grid.
+            value: La taille de la grille en pixels.
         """
         self._grid_size = value
         self._calculate_cursor()

@@ -1,4 +1,4 @@
-"""Provides implementations for standard logic gate components."""
+"""Fournit les implémentations pour les composants de portes logiques standard."""
 
 from typing import List, Union
 
@@ -6,13 +6,13 @@ from modules.data.gate import Gate
 
 
 class TAnd(Gate):
-    """Represents a standard two-input AND logic gate."""
+    """Représente une porte logique ET standard à deux entrées."""
 
     def __init__(self, id: Union[int, str]) -> None:
-        """Initializes the AND gate with default binary input/output states.
+        """Initialise la porte ET avec les états d'entrée/sortie binaires par défaut.
 
         Args:
-            id: Unique identifier used for tracking the gate instance.
+            id: Identifiant unique utilisé pour le suivi de l'instance de la porte.
         """
         super().__init__(id)
 

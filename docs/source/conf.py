@@ -1,6 +1,6 @@
 # Fichier de configuration pour le générateur de documentation Sphinx.
 #
-# Pour la liste complète des valeurs de configuration intégrées, consultez la documentation :
+# Pour la liste complète des options de configuration, veuillez consulter la documentation :
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Informations sur le projet -----------------------------------------------------
@@ -10,6 +10,8 @@ project = 'LogicBox'
 copyright = '2026, Victor, Marine, Théodore, Timéo'
 author = 'Victor, Marine, Théodore, Timéo'
 release = '300'
+
+# -- Configuration générale ---------------------------------------------------
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -25,7 +27,7 @@ templates_path = ['_templates']
 # Ce motif affecte également html_static_path et html_extra_path.
 exclude_patterns = []
 
-# Le nom du style Pygments (coloration syntaxique) à utiliser.
+# Le style Pygments (coloration syntaxique) à utiliser.
 pygments_style = 'sphinx'
 
 # -- Options pour la sortie HTML -------------------------------------------------
@@ -40,7 +42,7 @@ html_theme = 'sphinx_rtd_theme'
 # ainsi un fichier nommé "default.css" écrasera le fichier "default.css" intégré.
 html_static_path = ['_static']
 
-# Ajoutez le répertoire source de votre projet au sys.path afin qu'autodoc puisse trouver vos modules.
+# Ajoutez le répertoire source de votre projet au sys.path afin qu'autodoc puisse localiser vos modules.
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../modules'))
@@ -49,9 +51,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Options pour autodoc -----------------------------------------------------
 
-# Extraire automatiquement les indices de type (type hints) lorsqu'ils sont spécifiés et les placer
-# dans les descriptions de la fonction ou méthode concernée.
+# Extraire automatiquement les annotations de type (type hints) lorsqu'elles sont spécifiées 
+# et les intégrer dans les descriptions des fonctions ou méthodes concernées.
 autodoc_typehints = 'description'
 
-# Extraire automatiquement les indices de type à partir des commentaires.
+# Définir le format d'extraction des annotations de type à partir des commentaires.
 autodoc_typehints_format = 'short'

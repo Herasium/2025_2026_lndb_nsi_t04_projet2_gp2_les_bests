@@ -8,10 +8,10 @@ from modules.ui.toolbox.text import Text
 
 
 class SettingView(arcade.View):
-    """Manages the settings menu interface, including UI layout and user interaction."""
+    """Gère l'interface du menu des paramètres, incluant la disposition de l'interface utilisateur et les interactions avec l'utilisateur."""
 
     def __init__(self) -> None:
-        """Initializes the view, configures UI component positioning, and sets visual assets."""
+        """Initialise la vue, configure le positionnement des composants de l'interface et définit les ressources visuelles."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.JET
@@ -182,11 +182,11 @@ class SettingView(arcade.View):
             index += 1
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Processes keyboard input.
+        """Traite les entrées clavier.
 
         Args:
-            key: The numeric code of the key pressed.
-            key_modifiers: Bitwise flags for held modifier keys.
+            key: Le code numérique de la touche pressée.
+            key_modifiers: Drapeaux binaires pour les touches de modification maintenues.
         """
         if key == 65293:
             if self.writing:
@@ -195,7 +195,7 @@ class SettingView(arcade.View):
         if key == data.keys.back:
             data.save()
             data.window.display(data.main)
-        if key == 65473:  # Emergency exit: F4
+        if key == 65473:  # Arrêt d'urgence : F4
             arcade.exit()
 
         if self.writing:
@@ -212,7 +212,7 @@ class SettingView(arcade.View):
             self.setup_texts()
 
     def on_draw(self) -> None:
-        """Renders the complete view stack."""
+        """Effectue le rendu de la pile complète des vues."""
         self.clear(arcade.color.BLACK)
 
         self.bg.draw()
@@ -230,20 +230,20 @@ class SettingView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Synchronizes global mouse state with current cursor position.
+        """Synchronise l'état global de la souris avec la position actuelle du curseur.
 
         Args:
-            x: Current horizontal cursor position.
-            y: Current vertical cursor position.
-            delta_x: Horizontal movement relative to last frame.
-            delta_y: Vertical movement relative to last frame.
+            x: Position horizontale actuelle du curseur.
+            y: Position verticale actuelle du curseur.
+            delta_x: Mouvement horizontal relatif à la dernière image.
+            delta_y: Mouvement vertical relatif à la dernière image.
         """
         mouse.position = (x, y)
 
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Updates vertical camera offset and rebuilds layout."""
+        """Met à jour le décalage vertical de la caméra et reconstruit la mise en page."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
         self.setup_texts()
@@ -251,13 +251,13 @@ class SettingView(arcade.View):
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Processes mouse click input to trigger navigation or action events.
+        """Traite les clics de souris pour déclencher la navigation ou des événements d'action.
 
         Args:
-            x: Horizontal cursor position at click.
-            y: Vertical cursor position at click.
-            button: The specific button triggered.
-            key_modifiers: Bitwise flags for held modifier keys.
+            x: Position horizontale du curseur au moment du clic.
+            y: Position verticale du curseur au moment du clic.
+            button: Le bouton spécifique actionné.
+            key_modifiers: Drapeaux binaires pour les touches de modification maintenues.
         """
         if self.back_button.touched:
             data.save()
