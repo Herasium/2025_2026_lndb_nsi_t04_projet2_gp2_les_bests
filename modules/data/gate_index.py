@@ -24,6 +24,7 @@ from modules.data.nodes.one.on import On
 from modules.data.nodes.one.off import Off
 from modules.data.nodes.one.tand import TAnd
 from modules.data.nodes.one.tor import TOr
+from modules.data.nodes.one.decoder import Decoder
 
 # Importations des composants 8-bits
 from modules.data.nodes.eight.gnot import Not as Not_8
@@ -78,6 +79,7 @@ gate_types: Dict[str, Type[Any]] = {
     "TAND": TAnd,
     "8MUX": Mux_8,
     "8REGISTER": Register,
+    "DECOD": Decoder
 }
 
 # Registre spécifique aux composants 1-bit
@@ -99,6 +101,7 @@ gate_types_1: Dict[str, Type[Any]] = {
     "OFF": Off,
     "TOR": TOr,
     "TAND": TAnd,
+    "DECOD": Decoder
 }
 
 # Registre spécifique aux composants 8-bits

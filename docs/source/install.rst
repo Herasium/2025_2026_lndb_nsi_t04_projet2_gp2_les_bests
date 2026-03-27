@@ -1,19 +1,19 @@
 Installation
 ============
 
-Requirements
-------------
+Prérequis
+---------
 - Python 3.x
 
-Install dependencies
--------------------
+Installer les dépendances
+------------------------
 
 .. code-block:: bash
 
    pip install -r requirements.txt
 
-Run the project
----------------
+Lancer le projet
+----------------
 
 .. code-block:: bash
 
