@@ -125,10 +125,10 @@ class Data:
         """Initialise les configurations par défaut de l'application et les registres de données."""
         self.WINDOW_WIDTH: int = 1920
         self.WINDOW_HEIGHT: int = 1080
-        self.WINDOW_FULLSCREEN: bool = False
+        self.WINDOW_FULLSCREEN: bool = True
         self.WINDOW_FRAMERATE: int = 60
         self.UI_EDITOR_GRID_SIZE: int = 27
-        self.VERSION: int = 208
+        self.VERSION: int = 300
         self.COLORS = COLORS
         self.IMAGE: ImageBuffer = ImageBuffer()
         self.LEVEL_BUTTONS: LevelButtonsBuffer = LevelButtonsBuffer()
