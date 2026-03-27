@@ -2672,7 +2672,7 @@
   "id": "level_ed9a859610b26a228f1b8de22d5fbe51",
   "number": 44,
   "name": "8 Bits NAND v2",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build an 8-bit NAND gate using only NAND gates.",
   "hints": [],
   "version": 208,
   "start": 1,

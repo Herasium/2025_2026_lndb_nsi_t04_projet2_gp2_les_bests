@@ -429,7 +429,7 @@
   "id": "level_5022ecde3a60d885a3b07029f63e96d8",
   "number": 33,
   "name": "Always ON v2",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build a circuit that is always ON (true) using only NAND gates, regardless of input.",
   "hints": [],
   "version": 208,
   "start": 1,

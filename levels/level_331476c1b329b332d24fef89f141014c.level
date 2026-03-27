@@ -2272,7 +2272,7 @@
   "id": "level_331476c1b329b332d24fef89f141014c",
   "number": 29,
   "name": "ALU",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Choose between multiple operations on A and B using control bits.",
   "hints": [],
   "version": 208,
   "start": 1,

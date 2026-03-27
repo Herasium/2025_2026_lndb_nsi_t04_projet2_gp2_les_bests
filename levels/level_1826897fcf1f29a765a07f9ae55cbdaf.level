@@ -7704,7 +7704,7 @@
   "id": "level_1826897fcf1f29a765a07f9ae55cbdaf",
   "number": 45,
   "name": "8 Bits XOR v2",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build 8-bit XOR using only NAND gates. Output is 8-bit, true where bits differ.",
   "hints": [],
   "version": 208,
   "start": 1,

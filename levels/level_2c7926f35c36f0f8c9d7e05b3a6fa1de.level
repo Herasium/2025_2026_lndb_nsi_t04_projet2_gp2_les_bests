@@ -1102,7 +1102,7 @@
   "id": "level_2c7926f35c36f0f8c9d7e05b3a6fa1de",
   "number": 37,
   "name": "Half Adder v2 ",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build a half adder using only NAND gates. Outputs SUM and CARRY from inputs A and B.",
   "hints": [],
   "version": 208,
   "start": 1,

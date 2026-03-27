@@ -298,7 +298,7 @@
   "id": "level_ef07316dda297d0ed8cecd71eb4a7dd8",
   "number": 24,
   "name": "1 Bit Decoder",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Decode a 1-bit input into two outputs, activating only one at a time.",
   "hints": [],
   "version": 208,
   "start": 1,

@@ -4685,7 +4685,7 @@
   "id": "level_375e7bb56f0368631ba146cfbbabb82e",
   "number": 25,
   "name": "3 Bits Decoder",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Decode a 3-bit input into 8 outputs, activating only one output at a time.",
   "hints": [],
   "version": 208,
   "start": 1,

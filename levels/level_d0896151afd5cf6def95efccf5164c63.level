@@ -666,10 +666,8 @@
   "id": "level_d0896151afd5cf6def95efccf5164c63",
   "number": 8,
   "name": "A XOR B",
-  "description": "Basic level to learn the basis of gates.",
-  "hints": [
-   "Hello World"
-  ],
+  "description": "Output is true if A and B are different.",
+  "hints": [],
   "version": 208,
   "start": 1,
   "truth": {},

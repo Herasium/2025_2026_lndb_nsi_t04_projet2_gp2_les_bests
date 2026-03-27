@@ -10501,7 +10501,7 @@
   "id": "level_e81a68d6bf255cc3d0c6d0d61a96a756",
   "number": 28,
   "name": "3 Bits MUX",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Select between 8 bytes using a 3-bit control input.",
   "hints": [],
   "version": 208,
   "start": 1,

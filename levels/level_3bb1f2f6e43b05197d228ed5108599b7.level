@@ -2909,7 +2909,7 @@
   "id": "level_3bb1f2f6e43b05197d228ed5108599b7",
   "number": 40,
   "name": "Full Substracter v2 ",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Build a full subtractor using only NAND gates. Inputs: A, B, Borrow-In. Outputs: DIFFERENCE and BORROW-OUT.",
   "hints": [],
   "version": 208,
   "start": 1,

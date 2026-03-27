@@ -661,7 +661,7 @@
   "id": "level_334e702113418a395bd92dfb06071c7a",
   "number": 27,
   "name": "1 Bit MUX",
-  "description": "Basic level to learn the basis of gates.",
+  "description": "Select between inputs A and B using a control bit. Output is A when control is 0, and B when control is 1.",
   "hints": [],
   "version": 208,
   "start": 1,
