@@ -1,1 +1,1 @@
-"""Level list ui, used when pressing "levels" on main menu."""
+"""Interface de la liste des niveaux, utilisée lors de l'appui sur "levels" dans le menu principal."""

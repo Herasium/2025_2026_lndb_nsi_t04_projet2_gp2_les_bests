@@ -2,26 +2,26 @@ from typing import Any
 
 from modules.data.complex import Complex
 
-"""Provides 8-bit logic gate implementations for circuit simulation."""
+"""Fournit des implémentations de portes logiques 8 bits pour la simulation de circuits."""
 
 
 class Nor(Complex):
-    """Represents an 8-bit Nor logic gate component.
+    """Représente un composant de porte logique NOR 8 bits.
 
-    Attributes:
-        name: The display name of the gate.
-        gate_type: The identifier for the logic gate category.
-        inputs: Pin offsets for input signals.
-        outputs: Pin offsets for output signals.
-        inputs_sizes: Bit width of input pins.
-        outputs_sizes: Bit width of output pins.
+    Attributs :
+        name : Le nom d'affichage de la porte.
+        gate_type : L'identifiant de la catégorie de porte logique.
+        inputs : Décalages des broches pour les signaux d'entrée.
+        outputs : Décalages des broches pour les signaux de sortie.
+        inputs_sizes : Largeur en bits des broches d'entrée.
+        outputs_sizes : Largeur en bits des broches de sortie.
     """
 
     def __init__(self, id: Any) -> None:
-        """Initializes the Nor gate instance.
+        """Initialise l'instance de la porte NOR.
 
-        Args:
-            id: A unique identifier for the component.
+        Args :
+            id : Un identifiant unique pour le composant.
         """
         super().__init__(id)
 

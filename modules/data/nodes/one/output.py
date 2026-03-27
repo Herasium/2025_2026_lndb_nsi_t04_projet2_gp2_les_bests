@@ -3,30 +3,30 @@ from typing import List, Any
 
 from modules.data.gate import Gate
 
-"""Provides the Output gate implementation for the logic circuit simulation."""
+"""Fournit l'implémentation de la porte de sortie (Output) pour la simulation de circuit logique."""
 
 
 class Output(Gate):
-    """Represents an output node in the circuit.
+    """Représente un nœud de sortie dans le circuit.
 
-    Attributes:
-        name: Internal identifier name for the gate.
-        type: General classification of the gate.
-        gate_type: Specific operational type.
-        inputs: List of current boolean input states.
-        outputs: List of connected output terminals.
-        inputs_sizes: Required dimensions for input ports.
-        outputs_sizes: Required dimensions for output ports.
-        exceptional_size_offset: Vertical offset for rendering logic.
-        gate_width: Horizontal span of the gate representation.
-        gate_tile_pattern: Flattened grid map for graphical rendering.
+    Attributs :
+        name : Nom d'identifiant interne pour la porte.
+        type : Classification générale de la porte.
+        gate_type : Type opérationnel spécifique.
+        inputs : Liste des états d'entrée booléens actuels.
+        outputs : Liste des terminaux de sortie connectés.
+        inputs_sizes : Dimensions requises pour les ports d'entrée.
+        outputs_sizes : Dimensions requises pour les ports de sortie.
+        exceptional_size_offset : Décalage vertical pour la logique de rendu.
+        gate_width : Envergure horizontale de la représentation de la porte.
+        gate_tile_pattern : Plan de grille aplati pour le rendu graphique.
     """
 
     def __init__(self, id: Any) -> None:
-        """Initializes the Output gate instance.
+        """Initialise l'instance de la porte de sortie.
 
-        Args:
-            id: Unique identifier for the gate instance.
+        Args :
+            id : Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 
@@ -43,4 +43,3 @@ class Output(Gate):
 
         self.gen_tile_pattern()
         self.calculate_display()
-

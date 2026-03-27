@@ -3,17 +3,17 @@ from typing import List, Union
 
 from modules.data.gate import Gate
 
-"""Clock gate implementation for circuit simulation."""
+"""Implémentation d'une porte d'horloge pour la simulation de circuits."""
 
 
 class Clock(Gate):
-    """Represents a clock signal generator within the simulation environment."""
+    """Représente un générateur de signal d'horloge au sein de l'environnement de simulation."""
 
     def __init__(self, id: Union[int, str]) -> None:
-        """Initializes the Clock component.
+        """Initialise le composant Clock.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 

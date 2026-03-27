@@ -1,13 +1,13 @@
-"""Provides localization classes for application UI strings."""
+"""Fournit des classes de localisation pour les chaînes de caractères de l'interface utilisateur de l'application."""
 
 from typing import Dict
 
 
 class English:
-    """Stores and retrieves English localization strings."""
+    """Stocke et récupère les chaînes de localisation en anglais."""
 
     def __init__(self) -> None:
-        """Initializes the tutorial string repository."""
+        """Initialise le référentiel des chaînes de caractères du tutoriel."""
         self.tutorial: Dict[str, str] = {
             "button_1": "-> How to play ?",
             "button_2": "-> Keyboard commands",
@@ -45,14 +45,14 @@ class English:
         }
 
     def get(self, menu: str, key: str) -> str:
-        """Retrieves a translation string by category and identifier.
+        """Récupère une chaîne de traduction par catégorie et identifiant.
 
         Args:
-            menu: The attribute name containing the dictionary to search.
-            key: The specific identifier for the desired string.
+            menu: Le nom de l'attribut contenant le dictionnaire de recherche.
+            key: L'identifiant spécifique de la chaîne souhaitée.
 
         Returns:
-            The corresponding string if found, otherwise an error message.
+            La chaîne correspondante si elle est trouvée, sinon un message d'erreur.
         """
         if menu in self.__dict__:
             if key in self.__dict__[menu]:
@@ -64,10 +64,10 @@ class English:
 
 
 class French:
-    """Stores and retrieves French localization strings."""
+    """Stocke et récupère les chaînes de localisation en français."""
 
     def __init__(self) -> None:
-        """Initializes the tutorial string repository."""
+        """Initialise le référentiel des chaînes de caractères du tutoriel."""
         self.tutorial: Dict[str, str] = {
             "button_1": "-> Comment jouer ?",
             "button_2": "-> Commandes clavier",
@@ -105,14 +105,14 @@ class French:
         }
 
     def get(self, menu: str, key: str) -> str:
-        """Retrieves a translation string by category and identifier.
+        """Récupère une chaîne de traduction par catégorie et identifiant.
 
         Args:
-            menu: The attribute name containing the dictionary to search.
-            key: The specific identifier for the desired string.
+            menu: Le nom de l'attribut contenant le dictionnaire de recherche.
+            key: L'identifiant spécifique de la chaîne souhaitée.
 
         Returns:
-            The corresponding string if found, otherwise an error message.
+            La chaîne correspondante si elle est trouvée, sinon un message d'erreur.
         """
         if menu in self.__dict__:
             if key in self.__dict__[menu]:

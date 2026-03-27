@@ -6,21 +6,21 @@ from modules.data import data
 from modules.ui.toolbox.text import Text
 
 """
-This module provides the Complex gate implementation for logic simulation.
-It handles multi-bit signal management and UI synchronization for gates.
+Ce module fournit l'implémentation de la porte complexe (Complex) pour la simulation logique.
+Il gère la gestion des signaux multi-bits et la synchronisation de l'interface utilisateur pour les portes.
 """
 
 
 class Complex(Gate):
     """
-    Manages a logic gate capable of processing multi-bit inputs and outputs,
-    including the rendering of dynamic UI labels for these signals.
+    Gère une porte logique capable de traiter des entrées et sorties multi-bits,
+    incluant le rendu des étiquettes dynamiques de l'interface utilisateur pour ces signaux.
     """
 
     def __init__(self, id: Union[int, str]) -> None:
         """
         Args:
-            id: Identifier used to reference this gate instance.
+            id: Identifiant utilisé pour référencer cette instance de porte.
         """
         super().__init__(id)
 
@@ -43,8 +43,8 @@ class Complex(Gate):
 
     def setup_texts(self) -> None:
         """
-        Initializes UI Text objects for any input or output pins defined with
-        a bit-width greater than one.
+        Initialise les objets Text de l'interface utilisateur pour toutes les broches d'entrée ou de sortie 
+        définies avec une largeur de bit supérieure à un.
         """
         self.texts = {}
 
@@ -78,7 +78,7 @@ class Complex(Gate):
 
     def update_text_readings(self) -> None:
         """
-        Synchronizes existing UI Text labels with the latest internal signal values.
+        Synchronise les étiquettes de texte existantes de l'interface utilisateur avec les dernières valeurs internes des signaux.
         """
         if len(self.texts.keys()) == 0:
             return
@@ -93,7 +93,7 @@ class Complex(Gate):
 
     def update_text_position(self) -> None:
         """
-        Updates UI Text coordinates to track movement of the gate hitboxes.
+        Met à jour les coordonnées du texte de l'interface utilisateur pour suivre le mouvement des zones de collision (hitboxes) de la porte.
         """
         self.hide_text = False
         if len(self.texts.keys()) == 0:
@@ -115,7 +115,7 @@ class Complex(Gate):
 
     def draw_tiles(self) -> None:
         """
-        Renders the gate texture and associated labels based on the current logic state.
+        Affiche la texture de la porte et les étiquettes associées en fonction de l'état logique actuel.
         """
         width: int = self.tile_width
         height: int = 4
@@ -133,7 +133,7 @@ class Complex(Gate):
 
         out.reverse()
         inp.reverse()
-        # Calculate texture state index by converting concatenated output/input binary values
+        # Calcule l'index d'état de la texture en convertissant les valeurs binaires concaténées des sorties/entrées
         current: int = int("".join(map(str, map(int, (out + inp)))), 2)
 
         tile_x: float = self.x + self._camera[0]

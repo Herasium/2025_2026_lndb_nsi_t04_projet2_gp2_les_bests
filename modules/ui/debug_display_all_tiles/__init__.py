@@ -1,1 +1,1 @@
-"""Debug view of all tilesets present in the project, used when making new ui."""
+"""Vue de débogage de l'ensemble des jeux de tuiles (tilesets) présents dans le projet, utilisée lors de la création de nouvelles interfaces utilisateur."""
