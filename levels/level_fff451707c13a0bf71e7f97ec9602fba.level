@@ -2152,7 +2152,7 @@
   "time": 360,
   "id": "level_fff451707c13a0bf71e7f97ec9602fba",
   "number": 38,
-  "name": "Default Level",
+  "name": "Full Adder v2",
   "description": "Basic level to learn the basis of gates.",
   "hints": [],
   "version": 208,
