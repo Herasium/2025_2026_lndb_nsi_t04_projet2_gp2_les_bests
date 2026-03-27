@@ -1,6 +1,6 @@
 """
-Ce module définit la classe LevelEditorView, qui fournit l'interface graphique
-principale pour la construction et la gestion des niveaux de circuits au sein de l'application.
+This module defines the LevelEditorView, which provides the primary graphical
+interface for constructing and managing circuit levels within the application.
 """
 
 import arcade
@@ -20,8 +20,8 @@ from modules.engine import Engine
 
 class LevelEditorView(arcade.View):
     """
-    Gère l'interface de l'éditeur de niveaux, en prenant en charge le placement des portes,
-    la création de chemins, le mouvement de la caméra et la logique d'interaction.
+    Manages the level editor interface, handling gate placement,
+    path creation, camera movement, and interaction logic.
     """
 
     def __init__(self, id: Optional[str] = None):
@@ -70,10 +70,10 @@ class LevelEditorView(arcade.View):
 
     def bottom_bar_width_sum(self) -> int:
         """
-        Calcule la largeur cumulative de toutes les portes actuellement dans la barre d'outils.
+        Calculates the cumulative width of all gates currently in the toolbar.
 
-        Retourne :
-            La largeur totale en pixels.
+        Returns:
+            The total width in pixels.
         """
         result = 0
         for i in self.bottom_gates:
@@ -81,7 +81,7 @@ class LevelEditorView(arcade.View):
         return result
 
     def bottom_gate_bar(self) -> None:
-        """Remplit la barre d'outils inférieure avec les types de portes disponibles."""
+        """Populates the bottom toolbar with available gate types."""
         for i in gate_types:
             position = (
                 self.bottom_bar_width_sum() + len(self.bottom_gates)
@@ -93,10 +93,10 @@ class LevelEditorView(arcade.View):
 
     def get_hovered_bottom_gate(self) -> Optional[str]:
         """
-        Identifie si le curseur survole une porte spécifique dans la barre d'outils.
+        Identifies if the cursor is hovering over a specific gate in the toolbar.
 
-        Retourne :
-            Le type de la porte survolée, ou None si aucune porte n'est sous le curseur.
+        Returns:
+            The type of the hovered gate, or None if no gate is under the cursor.
         """
         for i in self.bottom_gates:
             if i.entity.touched:
@@ -104,28 +104,28 @@ class LevelEditorView(arcade.View):
         return None
 
     def draw_bottom_gates(self) -> None:
-        """Affiche les éléments de l'interface utilisateur dans la barre d'outils inférieure."""
+        """Renders the UI elements within the bottom toolbar."""
         for i in self.bottom_gates:
             i.draw()
 
     def draw_tile(self, id: str, x: int, y: int) -> None:
         """
-        Affiche une tuile de bordure individuelle.
+        Renders an individual border tile.
 
         Args:
-            id : L'identifiant unique de la texture.
-            x : Coordonnée horizontale.
-            y : Coordonnée verticale.
+            id: The unique identifier for the texture.
+            x: Horizontal coordinate.
+            y: Vertical coordinate.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def reset(self) -> None:
-        """Réinitialise l'état de l'éditeur."""
+        """Clears or reinitializes the editor state."""
         pass
 
     def draw_frame_border(self) -> None:
-        """Affiche la superposition de l'interface de la fenêtre externe de l'éditeur."""
+        """Renders the outer editor window interface overlay."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -136,7 +136,7 @@ class LevelEditorView(arcade.View):
         arcade.draw_sprite_rect(data.editor_border, rect)
 
     def draw_frame_background(self) -> None:
-        """Affiche l'arrière-plan de la grille de l'éditeur."""
+        """Renders the editor grid background."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -147,12 +147,12 @@ class LevelEditorView(arcade.View):
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
-        """Affiche les métriques de performance et les informations du niveau actuel."""
+        """Renders performance metrics and current level information."""
         debug_list = [
-            f"Éditeur de niveau {self.level.id}",
-            f"Caméra : {self.camera_position}",
-            f"FPS : {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
-            f"Objets : {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
+            f"Level Editor {self.level.id}",
+            f"Camera: {self.camera_position}",
+            f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
+            f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
         ]
 
         start_y = data.WINDOW_HEIGHT - 70
@@ -168,7 +168,7 @@ class LevelEditorView(arcade.View):
             )
 
     def on_draw(self) -> None:
-        """Affiche le circuit actif et la superposition de l'interface utilisateur."""
+        """Renders the active circuit and UI overlay."""
         self.clear()
 
         self.draw_frame_background()
@@ -195,25 +195,25 @@ class LevelEditorView(arcade.View):
 
     def on_update(self, delta_time: float) -> None:
         """
-        Met à jour l'état de la simulation et les métriques temporelles.
+        Updates simulation state and timing metrics.
 
         Args:
-            delta_time : Temps écoulé depuis la dernière mise à jour.
+            delta_time: Time elapsed since the previous update.
         """
         self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
 
     def save_frame(self) -> None:
-        """Ouvre la fenêtre de dialogue de sauvegarde."""
+        """Opens the save dialogue window."""
         data.window.display(SaveFrame(self.level))
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Traite les entrées clavier pour les commandes de l'éditeur.
+        Processes keyboard inputs for editor commands.
 
         Args:
-            key : Le code numérique de la touche pressée.
-            key_modifiers : Drapeaux binaires pour les touches de modification.
+            key: The numeric code of the pressed key.
+            key_modifiers: Bitwise flags for modifier keys.
         """
         if key == 101:
             for g in self.level.chip.gates.values():
@@ -238,10 +238,10 @@ class LevelEditorView(arcade.View):
 
     def delete_gate(self, id: str) -> None:
         """
-        Supprime une porte et élague tous les chemins orphelins.
+        Removes a gate and prunes all orphaned paths.
 
         Args:
-            id : L'identifiant unique de la porte à supprimer.
+            id: The unique identifier of the gate to remove.
         """
         to_delete = []
         for index in self.level.chip.paths.keys():
@@ -268,7 +268,7 @@ class LevelEditorView(arcade.View):
             del self.level.chip.paths[i]
 
     def delete(self) -> None:
-        """Initie la suppression de l'objet actuellement sous le curseur."""
+        """Initiates deletion of the object currently under the cursor."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
@@ -284,21 +284,21 @@ class LevelEditorView(arcade.View):
                 break
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de touches."""
+        """Handles key release events."""
         pass
 
     @property
     def camera(self) -> Tuple[int, int]:
-        """Retourne le décalage actuel de la caméra."""
+        """Returns the current camera offset."""
         return self.camera_position
 
     @camera.setter
     def camera(self, value: Tuple[int, int]) -> None:
         """
-        Définit la position de la caméra et l'aligne sur la grille.
+        Sets the camera position and aligns it to the grid.
 
         Args:
-            value : La coordonnée cible pour aligner la caméra.
+            value: The target coordinate to align the camera.
         """
         self._real_camera_position = value
         self.camera_position = (
@@ -316,13 +316,13 @@ class LevelEditorView(arcade.View):
 
     def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
         """
-        Gère les mises à jour de l'interaction souris, incluant le glisser et le mouvement.
+        Handles mouse interaction updates, including dragging and movement.
 
         Args:
-            x : Position horizontale de la souris.
-            y : Position verticale de la souris.
-            delta_x : Changement horizontal.
-            delta_y : Changement vertical.
+            x: Mouse horizontal position.
+            y: Mouse vertical position.
+            delta_x: Horizontal change.
+            delta_y: Vertical change.
         """
         mouse.position = (x, y)
 
@@ -378,12 +378,12 @@ class LevelEditorView(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self) -> None:
-        """Exécute la propagation de la logique du circuit."""
+        """Executes the circuit logic propagation."""
         self.engine.propagate_values(self.level.chip)
 
     def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
         """
-        Gère les déclencheurs d'interaction souris pour la construction de chemins et le placement de composants.
+        Handles mouse interaction triggers for path building and component placement.
         """
         if button == 2:
             self.camera_hold = True
@@ -498,7 +498,7 @@ class LevelEditorView(arcade.View):
                 )
 
     def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Finalise les opérations de glissement de caméra ou de placement de porte."""
+        """Finalizes camera drag or gate placement operations."""
         if button == 2:
             self.camera_hold = False
             for g in self.level.chip.gates:

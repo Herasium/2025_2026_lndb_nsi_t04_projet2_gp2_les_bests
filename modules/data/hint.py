@@ -1,25 +1,25 @@
-"""Fournit des mécanismes pour définir et gérer les éléments d'indice de l'interface utilisateur."""
+"""Provides mechanisms for defining and managing user interface hint elements."""
 
 from modules.data.chip import Chip
 
 
 class Hint:
-    """Représente un indice d'interface utilisateur configuré pour des formats d'affichage spécifiques.
+    """Represents a UI hint configured for specific display formats.
 
-    Attributs :
-        chip : La représentation de données associée pour l'affichage basé sur les jetons (chips).
-        text : Le contenu textuel principal affiché à l'utilisateur.
-        type : Le mode de rendu où 0 est texte seul, 1 est jeton seul, et 2 est combiné.
-        id : L'identifiant unique de cette instance.
+    Attributes:
+        chip: The associated data representation for chip-based display.
+        text: The primary string content displayed to the user.
+        type: The rendering mode where 0 is text-only, 1 is chip-only, and 2 is combined.
+        id: The unique identifier for this instance.
     """
 
     def __init__(self, id: int) -> None:
-        """Initialise l'instance de l'indice avec une configuration par défaut.
+        """Initializes the hint instance with a default configuration.
 
-        Args :
-            id : L'identifiant unique utilisé pour générer la référence interne du jeton.
+        Args:
+            id: The unique identifier used to generate the internal chip reference.
         """
         self.chip: Chip = Chip(f"hint_chip_{id}")
-        self.text: str = "Indice par défaut"
+        self.text: str = "Default Hint"
         self.type: int = 0
         self.id: int = id

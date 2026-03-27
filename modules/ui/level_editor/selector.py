@@ -13,19 +13,19 @@ from modules.ui.editor.view import EditorView
 from modules.ui.level_player.selector import LevelPlayerSelector
 
 """
-Fournit la classe LevelEditorSelector pour la gestion des flux de sélection 
-et de création de niveaux au sein de l'application arcade.
+Provides the LevelEditorSelector class for managing level selection and creation
+workflows within the arcade application.
 """
 
 
 class LevelEditorSelector(arcade.View):
     """
-    Gère la vue de l'interface utilisateur pour parcourir les niveaux existants ou en créer de nouveaux.
+    Manages the UI view for browsing existing levels or creating new ones.
     """
 
     def __init__(self) -> None:
         """
-        Initialise la vue avec la couleur d'arrière-plan par défaut et les structures de conteneurs.
+        Initializes the view with default background and container structures.
         """
         super().__init__()
 
@@ -37,13 +37,13 @@ class LevelEditorSelector(arcade.View):
 
     def setup(self) -> None:
         """
-        Remplit les étiquettes de l'interface et initialise les objets d'interaction pour les niveaux.
+        Populates the UI labels and initializes interaction objects for levels.
         """
         debug_list: List[str] = [
-            "Sélecteur d'Éditeur de Niveau",
-            "<- Retour",
-            "+ Nouveau +",
-            "Sélecteur de Niveau de Jeu",
+            "Level Editor Selector",
+            "<- Back",
+            "+ New +",
+            "Play Level Selector",
             "",
         ]
         self.texts: List[Text] = []
@@ -52,7 +52,7 @@ class LevelEditorSelector(arcade.View):
 
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
-            debug_list.append(f"Niveau {level.number} {level.name} #{level.id}")
+            debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
         start_y: int = data.WINDOW_HEIGHT - 70 + self.camera
@@ -66,13 +66,13 @@ class LevelEditorSelector(arcade.View):
 
     def reset(self) -> None:
         """
-        Réinitialise l'état actuel de la vue.
+        Resets the current view state.
         """
         pass
 
     def on_draw(self) -> None:
         """
-        Rendu de tous les éléments textuels de l'interface et de leurs zones de collision (hitboxes) associées.
+        Renders all UI text elements and their associated hitboxes.
         """
         self.clear()
 
@@ -82,31 +82,31 @@ class LevelEditorSelector(arcade.View):
 
     def on_update(self, delta_time: float) -> None:
         """
-        Met à jour la logique à chaque image.
+        Updates logic state per frame.
 
         Args:
-            delta_time: Temps écoulé depuis la mise à jour précédente.
+            delta_time: Time elapsed since the previous update.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Gère les événements de pression de touches du clavier.
+        Handles keyboard input events.
 
         Args:
-            key: Identifiant entier de la touche pressée.
-            key_modifiers: Masque de bits des touches modificatrices actuellement maintenues.
+            key: Integer identifier of the pressed key.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
-        Gère les événements de relâchement de touches du clavier.
+        Handles key release events.
 
         Args:
-            key: Identifiant entier de la touche relâchée.
-            key_modifiers: Masque de bits des touches modificatrices actuellement maintenues.
+            key: Integer identifier of the released key.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         pass
 
@@ -114,13 +114,13 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
         """
-        Met à jour l'état global du suivi de la souris.
+        Updates the global mouse tracking state.
 
         Args:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            delta_x: Changement de position en x.
-            delta_y: Changement de position en y.
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Change in x position.
+            delta_y: Change in y position.
         """
         mouse.position = (x, y)
 
@@ -128,13 +128,13 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Déclenche la navigation dans l'interface basée sur l'interaction avec les zones de collision du texte.
+        Triggers UI navigation based on interaction with text element hitboxes.
 
         Args:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            button: Identifiant du bouton de la souris pressé.
-            key_modifiers: Masque de bits des touches modificatrices actuellement maintenues.
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            button: Identifier of the pressed mouse button.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         for index in range(len(self.texts)):
             text = self.texts[index]
@@ -155,20 +155,19 @@ class LevelEditorSelector(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Gère les événements de relâchement du bouton de la souris.
+        Handles mouse release events.
 
         Args:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            button: Identifiant du bouton de la souris relâché.
-            key_modifiers: Masque de bits des touches modificatrices actuellement maintenues.
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            button: Identifier of the released mouse button.
+            key_modifiers: Bitmask of modifier keys currently held.
         """
         pass
-        
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Met à jour le décalage vertical de la caméra et reconstruit la mise en page."""
+        """Updates vertical camera offset and rebuilds layout."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
 

@@ -1,18 +1,18 @@
-"""Fournit des utilitaires de rendu de grille pour l'environnement de l'éditeur d'interface utilisateur."""
+"""Provides grid rendering utilities for the UI editor environment."""
 
 import arcade
 from modules.data import data
 
 
 class Grid:
-    """Gère la superposition de la grille de points visuelle pour l'interface de l'éditeur d'interface utilisateur."""
+    """Manages the visual point grid overlay for the UI editor interface."""
 
     def __init__(self) -> None:
-        """Initialise la configuration de la grille en utilisant les constantes du module de données."""
+        """Initializes the grid configuration using constants from the data module."""
         self.size: int = data.UI_EDITOR_GRID_SIZE
 
     def draw(self) -> None:
-        """Affiche une grille de points sur la zone de travail de 1280x720."""
+        """Renders a grid of points over the 1280x720 workspace area."""
         for y in range(0, 720, self.size):
             for x in range(0, 1280, self.size):
                 arcade.draw_point(x, y, arcade.color.DARK_BLUE_GRAY, 5)

@@ -6,14 +6,14 @@ from modules.ui.toolbox.text import Text
 from modules.data import data
 from modules.ui.editor.view import EditorView
 
-"""Module de gestion de l'interface de sélection de puces au sein de l'éditeur."""
+"""Module for managing the chip selection interface within the editor."""
 
 
 class EditorChipSelector(arcade.View):
-    """Fournit un menu de sélection pour les puces existantes et la navigation vers l'éditeur."""
+    """Provides a selection menu for existing chips and navigation to the editor."""
 
     def __init__(self) -> None:
-        """Initialise la vue et génère les composants de l'interface utilisateur."""
+        """Initializes the view and populates UI components."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
@@ -22,12 +22,12 @@ class EditorChipSelector(arcade.View):
         self.setup()
 
     def setup(self) -> None:
-        """Configure les éléments initiaux de l'interface et liste les puces disponibles."""
-        debug_list: List[str] = ["Sélecteur d'éditeur de puces", "<- Retour", "+ Nouveau +", ""]
+        """Configures the initial UI elements and populates available chips."""
+        debug_list: List[str] = ["Chip Editor Selector", "<- Back", "+ New +", ""]
 
         for i in data.loaded_chips:
             chip = data.loaded_chips[i]
-            debug_list.append(f"Puce #{chip.id}")
+            debug_list.append(f"Chip #{chip.id}")
             self.chips.append(i)
 
         start_y: int = data.WINDOW_HEIGHT - 70
@@ -40,11 +40,11 @@ class EditorChipSelector(arcade.View):
             self.texts[-1].align = ("left", "center")
 
     def reset(self) -> None:
-        """Réinitialise l'état de la vue."""
+        """Resets the view state."""
         pass
 
     def on_draw(self) -> None:
-        """Rendu des éléments de l'interface et de leurs zones de collision (hitboxes) associées."""
+        """Renders the UI elements and their associated hitboxes."""
         self.clear()
 
         for i in self.texts:
@@ -52,51 +52,51 @@ class EditorChipSelector(arcade.View):
             i.hitbox.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Met à jour la logique à chaque image.
+        """Updates frame-by-frame logic.
 
         Args:
-            delta_time: Temps écoulé depuis la dernière image.
+            delta_time: Elapsed time since the last frame.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Gère les entrées clavier.
+        """Handles keyboard input.
 
         Args:
-            key: Le code de la touche pressée.
-            key_modifiers: Modificateurs de touches bitwise actifs.
+            key: The pressed key code.
+            key_modifiers: Active bitwise key modifiers.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de touches.
+        """Handles key release events.
 
         Args:
-            key: Le code de la touche relâchée.
-            key_modifiers: Modificateurs de touches bitwise actifs.
+            key: The released key code.
+            key_modifiers: Active bitwise key modifiers.
         """
         pass
 
     def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
-        """Met à jour la position globale de la souris.
+        """Updates global mouse position.
 
         Args:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            delta_x: Variation de la position horizontale.
-            delta_y: Variation de la position verticale.
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Change in horizontal position.
+            delta_y: Change in vertical position.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Gère la sélection de l'interface selon les coordonnées du clic.
+        """Handles UI selection based on click coordinates.
 
         Args:
-            x: Coordonnée horizontale du clic.
-            y: Coordonnée verticale du clic.
-            button: Identifiant du bouton de la souris.
-            key_modifiers: Modificateurs de touches bitwise actifs.
+            x: Click horizontal coordinate.
+            y: Click vertical coordinate.
+            button: Mouse button identifier.
+            key_modifiers: Active bitwise key modifiers.
         """
         for index in range(len(self.texts)):
             text: Text = self.texts[index]
@@ -110,12 +110,12 @@ class EditorChipSelector(arcade.View):
                     data.window.display(EditorView())
 
     def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de la souris.
+        """Handles mouse release events.
 
         Args:
-            x: Coordonnée horizontale du relâchement.
-            y: Coordonnée verticale du relâchement.
-            button: Identifiant du bouton de la souris.
-            key_modifiers: Modificateurs de touches bitwise actifs.
+            x: Release horizontal coordinate.
+            y: Release vertical coordinate.
+            button: Mouse button identifier.
+            key_modifiers: Active bitwise key modifiers.
         """
         pass

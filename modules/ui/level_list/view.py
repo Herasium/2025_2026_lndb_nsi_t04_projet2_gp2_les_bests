@@ -1,4 +1,4 @@
-"""Fournit une vue pour la navigation et la sélection des niveaux du jeu."""
+"""Provides a view for navigating and selecting game levels."""
 
 import arcade
 from typing import List, Dict, Any
@@ -14,10 +14,10 @@ logger: Logger = Logger("LevelList")
 
 
 class LevelList(arcade.View):
-    """Affiche une liste défilante et catégorisée de niveaux sélectionnables."""
+    """Displays a categorized, scrollable list of selectable levels."""
 
     def __init__(self) -> None:
-        """Initialise la vue avec les éléments d'interface utilisateur et l'état par défaut."""
+        """Initializes the view with default UI elements and state."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
@@ -33,7 +33,7 @@ class LevelList(arcade.View):
         self.setup()
 
     def setup(self) -> None:
-        """Construit la disposition de l'interface, organise les niveaux par catégories et initialise les boutons."""
+        """Constructs UI layout, organizes levels into categories, and initializes buttons."""
         self.bg = Entity(
             0,
             0,
@@ -54,7 +54,7 @@ class LevelList(arcade.View):
         levels: List[str] = list(data.loaded_levels.keys())
 
         def sort_keys(i: str) -> int:
-            """Détermine l'ordre de tri en fonction du numéro de séquence du niveau."""
+            """Determines sort order based on level sequence number."""
             return data.loaded_levels[i].number
 
         levels.sort(key=sort_keys)
@@ -94,11 +94,11 @@ class LevelList(arcade.View):
             c += 1
 
     def reset(self) -> None:
-        """Réinitialise la vue à l'état initial."""
+        """Resets the view to initial state."""
         pass
 
     def on_draw(self) -> None:
-        """Rend l'arrière-plan, les boutons de niveau, les étiquettes de catégorie et l'interface utilisateur."""
+        """Renders the background, level buttons, category labels, and UI overlay."""
         self.clear()
         self.bg.draw()
 
@@ -113,33 +113,33 @@ class LevelList(arcade.View):
         self.back_button.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Effectue les mises à jour logiques trame par trame."""
+        """Performs frame-by-frame logic updates."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Gère les entrées de navigation."""
+        """Handles navigation inputs."""
         if key == data.keys.back:
             data.window.display(data.main)
-        if key == 65473:  # Sortie d'urgence : F4
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de touche."""
+        """Handles key release events."""
         pass
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Met à jour l'état global du suivi de la souris."""
+        """Updates the global mouse tracking state."""
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Détecte les clics de sélection de niveau et initie la transition de scène."""
+        """Detects level selection clicks and initiates scene transition."""
         for i in self.buttons:
             if self.buttons[i].touched:
-                logger.success(f"Lancement du niveau {i}")
+                logger.success(f"Launching Level {i}")
                 data.window.display(LevelPlayer(i))
 
         if self.back_button.touched:
@@ -148,7 +148,7 @@ class LevelList(arcade.View):
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Met à jour le décalage vertical de la caméra et reconstruit la disposition."""
+        """Updates vertical camera offset and rebuilds layout."""
         self.camera_y += scroll_y * -data.MOUSE_SENSI
         self.camera_y = max(self.camera_y, 0)
         self.setup()
@@ -156,5 +156,5 @@ class LevelList(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Gère les événements de relâchement de la souris."""
+        """Handles mouse release events."""
         pass

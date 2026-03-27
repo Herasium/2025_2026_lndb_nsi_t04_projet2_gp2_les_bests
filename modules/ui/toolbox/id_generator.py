@@ -1,4 +1,4 @@
-"""Module pour la génération d'identifiants uniques cryptographiquement sécurisés."""
+"""Module for generating cryptographically secure unique identifiers."""
 
 import time
 import secrets
@@ -6,24 +6,21 @@ import hashlib
 
 
 def random_id() -> str:
-    """Génère un identifiant hexadécimal de 128 bits.
+    """Generates a 128-bit hexadecimal identifier.
 
-    Construit l'ID en hachant une combinaison d'un horodatage de 48 bits et
-    d'une entropie aléatoire de 32 bits pour garantir l'unicité et l'imprévisibilité.
+    Constructs the ID by hashing a combination of a 48-bit timestamp and
+    32-bit random entropy to ensure uniqueness and unpredictability.
 
     Returns:
-        Une chaîne hexadécimale de 32 caractères.
+        A 32-character hexadecimal string.
     """
-    # Extraction d'un horodatage de 48 bits (microsecondes)
     ts: int = int(time.time() * 1_000_000) & ((1 << 48) - 1)
 
-    # Génération de 32 bits d'entropie aléatoire
     rand: int = secrets.randbits(32)
 
-    # Conversion des données en octets pour le hachage
     data: bytes = ts.to_bytes(6, "big") + rand.to_bytes(4, "big")
 
-    # Utilisation des 128 premiers bits du haché SHA-256 pour une sortie à longueur fixe
+    # Use the first 128 bits of the SHA-256 hash for fixed-length output
     digest: bytes = hashlib.sha256(data).digest()[:16]
 
     return digest.hex()

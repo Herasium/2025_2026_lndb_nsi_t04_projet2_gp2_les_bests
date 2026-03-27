@@ -14,8 +14,8 @@ from modules.data.custom import CustomGate
 from modules.logger import Logger
 
 """
-Ce module gère l'initialisation, le chargement des ressources et la génération 
-procédurale de textures pour l'architecture orientée données du jeu.
+This module handles the initialization, asset loading, and procedural texture
+baking for the game's data-driven architecture.
 """
 
 logger: Logger = Logger("Loader")
@@ -23,23 +23,23 @@ logger: Logger = Logger("Loader")
 
 class Loader:
     """
-    Gère le chargement des ressources JSON externes, des ressources de logique de jeu,
-    ainsi que la génération des textures procédurales de l'interface utilisateur.
+    Manages the loading of external JSON assets, game logic resources,
+    and the generation of procedural UI textures.
     """
 
     def __init__(self) -> None:
-        """Initialise le chargeur avec un tampon pour les dépendances non résolues."""
+        """Initializes the loader with a buffer for unresolved dependencies."""
         self.to_load_buffer: List[Chip] = []
 
     def load_files(self, sub_folder: str) -> List[Dict[str, Any]]:
         """
-        Lit tous les fichiers JSON d'un sous-répertoire spécifié.
+        Reads all JSON files from a specified subdirectory.
 
         Args:
-            sub_folder: Le chemin du répertoire relatif à la racine des données.
+            sub_folder: The directory path relative to the data root.
 
         Returns:
-            Une liste contenant le contenu analysé de chaque fichier JSON.
+            A list containing the parsed contents of each JSON file.
         """
         path: str = join(data.current_path, sub_folder)
 
@@ -55,16 +55,16 @@ class Loader:
                 with open(full_path, "rb") as file:
                     results.append(json.loads(file.read()))
             except Exception as e:
-                logger.error(f"Échec de la lecture du fichier {full_path} ({e})")
+                logger.error(f"Failed to read file {full_path} ({e})")
 
         return results
 
     def load_single_chip(self, raw_data: Dict[str, Any]) -> None:
         """
-        Enregistre un objet puce (chip) et gère ses besoins en dépendances.
+        Registers a chip object and handles its dependency requirements.
 
         Args:
-            raw_data: Le dictionnaire de configuration pour la puce.
+            raw_data: The configuration dictionary for the chip.
         """
         chip: Chip = Chip("default_id")
         chip.partial_load(raw_data)
@@ -72,7 +72,7 @@ class Loader:
         if len(chip.requirements) == 0:
             chip.load()
             if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
-                logger.warning(f"Puce {chip} vide, chargement annulé.")
+                logger.warning(f"Empty Chip {chip}, not loading.")
                 return
             data.loaded_chips[raw_data["id"]] = chip
         else:
@@ -85,28 +85,28 @@ class Loader:
             if can_load:
                 chip.load()
                 if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
-                    logger.warning(f"Puce {chip} vide, chargement annulé.")
+                    logger.warning(f"Empty Chip {chip}, not loading.")
                     return
                 data.loaded_chips[raw_data["id"]] = chip
             else:
                 self.to_load_buffer.append(chip)
 
     def load_saves(self) -> None:
-        """Charge et traite toutes les configurations de puces sauvegardées."""
+        """Loads and processes all saved chip configurations."""
         for raw_data in self.load_files("saves"):
             try:
                 self.load_single_chip(raw_data)
             except Exception:
-                logger.error(f"Échec du chargement de la puce : {traceback.format_exc()}")
+                logger.error(f"Failed to load chip: {traceback.format_exc()}")
 
-        logger.success(f"{len(data.loaded_chips)} puces chargées.")
+        logger.success(f"Loaded {len(data.loaded_chips)} Chips.")
         if len(self.to_load_buffer):
             logger.info(
-                f"Chargement des puces non terminé, {len(self.to_load_buffer)} puces avec des dépendances restent à charger."
+                f"Chip loading not finished, {len(self.to_load_buffer)} chips with requirements left to load."
             )
 
     def load_saves_dependency_round(self) -> None:
-        """Effectue une seule passe de résolution sur les puces en tampon."""
+        """Performs a single resolution pass on buffered chips."""
         for chip in self.to_load_buffer[:]:
             can_load: bool = True
             for i in chip.requirements:
@@ -117,13 +117,13 @@ class Loader:
             if can_load:
                 chip.load()
                 if len(chip.get_inputs()) + len(chip.get_outputs()) == 0:
-                    logger.warning(f"Puce {chip} vide, chargement annulé.")
+                    logger.warning(f"Empty Chip {chip}, not loading.")
                     return
                 self.to_load_buffer.remove(chip)
                 data.loaded_chips[chip.id] = chip
 
     def load_saves_dependency(self) -> None:
-        """Résout itérativement les dépendances jusqu'à ce que toutes les puces soient chargées ou que la limite soit atteinte."""
+        """Iteratively resolves dependencies until all chips are loaded or limit reached."""
         max_count: int = 1000
         count: int = 0
         previous: int = len(self.to_load_buffer)
@@ -133,17 +133,17 @@ class Loader:
 
             if len(self.to_load_buffer) == previous:
                 logger.error(
-                    f"Échec du chargement de {len(self.to_load_buffer)} portes avec dépendances, peut-être dû à une dépendance circulaire ou des puces manquantes."
+                    f"Failed to load {len(self.to_load_buffer)} gates with dependencies, maybe due to circular dependency or missing chips."
                 )
                 break
             else:
                 previous = len(self.to_load_buffer)
             count += 1
 
-        logger.debug(f"Chargement des portes avec dépendances terminé en {count} itérations.")
+        logger.debug(f"Finished loading gates with dependencies in {count} rounds.")
 
     def load_levels(self) -> None:
-        """Charge toutes les définitions de niveaux et leurs ressources requises."""
+        """Loads all level definitions and their required assets."""
         for raw_data in self.load_files("levels"):
             try:
                 level: Level = Level("default_id")
@@ -157,20 +157,20 @@ class Loader:
                     data.loaded_chips[level.chip.id] = level.chip
                 data.loaded_levels[raw_data["level"]["id"]] = level
             except Exception:
-                logger.error(f"Échec du chargement du niveau : {traceback.format_exc()}")
+                logger.error(f"Failed to load level: {traceback.format_exc()}")
 
-        logger.success(f"{len(data.loaded_levels)} niveaux chargés.")
+        logger.success(f"Loaded {len(data.loaded_levels)} Levels.")
 
     def load_fonts(self) -> None:
-        """Enregistre les polices TTF externes dans le moteur de rendu."""
+        """Registers external TTF fonts with the rendering engine."""
         try:
             arcade.load_font("assets/fonts/press_start.ttf")
-            logger.success("Polices chargées (1).")
+            logger.success("Loaded Fonts (1).")
         except Exception as e:
-            logger.error(f"Échec du chargement des polices ({e}).")
+            logger.error(f"Failed to load fonts ({e}).")
 
     def load_tilesets(self) -> None:
-        """Découpe les feuilles de sprites en grilles de textures pour les composants de l'interface."""
+        """Slices sprite sheets into texture grids for UI components."""
         data.ui_border_tiles = arcade.SpriteSheet(
             "assets/grid/ui_border_grid.png"
         ).get_texture_grid(size=(64, 64), columns=4, count=16)
@@ -184,14 +184,14 @@ class Loader:
 
     def _bake_grid(self, width_px: int, height_px: int) -> arcade.Texture:
         """
-        Génère une texture de grille d'arrière-plan répétitive.
+        Generates a repeating background grid texture.
 
         Args:
-            width_px: Largeur totale cible.
-            height_px: Hauteur totale cible.
+            width_px: Total target width.
+            height_px: Total target height.
 
         Returns:
-            La texture générée compatible avec arcade.
+            The generated arcade-compatible texture.
         """
         img: Image.Image = Image.new("RGBA", (width_px, height_px))
         tile: Image.Image = data.ui_border_tiles[9].image
@@ -202,14 +202,14 @@ class Loader:
 
     def _bake_border(self, width_px: int, rows: int) -> arcade.Texture:
         """
-        Génère un cadre de bordure d'interface de taille personnalisée.
+        Generates a custom-sized UI border frame.
 
         Args:
-            width_px: Largeur du cadre.
-            rows: Nombre de rangées de tuiles verticales.
+            width_px: Width of the frame.
+            rows: Number of vertical tile rows.
 
         Returns:
-            La texture de cadre générée.
+            The generated frame texture.
         """
         height_px: int = rows * 64
         canvas: Image.Image = Image.new("RGBA", (width_px, height_px))
@@ -238,13 +238,13 @@ class Loader:
 
     def render_gate_image(self, gate: Union[CustomGate, Any]) -> Image.Image:
         """
-        Génère une image composite pour une porte, incluant les tuiles et les étiquettes de texte.
+        Renders a composite image for a gate, including tiles and text labels.
 
         Args:
-            gate: Le composant porte à restituer.
+            gate: The gate component to render.
 
         Returns:
-            L'image PIL générée.
+            The rendered PIL Image.
         """
         width: int = gate.tile_width
         height: int = 4
@@ -281,29 +281,29 @@ class Loader:
 
     def bake_single_gate(self, gate: Any, id: str) -> bool:
         """
-        Met en cache les textures spécifiques aux états pour une porte afin d'optimiser les performances.
+        Caches state-specific textures for a gate to optimize performance.
 
         Args:
-            gate: L'instance de la porte.
-            id: Identifiant unique de la porte.
+            gate: The gate instance.
+            id: Unique gate identifier.
 
         Returns:
-            True si la génération a réussi, False si la complexité des entrées/sorties dépasse les limites.
+            True if baking succeeded, False if input/output complexity exceeds limits.
         """
         data.IMAGE.add_gate_type(id)
         size: int = len(gate.inputs) + len(gate.outputs)
 
         if size >= 12:
             logger.warning(
-                f"Grand nombre de textures détecté {2**size}, cela pourrait prendre un certain temps."
+                f"Large Texture count found {2**size}, this might take a while."
             )
 
         if size > 16:
-            logger.error("Taille de texture trop importante, abandon.")
+            logger.error("Texture size too large, aborting.")
             return False
 
         for i in range(2**size):
-            # Calcul des états d'entrée/sortie en utilisant l'extraction par indicateurs bit à bit
+            # Calculate input/output states using bitwise flag extraction
             vals: List[bool] = [bool(i & (1 << j)) for j in range(size)]
             gate.inputs, gate.outputs = (
                 vals[: len(gate.inputs)],
@@ -316,13 +316,13 @@ class Loader:
         return True
 
     def bake_predefined_gates(self) -> None:
-        """Génère les textures pour toutes les portes système prédéfinies."""
+        """Generates textures for all built-in system gates."""
         for g_id in gate_types:
             gate = gate_types[g_id]("default_id")
             self.bake_single_gate(gate, g_id)
 
     def bake_custom_gates(self) -> None:
-        """Génère les textures pour les puces personnalisées définies par l'utilisateur."""
+        """Generates textures for user-defined custom chips."""
         to_remove: List[str] = []
 
         for chip_id in data.loaded_chips:
@@ -333,11 +333,11 @@ class Loader:
                 to_remove.append(chip_id)
 
         for i in to_remove:
-            logger.warning(f"La puce {i} n'a pas pu charger ses textures, retrait du registre.")
+            logger.warning(f"Chip {i} failed to load textures, removed from register.")
             del data.loaded_chips[i]
 
     def bake_level_buttons(self) -> None:
-        """Génère des boutons visuels uniques pour chaque niveau de jeu disponible."""
+        """Generates unique visual buttons for each available game level."""
         font: ImageFont.FreeTypeFont = ImageFont.truetype(
             "assets/fonts/press_start.ttf", 32
         )
@@ -362,8 +362,8 @@ class Loader:
             data.LEVEL_BUTTONS.set(level.id, new)
 
     def bake_textures(self) -> None:
-        """Coordonne l'ensemble du flux de génération de textures procédurales."""
-        logger.debug("Génération des textures en cours (Baking)")
+        """Coordinates the full procedural texture generation workflow."""
+        logger.debug("Baking Textures")
         data.background_grid_texture = self._bake_grid(
             data.WINDOW_WIDTH, (((data.WINDOW_HEIGHT + 32) // 64) * 64)
         )
@@ -372,7 +372,7 @@ class Loader:
         self.bake_level_buttons()
 
     def load_ui(self) -> None:
-        """Charge et initialise les ressources statiques de l'interface."""
+        """Loads and initializes static interface assets."""
         data.play_button = arcade.Sprite("assets/buttons/play_button.png")
         data.button_level = arcade.Sprite("assets/buttons/button_level.png")
         data.button_options = arcade.Sprite("assets/buttons/button_options.png")
@@ -452,8 +452,8 @@ class Loader:
         data.tuto_truth["xor"] = arcade.Sprite("assets/truth/xor_gate.png")
 
     def load(self) -> None:
-        """Exécute l'intégralité du pipeline de chargement des ressources et d'initialisation."""
-        logger.print("Chargement des ressources du jeu.")
+        """Executes the full asset loading and initialization pipeline."""
+        logger.print("Loading Game Stuff.")
 
         try:
             self.load_fonts()
@@ -467,6 +467,6 @@ class Loader:
 
             self.bake_textures()
 
-            logger.success("Chargement des ressources terminé.")
+            logger.success("Finished loading stuff.")
         except Exception:
-            logger.error(f"Échec du chargement des ressources ({traceback.format_exc()})")
+            logger.error(f"Failed to load stuff ({traceback.format_exc()})")

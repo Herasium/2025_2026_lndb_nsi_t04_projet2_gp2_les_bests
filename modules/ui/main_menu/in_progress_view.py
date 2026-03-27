@@ -18,10 +18,10 @@ logger: Logger = Logger("MainMenu")
 
 
 class MainMenuView(arcade.View):
-    """Gère l'interface du menu principal, incluant le rendu de l'UI et la navigation."""
+    """Manages the main menu interface, including UI rendering and navigation."""
 
     def __init__(self, pause=False) -> None:
-        """Initialise la vue, les éléments de l'UI et l'état de navigation."""
+        """Initializes the view, UI elements, and navigation state."""
         super().__init__()
 
         self.background_color: arcade.types.Color = arcade.color.JET
@@ -87,21 +87,21 @@ class MainMenuView(arcade.View):
         self.add_paths()
 
     def rainbow_color(self, precision: int, index: int) -> str:
-        """Calcule une couleur hexadécimale basée sur une valeur HSV cyclique.
+        """Calculates a hex color based on a cycling HSV value.
 
         Args:
-            precision: La fréquence de la transition de couleur.
-            index: L'étape actuelle de l'animation.
+            precision: The frequency of the color transition.
+            index: The current animation step.
 
         Returns:
-            La chaîne hexadécimale résultante.
+            The resulting hex string.
         """
         h: float = (index % precision) / precision
         r, g, b = colorsys.hsv_to_rgb(h, 1.0, 1.0)
         return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
     def add_paths(self) -> None:
-        """Initialise et enregistre les structures de chemins pour les visuels d'arrière-plan du menu."""
+        """Initializes and registers path structures for menu background visuals."""
         branches: List[Dict[int, List[Tuple[int, int]]]] = [
             {0: [(945, 702), (594, 702), (594, 837), (270, 837), (270, 891)], 1: []},
             {
@@ -186,33 +186,33 @@ class MainMenuView(arcade.View):
             self.paths[-1].branch_points = branch
 
     def draw_paths(self) -> None:
-        """Affiche tous les visuels de chemins initialisés."""
+        """Renders all initialized path visuals."""
         for path in self.paths:
             path.draw()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Traite les entrées clavier pour les commandes du menu.
+        """Processes keyboard input for menu controls.
 
         Args:
-            key: Le code numérique de la touche.
-            key_modifiers: Masque de bits des touches de modification.
+            key: The numeric key code.
+            key_modifiers: Bitmask of modifier keys.
         """
-        if key == 65473:  # Sortie de secours : F4
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
     def draw_tile(self, id: int, x: int, y: int) -> None:
-        """Affiche une seule tuile de bordure d'UI depuis le registre de données.
+        """Renders a single UI border tile from the data registry.
 
         Args:
-            id: L'index de la texture de la tuile.
-            x: Coordonnée horizontale de l'écran.
-            y: Coordonnée verticale de l'écran.
+            id: The index of the tile texture.
+            x: The horizontal screen coordinate.
+            y: The vertical screen coordinate.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def draw_frame_border(self) -> None:
-        """Construit la bordure de l'UI en utilisant un rendu de tuiles répétitif."""
+        """Constructs the UI border using repetitive tile rendering."""
         start_x, start_y = 32, 865
         y_len, x_len = 13, 28
 
@@ -235,7 +235,7 @@ class MainMenuView(arcade.View):
         self.draw_tile(15, start_x + x_len * 64, start_y - y_len * 64)
 
     def draw_frame_background(self) -> None:
-        """Remplit la zone d'arrière-plan interne du menu."""
+        """Fills the internal menu background area."""
         start_x, start_y = 32, 865 + 64
         y_len = 15
         for i in range(y_len - 1):
@@ -243,7 +243,7 @@ class MainMenuView(arcade.View):
                 self.draw_tile(9, start_x + (a) * 64, start_y - (i + 1) * 64)
 
     def on_draw(self) -> None:
-        """Passe de rendu pour la scène du menu."""
+        """Rendering pass for the menu scene."""
         self.clear(arcade.color.BLACK)
         self.draw_frame_background()
         self.draw_paths()
@@ -334,13 +334,13 @@ class MainMenuView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Gère le suivi de la souris, les états de survol de l'UI et la progression de l'easter egg.
+        """Handles mouse tracking, UI hover states, and easter egg progression.
 
         Args:
-            x: Coordonnée X actuelle du curseur.
-            y: Coordonnée Y actuelle du curseur.
-            delta_x: Déplacement horizontal de la souris.
-            delta_y: Déplacement vertical de la souris.
+            x: Current cursor X coordinate.
+            y: Current cursor Y coordinate.
+            delta_x: Horizontal mouse displacement.
+            delta_y: Vertical mouse displacement.
         """
         mouse.position = (x, y)
 
@@ -391,13 +391,13 @@ class MainMenuView(arcade.View):
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Gère les événements d'interaction pour la navigation dans le menu.
+        """Handles interaction events for menu navigation.
 
         Args:
-            x: Coordonnée X du clic.
-            y: Coordonnée Y du clic.
-            button: Le bouton de la souris pressé.
-            key_modifiers: Touches de modification clavier actives.
+            x: X coordinate of the click.
+            y: Y coordinate of the click.
+            button: The mouse button pressed.
+            key_modifiers: Active keyboard modifiers.
         """
         to_display: Optional[Any] = None
 
@@ -411,7 +411,7 @@ class MainMenuView(arcade.View):
             else:
                 to_display = DebugTilesView if key_modifiers in [17, 1] else LevelList
         elif self.quit_button.touched:
-            logger.success("Au revoir ! <3")
+            logger.success("Bye Bye ! <3")
             arcade.exit()
         elif self.setting_button.touched:
             to_display = SettingView
@@ -421,7 +421,7 @@ class MainMenuView(arcade.View):
         if to_display is not None:
             try:
                 data.window.display(to_display())
-                logger.success(f"Lancement de {to_display.__name__}")
+                logger.success(f"Launching {to_display.__name__}")
             except Exception as e:
-                logger.error(f"Échec du lancement de {to_display.__name__} : {e}")
+                logger.error(f"Failed to launch {to_display.__name__} : {e}")
                 data.window.display(self)

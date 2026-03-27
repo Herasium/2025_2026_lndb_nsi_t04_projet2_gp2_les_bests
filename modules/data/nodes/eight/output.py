@@ -3,17 +3,17 @@ from typing import List, Any
 
 from modules.data.complex import Complex
 
-"""Fournit la classe Output pour le rendu des composants de porte de sortie au sein de l'interface utilisateur."""
+"""Provides the Output class for rendering output gate components within the UI."""
 
 
 class Output(Complex):
-    """Représente un composant de porte de sortie dans le système d'interface utilisateur."""
+    """Represents an output gate component in the UI system."""
 
     def __init__(self, id: Any) -> None:
-        """Initialise le composant de porte Output.
+        """Initializes the Output gate component.
 
         Args:
-            id: L'identifiant unique pour l'instance du composant.
+            id: The unique identifier for the component instance.
         """
         super().__init__(id)
 
@@ -26,9 +26,9 @@ class Output(Complex):
         self.inputs_sizes: List[int] = [8]
         self.outputs_sizes: List[int] = []
 
-        # Décalage de taille exceptionnel
         self.exceptional_size_offset: int = 2
 
-        self.gen_tile_pattern() # Génération du motif de tuiles
-        self.calculate_display() # Calcul de l'affichage
-        self.setup_texts() # Configuration des textes
+        self.gen_tile_pattern()
+        self.calculate_display()
+        self.setup_texts()
+

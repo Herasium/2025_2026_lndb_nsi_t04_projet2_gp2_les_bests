@@ -2,36 +2,36 @@ from typing import Any
 
 from modules.data.complex import Complex
 
-"""Fournit des implémentations de portes logiques 8 bits pour la simulation de circuits."""
+"""Provides 8-bit logic gate implementations for circuit simulation."""
 
 
 class Not(Complex):
-    """Représente un composant de porte logique NON (NOT) 8 bits.
+    """Represents an 8-bit NOT logic gate component.
 
-    Attributs :
-        name : Le nom d'affichage de la porte.
-        gate_type : L'identifiant de la catégorie de porte logique.
-        inputs : Décalages de broches pour les signaux d'entrée.
-        outputs : Décalages de broches pour les signaux de sortie.
-        inputs_sizes : Largeur de bits des broches d'entrée.
-        outputs_sizes : Largeur de bits des broches de sortie.
+    Attributes:
+        name: The display name of the gate.
+        gate_type: The identifier for the logic gate category.
+        inputs: Pin offsets for input signals.
+        outputs: Pin offsets for output signals.
+        inputs_sizes: Bit width of input pins.
+        outputs_sizes: Bit width of output pins.
     """
 
     def __init__(self, id: Any) -> None:
-        """Initialise l'instance de la porte NON.
+        """Initializes the NOT gate instance.
 
-        Args :
-            id : Un identifiant unique pour le composant.
+        Args:
+            id: A unique identifier for the component.
         """
         super().__init__(id)
 
         self.name: str = "NOT"
         self.gate_type: str = "8NOT"
 
-        self.inputs: list[int] = [0] # Décalage d'entrée
-        self.outputs: list[int] = [255] # Décalage de sortie
-        self.inputs_sizes: list[int] = [8] # Taille d'entrée en bits
-        self.outputs_sizes: list[int] = [8] # Taille de sortie en bits
+        self.inputs: list[int] = [0]
+        self.outputs: list[int] = [255]
+        self.inputs_sizes: list[int] = [8]
+        self.outputs_sizes: list[int] = [8]
 
         self.calculate_display()
         self.gen_tile_pattern()

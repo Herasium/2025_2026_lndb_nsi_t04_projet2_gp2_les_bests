@@ -1,23 +1,23 @@
 """
-Une bibliothèque fournissant diverses fonctions d'atténuation (easing) mathématiques pour les séquences d'animation.
+A library providing various mathematical easing functions for animation sequences.
 
-Ce module implémente des courbes d'interpolation standard pour créer des transitions
-au rendu naturel entre une valeur de début et de fin sur une durée définie.
+This module implements standard interpolation curves to create natural-feeling
+transitions between a start and end value over a defined duration.
 """
 
 import math
 
 
 class EasingBase:
-    """Interface de base pour l'implémentation de transitions d'atténuation spécifiques."""
+    """Base interface for implementing specific easing transitions."""
 
     def __init__(self, start: float = 0, end: float = 1, duration: int = 100) -> None:
-        """Initialise l'état d'atténuation de base.
+        """Initializes the base easing state.
 
         Args:
-            start: La valeur de départ de l'animation.
-            end: La valeur cible de l'animation.
-            duration: Le nombre total d'itérations pour compléter la transition.
+            start: The beginning value of the animation.
+            end: The target value of the animation.
+            duration: The total number of iterations to complete the transition.
         """
         self.start: float = start
         self.end: float = end
@@ -26,18 +26,18 @@ class EasingBase:
         self.done: bool = False
 
     def func(self) -> float:
-        """Calcule le facteur de progression normalisé.
+        """Calculates the normalized progress factor.
 
         Returns:
-            Le scalaire de progression entre 0.0 et 1.0.
+            The progression scalar between 0.0 and 1.0.
         """
         raise NotImplementedError
 
     def tick(self) -> float:
-        """Avance l'état interne d'une étape et calcule la valeur actuelle.
+        """Advances the internal state by one step and computes the current value.
 
         Returns:
-            La valeur interpolée à l'étape actuelle de la chronologie.
+            The interpolated value at the current step in the timeline.
         """
         if self.current < self.duration:
             value: float = self.func()
@@ -48,25 +48,25 @@ class EasingBase:
             return self.end
 
     def reset(self) -> None:
-        """Réinitialise l'état de l'animation à la position initiale."""
+        """Resets the animation state to the initial position."""
         self.current = 0
         self.done = False
 
 
 class LinearInOut(EasingBase):
-    """Effectue une interpolation linéaire entre le début et la fin."""
+    """Performs linear interpolation between start and end."""
 
     def func(self) -> float:
-        """Calcule l'atténuation linéaire."""
+        """Calculates linear easing."""
         t: float = self.current / self.duration
         return t
 
 
 class QuadEaseInOut(EasingBase):
-    """Effectue une interpolation quadratique de type ease-in-out."""
+    """Performs quadratic ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quadratique In-Out."""
+        """Calculates quadratic In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return 2 * t * t
@@ -74,46 +74,46 @@ class QuadEaseInOut(EasingBase):
 
 
 class QuadEaseIn(EasingBase):
-    """Effectue une interpolation quadratique de type ease-in."""
+    """Performs quadratic ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quadratique In."""
+        """Calculates quadratic In easing."""
         t: float = self.current / self.duration
         return t * t
 
 
 class QuadEaseOut(EasingBase):
-    """Effectue une interpolation quadratique de type ease-out."""
+    """Performs quadratic ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quadratique Out."""
+        """Calculates quadratic Out easing."""
         t: float = self.current / self.duration
         return -(t * (t - 2))
 
 
 class CubicEaseIn(EasingBase):
-    """Effectue une interpolation cubique de type ease-in."""
+    """Performs cubic ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation cubique In."""
+        """Calculates cubic In easing."""
         t: float = self.current / self.duration
         return t * t * t
 
 
 class CubicEaseOut(EasingBase):
-    """Effectue une interpolation cubique de type ease-out."""
+    """Performs cubic ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation cubique Out."""
+        """Calculates cubic Out easing."""
         t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) + 1
 
 
 class CubicEaseInOut(EasingBase):
-    """Effectue une interpolation cubique de type ease-in-out."""
+    """Performs cubic ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation cubique In-Out."""
+        """Calculates cubic In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return 4 * t * t * t
@@ -122,28 +122,28 @@ class CubicEaseInOut(EasingBase):
 
 
 class QuarticEaseIn(EasingBase):
-    """Effectue une interpolation quartique de type ease-in."""
+    """Performs quartic ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quartique In."""
+        """Calculates quartic In easing."""
         t: float = self.current / self.duration
         return t * t * t * t
 
 
 class QuarticEaseOut(EasingBase):
-    """Effectue une interpolation quartique de type ease-out."""
+    """Performs quartic ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quartique Out."""
+        """Calculates quartic Out easing."""
         t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) * (1 - t) + 1
 
 
 class QuarticEaseInOut(EasingBase):
-    """Effectue une interpolation quartique de type ease-in-out."""
+    """Performs quartic ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quartique In-Out."""
+        """Calculates quartic In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return 8 * t * t * t * t
@@ -152,28 +152,28 @@ class QuarticEaseInOut(EasingBase):
 
 
 class QuinticEaseIn(EasingBase):
-    """Effectue une interpolation quintique de type ease-in."""
+    """Performs quintic ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quintique In."""
+        """Calculates quintic In easing."""
         t: float = self.current / self.duration
         return t * t * t * t * t
 
 
 class QuinticEaseOut(EasingBase):
-    """Effectue une interpolation quintique de type ease-out."""
+    """Performs quintic ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quintique Out."""
+        """Calculates quintic Out easing."""
         t: float = self.current / self.duration
         return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1
 
 
 class QuinticEaseInOut(EasingBase):
-    """Effectue une interpolation quintique de type ease-in-out."""
+    """Performs quintic ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation quintique In-Out."""
+        """Calculates quintic In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return 16 * t * t * t * t * t
@@ -182,55 +182,55 @@ class QuinticEaseInOut(EasingBase):
 
 
 class SineEaseIn(EasingBase):
-    """Effectue une interpolation sinusidale de type ease-in."""
+    """Performs sine-based ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation sinusidale In."""
+        """Calculates sine In easing."""
         t: float = self.current / self.duration
         return math.sin((t - 1) * math.pi / 2) + 1
 
 
 class SineEaseOut(EasingBase):
-    """Effectue une interpolation sinusidale de type ease-out."""
+    """Performs sine-based ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation sinusidale Out."""
+        """Calculates sine Out easing."""
         t: float = self.current / self.duration
         return math.sin(t * math.pi / 2)
 
 
 class SineEaseInOut(EasingBase):
-    """Effectue une interpolation sinusidale de type ease-in-out."""
+    """Performs sine-based ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation sinusidale In-Out."""
+        """Calculates sine In-Out easing."""
         t: float = self.current / self.duration
         return 0.5 * (1 - math.cos(t * math.pi))
 
 
 class CircularEaseIn(EasingBase):
-    """Effectue une interpolation circulaire de type ease-in."""
+    """Performs circular ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation circulaire In."""
+        """Calculates circular In easing."""
         t: float = self.current / self.duration
         return 1 - math.sqrt(1 - (t * t))
 
 
 class CircularEaseOut(EasingBase):
-    """Effectue une interpolation circulaire de type ease-out."""
+    """Performs circular ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation circulaire Out."""
+        """Calculates circular Out easing."""
         t: float = self.current / self.duration
         return math.sqrt((2 - t) * t)
 
 
 class CircularEaseInOut(EasingBase):
-    """Effectue une interpolation circulaire de type ease-in-out."""
+    """Performs circular ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation circulaire In-Out."""
+        """Calculates circular In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return 0.5 * (1 - math.sqrt(1 - 4 * (t * t)))
@@ -238,10 +238,10 @@ class CircularEaseInOut(EasingBase):
 
 
 class ExponentialEaseIn(EasingBase):
-    """Effectue une interpolation exponentielle de type ease-in."""
+    """Performs exponential ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation exponentielle In."""
+        """Calculates exponential In easing."""
         t: float = self.current / self.duration
         if t == 0:
             return 0
@@ -249,10 +249,10 @@ class ExponentialEaseIn(EasingBase):
 
 
 class ExponentialEaseOut(EasingBase):
-    """Effectue une interpolation exponentielle de type ease-out."""
+    """Performs exponential ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation exponentielle Out."""
+        """Calculates exponential Out easing."""
         t: float = self.current / self.duration
         if t == 1:
             return 1
@@ -260,10 +260,10 @@ class ExponentialEaseOut(EasingBase):
 
 
 class ExponentialEaseInOut(EasingBase):
-    """Effectue une interpolation exponentielle de type ease-in-out."""
+    """Performs exponential ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation exponentielle In-Out."""
+        """Calculates exponential In-Out easing."""
         t: float = self.current / self.duration
         if t == 0 or t == 1:
             return t
@@ -273,28 +273,28 @@ class ExponentialEaseInOut(EasingBase):
 
 
 class ElasticEaseIn(EasingBase):
-    """Effectue une interpolation élastique de type ease-in."""
+    """Performs elastic ease-in interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation élastique In."""
+        """Calculates elastic In easing."""
         t: float = self.current / self.duration
         return math.sin(13 * math.pi / 2 * t) * math.pow(2, 10 * (t - 1))
 
 
 class ElasticEaseOut(EasingBase):
-    """Effectue une interpolation élastique de type ease-out."""
+    """Performs elastic ease-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation élastique Out."""
+        """Calculates elastic Out easing."""
         t: float = self.current / self.duration
         return math.sin(-13 * math.pi / 2 * (t + 1)) * math.pow(2, -10 * t) + 1
 
 
 class ElasticEaseInOut(EasingBase):
-    """Effectue une interpolation élastique de type ease-in-out."""
+    """Performs elastic ease-in-out interpolation."""
 
     def func(self) -> float:
-        """Calcule l'atténuation élastique In-Out."""
+        """Calculates elastic In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             return (
@@ -310,29 +310,29 @@ class ElasticEaseInOut(EasingBase):
 
 
 class BackEaseIn(EasingBase):
-    """Effectue une atténuation de type back-in, avec un léger dépassement au début."""
+    """Performs back-in easing, with a slight overshoot at the beginning."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Back In."""
+        """Calculates back In easing."""
         t: float = self.current / self.duration
         return t * t * t - t * math.sin(t * math.pi)
 
 
 class BackEaseOut(EasingBase):
-    """Effectue une atténuation de type back-out, avec un léger dépassement à la fin."""
+    """Performs back-out easing, with a slight overshoot at the end."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Back Out."""
+        """Calculates back Out easing."""
         t: float = self.current / self.duration
         p: float = 1 - t
         return 1 - (p * p * p - p * math.sin(p * math.pi))
 
 
 class BackEaseInOut(EasingBase):
-    """Effectue une atténuation de type back-in-out avec des dépassements aux deux extrémités."""
+    """Performs back-in-out easing with overshoots at both ends."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Back In-Out."""
+        """Calculates back In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             p: float = 2 * t
@@ -342,10 +342,10 @@ class BackEaseInOut(EasingBase):
 
 
 class BounceEaseIn(EasingBase):
-    """Effectue une atténuation de type rebond (bounce-in)."""
+    """Performs bounce-in easing."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Bounce In en déléguant à BounceEaseOut."""
+        """Calculates bounce In easing by delegating to BounceEaseOut."""
         t: float = self.current / self.duration
         n: BounceEaseOut = BounceEaseOut()
         n.current = 1 - t
@@ -354,10 +354,10 @@ class BounceEaseIn(EasingBase):
 
 
 class BounceEaseOut(EasingBase):
-    """Effectue une atténuation de type rebond (bounce-out)."""
+    """Performs bounce-out easing."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Bounce Out en utilisant des fonctions par morceaux."""
+        """Calculates bounce Out easing using piecewise functions."""
         t: float = self.current / self.duration
         if t < 4 / 11:
             return 121 * t * t / 16
@@ -369,10 +369,10 @@ class BounceEaseOut(EasingBase):
 
 
 class BounceEaseInOut(EasingBase):
-    """Effectue une atténuation de type rebond (bounce-in-out)."""
+    """Performs bounce-in-out easing."""
 
     def func(self) -> float:
-        """Calcule l'atténuation Bounce In-Out."""
+        """Calculates bounce In-Out easing."""
         t: float = self.current / self.duration
         if t < 0.5:
             n: BounceEaseIn = BounceEaseIn()

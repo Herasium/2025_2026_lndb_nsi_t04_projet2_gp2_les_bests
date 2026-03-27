@@ -2,24 +2,24 @@ from modules.data import data
 import datetime
 from typing import List
 
-"""Fournit un utilitaire de journalisation centralisé avec une sortie codée par couleurs ANSI."""
+"""Provides a centralized logging utility with ANSI color-coded output."""
 
 
 class Logger:
-    """Gère la journalisation formatée dans la console pour les processus de l'application.
+    """Handles formatted console logging for application processes.
 
-    Attributs :
-        name : L'identifiant du processus utilisant cette instance.
-        levels : Étiquettes de classification de la sévérité.
-        colors : Séquences d'échappement ANSI pour le style de sortie du terminal.
-        history : Entrées de journal capturées lors de la session actuelle.
+    Attributes:
+        name: The identifier of the process using this instance.
+        levels: Severity classification labels.
+        colors: ANSI escape sequences for terminal output styling.
+        history: Captured log entries from the current session.
     """
 
     def __init__(self, name: str) -> None:
-        """Initialise l'instance du Logger.
+        """Initializes the Logger instance.
 
-        Args :
-            name : L'identifiant du processus ou du module.
+        Args:
+            name: The process or module identifier.
         """
         self.name: str = name
 
@@ -42,13 +42,13 @@ class Logger:
         self.history: List[str] = []
 
     def _header(self, level: int) -> str:
-        """Construit un préfixe standardisé pour les messages de journalisation.
+        """Constructs a standardized prefix for log messages.
 
-        Args :
-            level : L'index correspondant au niveau de sévérité.
+        Args:
+            level: The index corresponding to the severity level.
 
-        Returns :
-            Une chaîne formatée contenant la version, le nom du processus, l'horodatage et la sévérité.
+        Returns:
+            A formatted string containing versioning, process name, timestamp, and severity.
         """
         timestamp: str = datetime.datetime.now().strftime("%Y-%m-%d | %H:%M:%S.%f")
 
@@ -59,10 +59,10 @@ class Logger:
         return header
 
     def debug(self, message: str) -> None:
-        """Enregistre un message avec la sévérité DEBUG.
+        """Logs a message with DEBUG severity.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 0:
             return
@@ -71,10 +71,10 @@ class Logger:
         print(log_data)
 
     def print(self, message: str) -> None:
-        """Enregistre un message avec la sévérité INFO par défaut.
+        """Logs a message with INFO severity as a default alias.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 1:
             return
@@ -83,10 +83,10 @@ class Logger:
         print(log_data)
 
     def info(self, message: str) -> None:
-        """Enregistre un message avec la sévérité INFO.
+        """Logs a message with INFO severity.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 1:
             return
@@ -95,10 +95,10 @@ class Logger:
         print(log_data)
 
     def success(self, message: str) -> None:
-        """Enregistre un message avec la sévérité SUCCESS.
+        """Logs a message with SUCCESS severity.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 2:
             return
@@ -107,10 +107,10 @@ class Logger:
         print(log_data)
 
     def warning(self, message: str) -> None:
-        """Enregistre un message avec la sévérité WARNING.
+        """Logs a message with WARNING severity.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 2:
             return
@@ -119,10 +119,10 @@ class Logger:
         print(log_data)
 
     def error(self, message: str) -> None:
-        """Enregistre un message avec la sévérité ERROR.
+        """Logs a message with ERROR severity.
 
-        Args :
-            message : Le contenu à journaliser.
+        Args:
+            message: The content to be logged.
         """
         if data.LOGGER_MIN > 4:
             return

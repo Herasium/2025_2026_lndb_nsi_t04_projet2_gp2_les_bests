@@ -7,14 +7,14 @@ from modules.ui.toolbox.entity import Entity
 
 from modules.data import data
 
-"""Fournit l'interface pour la section tutoriel de l'application."""
+"""Provides the interface for the tutorial section of the application."""
 
 
 class TutorialView(arcade.View):
-    """Gère la disposition, le rendu et la logique d'interaction pour l'écran du tutoriel."""
+    """Manages the layout, rendering, and interaction logic for the tutorial screen."""
 
     def __init__(self) -> None:
-        """Initialise la vue, les éléments de l'interface utilisateur et les positions de mise en page."""
+        """Initializes the view, UI elements, and layout positions."""
         super().__init__()
 
         self.camera = 0
@@ -96,7 +96,6 @@ class TutorialView(arcade.View):
         )
 
     def setup_texts(self) -> None:
-        """Configure et positionne les éléments textuels de l'interface."""
         self.regletexte = Text(
             x=120,
             y=820 + self.camera,
@@ -180,20 +179,20 @@ class TutorialView(arcade.View):
             )
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de saisie au clavier.
+        """Handles keyboard input events.
 
-        Arguments:
-            key: Le code de la touche pressée.
-            key_modifiers: Drapeaux binaires indiquant les touches de modification actives.
+        Args:
+            key: The key code of the pressed key.
+            key_modifiers: Bitwise flags indicating active modifier keys.
         """
         if key == data.keys.back:
             data.window.display(data.main)
-        if key == 65473:  # Sortie d'urgence : F4
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
 
     def on_draw(self) -> None:
-        """Affiche l'état actuel de la vue à l'écran."""
+        """Renders the current view state to the display."""
         self.clear(arcade.color.BLACK)
 
         self.bg.draw()
@@ -230,26 +229,26 @@ class TutorialView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Met à jour l'état global du suivi de la souris.
+        """Updates the global mouse tracking state.
 
-        Arguments:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            delta_x: Mouvement horizontal depuis la dernière image.
-            delta_y: Mouvement vertical depuis la dernière image.
+        Args:
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Horizontal movement since last frame.
+            delta_y: Vertical movement since last frame.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Traite les événements d'interaction de la souris pour les éléments de l'interface.
+        """Processes mouse interaction events for UI elements.
 
-        Arguments:
-            x: Position horizontale de la souris au moment du clic.
-            y: Position verticale de la souris au moment du clic.
-            button: Le bouton de la souris pressé.
-            key_modifiers: Drapeaux binaires pour les touches de modification actives.
+        Args:
+            x: Horizontal mouse position at time of click.
+            y: Vertical mouse position at time of click.
+            button: The mouse button being pressed.
+            key_modifiers: Bitwise flags for active modifier keys.
         """
         if self.back_button.touched:
             data.window.display(data.main)
@@ -273,7 +272,7 @@ class TutorialView(arcade.View):
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Met à jour le décalage vertical de la caméra et reconstruit la mise en page."""
+        """Updates vertical camera offset and rebuilds layout."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
         self.setup_texts()

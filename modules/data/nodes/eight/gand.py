@@ -2,39 +2,37 @@ from typing import Any
 
 from modules.data.complex import Complex
 
-"""Fournit des implémentations de portes logiques 8 bits pour la simulation de circuits."""
+"""Provides 8-bit logic gate implementations for circuit simulation."""
 
 
 class And(Complex):
-    """Représente un composant de porte logique ET 8 bits.
+    """Represents an 8-bit AND logic gate component.
 
-    Attributs :
-        name : Le nom d'affichage de la porte.
-        gate_type : L'identifiant de la catégorie de porte logique.
-        inputs : Décalages de broches pour les signaux d'entrée.
-        outputs : Décalages de broches pour les signaux de sortie.
-        inputs_sizes : Largeur de bits des broches d'entrée.
-        outputs_sizes : Largeur de bits des broches de sortie.
+    Attributes:
+        name: The display name of the gate.
+        gate_type: The identifier for the logic gate category.
+        inputs: Pin offsets for input signals.
+        outputs: Pin offsets for output signals.
+        inputs_sizes: Bit width of input pins.
+        outputs_sizes: Bit width of output pins.
     """
 
     def __init__(self, id: Any) -> None:
-        """Initialise l'instance de la porte And (ET).
+        """Initializes the And gate instance.
 
-        Args :
-            id : Un identifiant unique pour le composant.
+        Args:
+            id: A unique identifier for the component.
         """
         super().__init__(id)
 
         self.name: str = "AND"
         self.gate_type: str = "8AND"
 
-        # Configuration des entrées et sorties
         self.inputs: list[int] = [0, 0]
         self.outputs: list[int] = [0]
         self.inputs_sizes: list[int] = [8, 8]
         self.outputs_sizes: list[int] = [8]
 
-        # Initialisation de l'affichage et de la structure
         self.calculate_display()
         self.gen_tile_pattern()
         self.setup_texts()

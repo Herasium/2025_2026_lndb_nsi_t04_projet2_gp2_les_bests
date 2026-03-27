@@ -4,13 +4,13 @@ from modules.data.gate import Gate
 
 
 class Xor(Gate):
-    """Représente un composant de porte logique XOR (OU exclusif)."""
+    """Represents an XOR logic gate component."""
 
     def __init__(self, id: Any) -> None:
-        """Initialise la porte XOR avec les configurations de broches par défaut.
+        """Initializes the XOR gate with default pin configurations.
 
         Args:
-            id: L'identifiant unique pour l'instance de la porte.
+            id: The unique identifier for the gate instance.
         """
         super().__init__(id)
 
@@ -18,12 +18,10 @@ class Xor(Gate):
         self.type: str = "Gate"
         self.gate_type: str = "XOR"
 
-        # Initialisation des entrées et sorties (valeurs et tailles)
         self.inputs: List[int] = [0, 0]
         self.outputs: List[int] = [0]
         self.inputs_sizes: List[int] = [1, 1]
         self.outputs_sizes: List[int] = [1]
 
-        # Calcul de l'affichage et génération du motif de tuiles
         self.calculate_display()
         self.gen_tile_pattern()

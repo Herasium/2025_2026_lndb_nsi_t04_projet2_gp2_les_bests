@@ -11,10 +11,10 @@ from modules.ui.level_player.view import LevelPlayer
 
 
 class LevelPlayerSelector(arcade.View):
-    """Fournit une interface permettant aux utilisateurs de sélectionner et de lancer les niveaux du jeu."""
+    """Provides an interface for users to select and launch game levels."""
 
     def __init__(self) -> None:
-        """Initialise la vue et génère l'interface utilisateur de sélection de niveau."""
+        """Initializes the view and populates the level selection UI."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
@@ -24,14 +24,14 @@ class LevelPlayerSelector(arcade.View):
         self.setup()
 
     def setup(self) -> None:
-        """Configure la disposition de l'interface et associe les niveaux disponibles aux éléments sélectionnables."""
-        debug_list: List[str] = ["Sélecteur d'Éditeur de Puces", "<- Retour", ""]
+        """Configures the UI layout and maps available levels to selectable elements."""
+        debug_list: List[str] = ["Chip Editor Selector", "<- Back", ""]
         self.texts: List[Text] = []
         self.levels: List[Any] = []
 
         for i in data.loaded_levels:
             level = data.loaded_levels[i]
-            debug_list.append(f"Niveau {level.number} {level.name} #{level.id}")
+            debug_list.append(f"Level {level.number} {level.name} #{level.id}")
             self.levels.append(i)
 
         start_y: int = data.WINDOW_HEIGHT - 70 + self.camera
@@ -43,11 +43,11 @@ class LevelPlayerSelector(arcade.View):
             self.texts[-1].align = ("left", "center")
 
     def reset(self) -> None:
-        """Réinitialise l'état de la vue."""
+        """Resets the view state."""
         pass
 
     def on_draw(self) -> None:
-        """Rendu des éléments textuels et de leurs boîtes de collision (hitboxes) associées."""
+        """Renders text elements and their associated hitboxes."""
         self.clear()
 
         for i in self.texts:
@@ -57,15 +57,15 @@ class LevelPlayerSelector(arcade.View):
     def on_update(self, delta_time: float) -> None:
         """
         Args:
-            delta_time: Temps écoulé depuis la dernière mise à jour de la frame.
+            delta_time: Time elapsed since the last update frame.
         """
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
         Args:
-            key: Identifiant entier de la touche pressée.
-            key_modifiers: Masque de bits des touches de modification actives.
+            key: Integer identifier of the pressed key.
+            key_modifiers: Bitmask of active modifier keys.
         """
         if key == 97:
             arcade.exit()
@@ -73,8 +73,8 @@ class LevelPlayerSelector(arcade.View):
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
         Args:
-            key: Identifiant entier de la touche relâchée.
-            key_modifiers: Masque de bits des touches de modification actives.
+            key: Integer identifier of the released key.
+            key_modifiers: Bitmask of active modifier keys.
         """
         pass
 
@@ -83,10 +83,10 @@ class LevelPlayerSelector(arcade.View):
     ) -> None:
         """
         Args:
-            x: Position horizontale actuelle de la souris.
-            y: Position verticale actuelle de la souris.
-            delta_x: Variation de la position horizontale.
-            delta_y: Variation de la position verticale.
+            x: Current horizontal mouse position.
+            y: Current vertical mouse position.
+            delta_x: Change in horizontal position.
+            delta_y: Change in vertical position.
         """
         mouse.position = (x, y)
 
@@ -95,10 +95,10 @@ class LevelPlayerSelector(arcade.View):
     ) -> None:
         """
         Args:
-            x: Position horizontale de la souris lors du clic.
-            y: Position verticale de la souris lors du clic.
-            button: Identifiant du bouton de la souris pressé.
-            key_modifiers: Masque de bits des touches de modification actives.
+            x: Horizontal mouse position during click.
+            y: Vertical mouse position during click.
+            button: Identifier of the mouse button pressed.
+            key_modifiers: Bitmask of active modifier keys.
         """
         for index in range(len(self.texts)):
             text = self.texts[index]
@@ -114,18 +114,17 @@ class LevelPlayerSelector(arcade.View):
     ) -> None:
         """
         Args:
-            x: Position horizontale de la souris.
-            y: Position verticale de la souris.
-            button: Identifiant du bouton de la souris relâché.
-            key_modifiers: Masque de bits des touches de modification actives.
+            x: Horizontal mouse position.
+            y: Vertical mouse position.
+            button: Identifier of the mouse button released.
+            key_modifiers: Bitmask of active modifier keys.
         """
         pass
 
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Met à jour le décalage vertical de la caméra et reconstruit la disposition."""
-        # Mise à jour du décalage caméra selon la sensibilité de la souris
+        """Updates vertical camera offset and rebuilds layout."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
         self.setup()

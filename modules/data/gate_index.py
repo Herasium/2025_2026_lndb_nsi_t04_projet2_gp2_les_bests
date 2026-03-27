@@ -1,13 +1,11 @@
-"""Module de registre pour les composants de portes logiques.
+"""Registry module for logic gate components.
 
-Fournit une cartographie centralisée des identifiants de chaînes de caractères vers 
-leurs implémentations de classes de portes logiques respectives pour les systèmes 
-1-bit, 8-bits et à largeurs mixtes.
+Provides centralized mapping of string identifiers to their respective
+logic gate class implementations for 1-bit, 8-bit, and mixed-width systems.
 """
 
 from typing import Dict, Type, Any
 
-# Importations des nœuds 1-bit
 from modules.data.nodes.one.gand import And
 from modules.data.nodes.one.gnot import Not
 from modules.data.nodes.one.gor import Or
@@ -26,7 +24,6 @@ from modules.data.nodes.one.off import Off
 from modules.data.nodes.one.tand import TAnd
 from modules.data.nodes.one.tor import TOr
 
-# Importations des nœuds 8-bits
 from modules.data.nodes.eight.gnot import Not as Not_8
 from modules.data.nodes.eight.input import Input as Input_8
 from modules.data.nodes.eight.output import Output as Output_8
@@ -40,12 +37,10 @@ from modules.data.nodes.eight.xor import Xor as Xor_8
 from modules.data.nodes.eight.one import ONE as One_8
 from modules.data.nodes.eight.mux import Mux as Mux_8
 
-# Importations des nœuds mixtes (conversion et stockage)
 from modules.data.nodes.mix.eight_breaker import Breaker as Breaker_8
 from modules.data.nodes.mix.eight_maker import Maker as Maker_8
 from modules.data.nodes.mix.register import Register
 
-# Registre global de tous les types de portes
 gate_types: Dict[str, Type[Any]] = {
     "AND": And,
     "NOT": Not,
@@ -81,7 +76,6 @@ gate_types: Dict[str, Type[Any]] = {
     "8REGISTER": Register,
 }
 
-# Registre spécifique aux composants 1-bit
 gate_types_1: Dict[str, Type[Any]] = {
     "AND": And,
     "NOT": Not,
@@ -102,7 +96,6 @@ gate_types_1: Dict[str, Type[Any]] = {
     "TAND": TAnd,
 }
 
-# Registre spécifique aux composants 8-bits
 gate_types_8: Dict[str, Type[Any]] = {
     "8NOT": Not_8,
     "8Input": Input_8,
@@ -118,7 +111,6 @@ gate_types_8: Dict[str, Type[Any]] = {
     "8MUX": Mux_8,
 }
 
-# Registre pour les composants de conversion et les registres mixtes
 gate_types_mix: Dict[str, Type[Any]] = {
     "8BREAK": Breaker_8, 
     "8MAKER": Maker_8,

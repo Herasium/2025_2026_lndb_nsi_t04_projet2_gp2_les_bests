@@ -6,43 +6,43 @@ from modules.data.custom import CustomGate
 from modules.data.chip import Chip
 from modules.data.gate import Gate
 
-"""Fournit la logique de simulation pour les puces de circuit, incluant les opérations 
-des portes, la propagation du signal et le parcours du circuit."""
+"""Provides simulation logic for circuit chips, including gate operations, 
+signal propagation, and circuit traversal."""
 
 logger: Logger = Logger("Engine")
 
 
 def gate_and(inputs: list[int]) -> list[int]:
-    """Calcule l'opération ET (AND).
+    """Calculates AND operation.
 
     Args:
-        inputs: Liste contenant deux bits d'entrée.
+        inputs: List containing two input bits.
 
     Returns:
-        Résultat de l'opération ET.
+        Result of the AND operation.
     """
     return [(inputs[0] and inputs[1]) * 1]
 
 def gate_tand(inputs: list[int]) -> list[int]:
-    """Calcule l'opération ET (AND).
+    """Calculates AND operation.
 
     Args:
-        inputs: Liste contenant trois bits d'entrée.
+        inputs: List containing three input bits.
 
     Returns:
-        Résultat de l'opération ET.
+        Result of the AND operation.
     """
     return [(inputs[0] and inputs[1] and inputs[2]) * 1]
 
 
 def gate_adder(inputs: list[int]) -> list[int]:
-    """Calcule l'opération d'un additionneur complet (Full Adder).
+    """Calculates Full Adder operation.
 
     Args:
-        inputs: Liste contenant trois bits d'entrée [A, B, Cin].
+        inputs: List containing three input bits [A, B, Cin].
 
     Returns:
-        [Somme, Retenue]
+        [Sum, Carry]
     """
     A, B, Cin = inputs
 
@@ -53,13 +53,13 @@ def gate_adder(inputs: list[int]) -> list[int]:
 
 
 def gate_subtractor(inputs: list[int]) -> list[int]:
-    """Calcule l'opération d'un soustracteur complet (Full Subtractor).
+    """Calculates Full Subtractor operation.
 
     Args:
-        inputs: Liste contenant trois bits d'entrée [A, B, Bin].
+        inputs: List containing three input bits [A, B, Bin].
 
     Returns:
-        [Différence, Retenue]
+        [Difference, Borrow]
     """
     A, B, Bin = inputs
 
@@ -70,205 +70,205 @@ def gate_subtractor(inputs: list[int]) -> list[int]:
 
 
 def gate_or(inputs: list[int]) -> list[int]:
-    """Calcule l'opération OU (OR).
+    """Calculates OR operation.
 
     Args:
-        inputs: Liste contenant deux bits d'entrée.
+        inputs: List containing two input bits.
 
     Returns:
-        Résultat de l'opération OU.
+        Result of the OR operation.
     """
     return [(inputs[0] or inputs[1]) * 1]
 
 def gate_tor(inputs: list[int]) -> list[int]:
-    """Calcule l'opération OU (OR).
+    """Calculates OR operation.
 
     Args:
-        inputs: Liste contenant trois bits d'entrée.
+        inputs: List containing three input bits.
 
     Returns:
-        Résultat de l'opération OU.
+        Result of the OR operation.
     """
     return [(inputs[0] or inputs[1] or inputs[2]) * 1]
 
 
 def gate_not(inputs: list[int]) -> list[int]:
-    """Calcule l'opération NON (NOT).
+    """Calculates NOT operation.
 
     Args:
-        inputs: Liste contenant un seul bit d'entrée.
+        inputs: List containing a single input bit.
 
     Returns:
-        Bit inversé.
+        Inverted bit.
     """
     return [(not inputs[0]) * 1]
 
 
 def gate_xor(inputs: list[int]) -> list[int]:
-    """Calcule l'opération OU exclusif (XOR).
+    """Calculates XOR operation.
 
     Args:
-        inputs: Liste contenant deux bits d'entrée.
+        inputs: List containing two input bits.
 
     Returns:
-        Résultat de l'opération XOR.
+        Result of the XOR operation.
     """
     return [(inputs[0] ^ inputs[1]) * 1]
 
 
 def gate_nand(inputs: list[int]) -> list[int]:
-    """Calcule l'opération NON-ET (NAND).
+    """Calculates NAND operation.
 
     Args:
-        inputs: Liste contenant deux bits d'entrée.
+        inputs: List containing two input bits.
 
     Returns:
-        Résultat de l'opération NAND.
+        Result of the NAND operation.
     """
     return [(not (inputs[0] and inputs[1])) * 1]
 
 
 def gate_nor(inputs: list[int]) -> list[int]:
-    """Calcule l'opération NON-OU (NOR).
+    """Calculates NOR operation.
 
     Args:
-        inputs: Liste contenant deux bits d'entrée.
+        inputs: List containing two input bits.
 
     Returns:
-        Résultat de l'opération NOR.
+        Result of the NOR operation.
     """
     return [(not (inputs[0] or inputs[1])) * 1]
 
 
 def gate_clk(inputs: list[int] = []) -> list[int]:
-    """Fournit un signal d'horloge basé sur le temps système.
+    """Provides a clock signal based on system time.
 
     Args:
-        inputs: Liste d'entrées ignorée.
+        inputs: Ignored input list.
 
     Returns:
-        Bit alternant basé sur l'horodatage Unix actuel.
+        Alternating bit based on current Unix timestamp.
     """
     return [round(time.time()) % 2]
 
 
 def gate_pass(inputs: list[int]) -> list[int]:
-    """Transmet les valeurs d'entrée sans modification.
+    """Passes input values through unchanged.
 
     Args:
-        inputs: Liste d'entrée à transmettre.
+        inputs: Input list to pass.
 
     Returns:
-        Liste d'entrée inchangée.
+        Input list unchanged.
     """
     return inputs
 
 
 def gate_8not(inputs: list[int]) -> list[int]:
-    """Effectue une inversion sur 8 bits via XOR.
+    """Performs 8-bit inversion via XOR.
 
     Args:
-        inputs: Liste contenant une valeur entière de 8 bits.
+        inputs: List containing an 8-bit integer value.
 
     Returns:
-        Valeur 8 bits avec inversion bit à bit.
+        Bitwise inverted 8-bit value.
     """
     return [inputs[0] ^ ((1 << 8) - 1)]
 
 
 def gate_8and(inputs: list[int]) -> list[int]:
-    """Effectue un ET (AND) sur 8 bits.
+    """Performs 8-bit AND.
 
     Args:
-        inputs: Liste contenant deux valeurs entières de 8 bits.
+        inputs: List containing two 8-bit integer values.
 
     Returns:
-        Résultat du ET bit à bit des entrées.
+        Bitwise AND of inputs.
     """
     return [(inputs[0] & inputs[1]) & ((1 << 8) - 1)]
 
 
 def gate_8or(inputs: list[int]) -> list[int]:
-    """Effectue un OU (OR) sur 8 bits.
+    """Performs 8-bit OR.
 
     Args:
-        inputs: Liste contenant deux valeurs entières de 8 bits.
+        inputs: List containing two 8-bit integer values.
 
     Returns:
-        Résultat du OU bit à bit des entrées.
+        Bitwise OR of inputs.
     """
     return [(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
 
 def gate_8xor(inputs: list[int]) -> list[int]:
-    """Effectue un OU exclusif (XOR) sur 8 bits.
+    """Performs 8-bit XOR.
 
     Args:
-        inputs: Liste contenant deux valeurs entières de 8 bits.
+        inputs: List containing two 8-bit integer values.
 
     Returns:
-        Résultat du XOR bit à bit des entrées.
+        Bitwise XOR of inputs.
     """
     return [(inputs[0] ^ inputs[1]) & ((1 << 8) - 1)]
 
 
 def gate_8nand(inputs: list[int]) -> list[int]:
-    """Effectue un NON-ET (NAND) sur 8 bits.
+    """Performs 8-bit NAND.
 
     Args:
-        inputs: Liste contenant deux valeurs entières de 8 bits.
+        inputs: List containing two 8-bit integer values.
 
     Returns:
-        Résultat du NAND bit à bit des entrées.
+        Bitwise NAND of inputs.
     """
     return [~(inputs[0] & inputs[1]) & ((1 << 8) - 1)]
 
 
 def gate_8nor(inputs: list[int]) -> list[int]:
-    """Effectue un NON-OU (NOR) sur 8 bits.
+    """Performs 8-bit NOR.
 
     Args:
-        inputs: Liste contenant deux valeurs entières de 8 bits.
+        inputs: List containing two 8-bit integer values.
 
     Returns:
-        Résultat du NOR bit à bit des entrées.
+        Bitwise NOR of inputs.
     """
     return [~(inputs[0] | inputs[1]) & ((1 << 8) - 1)]
 
 
 def gate_8maker(inputs: list[int]) -> list[int]:
-    """Convertit une séquence de bits en un entier de 8 bits.
+    """Converts a sequence of bits into an 8-bit integer.
 
     Args:
-        inputs: Liste de bits individuels.
+        inputs: List of individual bits.
 
     Returns:
-        Liste à élément unique contenant la représentation entière.
+        Single-element list containing the integer representation.
     """
 
     return [int("".join(map(str, inputs)), 2)]
 
 
 def gate_8breaker(inputs: list[int]) -> list[int]:
-    """Décompose un entier de 8 bits en une séquence de bits.
+    """Decomposes an 8-bit integer into a sequence of bits.
 
     Args:
-        inputs: Liste contenant l'entier à décomposer.
+        inputs: List containing the integer to decompose.
 
     Returns:
-        Représentation binaire sur 8 bits sous forme de liste d'entiers.
+        8-bit binary representation as a list of integers.
     """
     return [int(bit) for bit in format(inputs[0], "08b")]
 
 
 def gate_delay(inputs: list[int], gate: Gate) -> list[int]:
-    """Maintient le signal pendant 1 tick.
+    """Hold the signal for 1 tick.
 
     Args:
-        inputs: Liste contenant un bit d'entrée.
+        inputs: List containing one input bit.
 
     Returns:
-        Le bit tel qu'il était il y a un tick.
+        Bit as it was one tick ago.
     """
     old = gate.old_output
     gate.old_output = inputs[0]
@@ -276,40 +276,40 @@ def gate_delay(inputs: list[int], gate: Gate) -> list[int]:
 
 
 def gate_8adder(inputs: list[int]) -> int:
-    """Additionneur 8 bits sans sortie de retenue.
+    """8-bit adder without carry output.
 
     Args:
-        inputs: [A, B] où 0 <= A, B <= 255
+        inputs: [A, B] where 0 <= A, B <= 255
 
     Returns:
-        Résultat 8 bits (0–255)
+        8-bit result (0–255)
     """
     A, B = inputs
     return [(A + B) & 0xFF]
 
 
 def gate_8subtractor(inputs: list[int]) -> int:
-    """Soustracteur 8 bits sans sortie de retenue.
+    """8-bit subtractor without borrow output.
 
     Args:
-        inputs: [A, B] où 0 <= A, B <= 255
+        inputs: [A, B] where 0 <= A, B <= 255
 
     Returns:
-        Résultat 8 bits (0–255)
+        8-bit result (0–255)
     """
     A, B = inputs
     return [(A - B) & 0xFF]
 
 def gate_8mux(inputs: list[int]) -> list[int]:
     """
-    Utilise la première entrée comme sélecteur pour choisir l'une des 8 entrées suivantes.
+    Uses the first input as a selector to choose one of the following 8 inputs.
     
     Args:
-        inputs: Une liste où l'indice 0 est le sélecteur (0-7) 
-                et les indices 1-8 sont les entrées de données.
+        inputs: A list where index 0 is the selector (0-7) 
+                and indices 1-8 are the data inputs.
 
     Returns:
-        La valeur d'entrée choisie.
+        The chosen input value.
     """
 
     selector = inputs[0] % 8
@@ -317,15 +317,15 @@ def gate_8mux(inputs: list[int]) -> list[int]:
     
     return [data_bits[selector]]
 
-def gate_register(inputs: list[int], gate: Gate) -> list[int]:
+def gate_register(inputs: list[int],gate: Gate) -> list[int]:
     """
-    Stocke une valeur unique de 8 bits.
+    Stores a single 8 bit value
 
     Args:
-        inputs: Valeur d'entrée (8), Save (Sauvegarder), Load (Charger)
+        inputs: Input Value (8), Save, Load
 
     Returns:
-        0 ou la valeur stockée.
+        0 or the Stored value
     """
 
     if inputs[1] == True:
@@ -365,33 +365,33 @@ LOGIC_MAP: dict[str, callable] = {
 
 
 class Engine:
-    """Simule le comportement des puces de circuit et la propagation des signaux."""
+    """Simulates circuit chip behavior and signal propagation."""
 
     @profile
     def calculate_output(
         self, gate_type: str, inputs: list[int], gate: Gate
     ) -> list[int]:
-        """Calcule la sortie pour une porte logique standard.
+        """Calculates output for a standard logic gate.
 
         Args:
-            gate_type: Identifiant pour la logique de la porte.
-            inputs: Valeurs d'entrée pour la porte.
+            gate_type: Identifier for the gate logic.
+            inputs: Input values for the gate.
 
         Returns:
-            Valeurs de sortie sous forme de liste.
+            Output values as a list.
         """
         if gate_type in LOGIC_MAP:
-            if gate_type in ["DLY", "8REGISTER"]:
+            if gate_type in ["DLY","8REGISTER"]:
                 return LOGIC_MAP[gate_type](inputs, gate)
             return LOGIC_MAP[gate_type](inputs)
         return [False]
 
     @profile
     def calculate_custom(self, gate: CustomGate) -> None:
-        """Simule la logique interne pour un composant de porte personnalisé.
+        """Simulates internal logic for a custom gate component.
 
         Args:
-            gate: Objet de porte personnalisée à simuler.
+            gate: Custom gate object to be simulated.
         """
         gate.prop_io()
         self.propagate_values(gate.chip, visible=False)
@@ -399,13 +399,13 @@ class Engine:
 
     @profile
     def sort_gates(self, chip: Chip) -> tuple[list[str], list[str], list[str]]:
-        """Catégorise les composants de la puce en portes logiques, d'entrée et de sortie.
+        """Categorizes chip components into logic, input, and output gates.
 
         Args:
-            chip: La structure de la puce à analyser.
+            chip: The chip structure to analyze.
 
         Returns:
-            Tuple contenant les listes d'IDs des portes logiques, d'entrée et de sortie.
+            Tuple containing lists of logic gate IDs, input IDs, and output IDs.
         """
         gates: list[str] = []
         inputs: list[str] = []
@@ -423,16 +423,16 @@ class Engine:
     def draw_connections(
         self, chip: Chip, inputs: list[str], outputs: list[str], gates: list[str]
     ) -> dict[str, list]:
-        """Construit une carte de connectivité pour la puce.
+        """Builds a connectivity map for the chip.
 
         Args:
-            chip: La structure de la puce.
-            inputs: Liste des IDs des portes d'entrée.
-            outputs: Liste des IDs des portes de sortie.
-            gates: Liste des IDs des portes logiques.
+            chip: The chip structure.
+            inputs: List of input gate IDs.
+            outputs: List of output gate IDs.
+            gates: List of logic gate IDs.
 
         Returns:
-            Dictionnaire associant les IDs de portes aux structures de chemin de connexion.
+            Dictionary mapping gate IDs to connection path structures.
         """
         paths = chip.paths
         result: dict[str, list] = {}
@@ -464,12 +464,12 @@ class Engine:
     def reset_input_validation(
         self, chip: Chip, gates: list[str], outputs: list[str]
     ) -> None:
-        """Réinitialise l'état de validation pour toutes les portes et chemins.
+        """Resets validation state for all gates and paths.
 
         Args:
-            chip: L'objet puce à réinitialiser.
-            gates: IDs des portes logiques.
-            outputs: IDs des portes de sortie.
+            chip: The chip object to reset.
+            gates: Logic gate IDs.
+            outputs: Output gate IDs.
         """
         for gate_id in gates + outputs:
             gate = chip.gates[gate_id]
@@ -481,13 +481,13 @@ class Engine:
 
     @profile
     def get_wired_inputs_map(self, connections: dict[str, list]) -> dict[str, set[int]]:
-        """Associe les ports d'entrée des portes à leur statut de câblage.
+        """Maps gate input ports to their wired status.
 
         Args:
-            connections: Carte de connectivité de la puce.
+            connections: Connectivity map of the chip.
 
         Returns:
-            Dictionnaire associant l'ID de la porte à un ensemble d'indices de ports d'entrée actifs.
+            Dictionary mapping gate ID to a set of active input port indices.
         """
         wired_map: dict[str, set[int]] = {}
         for source_id, data in connections.items():
@@ -502,12 +502,12 @@ class Engine:
     def propagate_outputs(
         self, chip: Chip, connections: dict[str, list], source_id: str, visible=False
     ) -> None:
-        """Propage le signal d'une porte source vers les cibles connectées.
+        """Propagates signal from a source gate to connected targets.
 
         Args:
-            chip: La structure de la puce.
-            connections: Carte de connectivité de la puce.
-            source_id: ID de la porte à l'origine du signal.
+            chip: The chip structure.
+            connections: Connectivity map of the chip.
+            source_id: ID of the gate originating the signal.
         """
         if source_id not in connections:
             return
@@ -554,14 +554,14 @@ class Engine:
         outputs: list[str],
         visible: bool = False,
     ) -> None:
-        """Simule de manière itérative la propagation du signal à travers les portes logiques.
+        """Iteratively simulates signal propagation through logic gates.
 
         Args:
-            chip: La puce en cours de simulation.
-            connections: Carte de connectivité.
-            gates: IDs des portes logiques.
-            inputs: IDs des portes d'entrée.
-            outputs: IDs des portes de sortie.
+            chip: The chip being simulated.
+            connections: Connectivity map.
+            gates: Logic gate IDs.
+            inputs: Input gate IDs.
+            outputs: Output gate IDs.
         """
         unprocessed = set(gates + outputs)
         wired_inputs_map = self.get_wired_inputs_map(connections)
@@ -593,7 +593,7 @@ class Engine:
             for pid in processed_this_frame:
                 unprocessed.remove(pid)
 
-            # Forcer la résolution des portes bloquées
+            # Force resolution of stalled gates
             if not processed_this_frame and unprocessed:
                 random_id = list(unprocessed)[0]
                 gate = chip.gates[random_id]
@@ -610,14 +610,14 @@ class Engine:
                 unprocessed.remove(random_id)
 
         if iterations >= safeguard_max:
-            logger.warning("Limite de sécurité atteinte. Boucle infinie ou circuit trop complexe.")
+            logger.warning("Safeguard reached. Infinite loop or too complex.")
 
     @profile
     def propagate_values(self, chip: Chip, visible=True) -> None:
-        """Initialise et lance la séquence de propagation du signal.
+        """Initializes and runs the signal propagation sequence.
 
         Args:
-            chip: L'objet puce à simuler.
+            chip: The chip object to simulate.
         """
         gates, inputs, outputs = self.sort_gates(chip)
         connections = self.draw_connections(chip, inputs, outputs, gates)

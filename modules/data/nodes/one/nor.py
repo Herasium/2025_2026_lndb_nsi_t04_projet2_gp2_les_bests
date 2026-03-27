@@ -2,17 +2,17 @@ from typing import List, Any
 
 from modules.data.gate import Gate
 
-"""Définitions des portes logiques pour la simulation de circuits."""
+"""Logic gate definitions for circuit simulation."""
 
 
 class Nor(Gate):
-    """Représente une porte logique NON-OU (NOR) avec deux entrées et une sortie."""
+    """Represents a NOR logic gate with two inputs and one output."""
 
     def __init__(self, id: Any) -> None:
-        """Initialise la porte NON-OU avec l'état et la configuration par défaut.
+        """Initializes the NOR gate with default state and configuration.
 
         Args:
-            id: Identifiant unique pour l'instance de la porte.
+            id: Unique identifier for the gate instance.
         """
         super().__init__(id)
 
@@ -26,6 +26,5 @@ class Nor(Gate):
         self.inputs_sizes: List[int] = [1, 1]
         self.outputs_sizes: List[int] = [1]
 
-        # Calculer l'affichage et générer le motif de tuiles
         self.calculate_display()
         self.gen_tile_pattern()

@@ -1,4 +1,4 @@
-"""Fournit la vue SaveFrame pour l'édition et la sauvegarde des données de configuration de niveau."""
+"""Provides the SaveFrame view for editing and saving level configuration data."""
 
 import arcade
 from typing import Any, Dict, List
@@ -9,13 +9,13 @@ from modules.data import data
 
 
 class SaveFrame(arcade.View):
-    """Gère la disposition de l'interface utilisateur et les interactions pour l'édition des propriétés de niveau."""
+    """Manages the UI layout and user interactions for editing level properties."""
 
     def __init__(self, level: Any) -> None:
-        """Initialise l'instance SaveFrame.
+        """Initializes the SaveFrame instance.
 
         Args:
-            level: L'objet de configuration contenant les données de niveau à modifier.
+            level: The configuration object containing level data to be modified.
         """
         super().__init__()
 
@@ -25,34 +25,33 @@ class SaveFrame(arcade.View):
         self.setup()
 
     def setup(self) -> None:
-        """Initialise et positionne les éléments textuels de l'interface basés sur les données actuelles du niveau."""
+        """Initializes and positions UI text elements based on current level data."""
         self.texts = []
         debug_list: List[str] = [
-            "Sauvegarde du Niveau",
-            "<- Retour",
+            "Level Saver",
+            "<- Back",
             "--------------",
-            # Les noms de variables (id, name) restent inchangés mais le texte environnant est traduit
-            f"Niveau {self.level.id} {self.level.name}",
-            "Description du Niveau : ",
+            f"Level {self.level.id} {self.level.name}",
+            "Level Description : ",
             self.level.description,
             "--------------",
-            f"Temps du Niveau : {self.level.time}",
+            f"Level Time : {self.level.time}",
             "+ 30 sec",
             " - 30 sec",
             "--------------",
-            f"Numéro du Niveau : {self.level.number}",
+            f"Level Number : {self.level.number}",
             "+ 1",
             "- 1",
             "--------------",
-            f"Catégorie du Niveau : {self.level.category}",
+            f"Level Category : {self.level.category}",
             "+ 1",
             "- 1",
             "--------------",
-            f"Couleur du Niveau : {data.level_colors[self.level.color]}",
-            "-> Suivant",
-            f"Puce Personnalisée Publique : {self.level.is_custom}",
-            "-> Changer",
-            "--> Sauvegarder <--",
+            f"Level Color : {data.level_colors[self.level.color]}",
+            "-> Next",
+            f"Public Custom Chip : {self.level.is_custom}",
+            "-> Change",
+            "--> Save <--",
         ]
 
         start_y: int = data.WINDOW_HEIGHT - 70
@@ -65,56 +64,56 @@ class SaveFrame(arcade.View):
             self.texts[-1].align = ("left", "center")
 
     def reset(self) -> None:
-        """Réinitialise l'état interne de la vue."""
+        """Resets the internal state of the view."""
         pass
 
     def on_draw(self) -> None:
-        """Rendu de tous les éléments textuels configurés de l'interface utilisateur."""
+        """Renders all configured UI text elements."""
         self.clear()
         for i in self.texts:
             i.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Gère les mises à jour logiques périodiques."""
+        """Handles periodic logic updates."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de pression de touches du clavier.
+        """Handles keyboard input events.
 
         Args:
-            key: L'identifiant de la touche pressée.
-            key_modifiers: Drapeaux binaires pour les touches de modification.
+            key: The identifier of the pressed key.
+            key_modifiers: Bitwise flags for modifier keys.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de touches."""
+        """Handles key release events."""
         pass
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Met à jour l'état global du suivi de la souris.
+        """Updates the global mouse tracking state.
 
         Args:
-            x: La coordonnée x actuelle de la souris.
-            y: La coordonnée y actuelle de la souris.
-            delta_x: La variation de la coordonnée x depuis la dernière image.
-            delta_y: La variation de la coordonnée y depuis la dernière image.
+            x: The current x-coordinate of the mouse.
+            y: The current y-coordinate of the mouse.
+            delta_x: The change in x-coordinate since the last frame.
+            delta_y: The change in y-coordinate since the last frame.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Traite les interactions de clic de souris avec les éléments de l'interface.
+        """Processes mouse click interactions with UI elements.
 
         Args:
-            x: La coordonnée x du clic de souris.
-            y: La coordonnée y du clic de souris.
-            button: Le bouton de la souris pressé.
-            key_modifiers: Drapeaux binaires pour les touches de modification.
+            x: The x-coordinate of the mouse click.
+            y: The y-coordinate of the mouse click.
+            button: The mouse button pressed.
+            key_modifiers: Bitwise flags for modifier keys.
         """
         if self.texts[1].touched:
             data.window.back()
@@ -152,14 +151,14 @@ class SaveFrame(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Gère les événements de relâchement du bouton de la souris."""
+        """Handles mouse release events."""
         pass
 
     def get_save_gate_counts(self) -> Dict[Any, int]:
-        """Calcule la fréquence des types de portes utilisés dans le niveau actuel.
+        """Calculates the frequency of gate types used in the current level.
 
         Returns:
-            Un dictionnaire associant des types de portes spécifiques à leur nombre total d'occurrences.
+            A dictionary mapping specific gate types to their total occurrences.
         """
         result: Dict[Any, int] = {}
         for i in self.level.chip.gates:

@@ -25,15 +25,15 @@ logger: Logger = Logger("LevelPlayer")
 
 
 class LevelPlayer(arcade.View):
-    """Gère la vue interactive du niveau de jeu, incluant le rendu de l'interface utilisateur,
-    l'édition pilotée par l'utilisateur et la simulation des portes logiques.
+    """Manages the interactive game level view, including UI rendering,
+    user-driven editing, and logic gate simulation.
     """
 
     def __init__(self, id: Optional[str] = None) -> None:
-        """Initialise la vue LevelPlayer et charge la configuration du niveau.
+        """Initializes the LevelPlayer view and loads level configuration.
 
         Args:
-            id: Identifiant du niveau.
+            id: Identifier of the level.
         """
         super().__init__()
 
@@ -52,7 +52,7 @@ class LevelPlayer(arcade.View):
         self.current_path: Optional[Path] = None
 
         if id is None:
-            logger.error("Aucun identifiant de niveau fourni, retour en arrière.")
+            logger.error("No level id provided, going back.")
             data.window.back()
             arcade.quit()
         else:
@@ -60,7 +60,7 @@ class LevelPlayer(arcade.View):
                 self.level = data.loaded_levels[id]
                 self.level.play_mode()
             else:
-                logger.error("Identifiant de niveau invalide, retour en arrière.")
+                logger.error("Invalid level id provided, going back.")
                 data.window.back()
                 arcade.quit()
 
@@ -100,7 +100,7 @@ class LevelPlayer(arcade.View):
         self.hint_frame_text.text = self.level.hints[self.current_hint_frame]
 
     def prepare_hint_frame(self) -> None:
-        """Initialise les éléments de l'interface pour l'écran d'indices. (Instructions du niveau.)"""
+        """Initializes UI elements for the hints screen. (Level Instructions.)"""
 
         self.hint_frame = Entity(
             x=384, y=220, width=576 * 2, height=320 * 2, sprite=data.level_player_empty
@@ -138,14 +138,14 @@ class LevelPlayer(arcade.View):
         self.hint_frame_text.text = self.level.hints[0]
 
     def prepare_won_frame(self) -> None:
-        """Initialise les éléments de l'interface pour l'écran de victoire."""
+        """Initializes UI elements for the victory screen."""
         self.win_frame_ease = BackEaseOut(-500, 220, 90)
         self.win_frame = Entity(
             x=384, y=-500, width=576 * 2, height=320 * 2, sprite=data.level_player_win
         )
 
         self.win_text_level_num = arcade.Text(
-            f"Niveau {self.level.number}",
+            f"Level {self.level.number}",
             512,
             580,
             arcade.color.WHITE,
@@ -187,7 +187,7 @@ class LevelPlayer(arcade.View):
             )
 
     def prepare_right_frame_basic(self) -> None:
-        """Construit l'interface de la barre latérale droite, incluant le rendu de la table de vérité."""
+        """Constructs the right-hand sidebar UI, including the truth table rendering."""
         self.check_button = Entity(
             x=1402, y=57, width=216, height=128, sprite=data.button_check
         )
@@ -210,7 +210,7 @@ class LevelPlayer(arcade.View):
         )
 
         self.level_name_text = arcade.Text(
-            f"Niveau {self.level.number} : {self.level.name}",
+            f"Level {self.level.number} : {self.level.name}",
             1408,
             900,
             arcade.color.WHITE,
@@ -222,7 +222,7 @@ class LevelPlayer(arcade.View):
         texts: List[str] = self.level.description.split(" ")
         c: int = 0
 
-        # Effectue un retour à la ligne automatique (word wrap) glouton basique
+        # Perform basic greedy word wrap
         for _ in range(len(texts)):
             if c > len(texts) - 2:
                 break
@@ -253,7 +253,7 @@ class LevelPlayer(arcade.View):
 
     def prepare_right_frame_complex(self) -> None:
         self.truth_inputs = arcade.Text(
-            "Entrée(s)",
+            "Input(s)",
             1626,
             data.WINDOW_HEIGHT - (447),
             arcade.color.WHITE,
@@ -277,7 +277,7 @@ class LevelPlayer(arcade.View):
         )
 
         self.truth_targets = arcade.Text(
-            "Cible(s)",
+            "Target(s)",
             1626,
             data.WINDOW_HEIGHT - (547),
             arcade.color.WHITE,
@@ -302,7 +302,7 @@ class LevelPlayer(arcade.View):
         )
 
         self.truth_outputs = arcade.Text(
-            "Sortie(s)",
+            "Output(s)",
             1626,
             data.WINDOW_HEIGHT - (647),
             arcade.color.WHITE,
@@ -364,7 +364,7 @@ class LevelPlayer(arcade.View):
         )
         self.truth_table_titles.append(
             arcade.Text(
-                "Entrées",
+                "Inputs",
                 start_x + (table["meta"]["size"] / 2) * add_x,
                 start_y + add_y + 5,
                 arcade.color.WHITE,
@@ -375,7 +375,7 @@ class LevelPlayer(arcade.View):
         )
         self.truth_table_titles.append(
             arcade.Text(
-                "Cible",
+                "Target",
                 start_x
                 + (table["meta"]["size"] + 2 + len(table["data"][0]) / 2) * add_x
                 - 5,
@@ -388,7 +388,7 @@ class LevelPlayer(arcade.View):
         )
         self.truth_table_titles.append(
             arcade.Text(
-                "Actuel",
+                "Current",
                 start_x
                 + (table["meta"]["size"] + 4 + len(table["data"][0]) * 1.5) * add_x,
                 start_y + add_y + 5,
@@ -473,14 +473,14 @@ class LevelPlayer(arcade.View):
                 offset_y += add_y
 
     def bottom_bar_width_sum(self) -> int:
-        """Retourne la largeur cumulée de toutes les icônes de portes dans la barre d'outils inférieure."""
+        """Returns the aggregate width of all gate icons in the bottom toolbar."""
         result: int = 0
         for i in self.bottom_gates:
             result += i.tile_width
         return result
 
     def bottom_gate_bar(self) -> None:
-        """Remplit la barre d'outils inférieure avec les portes disponibles selon les contraintes du niveau."""
+        """Populates the bottom UI toolbar with available gates based on level constraints."""
         self.bottom_gates = []
         for i in self.level.max_usage:
             if i != "Input" and i != "Output":
@@ -507,7 +507,7 @@ class LevelPlayer(arcade.View):
                     self.bottom_gates[-1].x = position
 
     def get_hovered_bottom_gate(self) -> Optional[str]:
-        """Identifie quelle icône de porte dans la barre d'outils est actuellement survolée."""
+        """Identifies which gate icon in the toolbar is currently being hovered."""
         for i in self.bottom_gates:
             if i.entity.touched:
                 if i.type == "Custom":
@@ -516,16 +516,16 @@ class LevelPlayer(arcade.View):
         return None
 
     def draw_bottom_gates(self) -> None:
-        """Affiche les icônes de portes dans la barre d'outils inférieure."""
+        """Renders the gate icons in the bottom toolbar."""
         for i in self.bottom_gates:
             i.draw()
 
     def reset(self) -> None:
-        """Réinitialise l'état actuel du niveau."""
+        """Resets the current level state."""
         pass
 
     def draw_frame_border(self) -> None:
-        """Affiche la bordure extérieure de la fenêtre de l'interface."""
+        """Renders the outer UI window boundary."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -536,7 +536,7 @@ class LevelPlayer(arcade.View):
         arcade.draw_sprite_rect(data.level_player_border, rect)
 
     def draw_frame_border_top(self) -> None:
-        """Affiche le haut de la bordure (deuxième couche pour éviter les superpositions)."""
+        """Renders the outer UI window boundary top (second layer to prevent clipping)."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -547,7 +547,7 @@ class LevelPlayer(arcade.View):
         arcade.draw_sprite_rect(data.level_player_border_no_bg, rect)
 
     def draw_frame_background(self) -> None:
-        """Affiche la texture d'arrière-plan de la grille du niveau."""
+        """Renders the level grid background texture."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -558,11 +558,11 @@ class LevelPlayer(arcade.View):
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
-        """Affiche les métriques de performance du moteur et le décompte des objets."""
+        """Renders engine performance metrics and object counts."""
         debug_list = [
-            f"Caméra: {self.camera_position}",
+            f"Camera: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time * 100000) / 100} ms / {self.frame_count}",
-            f"Objets: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
+            f"Objects: {len(self.level.chip.gates.keys())}g/{len(self.level.chip.paths.keys())}p",
         ]
         start_y = data.WINDOW_HEIGHT - 70
         for index, item in enumerate(debug_list):
@@ -576,10 +576,10 @@ class LevelPlayer(arcade.View):
             )
 
     def draw_level_time(self) -> None:
-        """Affiche le temps écoulé par rapport aux limites et les indicateurs de progression."""
+        """Renders current elapsed time versus limits and progress markers."""
         debug_list = [
-            f"Temps Limite: {round(time.time() - self.level.start_time)}s / {self.level.time}s",
-            f"Étoiles: {self.level.get_stars_count()}",
+            f"Time Limit: {round(time.time() - self.level.start_time)}s / {self.level.time}s",
+            f"Stars: {self.level.get_stars_count()}",
         ]
         start_y = data.WINDOW_HEIGHT - 80
         for index, item in enumerate(debug_list):
@@ -596,7 +596,7 @@ class LevelPlayer(arcade.View):
         )
 
     def draw_won(self) -> None:
-        """Affiche la fenêtre modale de victoire et les icônes d'étoiles animées."""
+        """Renders the victory modal and animated star icons."""
         if not self.win_frame_ease.done:
             value = self.win_frame_ease.tick()
             self.win_frame.y = value
@@ -613,7 +613,7 @@ class LevelPlayer(arcade.View):
             self.win_button_next.draw()
 
     def draw_right(self) -> None:
-        """Affiche les composants de la barre latérale et la table de vérité calculée."""
+        """Renders the sidebar components and calculated truth table."""
         self.check_button.draw()
         self.truth_table.draw()
         self.button_answer.draw()
@@ -649,7 +649,7 @@ class LevelPlayer(arcade.View):
             self.truth_outputs_values.draw()
 
     def draw_hint(self) -> None:
-        """Affiche le cadre d'indices pour fournir les instructions de base du niveau."""
+        """Render the hints frame, to provide basic level instructions."""
 
         if self.display_hint_frame:
             self.hint_frame.draw()
@@ -663,7 +663,7 @@ class LevelPlayer(arcade.View):
                 self.hint_frame_back.draw()
 
     def on_draw(self) -> None:
-        """Boucle de rendu principale : met à jour les états visuels et dessine les couches."""
+        """Main rendering loop: updates component visual states and draws layers."""
         self.clear()
         self.draw_frame_background()
 
@@ -693,12 +693,12 @@ class LevelPlayer(arcade.View):
         self.last_time = time.time()
 
     def on_update(self, delta_time: float) -> None:
-        """Boucle de mise à jour par image pour la simulation et le suivi d'état."""
+        """Per-frame update loop for simulation and state tracking."""
         self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Gère les raccourcis clavier pour l'interaction, la suppression et la navigation."""
+        """Handles keyboard shortcuts for interaction, deletion, and navigation."""
         if key == data.keys.input_toggle and not self.level.won:
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
@@ -706,7 +706,7 @@ class LevelPlayer(arcade.View):
                         g.switch()
                     elif g.gate_type in ["8Input"]:
                         data.window.display(InputFrame(self.level.chip,g.id))
-        if key == 65473:  # Sortie d'urgence : F4
+        if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
         if key == data.keys.back:
@@ -726,7 +726,7 @@ class LevelPlayer(arcade.View):
             self.delete()
 
     def delete_gate(self, id: str) -> None:
-        """Supprime la porte spécifiée et réconcilie les chemins de circuit affectés."""
+        """Removes specified gate and reconciles affected circuit paths."""
         to_delete: List[str] = []
         if self.level.chip.gates[id].type in ["Gate", "Custom", "Complex"]:
             for index in self.level.chip.paths.keys():
@@ -755,7 +755,7 @@ class LevelPlayer(arcade.View):
         del self.level.chip.paths[path_id]
 
     def delete(self) -> None:
-        """Initie le processus de suppression pour l'objet actuellement sélectionné."""
+        """Initiates the deletion process for the currently selected object."""
         for g in self.level.chip.gates.values():
             if g.entity.touched:
                 self.delete_gate(g.id)
@@ -770,17 +770,17 @@ class LevelPlayer(arcade.View):
             self.delete_path(p)
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Gère les événements de relâchement de touche."""
+        """Handles key-up events."""
         pass
 
     @property
     def camera(self) -> Tuple[int, int]:
-        """Fournit la position actuelle de la caméra quantifiée."""
+        """Provides the current quantized camera position."""
         return self.camera_position
 
     @camera.setter
     def camera(self, value: Tuple[int, int]) -> None:
-        """Met à jour la position de la caméra et recalibre les décalages d'objets."""
+        """Updates camera position and recalibrates object offsets."""
         self._real_camera_position = value
         self.camera_position = (
             (self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE)
@@ -796,7 +796,7 @@ class LevelPlayer(arcade.View):
             self.current_path.camera = self.camera_position
 
     def on_mouse_motion(self, x: int, y: int, delta_x: int, delta_y: int) -> None:
-        """Gère le mouvement de la souris pour le glisser-déposer d'objets et la mise à jour du circuit."""
+        """Handles mouse movement for dragging objects and updating circuit layout."""
         mouse.position = (x, y)
         if self.level.won:
             return
@@ -814,7 +814,7 @@ class LevelPlayer(arcade.View):
         if self.moving_gate:
             self.moving_gate.x = mouse.cursor[0] - self.moving_gate_offset[0]
             self.moving_gate.y = mouse.cursor[1] - self.moving_gate_offset[1]
-            # Recalcule la géométrie des câbles en fonction du mouvement de la porte
+            # Recalculate wire geometry based on gate movement
             for path in self.level.chip.paths.values():
                 connected_inputs, connected_outputs = path.get_connected_points(
                     self.moving_gate.id
@@ -847,7 +847,7 @@ class LevelPlayer(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self) -> None:
-        """Propage les états logiques à travers la puce du circuit actuel."""
+        """Propagates logic states through the current circuit chip."""
         self.engine.propagate_values(self.level.chip)
         if self.level.chip.changed:
             self.level.chip.changed = False
@@ -855,11 +855,11 @@ class LevelPlayer(arcade.View):
             self.bottom_gate_bar()
 
     def won(self) -> None:
-        """Active l'interface utilisateur et les états logiques liés à la victoire."""
+        """Activates victory-related UI and logic states."""
         self.prepare_won_frame()
 
     def launch_next_level(self) -> None:
-        """Transitionne l'application vers le niveau suivant dans la séquence."""
+        """Transitions application to the subsequent level in the sequence."""
         levels: List[str] = list(data.loaded_levels.keys())
 
         def sort_keys(i: str) -> int:
@@ -881,3 +881,198 @@ class LevelPlayer(arcade.View):
         if self.current_hint_frame > 0:
             self.current_hint_frame = 0
         self.reload_hint()
+
+    def on_mouse_press(self, x: int, y: int, button: int, key_modifiers: int) -> None:
+        """Handles click events for UI navigation, wiring paths, and gate placement."""
+        if self.level.won:
+            if self.win_button_next.touched:
+                self.launch_next_level()
+            return
+
+        if self.display_hint_frame:
+            if self.hint_frame_ok.touched or self.hint_frame_next.touched:
+                self.next_hint()
+            if self.hint_frame_back.touched:
+                self.previous_hint()
+            return
+
+        if button == 2:
+            self.camera_hold = True
+            return
+        if self.camera_hold:
+            return
+        if self.check_button.touched:
+            self.level.get_truth_table()
+            self.prepare_right_frame()
+            if self.level.check_victory():
+                self.won()
+            return
+        
+        if self.button_answer.touched:
+            data.window.display(EditorView(level_solution=self.level.answer.copy()))
+
+        # Wiring logic
+        for g in self.level.chip.gates.values():
+            touched = g.touched
+            if touched:
+                if self.current_path is None:
+                    pid = random_id()
+                    self.current_path = Path(pid)
+                    self.current_path.camera = self.camera
+                    self.current_path.add_path()
+                    if touched[0] == 1:
+                        self.current_path.outputs.append(
+                            [
+                                1,
+                                g.id,
+                                touched[1],
+                                1,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    else:
+                        self.current_path.inputs.append(
+                            [
+                                2,
+                                g.id,
+                                touched[1],
+                                1,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    self.level.chip.changed = True
+                    return
+                else:
+                    if touched[0] == 1:
+                        self.current_path.outputs.append(
+                            [
+                                1,
+                                g.id,
+                                touched[1],
+                                2,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    else:
+                        self.current_path.inputs.append(
+                            [
+                                2,
+                                g.id,
+                                touched[1],
+                                2,
+                                self.current_path.current_branch_count,
+                            ]
+                        )
+                    self.current_path.camera = self.camera
+                    self.current_path.finish()
+                    if self.current_path.id not in self.level.chip.paths:
+                        self.level.chip.paths[self.current_path.id] = self.current_path
+                    self.current_path = None
+                    self.level.chip.changed = True
+                    return
+        if not self.current_path:
+            for p in self.level.chip.paths.values():
+                if p.touched:
+                    p.add_path()
+                    self.current_path = p
+                    self.level.chip.changed = True
+                    return
+        else:
+            for p in self.level.chip.paths.values():
+                if p.touched and p != self.current_path:
+                    self.current_path.add_path()
+                    p.merge(self.current_path)
+                    if self.current_path.id in self.level.chip.paths:
+                        del self.level.chip.paths[self.current_path.id]
+                    self.current_path = None
+                    self.level.chip.changed = True
+                    return
+            self.current_path.add_path()
+            self.level.chip.changed = True
+            return
+        if self.moving_gate is None:
+            for g in self.level.chip.gates.values():
+                if g.entity.touched:
+                    self.moving_gate_offset = (
+                        mouse.cursor[0] - g.x,
+                        mouse.cursor[1] - g.y,
+                    )
+                    self.moving_gate = g
+                    return
+        if self.selected_follower is None:
+            hovered = self.get_hovered_bottom_gate()
+            if hovered in gate_types:
+                self.selected_follower = gate_types[hovered](random_id())
+                self.selected_follower.camera = self.camera
+                self.selected_follower.x = (
+                    mouse.cursor[0]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[0]
+                )
+                self.selected_follower.y = (
+                    mouse.cursor[1]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[1]
+                )
+            elif hovered in data.loaded_chips:
+                self.selected_follower = CustomGate(
+                    random_id(), data.loaded_chips[hovered]
+                )
+                self.selected_follower.camera = self.camera
+                self.selected_follower.x = (
+                    mouse.cursor[0]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[0]
+                )
+                self.selected_follower.y = (
+                    mouse.cursor[1]
+                    - data.UI_EDITOR_GRID_SIZE / 2
+                    - self.camera_position[1]
+                )
+
+    def bottom_bar_update_camera(self) -> None:
+        """Syncs the scroll position of bottom bar gates."""
+        for gate in self.bottom_gates:
+            gate.camera = self.bottom_camera_position
+
+    def on_mouse_scroll(
+        self, x: float, y: float, scroll_x: float, scroll_y: float
+    ) -> None:
+        """Handles scrolling within the bottom bar UI."""
+        if self.bottom_zone_collider.touched:
+            self.bottom_camera_position[0] += scroll_y * -data.MOUSE_SENSI
+            self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
+            self.bottom_bar_update_camera()
+
+    def on_mouse_release(self, x: int, y: int, button: int, key_modifiers: int) -> None:
+        """Handles mouse button release interactions."""
+        if button == 2:
+            self.camera_hold = False
+            for g in self.level.chip.gates:
+                self.level.chip.gates[g].camera = self.camera_position
+
+        else:
+            if self.selected_follower is not None:
+
+                if self.bottom_zone_collider.touched:
+                    self.selected_follower = None
+                else:
+                    self.level.chip.gates[self.selected_follower.id] = (
+                        self.selected_follower
+                    )
+                    self.selected_follower.camera = self.camera
+                    self.selected_follower.x = (
+                        mouse.cursor[0]
+                        - data.UI_EDITOR_GRID_SIZE / 2
+                        - self.camera_position[0]
+                    )
+                    self.selected_follower.y = (
+                        mouse.cursor[1]
+                        - data.UI_EDITOR_GRID_SIZE / 2
+                        - self.camera_position[1]
+                    )
+                    self.selected_follower = None
+                    self.level.chip.changed = True
+
+        self.moving_gate = None
+        self.moving_gate_offset = (0, 0)

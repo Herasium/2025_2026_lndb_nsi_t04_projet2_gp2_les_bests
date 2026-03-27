@@ -1,1 +1,1 @@
-"""Ancien éditeur de niveau, utilisé lors de la sélection du niveau à modifier et à sauvegarder."""
+"""Previous level editor, used when selecting which level to edit and save."""

@@ -3,99 +3,99 @@ from modules.data.language import English, French
 import os
 import json
 
-"""Fournit les structures de données et la gestion d'état pour les ressources et la configuration de l'application."""
+"""Provides data structures and state management for application assets and configuration."""
 
 
 class COLORS:
-    """Définit les constantes de la palette de couleurs au format hexadécimal."""
+    """Defines color palette constants in hexadecimal format."""
 
     VALUE_ON: str = "DC2626"
     VALUE_OFF: str = "D9D9D9"
 
 
 class ImageBuffer:
-    """Gère le stockage et le suivi de complétion pour les ressources de textures liées aux portes logiques."""
+    """Handles storage and completion tracking for gate-related texture assets."""
 
     def __init__(self) -> None:
-        """Initialise un tampon de ressources vide."""
+        """Initializes an empty asset buffer."""
         self.buffer: Dict[str, Dict[str, Any]] = {}
 
     def add_gate_type(self, id: str) -> None:
-        """Enregistre une nouvelle catégorie de porte dans le tampon.
+        """Registers a new gate category in the buffer.
 
         Args:
-            id: Identifiant du type de porte.
+            id: Identifier for the gate type.
         """
         self.buffer[id] = {"complete": False, "textures": {}}
 
     def add_texture(self, id: str, texture_id: str, texture: Any) -> None:
-        """Stocke un objet texture pour une porte spécifique.
+        """Stores a texture object for a specific gate.
 
         Args:
-            id: Identifiant de la porte.
-            texture_id: Identifiant de la texture.
-            texture: La ressource à stocker.
+            id: Gate identifier.
+            texture_id: Identifier for the texture.
+            texture: The asset to store.
         """
         self.buffer[id]["textures"][texture_id] = texture
 
     def get_texture(self, id: str, texture_id: str) -> Union[Any, bool]:
-        """Récupère una texture spécifique depuis le tampon.
+        """Retrieves a specific texture from the buffer.
 
         Args:
-            id: Identifiant de la porte.
-            texture_id: Identifiant de la texture.
+            id: Gate identifier.
+            texture_id: Identifier for the texture.
 
         Returns:
-            L'objet texture s'il est trouvé, sinon False.
+            The texture object if found, otherwise False.
         """
         if texture_id in self.buffer[id]["textures"]:
             return self.buffer[id]["textures"][texture_id]
         return False
 
     def complete_gate(self, id: str) -> None:
-        """Marque une porte spécifique comme terminée.
+        """Marks a specific gate as complete.
 
         Args:
-            id: Identifiant de la porte.
+            id: Gate identifier.
         """
         self.buffer[id]["complete"] = True
 
     def is_complete_gate(self, id: str) -> bool:
-        """Vérifie si une porte a été marquée comme terminée.
+        """Checks if a gate has been marked as complete.
 
         Args:
-            id: Identifiant de la porte.
+            id: Gate identifier.
 
         Returns:
-            True si la porte est marquée comme terminée, sinon False.
+            True if the gate is marked complete, otherwise False.
         """
         return self.buffer[id]["complete"]
 
 
 class LevelButtonsBuffer:
-    """Gère le stockage et la récupération des éléments d'interface de sélection de niveau."""
+    """Manages storage and retrieval for level selection interface elements."""
 
     def __init__(self) -> None:
-        """Initialise un tampon de stockage vide pour les boutons."""
+        """Initializes an empty storage buffer for buttons."""
         self.buffer: Dict[str, Any] = {}
 
     def get(self, id: str) -> Any:
-        """Récupère les données d'un bouton.
+        """Retrieves button data.
 
         Args:
-            id: Identifiant du bouton de niveau.
+            id: Level button identifier.
 
         Returns:
-            Les données d'image associées au bouton.
+            The associated button image data.
         """
         return self.buffer[id]
 
     def set(self, id: str, image: Any) -> None:
-        """Stocke ou met à jour les données d'un bouton.
+        """Stores or updates button data.
 
         Args:
-            id: Identifiant du bouton de niveau.
-            image: Données d'image à stocker.
+            id: Level button identifier.
+            image: Image data to be stored.
         """
         self.buffer[id] = image
 
@@ -112,17 +112,17 @@ class KeyBinds:
 
     def __init__(self) -> None:
 
-        self.back = 65307  # Échap
+        self.back = 65307  # Esc
         self.input_toggle = 101  # E
         self.chip_save = 115  # S
-        self.gate_delete = 65288  # Supprimer
+        self.gate_delete = 65288  # Delete
 
 
 class Data:
-    """Répertoire principal pour l'état global de l'application, les paramètres et les registres d'objets."""
+    """Main repository for application global state, settings, and object registries."""
 
     def __init__(self) -> None:
-        """Initialise les configurations par défaut de l'application et les registres de données."""
+        """Initializes default application configurations and data registries."""
         self.WINDOW_WIDTH: int = 1920
         self.WINDOW_HEIGHT: int = 1080
         self.WINDOW_FULLSCREEN: bool = False
@@ -146,19 +146,19 @@ class Data:
         self.window: Optional[Any] = None
         self.level_colors: List[str] = ["blue","green", "yellow", "orange", "red","purple","black"]
         self.categories: List[str] = [
-            "Fondamentaux de la logique",
-            "Portes de base",
-            "Portes à entrées triples",
-            "Bases de l'arithmétique",
-            "Plus on est de fous",
-            "Diviser pour régner",
-            "La FIN",
-            "Portes NANDiques",
-            "Portes NAND triples",
-            "Arithmétique NANDique",
-            "Plus on est de NAND",
-            "Diviser et NANDquer",
-            "La NEND"
+            "Fondamentals of logic",
+            "Some basic gates",
+            "Triple inputs gates",
+            "Basics of arithmetic",
+            "The more the better",
+            "Divide and conquer",
+            "The END",
+            "Some NANDic gates",
+            "Triple NANDuts gates",
+            "NANDics of arithmetic",
+            "The more the NANDier",
+            "Divide and NANDquer",
+            "The NEND"
         ]
 
         self.current_lang: str = "en"

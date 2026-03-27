@@ -1,4 +1,4 @@
-"""Fournit une implémentation de bouton UI avec gestion géométrique et zones de collision (hitboxes) d'interaction."""
+"""Provides a UI button implementation with geometric management and interaction hitboxes."""
 
 import arcade
 from modules.ui.toolbox.hitbox import HitBox
@@ -6,10 +6,10 @@ from modules.data import data
 
 
 class Button:
-    """Représente un élément de bouton UI avec des fonctionnalités de positionnement, de dimensions et de zone de collision."""
+    """Represents a UI button element with positioning, dimensions, and hitbox functionality."""
 
     def __init__(self) -> None:
-        """Initialise une nouvelle instance de bouton avec des propriétés physiques et visuelles par défaut."""
+        """Initializes a new button instance with default physical and visual properties."""
         self._x: float = 0.0
         self._y: float = 0.0
 
@@ -30,61 +30,61 @@ class Button:
 
     @property
     def x(self) -> float:
-        """Retourne la position horizontale."""
+        """Returns the horizontal position."""
         return self._x
 
     @x.setter
     def x(self, value: float) -> None:
-        """Définit la position horizontale et déclenche une mise à jour de la géométrie."""
+        """Sets the horizontal position and triggers a geometry update."""
         self._x = value
         self._recalculate_rect()
 
     @property
     def y(self) -> float:
-        """Retourne la position verticale."""
+        """Returns the vertical position."""
         return self._y
 
     @y.setter
     def y(self, value: float) -> None:
-        """Définit la position verticale et déclenche une mise à jour de la géométrie."""
+        """Sets the vertical position and triggers a geometry update."""
         self._y = value
         self._recalculate_rect()
 
     @property
     def width(self) -> float:
-        """Retourne la largeur du bouton."""
+        """Returns the button width."""
         return self._width
 
     @width.setter
     def width(self, value: float) -> None:
-        """Définit la largeur du bouton et déclenche une mise à jour de la géométrie."""
+        """Sets the button width and triggers a geometry update."""
         self._width = value
         self._recalculate_rect()
 
     @property
     def height(self) -> float:
-        """Retourne la hauteur du bouton."""
+        """Returns the button height."""
         return self._height
 
     @height.setter
     def height(self, value: float) -> None:
-        """Définit la hauteur du bouton et déclenche une mise à jour de la géométrie."""
+        """Sets the button height and triggers a geometry update."""
         self._height = value
         self._recalculate_rect()
 
     @property
     def anchor(self) -> arcade.Vec2:
-        """Retourne le vecteur d'ancrage actuel."""
+        """Returns the current anchor vector."""
         return self._anchor
 
     @anchor.setter
     def anchor(self, value: arcade.Vec2) -> None:
-        """Définit le vecteur d'ancrage et déclenche une mise à jour de la géométrie."""
+        """Sets the anchor vector and triggers a geometry update."""
         self._anchor = value
         self._recalculate_rect()
 
     def _recalculate_rect(self) -> None:
-        """Met à jour le rectangle interne, synchronise la zone de collision et recrée le texte d'affichage."""
+        """Updates the internal rectangle, syncs the hitbox, and recreates the display text."""
         self.rect = arcade.XYWH(
             x=self._x,
             y=self._y,
@@ -109,46 +109,46 @@ class Button:
 
     @property
     def name(self) -> str:
-        """Retourne le nom de l'étiquette du bouton."""
+        """Returns the button label name."""
         return self._name
 
     @name.setter
     def name(self, value: str) -> None:
-        """Définit le nom de l'étiquette du bouton et déclenche une mise à jour de la géométrie."""
+        """Sets the button label name and triggers a geometry update."""
         self._name = value
         self._recalculate_rect()
 
     @property
     def text(self) -> arcade.Text:
-        """Retourne l'objet texte arcade sous-jacent."""
+        """Returns the underlying arcade text object."""
         return self._text
 
     @text.setter
     def text(self, value: arcade.Text) -> None:
-        """Définit l'objet texte et déclenche une mise à jour de la géométrie."""
+        """Sets the text object and triggers a geometry update."""
         self._text = value
         self._recalculate_rect()
 
     @property
     def color(self) -> arcade.color:
-        """Retourne la couleur principale du bouton."""
+        """Returns the primary button color."""
         return self._color
 
     @color.setter
     def color(self, value: arcade.color) -> None:
-        """Définit la couleur du bouton et déclenche une mise à jour de la géométrie."""
+        """Sets the button color and triggers a geometry update."""
         self._color = value
         self._recalculate_rect()
 
     def _update_hitbox(self) -> None:
-        """Aligne les dimensions et la position de la zone de collision avec les limites du bouton."""
+        """Aligns the interaction hitbox dimensions and position with the button's bounds."""
         self.hitbox.x = self._x
         self.hitbox.y = self._y - self._height
         self.hitbox.width = self._width
         self.hitbox.height = self._height
 
     def draw(self) -> None:
-        """Rendu du texte et de la zone de collision en fonction de l'échelle actuelle et des contraintes de la grille."""
+        """Renders the text and hitbox based on current scaling and grid constraints."""
         current_width = 10 * self.grid_size * self.scale
         current_height = 2 * self.grid_size * self.scale
 
@@ -163,5 +163,5 @@ class Button:
 
     @property
     def touched(self) -> bool:
-        """Retourne l'état d'interaction provenant de la zone de collision."""
+        """Returns the interaction state from the hitbox."""
         return self.hitbox.touched

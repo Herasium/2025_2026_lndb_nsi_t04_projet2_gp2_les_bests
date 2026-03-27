@@ -1,4 +1,4 @@
-"""Fournit la gestion des fenêtres et l'état de navigation des vues pour l'application LogicBox."""
+"""Provides window management and view navigation state for the LogicBox application."""
 
 import arcade
 from modules.data import data
@@ -9,10 +9,10 @@ logger: Logger = Logger("Window")
 
 
 class Window:
-    """Gère la fenêtre principale de l'application et fournit un système de navigation basé sur une pile."""
+    """Manages the main application window and provides a stack-based navigation system."""
 
     def __init__(self) -> None:
-        """Initialise l'instance de la fenêtre avec les paramètres de configuration et l'état de navigation."""
+        """Initializes the window instance with configuration settings and navigation state."""
         self.width: int = data.WINDOW_WIDTH
         self.height: int = data.WINDOW_HEIGHT
         self.title: str = "LogicBox"
@@ -22,7 +22,7 @@ class Window:
             self.height,
             self.title,
             fullscreen=data.WINDOW_FULLSCREEN,
-            # Définit les taux de mise à jour et de rendu à environ 60 FPS
+            # Set update and draw rates to approximately 60 FPS
             update_rate=1 / data.WINDOW_FRAMERATE,
             draw_rate=1 / data.WINDOW_FRAMERATE,
         )
@@ -30,33 +30,33 @@ class Window:
         self.view_history: List[arcade.View] = []
 
     def back(self) -> None:
-        """Navigue vers la vue précédente dans la pile d'historique."""
+        """Navigates to the previous view in the history stack."""
         if len(self.view_history) < 2:
-            logger.warning("Aucune vue précédente disponible. Aucune action effectuée.")
+            logger.warning("No view to go back to. Doing Nothing.")
             return
         self.view_history.pop()
         view: arcade.View = self.view_history[-1]
         self.window.show_view(view)
 
     def first(self) -> None:
-        """Réinitialise la navigation vers la vue initiale et vide la pile d'historique."""
+        """Resets navigation to the initial view and flushes the history stack."""
         view: arcade.View = self.view_history[0]
         self.window.show_view(view)
         self.view_history = []
 
     def run(self) -> None:
-        """Lance la boucle d'événements principale de l'application."""
+        """Starts the application's main event loop."""
         arcade.run()
 
     def display(self, view: arcade.View) -> None:
-        """Ajoute une nouvelle vue à la pile d'historique et l'affiche.
+        """Pushes a new view onto the history stack and renders it.
 
         Args:
-            view: L'instance de la vue à afficher.
+            view: The view instance to be displayed.
         """
         self.view_history.append(view)
         self.window.show_view(view)
 
     def hide(self) -> None:
-        """Masque la vue actuellement active."""
+        """Hides the currently active view."""
         self.window.hide_view()

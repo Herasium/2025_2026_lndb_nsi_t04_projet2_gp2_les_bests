@@ -14,25 +14,25 @@ logger: Logger = Logger("Level")
 
 
 class Level:
-    """Gère la logique des niveaux du jeu, incluant l'état de la puce, les objectifs et la progression.
+    """Manages game level logic, including chip state, objectives, and progression.
 
-    Attributs :
-        chip (Chip) : La puce logique associée à ce niveau.
-        engine (Engine) : Le moteur de simulation utilisé pour évaluer la logique du circuit.
+    Attributes:
+        chip (Chip): The logical chip associated with this level.
+        engine (Engine): The simulation engine used to evaluate circuit logic.
     """
 
     def __init__(self, id: Union[int, str]) -> None:
-        """Initialise l'instance de Level.
+        """Initializes the Level instance.
 
-        Args :
-            id : L'identifiant utilisé pour configurer la puce de base.
+        Args:
+            id: The identifier used to configure the base chip.
         """
         self.chip: Chip = Chip(id)
         self.number: int = 0
         self.time: int = 300
         self.id: str = f"level_{id}"
-        self.name: str = "Niveau par défaut"
-        self.description: str = "Niveau de base pour apprendre les fondements des portes logiques."
+        self.name: str = "Default Level"
+        self.description: str = "Basic level to learn the basis of gates."
 
         self.start_text: List[str] = []
         self.hints: List[str] = []
@@ -59,7 +59,7 @@ class Level:
         self.engine: Engine = Engine()
 
     def play_mode(self) -> None:
-        """Prépare le niveau pour le jeu en réinitialisant l'état et en définissant la logique cible."""
+        """Prepares the level for gameplay by resetting state and defining target logic."""
         if self.play:
             self.play = True
             self.chip = self.answer.copy()
@@ -89,7 +89,7 @@ class Level:
         self.get_truth_table(answer=True)
 
     def setup_random_test_values(self):
-        """Configure des valeurs de test aléatoires pour la validation."""
+
         inputs: List[str] = self.get_inputs(self.answer)
         self.truth_test_values = []
 
@@ -111,10 +111,10 @@ class Level:
             self.truth_test_values.append(values)
 
     def get_stars_count(self) -> int:
-        """Calcule le nombre d'étoiles actuel basé sur le temps et l'utilisation d'indices.
+        """Calculates current star rating based on time and hint usage.
 
-        Retourne :
-            Le nombre d'étoiles obtenues, allant de 0 à 3.
+        Returns:
+            The number of stars earned, ranging from 0 to 3.
         """
         self.stars = 3
 
@@ -127,7 +127,7 @@ class Level:
         return self.stars
 
     def calculate_inventory(self) -> None:
-        """Calcule les besoins d'utilisation des portes et l'utilisation actuelle du joueur."""
+        """Computes gate usage requirements and current player usage."""
         self.max_usage = {}
         for i in self.answer.gates:
             if self.answer.gates[i].type == "Custom":
@@ -150,10 +150,10 @@ class Level:
                 self.inventory[key] = self.inventory.get(key, 0) + 1
 
     def start_chip(self, chip: Optional[Chip] = None) -> None:
-        """Réinitialise les états d'E/S des portes au sein de la puce spécifiée.
+        """Resets gate I/O states within the specified chip.
 
-        Args :
-            chip : La puce à initialiser ; utilise la puce actuelle par défaut si None.
+        Args:
+            chip: The chip to initialize; defaults to current chip if None.
         """
         if chip is None:
             chip = self.chip
@@ -168,39 +168,39 @@ class Level:
                 chip.gates[i].outputs = [1 for _ in chip.gates[i].outputs]
 
     def get_inputs(self, chip: Optional[Chip] = None) -> List[str]:
-        """Identifie tous les identifiants des portes d'entrée.
+        """Identifies all input gate IDs.
 
-        Args :
-            chip : La puce à inspecter.
+        Args:
+            chip: The chip to inspect.
 
-        Retourne :
-            Une liste d'identifiants de portes agissant comme entrées.
+        Returns:
+            A list of gate IDs acting as inputs.
         """
         if chip is None:
             chip = self.chip
         return [i for i in self.chip.gates if self.chip.gates[i].type == "Input"]
 
     def get_outputs(self, chip: Optional[Chip] = None) -> List[str]:
-        """Identifie tous les identifiants des portes de sortie.
+        """Identifies all output gate IDs.
 
-        Args :
-            chip : La puce à inspecter.
+        Args:
+            chip: The chip to inspect.
 
-        Retourne :
-            Une liste d'identifiants de portes agissant comme sorties.
+        Returns:
+            A list of gate IDs acting as outputs.
         """
         if chip is None:
             chip = self.chip
         return [i for i in self.chip.gates if self.chip.gates[i].type == "Output"]
 
     def get_gates(self, chip: Optional[Chip] = None) -> List[str]:
-        """Identifie tous les identifiants des portes logiques fonctionnelles.
+        """Identifies all functional logic gate IDs.
 
-        Args :
-            chip : La puce à inspecter.
+        Args:
+            chip: The chip to inspect.
 
-        Retourne :
-            Une liste d'identifiants de portes pour les portes standards ou personnalisées.
+        Returns:
+            A list of gate IDs for standard or custom gates.
         """
         if chip is None:
             chip = self.chip
@@ -211,10 +211,10 @@ class Level:
         ]
 
     def compare_truth_tables(self) -> bool:
-        """Valide la puce actuelle par rapport à la table de vérité de la solution attendue.
+        """Validates the current chip against the expected solution truth table.
 
-        Retourne :
-            True si les tables de vérité correspondent, False sinon.
+        Returns:
+            True if the truth tables match, False otherwise.
         """
         if self.answer is None:
             return False
@@ -236,19 +236,19 @@ class Level:
         return True
 
     def check_victory(self) -> bool:
-        """Détermine si les objectifs du niveau ont été atteints.
+        """Determines if the level objectives have been met.
 
-        Retourne :
-            L'état de victoire actuel.
+        Returns:
+            Current victory state.
         """
         self.won = self.compare_truth_tables()
         return self.won
 
     def get_single_truth_table_complex(self, chip: Chip) -> None:
-        """Génère une table de vérité pour la puce complexe fournie.
+        """Generates a truth table for the provided simple chip.
 
-        Args :
-            chip : L'instance à évaluer.
+        Args:
+            chip: The instance to evaluate.
         """
         copy: Chip = chip.copy()
         self.start_chip(copy)
@@ -279,10 +279,10 @@ class Level:
             count += 1
 
     def get_single_truth_table_simple(self, chip: Chip) -> None:
-        """Génère une table de vérité pour la puce simple fournie.
+        """Generates a truth table for the provided complex chip.
 
-        Args :
-            chip : L'instance à évaluer.
+        Args:
+            chip: The instance to evaluate.
         """
         copy: Chip = chip.copy()
         self.start_chip(copy)
@@ -304,7 +304,7 @@ class Level:
 
         power: int = 2**size
         for current in range(power):
-            # Génère les combinaisons d'états binaires pour les lignes de la table de vérité
+            # Generate binary state combinations for truth table rows
             values = [bool(current & (1 << i)) for i in range(size)]
             for index in range(len(inputs)):
                 copy.gates[inputs[index]].outputs[0] = values[index]
@@ -312,15 +312,15 @@ class Level:
             self.engine.propagate_values(copy)
 
             result = [copy.gates[i].inputs[0] for i in outputs]
-            # Mappe le tableau de bits vers un index entier pour le dictionnaire de résultats
+            # Map bit array to integer index for the results dictionary
             int_value = sum(b << i for i, b in enumerate(reversed(values)))
             self.truth[chip.id]["data"][int_value] = result
 
     def get_truth_table(self, answer: bool = False) -> None:
-        """Initialise le stockage de la table de vérité et déclenche la génération.
+        """Initializes truth table storage and triggers generation.
 
-        Args :
-            answer : Si True, évalue la puce solution ; sinon, la puce du joueur.
+        Args:
+            answer: If True, evaluates the solution chip; otherwise, the player chip.
         """
         used: Chip = self.answer if answer else self.chip
         self.truth[used.id] = {"meta": {}, "data": {}}
@@ -330,7 +330,7 @@ class Level:
             self.get_single_truth_table_simple(used)
 
     def save(self) -> None:
-        """Sérialise le niveau actuel et la configuration de la puce dans un fichier."""
+        """Serializes current level and chip configuration to a file."""
         chip_save = self.chip.save(no_file=True)
         requirements: List[Dict[str, Any]] = []
         for i in chip_save["requirements"]:
@@ -364,13 +364,13 @@ class Level:
         with open(file_path, "wb") as file:
             file.write(dump.encode())
 
-        logger.success(f"Niveau sauvegardé : {self.id}")
+        logger.success(f"Saved level {self.id}")
 
     def load(self, data: Dict[str, Any]) -> None:
-        """Hydrate l'état du niveau à partir d'un dictionnaire de configuration.
+        """Hydrates the level state from a configuration dictionary.
 
-        Args :
-            data : Le dictionnaire source contenant les paramètres du niveau.
+        Args:
+            data: The source dictionary containing level parameters.
         """
         self.time = data["level"]["time"]
         self.id = data["level"]["id"]
@@ -390,16 +390,16 @@ class Level:
         if data["level"]["version"] > 250:
             self.prepared_tt = data["level"]["prepared_tt"]
             self.is_prepared_tt = data["level"]["is_prepared_tt"]
-
+ 
         if data["level"]["version"] > 200:
             self.is_custom = data["level"]["is_custom"]
 
-        logger.debug(f"Niveau chargé : {self}")
+        logger.debug(f"Loaded Level {self}")
 
     def __str__(self) -> str:
-        """Fournit une représentation sous forme de chaîne de caractères du niveau.
+        """Provides a string representation of the level.
 
-        Retourne :
-            L'ID du niveau, son nom et son index.
+        Returns:
+            The level ID, name, and index.
         """
-        return f"Niveau (#{self.id}) {self.name} {self.number}"
+        return f"Level (#{self.id}) {self.name} {self.number}"

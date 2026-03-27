@@ -3,17 +3,17 @@ from typing import List, Any
 
 from modules.data.gate import Gate
 
-"""Fournit l'implémentation de la porte d'entrée (Input) pour la simulation de circuit."""
+"""Provides the Input gate implementation for circuit simulation."""
 
 
 class Input(Gate):
-    """Représente une porte d'entrée à bascule manuelle au sein d'un circuit."""
+    """Represents a manual input toggle gate within a circuit."""
 
     def __init__(self, id: Any) -> None:
-        """Initialise la porte d'entrée (Input).
+        """Initializes the Input gate.
 
         Args:
-            id: Identifiant unique pour l'instance de la porte.
+            id: Unique identifier for the gate instance.
         """
         super().__init__(id)
 
@@ -32,7 +32,8 @@ class Input(Gate):
         self.calculate_display()
 
     def switch(self) -> None:
-        """Bascule l'état de sortie actuel entre 0 et 1."""
-        # Convertit l'inversion booléenne en représentation entière
+        """Toggles the current output state between 0 and 1."""
+        # Convert boolean inversion to integer representation
         self.outputs[0] = (not self.outputs[0] == 1) * 1
         self.gen_tile_pattern()
+
