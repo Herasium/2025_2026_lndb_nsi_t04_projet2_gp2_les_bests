@@ -34,7 +34,7 @@ class EditorView(arcade.View):
     """Orchestrates the circuit editing workflow, including UI components,
     gate manipulation, and rendering cycles."""
 
-    def __init__(self, id: Optional[str] = None, level: Optional[Any] = None) -> None:
+    def __init__(self, id: Optional[str] = None, level: Optional[Any] = None, level_solution: Optional[any] = None,) -> None:
         """Initializes the EditorView with necessary UI elements and state.
 
         Args:
@@ -57,6 +57,7 @@ class EditorView(arcade.View):
         self.moving_gate: Optional[Any] = None
         self.current_path: Optional[Path] = None
         self.level_editor: bool = False
+        self.level_solution: bool = True
         self.engine: Engine = Engine()
 
         if id is None:
@@ -71,6 +72,10 @@ class EditorView(arcade.View):
             self.level = level
             self.level_editor = True
             self.chip = level.chip
+
+        if level_solution is not None:
+            self.chip = level_solution
+            self.level_solution = True
 
         self.moving_gate_offset: Tuple[int, int] = (0, 0)
         self._real_camera_position: Tuple[int, int] = (0, 0)
@@ -333,7 +338,10 @@ class EditorView(arcade.View):
                 self.current_path = None
                 self.selected_follower = None
             else:
-                data.window.display(data.pause)
+                if self.level_solution:
+                    data.window.back()
+                else:
+                    data.window.display(data.pause)
         if key == data.keys.chip_save:
             if self.level_editor:
                 data.window.display(SaveFrame(self.level))
@@ -375,19 +383,19 @@ class EditorView(arcade.View):
         del self.chip.paths[path_id]
 
     def delete(self) -> None:
-        """Initiates the deletion process for the currently selected object."""
-        for g in self.chip.gates.values():
-            if g.entity.touched:
-                self.delete_gate(g.id)
-                break
+            """Initiates the deletion process for the currently selected object."""
+            for g in self.chip.gates.values():
+                if g.entity.touched:
+                    self.delete_gate(g.id)
+                    break
 
-        to_delete = []
-        for p in self.chip.paths.values():
-            if p.touched:
-                to_delete.append(p.id)
+            to_delete = []
+            for p in self.chip.paths.values():
+                if p.touched:
+                    to_delete.append(p.id)
 
-        for p in to_delete:
-            self.delete_path(p)
+            for p in to_delete:
+                self.delete_path(p)
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """Handles key release events."""

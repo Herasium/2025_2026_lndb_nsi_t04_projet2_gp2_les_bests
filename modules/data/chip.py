@@ -14,13 +14,13 @@ logger: Logger = Logger("Chip")
 
 
 class Chip:
-    """Manages the lifecycle, serialization, and structure of a logic chip."""
+    """Gère le cycle de vie, la sérialisation et la structure d'une puce logique."""
 
     def __init__(self, id: str) -> None:
-        """Initializes a new Chip instance.
+        """Initialise une nouvelle instance de Chip.
 
         Args:
-            id: Unique identifier for the chip.
+            id: Identifiant unique de la puce.
         """
         self.paths: Dict[str, Path] = {}
         self.gates: Dict[str, Any] = {}
@@ -34,10 +34,10 @@ class Chip:
 
     @profile
     def copy(self) -> "Chip":
-        """Creates a deep copy of the chip with a newly generated identifier.
+        """Crée une copie profonde de la puce avec un identifiant nouvellement généré.
 
         Returns:
-            A new Chip instance reflecting the current state.
+            Une nouvelle instance de Chip reflétant l'état actuel.
         """
         new: Chip = Chip("no_id")
         new.partial_load(json.loads(self.save(no_file=True, dojson=True)))
@@ -49,14 +49,14 @@ class Chip:
     def save(
         self, no_file: bool = False, dojson: bool = False
     ) -> Union[Dict, str, None]:
-        """Serializes chip state to a dictionary, JSON string, or disk.
+        """Sérialise l'état de la puce vers un dictionnaire, une chaîne JSON ou le disque.
 
         Args:
-            no_file: Prevents disk I/O when true.
-            dojson: Returns serialized output as a JSON string when true.
+            no_file: Empêche les entrées/sorties (I/O) sur le disque si vrai.
+            dojson: Retourne la sortie sérialisée sous forme de chaîne JSON si vrai.
 
         Returns:
-            The serialized representation or None if the chip was written to disk.
+            La représentation sérialisée ou None si la puce a été écrite sur le disque.
         """
         paths: Dict[str, Any] = {}
         gates: Dict[str, Any] = {}
@@ -100,15 +100,15 @@ class Chip:
         with open(file_path, "wb") as file:
             file.write(dump.encode())
 
-        logger.print(f"Saved {self.name}, #{self.id}")
+        logger.print(f"Sauvegarde de {self.name}, #{self.id}")
         return None
 
     @profile
     def partial_load(self, data: Dict[str, Any]) -> None:
-        """Loads core metadata and buffers structural data for final initialization.
+        """Charge les métadonnées de base et met en tampon les données structurelles pour l'initialisation finale.
 
         Args:
-            data: Raw state dictionary.
+            data: Dictionnaire d'état brut.
         """
         self.type = data["type"]
         self.name = data["name"]
@@ -121,12 +121,12 @@ class Chip:
 
     @profile
     def load(self) -> None:
-        """Constructs gates and paths from buffered data.
+        """Construit les portes (gates) et les chemins (paths) à partir des données en tampon.
 
-        Requires partial_load to be executed first.
+        Nécessite l'exécution préalable de partial_load.
         """
         if self.temp_data is None:
-            logger.error("You must partial load a chip, before finishing load.")
+            logger.error("Vous devez effectuer un chargement partiel de la puce avant de terminer le chargement.")
             return
 
         data_map: Dict[str, Any] = self.temp_data
@@ -149,21 +149,21 @@ class Chip:
             self.paths[key] = new_path
 
         self.temp_data = None
-        logger.debug(f"Loaded Chip {self}")
+        logger.debug(f"Puce chargée : {self}")
 
     def __str__(self) -> str:
-        """Provides a human-readable summary of the chip instance.
+        """Fournit un résumé lisible de l'instance de la puce.
 
         Returns:
-            A formatted string containing ID and object counts.
+            Une chaîne formatée contenant l'ID et le décompte des objets.
         """
-        return f"Chip (#{self.id}) {len(self.gates)} Gates / {len(self.paths)} Paths"
+        return f"Chip (#{self.id}) {len(self.gates)} Portes / {len(self.paths)} Chemins"
 
     def get_inputs(self) -> List[str]:
-        """Retrieves identifiers for all input-type gates.
+        """Récupère les identifiants pour toutes les portes de type entrée (input).
 
         Returns:
-            List of gate IDs.
+            Liste des IDs de portes.
         """
         result: List[str] = []
         for i in self.gates:
@@ -172,10 +172,10 @@ class Chip:
         return result
 
     def get_outputs(self) -> List[str]:
-        """Retrieves identifiers for all output-type gates.
+        """Récupère les identifiants pour toutes les portes de type sortie (output).
 
         Returns:
-            List of gate IDs.
+            Liste des IDs de portes.
         """
         result: List[str] = []
         for i in self.gates:
@@ -184,10 +184,10 @@ class Chip:
         return result
 
     def get_gates(self) -> List[str]:
-        """Retrieves identifiers for all standard gate-type components.
+        """Récupère les identifiants pour tous les composants de type porte standard.
 
         Returns:
-            List of gate IDs.
+            Liste des IDs de portes.
         """
         result: List[str] = []
         for i in self.gates:

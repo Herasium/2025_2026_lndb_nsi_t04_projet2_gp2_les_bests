@@ -1,9 +1,9 @@
-# Configuration file for the Sphinx documentation builder.
+# Fichier de configuration pour le générateur de documentation Sphinx.
 #
-# For the full list of built-in configuration values, see the documentation:
+# Pour la liste complète des valeurs de configuration intégrées, consultez la documentation :
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Project information -----------------------------------------------------
+# -- Informations sur le projet -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'LogicBox'
@@ -17,40 +17,41 @@ extensions = [
     'sphinx.ext.githubpages',
 ]
 
-# Add any paths that contain templates here, relative to this directory.
+# Ajoutez ici tous les chemins contenant des modèles, relatifs à ce répertoire.
 templates_path = ['_templates']
 
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
+# Liste de motifs, relatifs au répertoire source, qui correspondent à des fichiers et
+# répertoires à ignorer lors de la recherche de fichiers sources.
+# Ce motif affecte également html_static_path et html_extra_path.
 exclude_patterns = []
 
-# The name of the Pygments (syntax highlighting) style to use.
+# Le nom du style Pygments (coloration syntaxique) à utiliser.
 pygments_style = 'sphinx'
 
-# -- Options for HTML output -------------------------------------------------
+# -- Options pour la sortie HTML -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# Le thème à utiliser pour les pages HTML et l'aide HTML. Consultez la documentation
+# pour obtenir une liste des thèmes intégrés.
 #
 html_theme = 'sphinx_rtd_theme'
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
+# Ajoutez ici tous les chemins contenant des fichiers statiques personnalisés (tels que des feuilles de style),
+# relatifs à ce répertoire. Ils sont copiés après les fichiers statiques intégrés,
+# ainsi un fichier nommé "default.css" écrasera le fichier "default.css" intégré.
 html_static_path = ['_static']
 
-# Add your project's source directory to the sys.path so that autodoc can find your modules.
+# Ajoutez le répertoire source de votre projet au sys.path afin qu'autodoc puisse trouver vos modules.
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../modules'))
 
 sys.path.insert(0, os.path.abspath('../..'))
-# -- Options for autodoc -----------------------------------------------------
 
-# Automatically extract type hints when specified and place them in
-# descriptions of the relevant function/method.
+# -- Options pour autodoc -----------------------------------------------------
+
+# Extraire automatiquement les indices de type (type hints) lorsqu'ils sont spécifiés et les placer
+# dans les descriptions de la fonction ou méthode concernée.
 autodoc_typehints = 'description'
 
-# Automatically extract type hints from comments
+# Extraire automatiquement les indices de type à partir des commentaires.
 autodoc_typehints_format = 'short'

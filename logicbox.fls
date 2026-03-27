@@ -1,0 +1,4 @@
+PWD H:\Documents\2025_2026_nsi_lnd_term4_2_2
+INPUT C:\Users\soubrie\AppData\Local\MiKTeX\miktex\data\le\pdftex\latex.fmt
+INPUT docs\_build\latex\logicbox.tex
+OUTPUT logicbox.log
