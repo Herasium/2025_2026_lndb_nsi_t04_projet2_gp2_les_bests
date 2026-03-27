@@ -2683,7 +2683,7 @@
   "id": "level_7da3044e97f87646a6b92c982dd3a66e",
   "number": 21,
   "name": "8 Bits XOR",
-  "description": "Compare two 8-bit inputs using breaker, maker, and other gates. Output is true when bits differ.",
+  "description": "Compare two 8-bit inputs. Output is 8-bit, true where bits differ.",
   "hints": [],
   "version": 208,
   "start": 1,
