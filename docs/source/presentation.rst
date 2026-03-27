@@ -1,66 +1,65 @@
 LogicBox Overview
 =================
 
-Overview
---------
+Vue d’ensemble
+--------------
 
-This project provide the user with a capable logic gates simultation, turing complete.
-The project can be divided into three parts:
+Ce projet fournit à l’utilisateur une simulation de portes logiques performante, Turing-complète.
+Le projet peut être divisé en trois parties :
 
-- **The Sandbox**, where users are free to user every tool to let their creativity run free.
-- **The Levels**, where users are though in a progressive and organized manner the basics of binary logic.
+- **Le Sandbox**, où les utilisateurs sont libres d’utiliser tous les outils pour laisser libre cours à leur créativité.
+- **Les Niveaux**, où les utilisateurs apprennent de manière progressive et structurée les bases de la logique binaire.
 
-The architecture is designed to be extensible, allowing custom gates,
-compositions, and multiple abstraction levels (1-bit, 8-bit, mixed).
+L’architecture est conçue pour être extensible, permettant des portes personnalisées et plusieurs niveaux d’abstraction (1-bit, 8-bit, mixte).
 
 Architecture
 ------------
 
-The project is organized into the following main packages:
+Le projet est organisé en principaux modules suivants :
 
 - ``modules.data``  
-  Core domain model: gates, nodes, chips, and level definitions
-  Shared classes and textures data for the entire project
+  Modèle de domaine principal : portes, nœuds, circuits (chips) et définitions de niveaux  
+  Classes partagées et données de textures pour l’ensemble du projet
 
 - ``modules.engine``  
-  Simulation logic and execution pipeline
+  Logique de simulation et pipeline d’exécution
 
 - ``modules.ui``  
-  All user interactions, main menu, editors and levels
+  Toutes les interactions utilisateur, menu principal, éditeurs et niveaux
 
 - ``modules.logger``  
-  Logging and debug utilities
+  Outils de journalisation et de débogage
 
 
-Key Concepts
-------------
-
-Gates
-~~~~~
-Logical operators (AND, OR, NOT, etc.) implemented across different bit widths.
-
-Levels
-~~~~~~
-Prebuilt by us, they represent a goal where the user is directed.
-
-UI Systems
-~~~~~~~~~~
-Tools for editing, debugging, and interacting with the simulation.
-
-
-Getting Started
----------------
-
-Typical workflow:
-
-1. Select a level
-2. Find the right solution
-3. Learn to create your own projects
-4. Build your own chips, free of limitations
-5. Enjoy!
-
-
-API Reference
+Concepts clés
 -------------
 
-See the :doc:`api` section for full technical documentation.
+Portes
+~~~~~~
+Opérateurs logiques (AND, OR, NOT, etc.) implémentés sur différentes tailles de bits.
+
+Niveaux
+~~~~~~~
+Préconçus par nous, ils représentent un objectif vers lequel l’utilisateur est guidé.
+
+Systèmes UI
+~~~~~~~~~~~
+Outils pour éditer, déboguer et interagir avec la simulation.
+
+
+Prise en main
+-------------
+
+Flux de travail typique :
+
+1. Sélectionner un niveau
+2. Trouver la bonne solution
+3. Apprendre à créer vos propres projets
+4. Construire vos propres circuits, sans limitations
+5. Amusez-vous !
+
+
+Référence API
+-------------
+
+Voir la section :doc:`api` pour la documentation technique complète.

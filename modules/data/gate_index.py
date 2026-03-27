@@ -23,6 +23,7 @@ from modules.data.nodes.one.on import On
 from modules.data.nodes.one.off import Off
 from modules.data.nodes.one.tand import TAnd
 from modules.data.nodes.one.tor import TOr
+from modules.data.nodes.one.decoder import Decoder
 
 from modules.data.nodes.eight.gnot import Not as Not_8
 from modules.data.nodes.eight.input import Input as Input_8
@@ -74,6 +75,7 @@ gate_types: Dict[str, Type[Any]] = {
     "TAND": TAnd,
     "8MUX": Mux_8,
     "8REGISTER": Register,
+    "DECOD": Decoder
 }
 
 gate_types_1: Dict[str, Type[Any]] = {
@@ -94,6 +96,7 @@ gate_types_1: Dict[str, Type[Any]] = {
     "OFF": Off,
     "TOR": TOr,
     "TAND": TAnd,
+    "DECOD": Decoder
 }
 
 gate_types_8: Dict[str, Type[Any]] = {

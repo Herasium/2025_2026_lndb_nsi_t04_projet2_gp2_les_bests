@@ -335,6 +335,10 @@ def gate_register(inputs: list[int],gate: Gate) -> list[int]:
         return [gate.current_value]
     return [0]
 
+def gate_decoder(inputs: list[int]):
+
+    return [(not inputs[0])*1,inputs[0]]
+
 LOGIC_MAP: dict[str, callable] = {
     "AND": gate_and,
     "OR": gate_or,
@@ -361,6 +365,7 @@ LOGIC_MAP: dict[str, callable] = {
     "8XOR": gate_8xor,
     "8MUX": gate_8mux,
     "8REGISTER": gate_register,
+    "DECOD": gate_decoder,
 }
 
 
