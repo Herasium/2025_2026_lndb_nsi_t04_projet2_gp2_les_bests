@@ -237,7 +237,7 @@
   "time": 60,
   "id": "level_4a3148ca15d59a5eeb23dd7b748b49fc",
   "number": 5,
-  "name": "NOT A v2",
+  "name": "NOT A",
   "description": "Build NOT A using only a NAND gate. Output is the inverse of A.",
   "hints": [],
   "version": 208,

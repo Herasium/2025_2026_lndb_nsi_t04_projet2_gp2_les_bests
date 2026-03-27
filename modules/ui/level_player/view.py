@@ -131,10 +131,11 @@ class LevelPlayer(arcade.View):
             x=384 + 90, y=310, width=160 * 1.2, height=120, sprite=data.button_back
         )
 
-        if (len(self.level.hints) - 1) < 1:
+        if (len(self.level.hints)) < 1:
             self.display_hint_frame = False
             return
-
+        else:
+            self.display_hint_frame = True
         self.hint_frame_text.text = self.level.hints[0]
 
     def prepare_won_frame(self) -> None:

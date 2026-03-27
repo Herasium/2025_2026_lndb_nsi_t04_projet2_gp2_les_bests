@@ -373,7 +373,7 @@
   "time": 90,
   "id": "level_411375352220c9bcb746f33e4bbdd574",
   "number": 6,
-  "name": "Basic level",
+  "name": "A AND B",
   "description": "Use NAND and NOT gates to get A AND B.",
   "hints": [],
   "version": 208,
