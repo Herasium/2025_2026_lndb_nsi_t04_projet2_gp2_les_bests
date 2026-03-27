@@ -161,6 +161,8 @@ class InputFrame(arcade.View):
             button: The mouse button pressed.
             key_modifiers: Bitwise flags for modifier keys.
         """
+        if len(str(self.current_text)) == 0:
+            self.current_text = 0
 
         if self.typing_collider.touched:
             self.typing = not self.typing

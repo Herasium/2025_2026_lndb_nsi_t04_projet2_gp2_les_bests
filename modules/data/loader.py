@@ -388,6 +388,7 @@ class Loader:
         data.button_edit = arcade.Sprite("assets/buttons/button_edit.png")
         data.button_new = arcade.Sprite("assets/buttons/button_new.png")
         data.button_resume = arcade.Sprite("assets/buttons/button_resume.png")
+        data.button_answer = arcade.Sprite("assets/buttons/button_answer.png")
 
         data.name_banner = arcade.Sprite("assets/titles/name_banner.png")
         data.level_info = arcade.Sprite("assets/titles/level_info.png")
@@ -424,6 +425,9 @@ class Loader:
         data.level_buttons_empty["red"] = arcade.Sprite("assets/buttons/levels/red.png")
         data.level_buttons_empty["green"] = arcade.Sprite(
             "assets/buttons/levels/green.png"
+        )        
+        data.level_buttons_empty["blue"] = arcade.Sprite(
+            "assets/buttons/levels/blue.png"
         )
         data.level_buttons_empty["black"] = arcade.Sprite("assets/buttons/levels/black.png")
         data.level_buttons_empty["purple"] = arcade.Sprite("assets/buttons/levels/purple.png")

@@ -1,0 +1,9 @@
+# Fdb version 4
+["latex"] 0 "logicbox.tex" "logicbox.dvi" "logicbox" 0 -1
+  "logicbox.aux" 0 -1 0 "latex"
+  "logicbox.tex" 0 -1 0 ""
+  (generated)
+  "logicbox.aux"
+  "logicbox.dvi"
+  "logicbox.log"
+  (rewritten before read)

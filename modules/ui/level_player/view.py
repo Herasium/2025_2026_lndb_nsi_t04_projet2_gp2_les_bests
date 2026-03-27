@@ -7,6 +7,8 @@ from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.id_generator import random_id
 from modules.ui.toolbox.easing import BackEaseOut, ElasticEaseOut
 from modules.ui.toolbox.text import Text
+from modules.ui.editor.view import EditorView
+from modules.ui.editor.input import InputFrame
 
 from modules.data.nodes.path import Path
 
@@ -196,8 +198,8 @@ class LevelPlayer(arcade.View):
             height=64,
             sprite=data.truth_table,
         )
-        self.button_next_off = Entity(
-            x=1634, y=57, width=216, height=128, sprite=data.button_next_off
+        self.button_answer = Entity(
+            x=1634, y=57, width=216, height=128, sprite=data.button_answer
         )
         self.level_info = Entity(
             x=1402,
@@ -614,7 +616,7 @@ class LevelPlayer(arcade.View):
         """Renders the sidebar components and calculated truth table."""
         self.check_button.draw()
         self.truth_table.draw()
-        self.button_next_off.draw()
+        self.button_answer.draw()
         self.level_info.draw()
         self.level_name_text.draw()
         for i in self.level_desc_text:
@@ -700,7 +702,10 @@ class LevelPlayer(arcade.View):
         if key == data.keys.input_toggle and not self.level.won:
             for g in self.level.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
-                    g.switch()
+                    if g.outputs_sizes[0] == 1:
+                        g.switch()
+                    elif g.gate_type in ["8Input"]:
+                        data.window.display(InputFrame(self.level.chip,g.id))
         if key == 65473:  # Emergency exit: F4
             arcade.exit()
 
@@ -902,6 +907,10 @@ class LevelPlayer(arcade.View):
             if self.level.check_victory():
                 self.won()
             return
+        
+        if self.button_answer.touched:
+            data.window.display(EditorView(level_solution=self.level.answer.copy()))
+
         # Wiring logic
         for g in self.level.chip.gates.values():
             touched = g.touched

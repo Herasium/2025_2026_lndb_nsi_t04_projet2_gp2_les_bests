@@ -16,7 +16,7 @@ class Register(Complex):
         """
         super().__init__(id)
 
-        self.name: str = "REGISTER"
+        self.name: str = "REGI"
         self.gate_type: str = "8REGISTER"
 
         self.inputs: List[int] = [0,0,0]
