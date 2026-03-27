@@ -2333,7 +2333,7 @@
   "id": "level_a89684307155d13ab07489981126afcb",
   "number": 18,
   "name": "8 Bits AND",
-  "description": "Combine 8 input bits using breaker, maker, and other gates. Output is true only if all bits are true.",
+  "description": "Combine 8 inputs using breaker, maker, and gates. Output is true only if all bits are true.",
   "hints": ["Use the Breaker and Maker to divide the byte in 8 bits."],
   "version": 208,
   "start": 1,
