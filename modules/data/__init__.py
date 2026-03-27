@@ -161,7 +161,7 @@ class Data:
             "The NEND"
         ]
 
-        self.current_lang: str = "fr"
+        self.current_lang: str = "en"
         if self.current_lang == "en":
             self.language = English()
         else:
