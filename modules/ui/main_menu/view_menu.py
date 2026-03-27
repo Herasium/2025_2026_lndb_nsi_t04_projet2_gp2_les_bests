@@ -9,14 +9,14 @@ from modules.ui.main_menu.in_progress_view import MainMenuView
 
 from modules.data import data
 
-"""Old Menu, not used anymore."""
+"""Ancien menu, n'est plus utilisé."""
 
 
 class GameView(arcade.View):
-    """Manages the layout, rendering, and interaction logic for the main menu."""
+    """Gère la disposition, le rendu et la logique d'interaction du menu principal."""
 
     def __init__(self) -> None:
-        """Initializes UI elements, assets, and display parameters."""
+        """Initialise les éléments de l'interface utilisateur, les ressources et les paramètres d'affichage."""
         super().__init__()
 
         self.background_color: arcade.color = arcade.color.JET
@@ -76,11 +76,11 @@ class GameView(arcade.View):
         )
 
     def reset(self) -> None:
-        """Resets the state of the view."""
+        """Réinitialise l'état de la vue."""
         pass
 
     def on_draw(self) -> None:
-        """Renders UI components to the frame."""
+        """Affiche les composants de l'interface utilisateur à l'écran."""
         self.clear()
         self.button_play.draw()
         self.button_quit.draw()
@@ -90,23 +90,23 @@ class GameView(arcade.View):
         self.titreL.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Updates view logic."""
+        """Met à jour la logique de la vue."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
         """
-        Args:
-            key: The numeric identifier of the pressed key.
-            key_modifiers: Bitwise flags representing active modifier keys.
+        Arguments:
+            key: L'identifiant numérique de la touche pressée.
+            key_modifiers: Drapeaux binaires représentant les touches de modification actives.
         """
         if key == 97:
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
         """
-        Args:
-            key: The numeric identifier of the released key.
-            key_modifiers: Bitwise flags representing active modifier keys.
+        Arguments:
+            key: L'identifiant numérique de la touche relâchée.
+            key_modifiers: Drapeaux binaires représentant les touches de modification actives.
         """
         pass
 
@@ -114,11 +114,11 @@ class GameView(arcade.View):
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
         """
-        Args:
-            x: Horizontal screen coordinate of the mouse.
-            y: Vertical screen coordinate of the mouse.
-            delta_x: Change in horizontal position.
-            delta_y: Change in vertical position.
+        Arguments:
+            x: Coordonnée horizontale de la souris sur l'écran.
+            y: Coordonnée verticale de la souris sur l'écran.
+            delta_x: Variation de la position horizontale.
+            delta_y: Variation de la position verticale.
         """
         mouse.position = (x, y)
 
@@ -136,15 +136,15 @@ class GameView(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Args:
-            x: Horizontal screen coordinate of the click.
-            y: Vertical screen coordinate of the click.
-            button: The mouse button pressed.
-            key_modifiers: Bitwise flags representing active modifier keys.
+        Arguments:
+            x: Coordonnée horizontale du clic sur l'écran.
+            y: Coordonnée verticale du clic sur l'écran.
+            button: Le bouton de la souris pressé.
+            key_modifiers: Drapeaux binaires représentant les touches de modification actives.
         """
         if self.button_play.touched:
             data.window.hide()
-            # Navigation routing based on modifier key bitmasks
+            # Routage de la navigation basé sur les masques de bits des touches de modification
             if key_modifiers == 16 or key_modifiers == 0:
                 data.window.display(EditorView())
             elif key_modifiers == 17 or key_modifiers == 1:
@@ -161,10 +161,10 @@ class GameView(arcade.View):
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
         """
-        Args:
-            x: Horizontal screen coordinate of the release.
-            y: Vertical screen coordinate of the release.
-            button: The mouse button released.
-            key_modifiers: Bitwise flags representing active modifier keys.
+        Arguments:
+            x: Coordonnée horizontale du relâchement sur l'écran.
+            y: Coordonnée verticale du relâchement sur l'écran.
+            button: Le bouton de la souris relâché.
+            key_modifiers: Drapeaux binaires représentant les touches de modification actives.
         """
         pass

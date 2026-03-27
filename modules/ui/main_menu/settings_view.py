@@ -8,10 +8,10 @@ from modules.ui.toolbox.text import Text
 
 
 class SettingView(arcade.View):
-    """Manages the settings menu interface, including UI layout and user interaction."""
+    """Gère l'interface du menu des paramètres, incluant la disposition de l'IU et les interactions utilisateur."""
 
     def __init__(self) -> None:
-        """Initializes the view, configures UI component positioning, and sets visual assets."""
+        """Initialise la vue, configure le positionnement des composants de l'IU et définit les ressources visuelles."""
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.JET
@@ -41,7 +41,7 @@ class SettingView(arcade.View):
         self.setup_texts()
 
     def write_value(self) -> None:
-
+        """Enregistre la valeur numérique saisie dans les données de configuration correspondantes."""
         if len(self.writing_value) != 0:
             match self.current_selected:
                 case "max_framerate":
@@ -54,7 +54,7 @@ class SettingView(arcade.View):
                     data.MOUSE_SENSI = min(max(0, int(self.writing_value)), 255)
 
     def write_single(self) -> None:
-
+        """Assigne une touche unique à une action spécifique des contrôles."""
         match self.current_selected:
             case "back":
                 data.keys.back = self.writing_value
@@ -66,20 +66,20 @@ class SettingView(arcade.View):
                 data.keys.gate_delete = self.writing_value
 
     def text_list(self) -> None:
-
+        """Définit la liste des éléments textuels affichés dans le menu des paramètres."""
         self.texts = [
-            ["--> Video <--", 30, "", False, False],
-            ["Click to edit / toggle any values.", self.standart, "", False, False],
+            ["--> Vidéo <--", 30, "", False, False],
+            ["Cliquez pour modifier / basculer les valeurs.", self.standart, "", False, False],
             [
-                f"Resolution: {data.WINDOW_WIDTH}x{data.WINDOW_HEIGHT} (Fixed)",
+                f"Résolution : {data.WINDOW_WIDTH}x{data.WINDOW_HEIGHT} (Fixe)",
                 self.standart,
                 "",
                 False,
                 False,
             ],
-            [f"Fullscreen: {data.WINDOW_FULLSCREEN}", self.standart, "", False, False],
+            [f"Plein écran : {data.WINDOW_FULLSCREEN}", self.standart, "", False, False],
             [
-                f"Max Framerate: {data.WINDOW_FRAMERATE} FPS",
+                f"Fréquence d'image max : {data.WINDOW_FRAMERATE} FPS",
                 self.standart,
                 "max_framerate",
                 True,
@@ -87,51 +87,51 @@ class SettingView(arcade.View):
             ],
             ["--> Audio <--", 30, "", False, False],
             [
-                f"Music Volume: {data.audio.music_volume}",
+                f"Volume Musique : {data.audio.music_volume}",
                 self.standart,
                 "music_volume",
                 True,
                 False,
             ],
             [
-                f"SFX Volume: {data.audio.sfx_volume}",
+                f"Volume Effets (SFX) : {data.audio.sfx_volume}",
                 self.standart,
                 "sfx_volume",
                 True,
                 False,
             ],
-            [f"Mute: {data.audio.mute}", self.standart, "", False, False],
-            ["--> Inputs <--", 30, "", False, False],
+            [f"Muet : {data.audio.mute}", self.standart, "", False, False],
+            ["--> Commandes <--", 30, "", False, False],
             [
-                f"Menu Back / Cancel: {data.keys.back} ({visual_key(data.keys.back)})",
+                f"Retour Menu / Annuler : {data.keys.back} ({visual_key(data.keys.back)})",
                 self.standart,
                 "back",
                 False,
                 True,
             ],
             [
-                f"Input Toggle: {data.keys.input_toggle} ({visual_key(data.keys.input_toggle)})",
+                f"Basculer Entrée : {data.keys.input_toggle} ({visual_key(data.keys.input_toggle)})",
                 self.standart,
                 "input",
                 False,
                 True,
             ],
             [
-                f"Save Chip: {data.keys.chip_save} ({visual_key(data.keys.chip_save)})",
+                f"Sauvegarder Puce : {data.keys.chip_save} ({visual_key(data.keys.chip_save)})",
                 self.standart,
                 "save",
                 False,
                 True,
             ],
             [
-                f"Mouse Sensitivity: {data.MOUSE_SENSI}",
+                f"Sensibilité Souris : {data.MOUSE_SENSI}",
                 self.standart,
                 "mouse_sensi",
                 True,
                 False,
             ],
             [
-                f"Delete Gate: {data.keys.gate_delete} ({visual_key(data.keys.gate_delete)})",
+                f"Supprimer Porte : {data.keys.gate_delete} ({visual_key(data.keys.gate_delete)})",
                 self.standart,
                 "delete",
                 False,
@@ -140,6 +140,7 @@ class SettingView(arcade.View):
         ]
 
     def setup_texts(self) -> None:
+        """Initialise les objets visuels de texte et gère leur mise en page dynamique."""
         self.text_list()
         self.visual = []
         self.option_title = Entity(
@@ -182,20 +183,20 @@ class SettingView(arcade.View):
             index += 1
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Processes keyboard input.
+        """Traite les entrées clavier.
 
         Args:
-            key: The numeric code of the key pressed.
-            key_modifiers: Bitwise flags for held modifier keys.
+            key: Le code numérique de la touche pressée.
+            key_modifiers: Drapeaux binaires pour les touches modificatrices enfoncées.
         """
-        if key == 65293:
+        if key == 65293: # Touche Entrée
             if self.writing:
                 self.writing = False
                 self.setup_texts()
         if key == data.keys.back:
             data.save()
             data.window.display(data.main)
-        if key == 65473:  # Emergency exit: F4
+        if key == 65473:  # Sortie d'urgence : F4
             arcade.exit()
 
         if self.writing:
@@ -212,7 +213,7 @@ class SettingView(arcade.View):
             self.setup_texts()
 
     def on_draw(self) -> None:
-        """Renders the complete view stack."""
+        """Rend l'ensemble de la pile de vues."""
         self.clear(arcade.color.BLACK)
 
         self.bg.draw()
@@ -230,20 +231,20 @@ class SettingView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Synchronizes global mouse state with current cursor position.
+        """Synchronise l'état global de la souris avec la position actuelle du curseur.
 
         Args:
-            x: Current horizontal cursor position.
-            y: Current vertical cursor position.
-            delta_x: Horizontal movement relative to last frame.
-            delta_y: Vertical movement relative to last frame.
+            x: Position horizontale actuelle du curseur.
+            y: Position verticale actuelle du curseur.
+            delta_x: Mouvement horizontal relatif à la dernière image.
+            delta_y: Mouvement vertical relatif à la dernière image.
         """
         mouse.position = (x, y)
 
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Updates vertical camera offset and rebuilds layout."""
+        """Met à jour le décalage vertical de la caméra et reconstruit la mise en page."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, 0)
         self.setup_texts()
@@ -251,13 +252,13 @@ class SettingView(arcade.View):
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Processes mouse click input to trigger navigation or action events.
+        """Traite les clics de souris pour déclencher la navigation ou des événements d'action.
 
         Args:
-            x: Horizontal cursor position at click.
-            y: Vertical cursor position at click.
-            button: The specific button triggered.
-            key_modifiers: Bitwise flags for held modifier keys.
+            x: Position horizontale du curseur lors du clic.
+            y: Position verticale du curseur lors du clic.
+            button: Le bouton spécifique actionné.
+            key_modifiers: Drapeaux binaires pour les touches modificatrices enfoncées.
         """
         if self.back_button.touched:
             data.save()

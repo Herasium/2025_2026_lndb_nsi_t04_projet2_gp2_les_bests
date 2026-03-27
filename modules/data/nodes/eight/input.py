@@ -1,4 +1,4 @@
-"""Provides specialized logic gate components for simulation environments."""
+"""Fournit des composants de portes logiques spécialisés pour les environnements de simulation."""
 
 import math
 from typing import List, Any
@@ -8,13 +8,13 @@ from modules.data.complex import Complex
 
 
 class Input(Complex):
-    """Represents an 8-bit input gate within a logic simulation circuit."""
+    """Représente une porte d'entrée 8 bits au sein d'un circuit de simulation logique."""
 
     def __init__(self, id: Any) -> None:
-        """Initializes the input component.
+        """Initialise le composant d'entrée.
 
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 
@@ -27,6 +27,7 @@ class Input(Complex):
         self.inputs_sizes: List[int] = []
         self.outputs_sizes: List[int] = [8]
 
+        # Décalage de taille exceptionnel
         self.exceptional_size_offset: int = 2
 
         self.gen_tile_pattern()
@@ -34,8 +35,7 @@ class Input(Complex):
         self.setup_texts()
 
     def switch(self) -> None:
-        """Simulates an input state change by generating a new random 8-bit integer."""
+        """Simule un changement d'état d'entrée en générant un nouvel entier 8 bits aléatoire."""
         self.outputs[0] = random.randint(0, 255)
         self.gen_tile_pattern()
         self.update_text_readings()
-

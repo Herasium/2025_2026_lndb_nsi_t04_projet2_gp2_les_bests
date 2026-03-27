@@ -1,1 +1,1 @@
-"""Main chip editor, used in sandbox mode and in level making."""
+"""Éditeur de puces principal, utilisé dans le mode bac à sable et dans la création de niveaux."""

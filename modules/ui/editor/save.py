@@ -1,4 +1,4 @@
-"""Provides the SaveFrame view for editing and saving chip configuration data."""
+"""Fournit la vue SaveFrame pour l'édition et la sauvegarde des données de configuration de la puce."""
 
 import arcade
 from typing import Any
@@ -11,20 +11,20 @@ from modules.data import data
 
 
 class SaveFrame(arcade.View):
-    """Manages the UI layout and user interactions for editing chip properties."""
+    """Gère la disposition de l'interface utilisateur et les interactions pour l'édition des propriétés de la puce."""
 
     def __init__(self, chip: Any) -> None:
-        """Initializes the SaveFrame instance.
+        """Initialise l'instance SaveFrame.
 
         Args:
-            chip: The configuration object containing chip data to be modified.
+            chip: L'objet de configuration contenant les données de la puce à modifier.
         """
         super().__init__()
 
         self.background_color: arcade.Color = arcade.color.BLACK
         self.chip: Any = chip
         self.typing: bool = False
-        self.current_text = "Default Chip"
+        self.current_text = "Puce par défaut"
 
         self.setup()
 
@@ -62,7 +62,7 @@ class SaveFrame(arcade.View):
             y=data.WINDOW_HEIGHT / 2 + 30,
             width=500,
             height=200,
-            text="Chip Name (Click to Edit.)",
+            text="Nom de la puce (Cliquer pour éditer.)",
             align=("left", "center"),
             size=12,
         )
@@ -72,7 +72,7 @@ class SaveFrame(arcade.View):
             y=data.WINDOW_HEIGHT / 2 - 100,
             width=500,
             height=200,
-            text=f"Chip Id: {self.chip.id}",
+            text=f"ID Puce : {self.chip.id}",
             align=("center", "center"),
             size=18,
         )
@@ -81,7 +81,7 @@ class SaveFrame(arcade.View):
             y=data.WINDOW_HEIGHT / 2 - 150,
             width=500,
             height=200,
-            text=f"Chip Version: {data.VERSION}",
+            text=f"Version Puce : {data.VERSION}",
             align=("center", "center"),
             size=18,
         )
@@ -94,11 +94,11 @@ class SaveFrame(arcade.View):
         )
 
     def reset(self) -> None:
-        """Resets the internal state of the view."""
+        """Réinitialise l'état interne de la vue."""
         pass
 
     def on_draw(self) -> None:
-        """Renders all configured UI text elements."""
+        """Affiche tous les éléments textuels configurés de l'interface utilisateur."""
         self.clear()
         self.bg.draw()
         self.border.draw()
@@ -130,15 +130,15 @@ class SaveFrame(arcade.View):
             )
 
     def on_update(self, delta_time: float) -> None:
-        """Handles periodic logic updates."""
+        """Gère les mises à jour logiques périodiques."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handles keyboard input events.
+        """Gère les événements de pression de touches du clavier.
 
         Args:
-            key: The identifier of the pressed key.
-            key_modifiers: Bitwise flags for modifier keys.
+            key: L'identifiant de la touche pressée.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
         if self.typing:
             if key == data.keys.back:
@@ -148,36 +148,36 @@ class SaveFrame(arcade.View):
             self.chip_name.text = self.current_text
         if key == data.keys.back:
             data.window.back()
-        if key == 65473:  # Emergency exit: F4
+        if key == 65473:  # Sortie de secours : F4
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Handles key release events."""
+        """Gère les événements de relâchement de touches."""
         pass
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Updates the global mouse tracking state.
+        """Met à jour l'état global du suivi de la souris.
 
         Args:
-            x: The current x-coordinate of the mouse.
-            y: The current y-coordinate of the mouse.
-            delta_x: The change in x-coordinate since the last frame.
-            delta_y: The change in y-coordinate since the last frame.
+            x: Coordonnée x actuelle de la souris.
+            y: Coordonnée y actuelle de la souris.
+            delta_x: Variation de la coordonnée x depuis la dernière image.
+            delta_y: Variation de la coordonnée y depuis la dernière image.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Processes mouse click interactions with UI elements.
+        """Traite les interactions par clic de souris avec les éléments de l'interface.
 
         Args:
-            x: The x-coordinate of the mouse click.
-            y: The y-coordinate of the mouse click.
-            button: The mouse button pressed.
-            key_modifiers: Bitwise flags for modifier keys.
+            x: Coordonnée x du clic de souris.
+            y: Coordonnée y du clic de souris.
+            button: Le bouton de la souris pressé.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
 
         if self.typing_collider.touched:
@@ -191,5 +191,5 @@ class SaveFrame(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Handles mouse release events."""
+        """Gère les événements de relâchement du bouton de la souris."""
         pass

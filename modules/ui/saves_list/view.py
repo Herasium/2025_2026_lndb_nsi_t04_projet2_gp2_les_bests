@@ -1,4 +1,4 @@
-"""Provides the SaveFrame view for editing and saving chip configuration data."""
+"""Fournit la vue SaveFrame pour l'édition et l'enregistrement des données de configuration des puces."""
 
 import arcade
 
@@ -10,13 +10,13 @@ from modules.ui.editor.view import EditorView
 
 
 class ChipList(arcade.View):
-    """Manages the UI layout and user interactions for editing chip properties."""
+    """Gère la disposition de l'interface utilisateur et les interactions pour l'édition des propriétés des puces."""
 
     def __init__(self) -> None:
-        """Initializes the ChipList instance.
+        """Initialise l'instance de ChipList.
 
         Args:
-            chip: The configuration object containing chip data to be modified.
+            chip: L'objet de configuration contenant les données de la puce à modifier.
         """
         super().__init__()
 
@@ -73,7 +73,7 @@ class ChipList(arcade.View):
                 y=840 - offset * i + self.camera,
                 width=920,
                 height=30,
-                text=f"Chip Id:{chip.id}",
+                text=f"ID Puce :{chip.id}",
                 align=("left", "center"),
                 size=12,
             )
@@ -114,17 +114,17 @@ class ChipList(arcade.View):
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Updates vertical camera offset and rebuilds layout."""
+        """Met à jour le décalage vertical de la caméra et reconstruit la disposition."""
         self.camera += scroll_y * -data.MOUSE_SENSI
         self.camera = max(self.camera, -70)
         self.move()
 
     def reset(self) -> None:
-        """Resets the internal state of the view."""
+        """Réinitialise l'état interne de la vue."""
         pass
 
     def on_draw(self) -> None:
-        """Renders all configured UI text elements."""
+        """Rend tous les éléments textuels de l'interface configurés."""
         self.clear()
         self.bg.draw()
 
@@ -140,48 +140,48 @@ class ChipList(arcade.View):
         self.back_button.draw()
 
     def on_update(self, delta_time: float) -> None:
-        """Handles periodic logic updates."""
+        """Gère les mises à jour logiques périodiques."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handles keyboard input events.
+        """Gère les événements de pression de touches du clavier.
 
         Args:
-            key: The identifier of the pressed key.
-            key_modifiers: Bitwise flags for modifier keys.
+            key: L'identifiant de la touche pressée.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
         if key == data.keys.back:
             data.window.display(data.main)
-        if key == 65473:  # Emergency exit: F4
+        if key == 65473:  # Sortie de secours : F4
             arcade.exit()
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Handles key release events."""
+        """Gère les événements de relâchement de touches."""
         pass
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Updates the global mouse tracking state.
+        """Met à jour l'état global du suivi de la souris.
 
         Args:
-            x: The current x-coordinate of the mouse.
-            y: The current y-coordinate of the mouse.
-            delta_x: The change in x-coordinate since the last frame.
-            delta_y: The change in y-coordinate since the last frame.
+            x: La coordonnée x actuelle de la souris.
+            y: La coordonnée y actuelle de la souris.
+            delta_x: La variation de la coordonnée x depuis la dernière image.
+            delta_y: La variation de la coordonnée y depuis la dernière image.
         """
         mouse.position = (x, y)
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Processes mouse click interactions with UI elements.
+        """Traite les interactions de clic de souris avec les éléments de l'interface.
 
         Args:
-            x: The x-coordinate of the mouse click.
-            y: The y-coordinate of the mouse click.
-            button: The mouse button pressed.
-            key_modifiers: Bitwise flags for modifier keys.
+            x: La coordonnée x du clic de souris.
+            y: La coordonnée y du clic de souris.
+            button: Le bouton de la souris pressé.
+            key_modifiers: Drapeaux binaires pour les touches de modification.
         """
         for i in self.chips:
             if i["button"].touched:
@@ -195,5 +195,5 @@ class ChipList(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Handles mouse release events."""
+        """Gère les événements de relâchement du bouton de la souris."""
         pass

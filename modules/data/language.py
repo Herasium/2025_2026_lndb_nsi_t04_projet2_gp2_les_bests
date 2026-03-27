@@ -1,13 +1,13 @@
-"""Provides localization classes for application UI strings."""
+"""Fournit des classes de localisation pour les chaînes de caractères de l'interface utilisateur."""
 
 from typing import Dict
 
 
 class English:
-    """Stores and retrieves English localization strings."""
+    """Stocke et récupère les chaînes de localisation en anglais."""
 
     def __init__(self) -> None:
-        """Initializes the tutorial string repository."""
+        """Initialise le référentiel des chaînes de caractères du tutoriel."""
         self.tutorial: Dict[str, str] = {
             "button_1": "-> How to play ?",
             "button_2": "-> Keyboard commands",
@@ -45,29 +45,29 @@ class English:
         }
 
     def get(self, menu: str, key: str) -> str:
-        """Retrieves a translation string by category and identifier.
+        """Récupère une chaîne de traduction par catégorie et identifiant.
 
         Args:
-            menu: The attribute name containing the dictionary to search.
-            key: The specific identifier for the desired string.
+            menu: Le nom de l'attribut contenant le dictionnaire de recherche.
+            key: L'identifiant spécifique pour la chaîne souhaitée.
 
         Returns:
-            The corresponding string if found, otherwise an error message.
+            La chaîne correspondante si elle est trouvée, sinon un message d'erreur.
         """
         if menu in self.__dict__:
             if key in self.__dict__[menu]:
                 return self.__dict__[menu][key]
             else:
-                return f"Key '{key}' not found in menu '{menu}'"
+                return f"Clé '{key}' non trouvée dans le menu '{menu}'"
         else:
-            return f"Menu '{menu}' not found"
+            return f"Menu '{menu}' non trouvé"
 
 
 class French:
-    """Stores and retrieves French localization strings."""
+    """Stocke et récupère les chaînes de localisation en français."""
 
     def __init__(self) -> None:
-        """Initializes the tutorial string repository."""
+        """Initialise le référentiel des chaînes de caractères du tutoriel."""
         self.tutorial: Dict[str, str] = {
             "button_1": "-> Comment jouer ?",
             "button_2": "-> Commandes clavier",
@@ -86,39 +86,39 @@ class French:
             "button_15": "-> MAKER",
             "title_1": "Règles",
             "title_2": "Portes logiques",
-            "title_3": "Logic gates 8 bits",
-            "button_01": "Faites glisser les portes depuis la barre d'accès vers l'aire de jeu. Vous pouvez cliquer sur le port de sortie d'une porte pour créer un câble, puis sur le port d'entrée d'une autre porte pour les connecter.",
-            "button_02": "wvu",
-            "button_03": "INPUT est votre source de signal. \n\nElle se place en permanance au \n\ndébut d'un programme. Vous pouvez \n\ncliquer dessus pour basculer \n\nmanuellement son état entre 0 \n\n(éteint) et 1 (allumé).",
-            "button_04": "OUTPUT ferme un programme, c'est \n\nelle qui renvoie le signal. \n\nConnectez un câble à son port \n\nd'entrée. Elle s'illuminera en vert \n\nsi elle reçoit un signal 1 et \n\nrestera rouge pour un signal 0.",
-            "button_05": "NOT : \n\nConnectez une entrée à ce composant \n\npour inverser la logique. Si vous \n\nenvoyez un signal, il le coupe en \n\nsortie, si vous ne lui partagez \n\naucun signal, il renvoie 1.",
-            "button_06": "AND : \n\nReliez deux câbles aux ports \n\nd'entrée à gauche. La porte ne \n\ntransmettra un signal à la sortie \n\nque si les deux câbles d'entrée \n\ntransportent un signal 1.",
+            "title_3": "Portes logiques 8 bits",
+            "button_01": "Faites glisser les portes depuis la barre d'accès vers \n\nl'aire de jeu. Vous pouvez cliquer sur \n\nle port de sortie d'une porte pour créer \n\nun câble, puis sur le port d'entrée \n\nd'une autre porte pour les connecter.",
+            "button_02": "Échap : retour \n\nE : changer la valeur d'une entrée \n\n(entre 0 et 1) \n\nBackslash : supprimer \n\nClic milieu : déplacer la caméra \n\nS : sauvegarder \n\nF4 : arrêt d'urgence",
+            "button_03": "INPUT est votre source de signal. \n\nElle se place en permanence au \n\ndébut d'un programme. Vous pouvez \n\ncliquer dessus pour basculer \n\nmanuellement son état entre 0 \n\n(éteint) et 1 (allumé).",
+            "button_04": "OUTPUT ferme un programme ; c'est \n\nelle qui renvoie le signal. \n\nConnectez un câble à son port \n\nd'entrée. Elle s'illuminera en vert \n\nsi elle reçoit un signal 1 et \n\nrestera rouge pour un signal 0.",
+            "button_05": "NOT : \n\nConnectez une entrée à ce composant \n\npour inverser la logique. Si vous \n\nenvoyez un signal, il le coupe en \n\nsortie ; si vous ne lui envoyez \n\naucun signal, il renvoie 1.",
+            "button_06": "AND : \n\nReliez deux câbles aux ports \n\nd'entrée à gauche. La porte ne \n\ntransmettra un signal à la sortie \n\nque si les deux câbles d'entrée \n\ntransportent un signal.",
             "button_07": "OR : \n\nConnectez vos entrées. La porte \n\nretournera un signal dès qu'au \n\nmoins un des ports d'entrée reçoit \n\nun signal 1.",
-            "button_08": "NAND : \n\nCette porte fonctionne comme une \n\nAND, mais avec une sortie inversée. \n\nElle émet un signal 1 en \n\npermanence, sauf quand toutes ses \n\nentrées sont activées.",
-            "button_09": "NOR : \n\nCette porte éteint sa sortie \n\n(signal à 0) dès qu'une de ses \n\nentrées est 1. Elle ne laisse \n\npasser le signal 1 que si ses deux \n\nentrées sont à 0.",
+            "button_08": "NAND : \n\nCette porte fonctionne comme une \n\nporte AND, mais avec une sortie inversée. \n\nElle émet un signal 1 en \n\npermanence, sauf quand toutes ses \n\nentrées sont activées.",
+            "button_09": "NOR : \n\nCette porte éteint sa sortie \n\n(signal à 0) dès qu'une de ses \n\nentrées est à 1. Elle ne laisse \n\npasser le signal 1 que si ses deux \n\nentrées sont à 0.",
             "button_010": "XOR : \n\nConnectez deux sources. La sortie \n\npassera à 1 uniquement si les deux \n\nsignaux d'entrée sont différents \n\n(l'un à 1, l'autre à 0).",
-            "button_011": "CLOCK : \n\nUne fois placée, cette porte génère \n\nautomatiquement un signal alternant \n\nentre 0 et 1 toutes les secondes. \n\nQu'importe ces entrées, le signal \n\nqu'elle renvoie dépends uniquement \n\nde l'alternance chaque seconde.",
-            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger \n\nune connexion ou isoler une partie \n\ndu circuit. Il renvoie le signal \n\nentrant sans aucune modification.",
-            "button_013": "ON tient le même role que INPUT. \n\nCependant, les valeurs de ON ne \n\nvarient pas, il envoie un signal en \n\ncontinu (1).",
+            "button_011": "CLOCK : \n\nUne fois placée, cette porte génère \n\nautomatiquement un signal alternant \n\nentre 0 et 1 toutes les secondes. \n\nPeu importe les entrées, le signal \n\nqu'elle renvoie dépend uniquement \n\nde l'alternance chaque seconde.",
+            "button_012": "PASS : \n\nUtilisez cette porte pour prolonger \n\nune connexion ou isoler une partie \n\ndu circuit. Elle renvoie le signal \n\nentrant sans aucune modification.",
+            "button_013": "ON joue le même rôle que INPUT. \n\nCependant, les valeurs de ON ne \n\nvarient pas ; il envoie un signal \n\nen continu (1).",
             "button_014": "BREAKER : \n\nCe module agit comme un \n\ninterrupteur de sécurité et de \n\ndiagnostic. Il analyse le signal \n\nentrant et coupe la transmission \n\n(sortie à 0) pour isoler une \n\nsection du circuit. Utilisez-le \n\npour tester la résistance de \n\nvotre logique.",
             "button_015": "MAKER : \n\nC'est le module de production \n\nfinale. Connectez vos signaux \n\ntraités à son port d'entrée. Il \n\nconvertit le flux entrant en un \n\nrésultat concret et ne transmet un \n\nsignal de validation que s'il \n\nreçoit un signal 1 stable.",
         }
 
     def get(self, menu: str, key: str) -> str:
-        """Retrieves a translation string by category and identifier.
+        """Récupère une chaîne de traduction par catégorie et identifiant.
 
         Args:
-            menu: The attribute name containing the dictionary to search.
-            key: The specific identifier for the desired string.
+            menu: Le nom de l'attribut contenant le dictionnaire de recherche.
+            key: L'identifiant spécifique pour la chaîne souhaitée.
 
         Returns:
-            The corresponding string if found, otherwise an error message.
+            La chaîne correspondante si elle est trouvée, sinon un message d'erreur.
         """
         if menu in self.__dict__:
             if key in self.__dict__[menu]:
                 return self.__dict__[menu][key]
             else:
-                return f"Clé '{key}' non trouvée dans menu '{menu}'."
+                return f"Clé '{key}' non trouvée dans le menu '{menu}'."
         else:
             return f"Menu '{menu}' non trouvé."
 

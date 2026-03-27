@@ -10,22 +10,22 @@ from modules.data import data
 from line_profiler import profile
 
 """
-Provides the Gate class for representing and rendering logic components
-within the visual editor environment.
+Fournit la classe Gate pour représenter et faire le rendu des composants logiques
+au sein de l'environnement de l'éditeur visuel.
 """
 
 
 class Gate(Node):
     """
-    Manages the lifecycle, visual state, and interaction hitboxes of a
-    logic gate node in the UI editor.
+    Gère le cycle de vie, l'état visuel et les hitboxes d'interaction d'un
+    nœud de porte logique dans l'éditeur d'interface utilisateur.
     """
 
     @profile
     def __init__(self, id: int) -> None:
         """
         Args:
-            id: Unique identifier for the gate instance.
+            id: Identifiant unique pour l'instance de la porte.
         """
         super().__init__(id)
 
@@ -66,14 +66,14 @@ class Gate(Node):
 
     @property
     def name(self) -> str:
-        """Returns the current gate name."""
+        """Retourne le nom actuel de la porte."""
         return self._name
 
     @name.setter
     def name(self, value: str) -> None:
         """
         Args:
-            value: String identifier to apply to the gate.
+            value: Identifiant textuel à appliquer à la porte.
         """
         self._name = value
 
@@ -92,34 +92,34 @@ class Gate(Node):
 
     @property
     def x(self) -> float:
-        """Returns the current x-coordinate."""
+        """Retourne la coordonnée x actuelle."""
         return self._x
 
     @x.setter
     def x(self, value: float) -> None:
         """
         Args:
-            value: New horizontal position.
+            value: Nouvelle position horizontale.
         """
         self._x = value
         self.calculate_display()
 
     @property
     def y(self) -> float:
-        """Returns the current y-coordinate."""
+        """Retourne la coordonnée y actuelle."""
         return self._y
 
     @y.setter
     def y(self, value: float) -> None:
         """
         Args:
-            value: New vertical position.
+            value: Nouvelle position verticale.
         """
         self._y = value
         self.calculate_display()
 
     def calculate_display_lite(self) -> None:
-        """Performs optimized visual update for camera movement scenarios."""
+        """Effectue une mise à jour visuelle optimisée pour les scénarios de mouvement de caméra."""
         self.hide_text: bool = True
 
         self.entity._x = self.x + self._camera[0]
@@ -133,11 +133,11 @@ class Gate(Node):
         self.bg._height = self.height + 10
 
     def update_text_position(self) -> None:
-        """Hook for specialized label alignment updates."""
+        """Point d'ancrage pour les mises à jour spécialisées de l'alignement des étiquettes."""
         pass
 
     def calculate_display(self) -> None:
-        """Calculates internal dimensions and refreshes input/output interaction hitboxes."""
+        """Calcule les dimensions internes et rafraîchit les hitboxes d'interaction d'entrée/sortie."""
         self.both: bool = len(self.inputs) > 0 and len(self.outputs) > 0
 
         pin_width_required = 2 + len(self.inputs) + len(self.outputs) + (1 if self.both else 0)
@@ -215,14 +215,14 @@ class Gate(Node):
 
     @property
     def camera(self) -> Tuple[float, float]:
-        """Returns the active camera offset."""
+        """Retourne le décalage (offset) actif de la caméra."""
         return self._camera
 
     @camera.setter
     def camera(self, value: Tuple[float, float]) -> None:
         """
         Args:
-            value: (x, y) coordinates for the camera view.
+            value: Coordonnées (x, y) pour la vue de la caméra.
         """
         self._camera = value
         self.calculate_display()
@@ -230,13 +230,13 @@ class Gate(Node):
     def camera_moving(self, value: Tuple[float, float]) -> None:
         """
         Args:
-            value: Intermediate (x, y) coordinates during camera transition.
+            value: Coordonnées (x, y) intermédiaires pendant la transition de la caméra.
         """
         self._camera = value
         self.calculate_display_lite()
 
     def gen_tile_pattern(self) -> None:
-        """Generates the grid-based tile indices array based on node configuration."""
+        """Génère le tableau d'indices de motifs de tuiles basé sur la configuration du nœud."""
         gate_tile_pattern: List[int] = []
 
         sum_io = len(self.inputs) + len(self.outputs) + 2
@@ -297,7 +297,7 @@ class Gate(Node):
         self.gate_tile_pattern = gate_tile_pattern
 
     def draw_tiles(self) -> None:
-        """Renders the graphical texture representation of the gate state."""
+        """Effectue le rendu de la représentation graphique (texture) de l'état de la porte."""
         width: int = self.tile_width
         height: int = 4
 
@@ -311,7 +311,7 @@ class Gate(Node):
             if self.outputs_sizes[i] != 1:
                 out[i] = 0
 
-        # Construct binary state key: [Output State] + [Input State] reversed
+        # Construction de la clé d'état binaire : [État Sortie] + [État Entrée] inversé
         out.reverse()
         inp.reverse()
         current: int = int("".join(map(str, map(int, (out + inp)))), 2)
@@ -330,7 +330,7 @@ class Gate(Node):
         arcade.draw_texture_rect(data.IMAGE.get_texture(self.gate_type, current), rect)
 
     def draw(self) -> None:
-        """Executes rendering logic for the gate and optional debug hitboxes."""
+        """Exécute la logique de rendu pour la porte et les hitboxes de débogage optionnelles."""
         self.draw_tiles()
 
         if self.draw_hitboxes:
@@ -344,8 +344,8 @@ class Gate(Node):
     def touched(self) -> Union[bool, Tuple[int, int, int]]:
         """
         Returns:
-            Either False or a tuple containing (Pin Type, Index, Bit Size)
-            where Pin Type 1 represents input and 2 represents output.
+            Soit False, soit un tuple contenant (Type de Broche, Index, Taille en Bits)
+            où le Type de Broche 1 représente une entrée et 2 représente une sortie.
         """
         touched: Union[bool, Tuple[int, int, int]] = False
 
@@ -364,7 +364,7 @@ class Gate(Node):
     def save(self) -> Dict[str, Any]:
         """
         Returns:
-            Dict representing the serializable gate state.
+            Dict représentant l'état sérialisable de la porte.
         """
         return {
             "x": self.x,
@@ -379,7 +379,7 @@ class Gate(Node):
     def load(self, data: Dict[str, Any]) -> None:
         """
         Args:
-            data: State dictionary containing gate properties to restore.
+            data: Dictionnaire d'état contenant les propriétés de la porte à restaurer.
         """
         self.type = data["type"]
         self.inputs = data.get("inputs", [])
@@ -392,9 +392,9 @@ class Gate(Node):
     def __str__(self) -> str:
         """
         Returns:
-            Human-readable summary of the gate and its connectivity.
+            Résumé lisible par l'homme de la porte et de sa connectivité.
         """
         result: str = (
-            f"Gate {self._name} (#{self.id}), {len(self.inputs)} Inputs ({self.inputs}), {len(self.outputs)} Outputs ({self.outputs})"
+            f"Porte {self._name} (#{self.id}), {len(self.inputs)} Entrées ({self.inputs}), {len(self.outputs)} Sorties ({self.outputs})"
         )
         return result

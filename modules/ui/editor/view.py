@@ -24,22 +24,22 @@ from modules.ui.level_editor.save import SaveFrame
 from modules.ui.editor.input import InputFrame
 from modules.ui.editor.save import SaveFrame as EditorSaveFrame
 
-"""Provides the primary interface for the circuit design environment, 
-managing editor state, user interactions, and visual rendering."""
+"""Fournit l'interface principale pour l'environnement de conception de circuits, 
+gérant l'état de l'éditeur, les interactions utilisateur et le rendu visuel."""
 
 logger: Logger = Logger("EditorView")
 
 
 class EditorView(arcade.View):
-    """Orchestrates the circuit editing workflow, including UI components,
-    gate manipulation, and rendering cycles."""
+    """Orchestre le flux de travail d'édition de circuits, y compris les composants UI, 
+    la manipulation des portes et les cycles de rendu."""
 
     def __init__(self, id: Optional[str] = None, level: Optional[Any] = None, level_solution: Optional[any] = None,) -> None:
-        """Initializes the EditorView with necessary UI elements and state.
+        """Initialise EditorView avec les éléments d'interface et l'état nécessaires.
 
         Args:
-            id: Unique identifier for an existing chip to load into the editor.
-            level: The level data container if operating in level editor mode.
+            id: Identifiant unique pour une puce existante à charger dans l'éditeur.
+            level: Le conteneur de données du niveau si utilisé en mode éditeur de niveau.
         """
         super().__init__()
 
@@ -110,7 +110,7 @@ class EditorView(arcade.View):
             self.perf_graph_list.append(graph)
 
     def setup_editor_categories(self) -> None:
-        """Sets up the UI entities representing gate selection categories."""
+        """Configure les entités de l'interface représentant les catégories de sélection de portes."""
         self.editor_categories = []
 
         sprite = data.editor_categories["1_bit"]
@@ -129,7 +129,7 @@ class EditorView(arcade.View):
         )
 
     def bottom_bar_width_sum(self) -> int:
-        """Calculates the total horizontal space required for all bottom bar gates."""
+        """Calcule l'espace horizontal total requis pour toutes les portes de la barre inférieure."""
         result = 0
         for i in self.bottom_gates:
             result += i.tile_width
@@ -137,7 +137,7 @@ class EditorView(arcade.View):
 
     @profile
     def bottom_gate_bar(self) -> None:
-        """Refreshes the bottom UI bar contents based on the active category."""
+        """Actualise le contenu de la barre d'interface inférieure selon la catégorie active."""
         self.bottom_gates = []
 
         if self.current_bottom_categorie in self.bottom_gates_cache:
@@ -183,15 +183,15 @@ class EditorView(arcade.View):
             self.bottom_gates_cache[2] = self.bottom_gates
 
     def bottom_bar_update_camera(self) -> None:
-        """Syncs the scroll position of bottom bar gates."""
+        """Synchronise la position de défilement des portes de la barre inférieure."""
         for gate in self.bottom_gates:
             gate.camera = self.bottom_camera_position
 
     def get_hovered_bottom_gate(self) -> Tuple[int, Any]:
-        """Identifies which gate in the bottom bar, if any, is currently hovered.
+        """Identifie quelle porte de la barre inférieure est actuellement survolée, le cas échéant.
 
         Returns:
-            A tuple containing the category flag and the corresponding identifier.
+            Un tuple contenant le flag de catégorie et l'identifiant correspondant.
         """
         for i in self.bottom_gates:
             if i.entity.touched:
@@ -202,27 +202,27 @@ class EditorView(arcade.View):
         return 2, None
 
     def draw_bottom_gates(self) -> None:
-        """Renders the gate selection menu."""
+        """Affiche le menu de sélection de portes."""
         for i in self.bottom_gates:
             i.draw()
 
     def draw_tile(self, id: Any, x: float, y: float) -> None:
-        """Renders an individual UI border segment.
+        """Affiche un segment de bordure d'interface individuel.
 
         Args:
-            id: The identifier for the specific tile texture.
-            x: Horizontal position.
-            y: Vertical position.
+            id: L'identifiant de la texture de tuile spécifique.
+            x: Position horizontale.
+            y: Position verticale.
         """
         rect = arcade.XYWH(x=x, y=y, width=64, height=64, anchor=arcade.Vec2(0, 0))
         arcade.draw_texture_rect(data.ui_border_tiles[id], rect)
 
     def reset(self) -> None:
-        """Resets the view state."""
+        """Réinitialise l'état de la vue."""
         pass
 
     def draw_frame_border(self) -> None:
-        """Renders the outer UI window boundary and its background."""
+        """Affiche la bordure extérieure de la fenêtre UI et son arrière-plan."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -233,7 +233,7 @@ class EditorView(arcade.View):
         arcade.draw_sprite_rect(data.editor_border, rect)
 
     def draw_frame_border_no_bg(self) -> None:
-        """Renders the UI window boundary foreground elements."""
+        """Affiche les éléments de premier plan de la bordure de la fenêtre UI."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -244,7 +244,7 @@ class EditorView(arcade.View):
         arcade.draw_sprite_rect(data.editor_border_no_bg, rect)
 
     def draw_frame_background(self) -> None:
-        """Renders the editor's grid-based workspace background."""
+        """Affiche l'arrière-plan de l'espace de travail basé sur une grille."""
         rect = arcade.XYWH(
             x=0,
             y=0,
@@ -255,12 +255,12 @@ class EditorView(arcade.View):
         arcade.draw_texture_rect(data.background_grid_texture, rect)
 
     def draw_debug_text(self) -> None:
-        """Renders diagnostic information for performance monitoring."""
+        """Affiche les informations de diagnostic pour le suivi des performances."""
         debug_list = [
-            f"Level Editor ? {self.level_editor}",
-            f"Camera: {self.camera_position}",
+            f"Éditeur de niveau ? {self.level_editor}",
+            f"Caméra: {self.camera_position}",
             f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
-            f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",
+            f"Objets: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p",
         ]
         start_y = data.WINDOW_HEIGHT - 70
         for index, item in enumerate(debug_list):
@@ -274,7 +274,7 @@ class EditorView(arcade.View):
             )
 
     def on_draw(self) -> None:
-        """Executes the primary frame rendering sequence."""
+        """Exécute la séquence principale de rendu de la frame."""
         self.clear()
         self.draw_frame_background()
 
@@ -304,7 +304,7 @@ class EditorView(arcade.View):
         self.last_time = time.time()
 
     def on_update(self, delta_time: float) -> None:
-        """Executes the simulation logic and updates performance metrics."""
+        """Exécute la logique de simulation et met à jour les métriques de performance."""
         self.fps = 1 / self.delta_time * 10000 // 10000
         self.simulate()
         if self.stress_test:
@@ -313,14 +313,14 @@ class EditorView(arcade.View):
                 self.chip.gates[a] = And(a)
 
         if (self.frame_count + 1) % (60 * 60 * 1) == 0:
-            logger.info("Auto-Save")
+            logger.info("Sauvegarde automatique")
             if self.level_editor:
                 self.level.save()
             else:
                 self.chip.save()
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Handles keyboard-triggered actions for input switching, navigation, and editing."""
+        """Gère les actions déclenchées par le clavier pour le basculement des entrées, la navigation et l'édition."""
         if key == data.keys.input_toggle:
             for g in self.chip.gates.values():
                 if g.entity.touched and g.type == "Input":
@@ -329,7 +329,7 @@ class EditorView(arcade.View):
                     elif g.gate_type in ["8Input"]:
                         data.window.display(InputFrame(self.chip,g.id))
 
-        if key == 65473:  # Emergency exit: F4
+        if key == 65473:  # Sortie d'urgence : F4
             arcade.exit()
         if key == data.keys.back:
             if self.current_path:
@@ -352,10 +352,10 @@ class EditorView(arcade.View):
             self.delete()
 
     def delete_gate(self, id: str) -> None:
-        """Deletes a gate and removes any paths associated with its ports.
+        """Supprime une porte et retire tous les chemins associés à ses ports.
 
         Args:
-            id: The identifier of the gate to remove.
+            id: L'identifiant de la porte à supprimer.
         """
         to_delete = []
         for index in self.chip.paths.keys():
@@ -373,7 +373,7 @@ class EditorView(arcade.View):
             self.delete_path(i)
 
     def delete_path(self,path_id):
-
+        """Supprime un chemin spécifique."""
         p = self.chip.paths[path_id]
         for i in self.chip.paths[path_id].outputs:
                     gate_id = i[1]
@@ -383,7 +383,7 @@ class EditorView(arcade.View):
         del self.chip.paths[path_id]
 
     def delete(self) -> None:
-            """Initiates the deletion process for the currently selected object."""
+            """Initie le processus de suppression pour l'objet actuellement sélectionné."""
             for g in self.chip.gates.values():
                 if g.entity.touched:
                     self.delete_gate(g.id)
@@ -398,20 +398,20 @@ class EditorView(arcade.View):
                 self.delete_path(p)
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Handles key release events."""
+        """Gère les événements de relâchement de touche."""
         pass
 
     @property
     def camera(self) -> Tuple[int, int]:
-        """Gets current camera coordinates."""
+        """Récupère les coordonnées actuelles de la caméra."""
         return self.camera_position
 
     @camera.setter
     def camera(self, value: Tuple[int, int]) -> None:
-        """Sets the camera position and synchronizes all entities to the grid.
+        """Définit la position de la caméra et synchronise toutes les entités sur la grille.
 
         Args:
-            value: The target camera coordinates to snap.
+            value: Les coordonnées cibles de la caméra pour l'alignement.
         """
         self._real_camera_position = value
         self.camera_position = (
@@ -430,7 +430,7 @@ class EditorView(arcade.View):
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Updates UI mouse trackers and performs drag calculations."""
+        """Met à jour les suivis de souris UI et effectue les calculs de glissement."""
         mouse.position = (x, y)
 
         self.follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2
@@ -485,13 +485,13 @@ class EditorView(arcade.View):
                     path.recalculate_hitbox()
 
     def simulate(self) -> None:
-        """Invokes the logic engine to propagate signal values."""
+        """Invoque le moteur logique pour propager les valeurs des signaux."""
         self.engine.propagate_values(self.chip)
 
     def on_mouse_scroll(
         self, x: float, y: float, scroll_x: float, scroll_y: float
     ) -> None:
-        """Handles scrolling within the bottom bar UI."""
+        """Gère le défilement dans l'interface de la barre inférieure."""
         if self.bottom_zone_collider.touched:
             self.bottom_camera_position[0] += scroll_y * -data.MOUSE_SENSI
             self.bottom_camera_position[0] = min(self.bottom_camera_position[0], 0)
@@ -501,7 +501,7 @@ class EditorView(arcade.View):
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Handles click events for UI selection and workspace interactions."""
+        """Gère les événements de clic pour la sélection UI et les interactions avec l'espace de travail."""
         if button == 2:
             self.camera_hold = True
             return
@@ -639,7 +639,7 @@ class EditorView(arcade.View):
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Finalizes drag-and-drop operations for gates and camera movement."""
+        """Finalise les opérations de glisser-déposer pour les portes et le mouvement de caméra."""
         if button == 2:
             self.camera_hold = False
             for g in self.chip.gates:

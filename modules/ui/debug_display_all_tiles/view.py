@@ -5,16 +5,16 @@ from modules.ui.toolbox.entity import Entity
 from modules.data import data
 from modules.logger import Logger
 
-"""Provides a specialized view for rendering and interacting with grid-based tilesets."""
+"""Fournit une vue spécialisée pour le rendu et l'interaction avec des jeux de tuiles (tilesets) basés sur une grille."""
 
 logger = Logger("DebugTilesView")
 
 
 class DebugTilesView(arcade.View):
-    """Manages the visualization and selection logic for multiple asset tilesets."""
+    """Gère la logique de visualisation et de sélection pour plusieurs jeux de tuiles d'actifs (assets)."""
 
     def __init__(self) -> None:
-        """Initializes the view state, grid configuration, and tileset definitions."""
+        """Initialise l'état de la vue, la configuration de la grille et les définitions des jeux de tuiles."""
         super().__init__()
 
         self.grid_size: int = data.UI_EDITOR_GRID_SIZE
@@ -62,7 +62,7 @@ class DebugTilesView(arcade.View):
         self.display_start_y: int = 500
 
     def load_tilesets(self) -> None:
-        """Parses tileset paths and extracts texture grids for each entry."""
+        """Analyse les chemins des jeux de tuiles et extrait les grilles de textures pour chaque entrée."""
         for ts in self.tilesets:
             try:
                 sheet = arcade.SpriteSheet(ts["path"])
@@ -72,19 +72,19 @@ class DebugTilesView(arcade.View):
                     count=ts["count"],
                 )
             except Exception as e:
-                logger.error(f"Error loading tileset {ts['name']}: {e}")
+                logger.error(f"Erreur lors du chargement du jeu de tuiles {ts['name']} : {e}")
                 ts["textures"] = []
 
     def on_mouse_motion(
         self, x: float, y: float, delta_x: float, delta_y: float
     ) -> None:
-        """Updates the hovered_index based on the current mouse coordinates.
+        """Met à jour hovered_index en fonction des coordonnées actuelles de la souris.
 
         Args:
-            x: Horizontal screen coordinate of the mouse.
-            y: Vertical screen coordinate of the mouse.
-            delta_x: Change in horizontal mouse position.
-            delta_y: Change in vertical mouse position.
+            x: Coordonnée horizontale de la souris à l'écran.
+            y: Coordonnée verticale de la souris à l'écran.
+            delta_x: Variation de la position horizontale de la souris.
+            delta_y: Variation de la position verticale de la souris.
         """
         self.hovered_index = None
 
@@ -100,10 +100,10 @@ class DebugTilesView(arcade.View):
         if 0 <= grid_x < cols and 0 <= grid_y < rows:
             index = int(grid_y * cols + grid_x)
             if 0 <= index < total_count:
-                self.hovered_index = f"{current_set['name']} Index: {index}"
+                self.hovered_index = f"{current_set['name']} Index : {index}"
 
     def on_draw(self) -> None:
-        """Renders the active tileset, grid interface, and UI feedback labels."""
+        """Affiche le jeu de tuiles actif, l'interface de la grille et les étiquettes de retour utilisateur."""
         self.clear()
 
         current_set = self.tilesets[self.current_index]
@@ -111,7 +111,7 @@ class DebugTilesView(arcade.View):
         cols = current_set["columns"]
 
         arcade.draw_text(
-            f"Current Set: {current_set['name']} (Arrow Keys to Switch)",
+            f"Jeu actuel : {current_set['name']} (Touches fléchées pour changer)",
             self.display_start_x,
             self.display_start_y + (len(textures) // cols * self.grid_size) + 50,
             arcade.color.WHITE,
@@ -137,19 +137,19 @@ class DebugTilesView(arcade.View):
 
         if self.hovered_index is not None:
             arcade.draw_text(
-                f"Hovered: {self.hovered_index}", 10, 10, arcade.color.CYAN, 16
+                f"Survolé : {self.hovered_index}", 10, 10, arcade.color.CYAN, 16
             )
 
     def on_update(self, delta_time: float) -> None:
-        """Stub for frame-specific update logic."""
+        """Espace réservé pour la logique de mise à jour spécifique à chaque image (frame)."""
         pass
 
     def on_key_press(self, key: int, key_modifiers: int) -> None:
-        """Processes navigation keys for tileset selection and application control.
+        """Traite les touches de navigation pour la sélection des jeux de tuiles et le contrôle de l'application.
 
         Args:
-            key: The key code triggered.
-            key_modifiers: Bitmask of modifier keys active.
+            key: Le code de la touche déclenchée.
+            key_modifiers: Masque de bits des touches de modification actives.
         """
         if key == arcade.key.ESCAPE:
             self.current_path = None
@@ -159,27 +159,27 @@ class DebugTilesView(arcade.View):
             arcade.exit()
 
         elif key == arcade.key.RIGHT:
-            # Wrap to start if exceeding bounds
+            # Revenir au début si l'on dépasse les limites
             self.current_index = (self.current_index + 1) % len(self.tilesets)
-            logger.debug(f"Switched to: {self.tilesets[self.current_index]['name']}")
+            logger.debug(f"Passage à : {self.tilesets[self.current_index]['name']}")
 
         elif key == arcade.key.LEFT:
-            # Wrap to end if going below zero
+            # Revenir à la fin si l'on descend en dessous de zéro
             self.current_index = (self.current_index - 1) % len(self.tilesets)
-            logger.debug(f"Switched to: {self.tilesets[self.current_index]['name']}")
+            logger.debug(f"Passage à : {self.tilesets[self.current_index]['name']}")
 
     def on_key_release(self, key: int, key_modifiers: int) -> None:
-        """Stub for keyboard release events."""
+        """Espace réservé pour les événements de relâchement de touche clavier."""
         pass
 
     def on_mouse_press(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Stub for mouse button down events."""
+        """Espace réservé pour les événements de pression des boutons de la souris."""
         pass
 
     def on_mouse_release(
         self, x: float, y: float, button: int, key_modifiers: int
     ) -> None:
-        """Stub for mouse button up events."""
+        """Espace réservé pour les événements de relâchement des boutons de la souris."""
         pass

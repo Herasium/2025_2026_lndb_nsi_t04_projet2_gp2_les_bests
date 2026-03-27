@@ -1,4 +1,4 @@
-"""Provides the CustomGate class for managing user-defined logic gate instances."""
+"""Fournit la classe CustomGate pour la gestion des instances de portes logiques définies par l'utilisateur."""
 
 import arcade
 from typing import Any, Dict, List, Optional
@@ -9,14 +9,14 @@ from modules.data import data as data_module
 
 
 class CustomGate(Complex):
-    """Represents a user-defined logic gate wrapping an internal chip architecture."""
+    """Représente une porte logique définie par l'utilisateur enveloppant une architecture de puce interne."""
 
     def __init__(self, id: int, chip: Optional[Any] = None) -> None:
-        """Initializes a new CustomGate instance.
+        """Initialise une nouvelle instance de CustomGate.
 
         Args:
-            id: Unique identifier for the gate.
-            chip: The chip definition to encapsulate.
+            id: Identifiant unique de la porte.
+            chip: La définition de la puce à encapsuler.
         """
         super().__init__(id)
 
@@ -34,13 +34,13 @@ class CustomGate(Complex):
         self.setup_texts()
 
     def prop_io(self) -> None:
-        """Propagates current external input values into the internal chip structure."""
+        """Propage les valeurs actuelles des entrées externes vers la structure interne de la puce."""
         chip_inputs: List[int] = self.chip.get_inputs()
         for i in range(len(self.inputs)):
             self.chip.gates[chip_inputs[i]].outputs[0] = self.inputs[i]
 
     def update_io(self) -> None:
-        """Synchronizes gate I/O pins and bus metadata with the underlying chip."""
+        """Synchronise les broches d'E/S de la porte et les métadonnées de bus avec la puce sous-jacente."""
         self.inputs: List[int] = []
         self.outputs: List[int] = []
         self.inputs_sizes: List[int] = []
@@ -59,7 +59,7 @@ class CustomGate(Complex):
         self.update_text_readings()
 
     def draw_tiles(self) -> None:
-        """Renders the gate using state-dependent textures."""
+        """Rendu de la porte en utilisant des textures dépendantes de l'état."""
         width: int = self.tile_width
         height: int = 4
 
@@ -76,7 +76,7 @@ class CustomGate(Complex):
 
         out.reverse()
         inp.reverse()
-        # Pack state bits into an integer to select the appropriate texture index
+        # Regroupe les bits d'état dans un entier pour sélectionner l'index de texture approprié
         if self.safe_mode:
             current: int = 0
         else:
@@ -102,10 +102,10 @@ class CustomGate(Complex):
                 self.texts[i].draw()
 
     def save(self) -> Dict[str, Any]:
-        """Serializes the gate state for storage.
+        """Sérialise l'état de la porte pour le stockage.
 
         Returns:
-            Dictionary containing spatial and logical configuration data.
+            Dictionnaire contenant les données de configuration spatiale et logique.
         """
         return {
             "x": self.x,
@@ -120,10 +120,10 @@ class CustomGate(Complex):
 
     @profile
     def load(self, data: Dict[str, Any]) -> None:
-        """Hydrates the gate state from provided configuration data.
+        """Restaure l'état de la porte à partir des données de configuration fournies.
 
         Args:
-            data: Configuration dictionary to load.
+            data: Dictionnaire de configuration à charger.
         """
         self.type = data["type"]
         self.inputs = data.get("inputs", [])

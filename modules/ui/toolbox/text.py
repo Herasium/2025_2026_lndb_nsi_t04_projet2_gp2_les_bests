@@ -5,13 +5,13 @@ from modules.ui.toolbox.hitbox import HitBox
 from modules.data import data
 
 """
-Provides a wrapper for arcade.Text to manage UI element layout and interactions.
+Fournit une interface pour arcade.Text afin de gérer la disposition des éléments de l'interface utilisateur et leurs interactions.
 """
 
 
 class Text:
     """
-    Manages text rendering, positioning, alignment, and hit detection.
+    Gère le rendu du texte, le positionnement, l'alignement et la détection de collision (hit detection).
     """
 
     def __init__(
@@ -20,23 +20,23 @@ class Text:
         y: float = 0,
         width: float = 10,
         height: float = 10,
-        text: str = "Default Text",
+        text: str = "Texte par défaut",
         align: Tuple[str, str] = ("center", "center"),
         size: int = 18,
         multiline: bool = False,
     ) -> None:
         """
-        Initializes the Text element and its layout properties.
+        Initialise l'élément Text et ses propriétés de disposition.
 
         Args:
-            x: Horizontal position.
-            y: Vertical position.
-            width: Horizontal constraint for the text box.
-            height: Vertical constraint for the text box.
-            text: Displayed string content.
-            align: Anchor points for (horizontal, vertical) alignment.
-            size: Font size in pixels.
-            multiline: Enables automatic line wrapping if True.
+            x: Position horizontale.
+            y: Position verticale.
+            width: Contrainte horizontale pour la zone de texte.
+            height: Contrainte verticale pour la zone de texte.
+            text: Contenu de la chaîne de caractères affichée.
+            align: Points d'ancrage pour l'alignement (horizontal, vertical).
+            size: Taille de la police en pixels.
+            multiline: Active le retour à la ligne automatique si True.
         """
         self._x: float = x
         self._y: float = y
@@ -60,85 +60,85 @@ class Text:
 
     @property
     def x(self) -> float:
-        """Returns the current X-coordinate."""
+        """Renvoie la coordonnée X actuelle."""
         return self._x
 
     @x.setter
     def x(self, value: float) -> None:
-        """Updates X-coordinate and triggers layout recalculation."""
+        """Met à jour la coordonnée X et déclenche un recalcul de la disposition."""
         self._x = value
         self._recalculate_rect()
 
     @property
     def align(self) -> Tuple[str, str]:
-        """Returns the current alignment anchor tuple."""
+        """Renvoie le tuple d'ancrage de l'alignement actuel."""
         return self._align
 
     @align.setter
     def align(self, value: Tuple[str, str]) -> None:
-        """Updates alignment anchors and triggers layout recalculation."""
+        """Met à jour les ancres d'alignement et déclenche un recalcul de la disposition."""
         self._align = value
         self._recalculate_rect()
 
     @property
     def y(self) -> float:
-        """Returns the current Y-coordinate."""
+        """Renvoie la coordonnée Y actuelle."""
         return self._y
 
     @y.setter
     def y(self, value: float) -> None:
-        """Updates Y-coordinate and triggers layout recalculation."""
+        """Met à jour la coordonnée Y et déclenche un recalcul de la disposition."""
         self._y = value
         self._recalculate_rect()
 
     @property
     def width(self) -> float:
-        """Returns the current box width."""
+        """Renvoie la largeur actuelle de la boîte."""
         return self._width
 
     @width.setter
     def width(self, value: float) -> None:
-        """Updates width and triggers layout recalculation."""
+        """Met à jour la largeur et déclenche un recalcul de la disposition."""
         self._width = value
         self._recalculate_rect()
 
     @property
     def size(self) -> int:
-        """Returns the current font size."""
+        """Renvoie la taille actuelle de la police."""
         return self._size
 
     @size.setter
     def size(self, value: int) -> None:
-        """Updates font size and triggers layout recalculation."""
+        """Met à jour la taille de la police et déclenche un recalcul de la disposition."""
         self._size = value
         self._recalculate_rect()
 
     @property
     def height(self) -> float:
-        """Returns the current box height."""
+        """Renvoie la hauteur actuelle de la boîte."""
         return self._height
 
     @height.setter
     def height(self, value: float) -> None:
-        """Updates height and triggers layout recalculation."""
+        """Met à jour la hauteur et déclenche un recalcul de la disposition."""
         self._height = value
         self._recalculate_rect()
 
     @property
     def multiline(self) -> bool:
-        """Returns whether multiline support is enabled."""
+        """Indique si le support multiligne est activé."""
         return self._multiline
 
     @multiline.setter
     def multiline(self, value: bool) -> None:
-        """Updates multiline setting and triggers layout recalculation."""
+        """Met à jour le paramètre multiligne et déclenche un recalcul de la disposition."""
         self._multiline = value
         self._recalculate_rect()
 
     def _recalculate_rect(self) -> None:
         """
-        Updates the internal arcade.Text instance and recalibrates the
-        bounding rectangle based on current alignment and content size.
+        Met à jour l'instance interne arcade.Text et recalibre le
+        rectangle de délimitation basé sur l'alignement actuel et la taille du contenu.
         """
         if self._multiline:
             self._text = arcade.Text(
@@ -170,7 +170,7 @@ class Text:
             self._width = self._text.content_width
         self._height = self._text.content_height
 
-        # Offset anchor calculation based on horizontal alignment
+        # Calcul du décalage de l'ancre basé sur l'alignement horizontal
         if self._align[0] == "left":
             self.rect = arcade.XYWH(
                 x=self._x,
@@ -200,35 +200,35 @@ class Text:
 
     @property
     def text(self) -> str:
-        """Returns the current string content."""
+        """Renvoie le contenu textuel actuel."""
         return self._name
 
     @text.setter
     def text(self, value: str) -> None:
-        """Updates string content and triggers layout recalculation."""
+        """Met à jour le contenu textuel et déclenche un recalcul de la disposition."""
         self._name = value
         self._recalculate_rect()
 
     @property
     def color(self) -> arcade.color:
-        """Returns the current text color."""
+        """Renvoie la couleur actuelle du texte."""
         return self._color
 
     @color.setter
     def color(self, value: arcade.color) -> None:
-        """Updates text color and triggers layout recalculation."""
+        """Met à jour la couleur du texte et déclenche un recalcul de la disposition."""
         self._color = value
         self._recalculate_rect()
 
     def _update_hitbox(self) -> None:
-        """Syncs the internal HitBox bounds with the calculated rectangle."""
+        """Synchronise les limites de la HitBox interne avec le rectangle calculé."""
         self.hitbox.rect = self.rect
 
     def draw(self) -> None:
-        """Renders the text element."""
+        """Effectue le rendu de l'élément texte."""
         self._text.draw()
 
     @property
     def touched(self) -> bool:
-        """Returns whether the element is currently under interaction."""
+        """Indique si l'élément fait actuellement l'objet d'une interaction."""
         return self.hitbox.touched

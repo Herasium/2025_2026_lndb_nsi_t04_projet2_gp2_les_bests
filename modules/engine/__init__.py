@@ -1,1 +1,1 @@
-from .logic import Engine as Engine
+from modules.engine.logic import Engine

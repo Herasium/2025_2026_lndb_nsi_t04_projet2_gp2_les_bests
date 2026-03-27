@@ -2,11 +2,11 @@ import arcade
 from typing import Optional
 from modules.ui.toolbox.hitbox import HitBox
 
-"""Provides the base Entity class for spatial management and rendering."""
+"""Fournit la classe de base Entity pour la gestion spatiale et le rendu."""
 
 
 class Entity:
-    """Manages an entity's spatial properties and rendering state."""
+    """Gère les propriétés spatiales et l'état de rendu d'une entité."""
 
     def __init__(
         self,
@@ -17,15 +17,15 @@ class Entity:
         sprite: Optional[arcade.Sprite] = None,
         anchor: arcade.Vec2 = arcade.Vec2(0, 0),
     ):
-        """Initializes the entity.
+        """Initialise l'entité.
 
         Args:
-            x: Horizontal position.
-            y: Vertical position.
-            width: Horizontal dimension.
-            height: Vertical dimension.
-            sprite: Optional visual representation.
-            anchor: Vector defining the pivot point.
+            x: Position horizontale.
+            y: Position verticale.
+            width: Dimension horizontale.
+            height: Dimension verticale.
+            sprite: Représentation visuelle optionnelle.
+            anchor: Vecteur définissant le point de pivot.
         """
         self._x: float = x
         self._y: float = y
@@ -44,50 +44,50 @@ class Entity:
 
     @property
     def x(self) -> float:
-        """Returns the current X-coordinate."""
+        """Retourne la coordonnée X actuelle."""
         return self._x
 
     @x.setter
     def x(self, value: float) -> None:
-        """Sets the X-coordinate and updates the associated hitbox."""
+        """Définit la coordonnée X et met à jour la boîte de collision associée."""
         self._x = value
         self._update_hitbox()
 
     @property
     def y(self) -> float:
-        """Returns the current Y-coordinate."""
+        """Retourne la coordonnée Y actuelle."""
         return self._y
 
     @y.setter
     def y(self, value: float) -> None:
-        """Sets the Y-coordinate and updates the associated hitbox."""
+        """Définit la coordonnée Y et met à jour la boîte de collision associée."""
         self._y = value
         self._update_hitbox()
 
     @property
     def width(self) -> float:
-        """Returns the entity width."""
+        """Retourne la largeur de l'entité."""
         return self._width
 
     @width.setter
     def width(self, value: float) -> None:
-        """Sets the width and updates the associated hitbox."""
+        """Définit la largeur et met à jour la boîte de collision associée."""
         self._width = value
         self._update_hitbox()
 
     @property
     def height(self) -> float:
-        """Returns the entity height."""
+        """Retourne la hauteur de l'entité."""
         return self._height
 
     @height.setter
     def height(self, value: float) -> None:
-        """Sets the height and updates the associated hitbox."""
+        """Définit la hauteur et met à jour la boîte de collision associée."""
         self._height = value
         self._update_hitbox()
 
     def _update_hitbox(self) -> None:
-        """Synchronizes hitbox dimensions and position with the entity."""
+        """Synchronise les dimensions et la position de la boîte de collision avec l'entité."""
         self.hitbox._x = self._x
         self.hitbox._y = self._y
         self.hitbox._width = self._width
@@ -95,7 +95,7 @@ class Entity:
         self.hitbox.anchor = self._anchor
 
     def draw(self) -> None:
-        """Renders the entity using either a primitive shape or a sprite."""
+        """Affiche l'entité en utilisant soit une forme primitive, soit un sprite."""
         if self.sprite is None:
             arcade.draw_rect_filled(
                 arcade.rect.XYWH(
@@ -114,5 +114,5 @@ class Entity:
 
     @property
     def touched(self) -> bool:
-        """Returns the current collision state from the hitbox."""
+        """Retourne l'état de collision actuel depuis la boîte de collision."""
         return self.hitbox.touched
