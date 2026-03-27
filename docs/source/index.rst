@@ -10,4 +10,8 @@ Documentation for the project.
    presentation
    install
    usage
+   ai
+   roles
+   credits
+   futur
    api

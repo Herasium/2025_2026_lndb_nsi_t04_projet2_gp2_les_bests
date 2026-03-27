@@ -3,39 +3,39 @@ import arcade.geometry
 from typing import List, Tuple, Dict, Any
 from modules.ui.mouse import mouse
 
-"""Provides collision detection and rendering logic for polygon-based hitboxes."""
+"""Fournit la logique de détection de collision et de rendu pour les zones de collision (hitboxes) basées sur des polygones."""
 
 
 class PolyHitbox:
-    """Manages vertex-based collision boundaries and associated rendering."""
+    """Gère les limites de collision basées sur des sommets et le rendu associé."""
 
     def __init__(self, points: List[Tuple[float, float]] = None) -> None:
-        """Initializes a polygon hitbox.
+        """Initialise une zone de collision polygonale.
 
         Args:
-            points: Vertices defined as coordinate pairs forming the polygon perimeter.
+            points: Sommets définis comme des paires de coordonnées formant le périmètre du polygone.
         """
         self.points: List[Tuple[float, float]] = points if points is not None else []
 
     def draw(self) -> None:
-        """Renders the polygon outline to the screen."""
+        """Affiche le contour du polygone à l'écran."""
         if len(self.points) > 1:
             arcade.draw_polygon_outline(self.points, arcade.color.ALLOY_ORANGE)
 
     def save(self) -> Dict[str, Any]:
-        """Serializes hitbox data for persistence.
+        """Sérialise les données de la zone de collision pour la persistance.
 
         Returns:
-            A dictionary containing the identifier and vertex collection.
+            Un dictionnaire contenant l'identifiant et la collection de sommets.
         """
         return {"type": "PolyHitbox", "points": self.points}
 
     @property
     def touched(self) -> bool:
-        """Determines if the mouse cursor overlaps with the polygon area.
+        """Détermine si le curseur de la souris chevauche la zone du polygone.
 
         Returns:
-            True if the mouse coordinates intersect the polygon geometry.
+            True si les coordonnées de la souris intersectent la géométrie du polygone.
         """
         mouse_x: float
         mouse_y: float
@@ -46,9 +46,9 @@ class PolyHitbox:
         )
 
     def __repr__(self) -> str:
-        """Returns the formal developer-facing representation of the hitbox."""
+        """Retourne la représentation formelle de la zone de collision destinée au développeur."""
         return f"PolyHitBox (points={self.points})"
 
     def __str__(self) -> str:
-        """Returns the informal user-facing representation of the hitbox."""
+        """Retourne la représentation informelle de la zone de collision destinée à l'utilisateur."""
         return f"PolyHitBox (points={self.points})"

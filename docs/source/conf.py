@@ -1,14 +1,3 @@
-The Prompt
-Role: You are an expert Python developer and a native French speaker.
-Task: Please translate all comments and docstrings in the provided Python code into French.
-Guidelines:
-
-Code Integrity: Do NOT translate Python keywords (from, import, try, except), variable names, or class names (e.g., keep MainMenuView as is). Do not modify anything except the comments, no log output, not text value. Keep the project in english, only the comments in french.
-Technical Accuracy: Use professional French programming terminology (e.g., use "boucle principale" for "main loop", "données" for "data").
-Context: Ensure the initial docstring is translated in a formal, professional tone.
-Output: Return the full code block with the translated text.
-Code to translate:
-
 # Fichier de configuration pour le générateur de documentation Sphinx.
 #
 # Pour la liste complète des options de configuration, veuillez consulter la documentation :

@@ -1,14 +1,14 @@
-"""Provides a modular hitbox implementation for collision and interaction logic."""
+"""Fournit une implémentation modulaire de hitbox pour la logique de collision et d'interaction."""
 
 import arcade
 from modules.ui.mouse import mouse
 
 
 class HitBox:
-    """Manages a rectangular boundary for collision detection and UI interaction.
+    """Gère une zone rectangulaire pour la détection de collision et l'interaction UI.
 
     Attributes:
-        rect (arcade.XYWH): The internal arcade representation of the rectangle.
+        rect (arcade.XYWH): La représentation interne du rectangle via arcade.
     """
 
     def __init__(
@@ -19,14 +19,14 @@ class HitBox:
         height: float = 0,
         anchor: arcade.Vec2 = arcade.Vec2(0, 0),
     ):
-        """Initializes the HitBox instance.
+        """Initialise l'instance de HitBox.
 
         Args:
-            x: Horizontal position.
-            y: Vertical position.
-            width: Horizontal span of the boundary.
-            height: Vertical span of the boundary.
-            anchor: Origin point for coordinate calculations.
+            x: Position horizontale.
+            y: Position verticale.
+            width: Étendue horizontale de la zone.
+            height: Étendue verticale de la zone.
+            anchor: Point d'ancrage pour les calculs de coordonnées.
         """
         self._x: float = x
         self._y: float = y
@@ -38,7 +38,7 @@ class HitBox:
 
     @property
     def x(self) -> float:
-        """float: Current horizontal coordinate."""
+        """float: Coordonnée horizontale actuelle."""
         return self._x
 
     @x.setter
@@ -48,7 +48,7 @@ class HitBox:
 
     @property
     def y(self) -> float:
-        """float: Current vertical coordinate."""
+        """float: Coordonnée verticale actuelle."""
         return self._y
 
     @y.setter
@@ -58,7 +58,7 @@ class HitBox:
 
     @property
     def anchor(self) -> arcade.Vec2:
-        """arcade.Vec2: Current anchor point."""
+        """arcade.Vec2: Point d'ancrage actuel."""
         return self._anchor
 
     @anchor.setter
@@ -68,7 +68,7 @@ class HitBox:
 
     @property
     def width(self) -> float:
-        """float: Width of the boundary."""
+        """float: Largeur de la zone."""
         return self._width
 
     @width.setter
@@ -78,7 +78,7 @@ class HitBox:
 
     @property
     def height(self) -> float:
-        """float: Height of the boundary."""
+        """float: Hauteur de la zone."""
         return self._height
 
     @height.setter
@@ -87,7 +87,7 @@ class HitBox:
         self._recalculate_rect()
 
     def _recalculate_rect(self) -> None:
-        """Synchronizes internal rectangle geometry with current hitbox attributes."""
+        """Synchronise la géométrie interne du rectangle avec les attributs actuels de la hitbox."""
         self.rect: arcade.XYWH = arcade.XYWH(
             x=self._x,
             y=self._y,
@@ -97,7 +97,7 @@ class HitBox:
         )
 
     def draw(self) -> None:
-        """Renders the hitbox boundary with visual feedback for hover states."""
+        """Affiche les limites de la hitbox avec un retour visuel pour l'état de survol."""
         color = arcade.color.ALLOY_ORANGE
         if self.touched:
             color = arcade.color.RED
@@ -105,18 +105,18 @@ class HitBox:
 
     @property
     def touched(self) -> bool:
-        """bool: Indicates if the current mouse position intersects the hitbox."""
+        """bool: Indique si la position actuelle de la souris intersecte la hitbox."""
         return self.rect.point_in_rect(point=mouse.position)
 
     def __repr__(self) -> str:
-        """Returns the internal state for debugging."""
+        """Retourne l'état interne pour le débogage."""
         return (
             f"HitBox(x={self._x}, y={self._y}, "
             f"width={self._width}, height={self._height})"
         )
 
     def __str__(self) -> str:
-        """Returns a user-facing string summary of the hitbox."""
+        """Retourne un résumé textuel de la hitbox destiné à l'utilisateur."""
         return (
-            f"HitBox at ({self._x}, {self._y}) " f"size=({self._width}×{self._height})"
+            f"HitBox à ({self._x}, {self._y}) " f"taille=({self._width}×{self._height})"
         )

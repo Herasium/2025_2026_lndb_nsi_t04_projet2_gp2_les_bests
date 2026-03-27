@@ -1,1 +1,1 @@
-"""Main menu, as well as options menu and tutorial menu."""
+"""Menu principal, ainsi que le menu des options et le menu du didacticiel."""

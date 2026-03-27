@@ -4,6 +4,7 @@ Installation
 Prérequis
 ---------
 - Python 3.x
+- Arcade 
 
 Installer les dépendances
 ------------------------
