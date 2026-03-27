@@ -553,12 +553,12 @@
   "id": "level_82dc46ec74df36dd0a6a6b410d33c762",
   "number": 11,
   "name": "Triple OR",
-  "description": "Combine A, B, and C using any unlocked gates. Output is true if at least one input is true.",
+  "description": "Combine A, B, and C using any gates. Output is true if at least one input is true.",
   "hints": [],
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 0,
+  "color": 1,
   "category": 3,
   "is_custom": false
  }

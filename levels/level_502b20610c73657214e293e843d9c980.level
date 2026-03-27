@@ -299,7 +299,7 @@
   "number": 3,
   "name": "A OR B",
   "description": "Use an OR gate to combine A and B. Output is true if at least one is true.",
-  "hints": [],
+  "hints": ["Output is false only when both A and B are false", "A OR B can be built using NAND as NOT(NOT A AND NOT B)"],
   "version": 160,
   "start": 1,
   "truth": {},

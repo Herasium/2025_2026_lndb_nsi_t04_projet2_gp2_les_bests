@@ -299,7 +299,7 @@
   "number": 4,
   "name": "A NAND B",
   "description": "Use a NAND gate on A and B. Output is false only if both are true.",
-  "hints": [],
+  "hints": ["Output is the inverse of A AND B", "It is false only when A and B are both true"],
   "version": 160,
   "start": 1,
   "truth": {},

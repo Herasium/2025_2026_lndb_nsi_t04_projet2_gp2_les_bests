@@ -2273,7 +2273,7 @@
   "number": 29,
   "name": "ALU",
   "description": "Choose between multiple operations on A and B using control bits.",
-  "hints": [],
+  "hints": ["00 selects NOT A, 01 selects A AND B, 10 selects A OR B, 11 selects A XOR B, 100 selects A + B, 101 selects A - B, 110 selects A NAND B, 111 selects NOT B"],
   "version": 208,
   "start": 1,
   "truth": {},

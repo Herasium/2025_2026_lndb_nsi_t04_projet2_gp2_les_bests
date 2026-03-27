@@ -667,7 +667,7 @@
   "number": 8,
   "name": "A XOR B",
   "description": "Output is true if A and B are different.",
-  "hints": [],
+  "hints": ["Output is true when exactly one input is true", "A XOR B = (A OR B) AND NOT (A AND B)"],
   "version": 208,
   "start": 1,
   "truth": {},

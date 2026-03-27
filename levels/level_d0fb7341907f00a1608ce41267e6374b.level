@@ -553,12 +553,12 @@
   "id": "level_d0fb7341907f00a1608ce41267e6374b",
   "number": 10,
   "name": "Triple AND",
-  "description": "Combine A, B, and C using any unlocked gates. Output is true only if all inputs are true.",
+  "description": "Combine A, B, and C using any gates. Output is true only if all inputs are true.",
   "hints": [],
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 0,
+  "color": 1,
   "category": 3,
   "is_custom": false
  }

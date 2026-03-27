@@ -225,7 +225,7 @@
   "number": 1,
   "name": "NOT A",
   "description": "Invert the value of A using a NOT gate.",
-  "hints": [],
+  "hints": ["Output is true when A is false", "A NOT gate flips the input value"],
   "version": 160,
   "start": 1,
   "truth": {},

@@ -239,7 +239,7 @@
   "number": 5,
   "name": "NOT A",
   "description": "Build NOT A using only a NAND gate. Output is the inverse of A.",
-  "hints": [],
+  "hints": ["A NAND A produces NOT A", "Connect both inputs of the NAND gate to A"],
   "version": 208,
   "start": 1,
   "truth": {},

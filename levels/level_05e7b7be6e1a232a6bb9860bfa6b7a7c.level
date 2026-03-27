@@ -1538,12 +1538,12 @@
   "id": "level_05e7b7be6e1a232a6bb9860bfa6b7a7c",
   "number": 36,
   "name": "Odd selector v2",
-  "description": "Build Odd selector using only NAND gates. Output is true when an odd number of inputs are true.",
+  "description": "Build Odd selector using only NAND gates.Output is true when number of inputs is true.",
   "hints": [],
   "version": 208,
   "start": 1,
   "truth": {},
-  "color": 2,
+  "color": 3,
   "category": 9,
   "is_custom": false
  }
