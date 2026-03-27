@@ -57,7 +57,7 @@ class Gate(Node):
         )
 
         self.tiles: Any = data.gate_tiles
-        self.draw_hitboxes: bool = True
+        self.draw_hitboxes: bool = False
         self.exceptional_size_offset: int = 0
         self._moving = False
 
